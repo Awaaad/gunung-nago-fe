@@ -1,0 +1,7 @@
+{
+  "name": "gunung-nago",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
