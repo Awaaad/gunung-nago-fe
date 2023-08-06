@@ -7,6 +7,18 @@ const routes: Routes = [
     loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)
   },
   {
+    path: 'cage',
+    loadChildren: () => import('./features/cage/cage.module').then( m => m.CageModule)
+  },
+  {
+    path: 'flock',
+    loadChildren: () => import('./features/flock/flock.module').then( m => m.FlockModule)
+  },
+  {
+    path: 'survey',
+    loadChildren: () => import('./features/survey/survey.module').then( m => m.SurveyModule)
+  },
+  {
     path: '',
     redirectTo: 'home',
     pathMatch: 'full'

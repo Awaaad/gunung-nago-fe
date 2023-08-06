@@ -24,3 +24,56 @@
 @import "@ionic/angular/css/text-alignment.css";
 @import "@ionic/angular/css/text-transformation.css";
 @import "@ionic/angular/css/flex-utils.css";
+
+.router-links {
+    display: flex;
+    justify-content: space-between;
+
+    .language-selection {
+        height: 3.5em;
+    }
+}
+
+.title {
+    display: flex;
+    align-items: center;
+
+    .header-logo {
+        width: 45px;
+        padding-right: 10px;
+        padding-top: 2px;
+
+        &:hover {
+            cursor: pointer;
+        }
+
+        &:focus {
+            outline: none;
+        }
+    }
+
+    h3 {
+        font-size: 25px;
+        margin-top: 10px;
+
+        text-decoration: none;
+
+        &:hover {
+            cursor: pointer;
+        }
+
+        &:focus {
+            outline: none;
+        }
+    }
+}
+
+ion-title {
+    padding: 0;
+}
+
+.title {
+    .header-logo {
+        padding-top: 0;
+    }
+}

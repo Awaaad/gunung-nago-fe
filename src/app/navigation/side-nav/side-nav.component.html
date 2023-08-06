@@ -1,0 +1,83 @@
+<ion-split-pane when="(min-width: 10000px)" *ngIf="true" contentId="menu-content">
+  <ion-menu contentId="menu-content">
+    <ion-header>
+      <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-menu-button autoHide='false'></ion-menu-button>
+        </ion-buttons>
+        <div class="header-section">
+          <img class="menu-logo" routerLink="/dashboard" src='./assets/header-icon/chicken.png' width="22px">
+          <h5 class="side-nav-home" routerLink="/dashboard">G.V-GN</h5>
+          <a *ngIf="false" routerLink="login">Login</a>
+          <a *ngIf="true" routerLink="login">Logout</a>
+        </div>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <ion-list class="ion-no-padding">
+        <div class="side-nav" *ngIf="true">
+          <ul id="myUL">
+            <li>
+              <a routerLink="/dashboard">
+                <ion-icon class="ion-icon" name="analytics"></ion-icon><span>{{ 'activity.dashboard' | translate
+                  }}</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="/cash-registry">
+                <ion-icon name="pencil"></ion-icon><span>{{ 'activity.survey' | translate }}</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="/point-of-sale/pos">
+                <ion-icon name="book"></ion-icon>{{ 'activity.daily-report' | translate }}
+              </a>
+            </li>
+            <li>
+              <a routerLink="/order/order-history">
+                <ion-icon name="home"></ion-icon>{{ 'activity.warehouse' | translate }}
+              </a>
+            </li>
+            <li>
+              <a routerLink="/order/order-history">
+                <ion-icon name="grid"></ion-icon>{{ 'activity.cage' | translate }}
+              </a>
+            </li>
+            <li>
+              <a routerLink="/order/order-history">
+                <ion-icon name="albums"></ion-icon>{{ 'activity.chicken-flock' | translate }}
+              </a>
+            </li>
+            <li>
+              <a routerLink="/order/order-history">
+                <ion-icon name="medkit"></ion-icon>{{ 'activity.vaccine-medication' | translate }}
+              </a>
+            </li>
+            <li>
+              <a routerLink="/order/order-history">
+                <ion-icon name="bag"></ion-icon>{{ 'activity.chicken-food' | translate }}
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="side-nav" *ngIf="false">
+          <ul id="myUL">
+            <li>
+              <a routerLink="/point-of-sale/pos">
+                <ion-icon name="calculator"></ion-icon>Point of Sale
+              </a>
+            </li>
+            <li>
+              <a routerLink="/order/order-history">
+                <ion-icon name="albums"></ion-icon>Sale Invoice List
+              </a>
+            </li>
+            <p class="med-it-lg">Powered By ©Med-IT</p>
+          </ul>
+        </div>
+      </ion-list>
+    </ion-content>
+  </ion-menu>
+  <ion-router-outlet id="menu-content"></ion-router-outlet>
+</ion-split-pane>

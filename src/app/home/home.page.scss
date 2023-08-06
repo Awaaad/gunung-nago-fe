@@ -1,27 +1,156 @@
-#container {
-  text-align: center;
-
+.card-corner {
+  height: 100%;
+  width: 7em;
+  z-index: 1;
   position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
+  left: -75px;
 }
 
-#container strong {
-  font-size: 20px;
-  line-height: 26px;
+ion-card {
+  &:hover {
+    cursor: pointer;
+  }
 }
 
-#container p {
-  font-size: 16px;
-  line-height: 22px;
-
-  color: #8c8c8c;
-
-  margin: 0;
+.card-rounded-corner {
+  height: 135px;
+  width: 135px;
+  background-color: #068C38;
+  z-index: 1;
+  position: absolute;
+  top: -75px;
+  right: -75px;
+  border-radius: 50%;
+  -webkit-transition: all .5s ease;
+  -o-transition: all .5s ease;
+  transition: all .5s ease;
 }
 
-#container a {
-  text-decoration: none;
+.survey {
+  background-color: #0F1A87;
+}
+
+.report {
+  background-color: #068C38;
+}
+
+.cage {
+  background-color: #3d4142;
+}
+
+.flock {
+  background-color: #f5b803;
+}
+
+.warehouse {
+  background-color: #d13710;
+}
+
+.dashboard {
+  background-color: #FF9933;
+}
+
+.vaccine {
+  background-color: #831882;
+}
+
+.chicken-food {
+  background-color: #5F3E2A;
+}
+
+.home-card-title {
+  padding-left: 1em;
+}
+
+.home-card-content {
+  text-align: center;
+}
+
+::ng-deeep .item-radio-checked.sc-ion-select-popover-md {
+  --background: rgba(var(--ion-color-primary-rgb, 56, 128, 255), 0.08);
+  --background-focused: none;
+  --background-focused-opacity: 0.2;
+  --background-hover: none;
+  --background-hover-opacity: 0.12;
+}
+
+::ng-deep .mat-focused .mat-form-field-label {
+  /*change color of label*/
+  color: black !important;
+}
+
+::ng-deep.mat-form-field-underline {
+  /*change color of underline*/
+  background-color: gray !important;
+}
+
+::ng-deep.mat-form-field-ripple {
+  /*change color of underline when focused*/
+  background-color: gray !important;
+}
+
+::ng-deep .mat-form-field-placeholder {
+  color: red;
+}
+
+::ng-deep .mat-focused .mat-form-field-placeholder {
+  color: red;
+}
+
+::ng-deep .mat-form-field {
+  /*change color of label*/
+  width: auto;
+  color: black;
+  padding-left: 20px;
+}
+
+::ng-deep .mat-select-value {
+  color: black;
+}
+
+::ng-deep .select-label {
+  color: black;
+}
+
+::ng-deep .mat-primary .mat-option.mat-selected:not(.mat-option-disabled) {
+  color: black;
+}
+
+::ng-deep .mat-form-field-infix {
+  padding: 0.5em 0;
+  border-bottom: 0.15em solid gray;
+}
+
+::ng-deep .mat-select-arrow {
+  color: gray;
+}
+
+::ng-deep .mat-select-panel .mat-option.mat-selected:not(.mat-option-multiple) {
+  background-color: #e2e2e2 !important;
+}
+
+::ng-deep .mat-option.mat-active {
+  background: #e2e2e2 !important;
+  color: black;
+}
+
+// ion-card {
+//   --background: #19422d;
+//   --color: #fff;
+
+//   --border-color: #fff;
+//   --border-style: dashed;
+//   --border-width: 2px;
+
+//   --border-radius: 20px;
+
+//   --ripple-color: purple;
+
+//   --detail-icon-color: white;
+//   --detail-icon-opacity: 1;
+//   --detail-icon-font-size: 20px;
+// }
+
+.custom-ripple {
+  color: #501ace;
 }
