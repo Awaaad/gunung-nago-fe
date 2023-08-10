@@ -1,0 +1,30 @@
+.input {
+    width: 100%;
+    padding-right: 10px;
+}
+
+table {
+    width: 100%;
+}
+
+th.mat-header-cell,
+td.mat-cell {
+    text-align: center;
+    // border: 1px solid #CCC;
+    padding: 0 !important;
+}
+
+.container {
+    width: 80%;
+    padding: 0;
+}
+
+.table-responsive {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+}
+
+tbody {
+    overflow-x: scroll;
+}

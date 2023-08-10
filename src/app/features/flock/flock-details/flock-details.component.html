@@ -1,0 +1,91 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      <div class="router-links">
+        <div class="title">
+          <img class="header-logo" src='./assets/header-icon/poultry.png'>
+          <h3 class="header-nav-products">{{ 'flock.flock-details.flock-details' | translate }}</h3>
+        </div>
+        <div>
+          <ion-item class="language-selection">
+            <ion-select aria-label="language" interface="popover" placeholder="Select language" [(ngModel)]="language"
+              (ionChange)="ionChangeLanguage($event)">
+              <ion-select-option value="en">English</ion-select-option>
+              <ion-select-option value="id">Indonesian</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </div>
+      </div>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="false" class="ion-padding">
+  <form [formGroup]="stockForm">
+    <ion-card>
+      <ion-card-content>
+
+        <ion-item-divider>
+          <ion-label>{{ 'flock.flock-details.cage' | translate }}</ion-label>
+        </ion-item-divider>
+        <ion-row>
+          <ion-col size-xs="12" size-md="3">
+            <ion-select color="gunung-nago-primary" label="{{ 'flock.flock-details.cage' | translate }}"
+              label-placement="floating" fill="outline" interface="popover"
+              placeholder="{{ 'flock.flock-details.cage' | translate }}" formControlName="cageId">
+              <ion-select-option value="1">A</ion-select-option>
+              <ion-select-option value="2">B</ion-select-option>
+              <ion-select-option value="3">C</ion-select-option>
+            </ion-select>
+          </ion-col>
+        </ion-row>
+
+        <ion-item-divider>
+          <ion-label>{{ 'flock.flock-details.general' | translate }}</ion-label>
+        </ion-item-divider>
+        <ion-row>
+          <ion-col size-xs="12" size-md="3">
+            <ion-input color="gunung-nago-primary" label="{{ 'flock.flock-details.initial-age' | translate }}"
+              label-placement="floating" fill="outline" type="number" min="0" clear-input="true"
+              formControlName="initialAge"></ion-input>
+          </ion-col>
+          <ion-col size-xs="12" size-md="3">
+            <ion-input color="gunung-nago-primary" label="{{ 'flock.flock-details.initial-population' | translate }}"
+              label-placement="floating" fill="outline" type="number" min="0" clear-input="true"
+              formControlName="initialQuantity" readonly="true"></ion-input>
+          </ion-col>
+        </ion-row>
+
+        <ion-item-divider>
+          <ion-label>{{ 'flock.flock-details.aquisition' | translate }}</ion-label>
+        </ion-item-divider>
+        <ion-row>
+          <ion-col size-xs="12" size-md="3">
+            <ion-select color="gunung-nago-primary" label="{{ 'flock.flock-details.aquisition-type' | translate }}"
+              label-placement="floating" fill="outline" interface="popover"
+              placeholder="{{ 'flock.flock-details.aquisition-type' | translate }}" formControlName="aquisitionType">
+              <ion-select-option value="PURCHASE">Purchase</ion-select-option>
+              <ion-select-option value="BORN_ON_FARM">Born on farm</ion-select-option>
+            </ion-select>
+          </ion-col>
+
+          <ion-col size-xs="12" size-md="3">
+            <ion-input color="gunung-nago-primary" label="{{ 'flock.flock-details.aquisition-date' | translate }}"
+              label-placement="floating" fill="outline" type="number" min="0" clear-input="true"
+              formControlName="aquisitionDate"></ion-input>
+            <!-- <ion-datetime color="gunung-nago-primary" label-placement="floating" fill="outline"></ion-datetime> -->
+          </ion-col>
+        </ion-row>
+      </ion-card-content>
+
+      <div class="btn-container">
+        <ion-button class="cancel-btn">Cancel</ion-button>
+        <ion-button color="gunung-nago-primary">Save</ion-button>
+      </div>
+
+    </ion-card>
+  </form>
+</ion-content>

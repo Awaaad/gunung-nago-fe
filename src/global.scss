@@ -77,3 +77,43 @@ ion-title {
         padding-top: 0;
     }
 }
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0;
+}
+
+.btn-container {
+    display: flex;
+    justify-content: end;
+    margin: 1em 1em 1em 0;
+}
+
+.cancel-btn {
+    margin-right: 0.5em;
+    --background: white;
+    --background-hover: rgba(184, 181, 181, 0.836);
+    --color: black;
+}
+
+ion-input {
+    --color: black;
+}
+
+ion-textarea {
+    --color: black;
+}
+
+ion-item-divider {
+    margin-bottom: 1em;
+    border-color: var(--ion-color-gunung-nago-survey);
+    color: var(--ion-color-gunung-nago-survey);
+    font-weight: 500;
+}
+
+.ion-valid.sc-ion-input-md-h {
+    --highlight-color: var(--ion-color-gunung-nago-survey);
+}

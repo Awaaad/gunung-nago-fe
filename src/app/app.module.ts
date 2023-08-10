@@ -6,11 +6,11 @@ import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { SideNavComponent } from './navigation/side-nav/side-nav.component';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { SideNavComponent } from './shared/navigation/side-nav/side-nav.component';
 
 @NgModule({
   declarations: [AppComponent, SideNavComponent],

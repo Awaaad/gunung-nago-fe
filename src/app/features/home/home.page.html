@@ -7,23 +7,16 @@
       <div class="router-links">
         <div class="title">
           <img class="header-logo" src='./assets/header-icon/process.png'>
-          <h3 class="header-nav-products">Activity</h3>
+          <h3 class="header-nav-products">{{ 'activity.activity' | translate }}</h3>
         </div>
         <div>
           <ion-item class="language-selection">
-            <ion-select aria-label="Fruit" interface="popover" placeholder="Select fruit" [(ngModel)]="language"
+            <ion-select aria-label="language" interface="popover" placeholder="Select language" [(ngModel)]="language"
               (ionChange)="ionChangeLanguage($event)">
               <ion-select-option value="en">English</ion-select-option>
               <ion-select-option value="id">Indonesian</ion-select-option>
             </ion-select>
           </ion-item>
-          <!-- <mat-form-field>
-            <mat-select [value]="language" (selectionChange)="matChangeLanguage($event)">
-              <mat-option value="en">English</mat-option>
-              <mat-option value="id">Indonesian</mat-option>
-            </mat-select>
-          </mat-form-field> -->
-
         </div>
       </div>
     </ion-title>
@@ -39,13 +32,13 @@
         <ion-col size-xs="12" size-md="3">
           <ion-ripple-effect class="custom-ripple"></ion-ripple-effect>
 
-          <ion-card>
+          <ion-card routerLink="/survey/survey-details">
             <div class="card-corner survey"></div>
             <ion-card-header>
               <ion-card-title class="home-card-title">{{ 'activity.survey' | translate }}</ion-card-title>
             </ion-card-header>
             <ion-card-content class="home-card-content">
-              <img class="img-card-home" src="./assets/header-icon/survey.png" alt="survey">
+              <img class="img-card-home" src="./assets/home-icon/survey.png" alt="survey">
             </ion-card-content>
           </ion-card>
         </ion-col>
@@ -56,7 +49,7 @@
               <ion-card-title class="home-card-title">{{ 'activity.daily-report' | translate }}</ion-card-title>
             </ion-card-header>
             <ion-card-content class="home-card-content">
-              <img class="img-card-home" src="./assets/header-icon/marker.png" alt="report">
+              <img class="img-card-home" src="./assets/home-icon/marker.png" alt="report">
             </ion-card-content>
           </ion-card>
         </ion-col>
@@ -71,18 +64,18 @@
               <ion-card-title class="home-card-title">{{ 'activity.warehouse' | translate }}</ion-card-title>
             </ion-card-header>
             <ion-card-content class="home-card-content">
-              <img class="img-card-home" src="./assets/header-icon/warehouse.png" alt="report">
+              <img class="img-card-home" src="./assets/home-icon/warehouse.png" alt="report">
             </ion-card-content>
           </ion-card>
         </ion-col>
         <ion-col size-xs="12" size-md="3">
-          <ion-card>
+          <ion-card routerLink="/cage/cage-list">
             <div class="card-corner cage"></div>
             <ion-card-header>
               <ion-card-title class="home-card-title">{{ 'activity.cage' | translate }}</ion-card-title>
             </ion-card-header>
             <ion-card-content class="home-card-content">
-              <img class="img-card-home" src="./assets/header-icon/cage.png" alt="survey">
+              <img class="img-card-home" src="./assets/home-icon/cage.png" alt="survey">
             </ion-card-content>
           </ion-card>
         </ion-col>
@@ -93,7 +86,7 @@
               <ion-card-title class="home-card-title">{{ 'activity.chicken-flock' | translate }}</ion-card-title>
             </ion-card-header>
             <ion-card-content class="home-card-content">
-              <img class="img-card-home" src="./assets/header-icon/poultry.png" alt="report">
+              <img class="img-card-home" src="./assets/home-icon/poultry.png" alt="report">
             </ion-card-content>
           </ion-card>
         </ion-col>
@@ -104,7 +97,7 @@
               <ion-card-title class="home-card-title">{{ 'activity.dashboard' | translate }}</ion-card-title>
             </ion-card-header>
             <ion-card-content class="home-card-content">
-              <img class="img-card-home" src="./assets/header-icon/dashboard.png" alt="report">
+              <img class="img-card-home" src="./assets/home-icon/dashboard.png" alt="report">
             </ion-card-content>
           </ion-card>
         </ion-col>
@@ -118,7 +111,7 @@
               <ion-card-title class="home-card-title">{{ 'activity.vaccine-medication' | translate }}</ion-card-title>
             </ion-card-header>
             <ion-card-content class="home-card-content">
-              <img class="img-card-home" src="./assets/header-icon/vaccine.png" alt="report">
+              <img class="img-card-home" src="./assets/home-icon/vaccine.png" alt="report">
             </ion-card-content>
           </ion-card>
         </ion-col>
@@ -129,7 +122,7 @@
               <ion-card-title class="home-card-title">{{ 'activity.chicken-food' | translate }}</ion-card-title>
             </ion-card-header>
             <ion-card-content class="home-card-content">
-              <img class="img-card-home" src="./assets/header-icon/chicken-rice.png" alt="survey">
+              <img class="img-card-home" src="./assets/home-icon/chicken-rice.png" alt="survey">
             </ion-card-content>
           </ion-card>
         </ion-col>
