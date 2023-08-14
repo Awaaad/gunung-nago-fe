@@ -6,7 +6,7 @@
     <ion-title>
       <div class="router-links">
         <div class="title">
-          <img class="header-logo" src='./assets/header-icon/survey.png'>
+          <img class="header-logo" src='./assets/tiny-color/survey/icons8-pass-fail-64.png'>
           <h3 class="header-nav-products">{{ 'survey.survey-details.survey-details' | translate }}</h3>
         </div>
         <div>
@@ -34,7 +34,7 @@
           <ion-col size-xs="12" size-md="3">
             <div class="survey-general-header">
               <ion-icon name="grid-outline"></ion-icon>
-              <div>{{ 'survey.survey-details.cage' | translate }}: A</div>
+              <div>{{ 'survey.survey-details.cage' | translate }}: {{cageName}}</div>
             </div>
           </ion-col>
           <ion-col size-xs="12" size-md="3">
@@ -46,13 +46,13 @@
           <ion-col size-xs="12" size-md="3">
             <div class="survey-general-header">
               <ion-icon name="pulse-outline"></ion-icon>
-              <div>{{ 'survey.survey-details.chicken-age' | translate }}: 10</div>
+              <div>{{ 'survey.survey-details.chicken-age' | translate }}: {{flockAge}}</div>
             </div>
           </ion-col>
           <ion-col size-xs="12" size-md="3">
             <div class="survey-general-header">
               <ion-icon name="albums-outline"></ion-icon>
-              <div>{{ 'survey.survey-details.chicken-category' | translate }}: NORMAL</div>
+              <div>{{ 'survey.survey-details.chicken-category' | translate }}: {{flockCategory}}</div>
             </div>
           </ion-col>
         </ion-row>
@@ -62,7 +62,7 @@
         </ion-item-divider>
         <ion-row>
           <ion-col size-xs="12" size-md="3">
-            <ion-input color="gunung-nago-primary" label="{{ 'survey.survey-details.population' | translate }}"
+            <ion-input color="gunung-nago-survey" label="{{ 'survey.survey-details.population' | translate }}"
               label-placement="floating" fill="outline" type="number" min="0" clear-input="true"
               formControlName="population" readonly="true"></ion-input>
           </ion-col>
@@ -73,17 +73,17 @@
         </ion-item-divider>
         <ion-row>
           <ion-col size-xs="12" size-md="3">
-            <ion-input color="gunung-nago-primary" label="{{ 'survey.survey-details.dead' | translate }}"
+            <ion-input color="gunung-nago-survey" label="{{ 'survey.survey-details.dead' | translate }}"
               label-placement="floating" fill="outline" type="number" min="0" clear-input="true" formControlName="dead"
               [(ngModel)]="dead" (ngModelChange)="calculateRemaining()"></ion-input>
           </ion-col>
           <ion-col size-xs="12" size-md="3">
-            <ion-input color="gunung-nago-primary" label="{{ 'survey.survey-details.sterile' | translate }}"
+            <ion-input color="gunung-nago-survey" label="{{ 'survey.survey-details.sterile' | translate }}"
               label-placement="floating" fill="outline" type="number" min="0" clear-input="true"
               formControlName="sterile" [(ngModel)]="sterile" (ngModelChange)="calculateRemaining()"></ion-input>
           </ion-col>
           <ion-col size-xs="12" size-md="3">
-            <ion-input color="gunung-nago-primary" label="{{ 'survey.survey-details.remaining' | translate }}"
+            <ion-input color="gunung-nago-survey" label="{{ 'survey.survey-details.remaining' | translate }}"
               label-placement="floating" fill="outline" type="number" min="0" clear-input="true"
               [value]="remaining"></ion-input>
           </ion-col>
@@ -94,17 +94,17 @@
         </ion-item-divider>
         <ion-row>
           <ion-col size-xs="12" size-md="3">
-            <ion-input color="gunung-nago-primary" label="{{ 'survey.survey-details.tie' | translate }}"
+            <ion-input color="gunung-nago-survey" label="{{ 'survey.survey-details.tie' | translate }}"
               label-placement="floating" fill="outline" type="number" min="0" clear-input="true" formControlName="tie"
               [(ngModel)]="tie" (ngModelChange)="calculateTotalItem()"></ion-input>
           </ion-col>
           <ion-col size-xs="12" size-md="3">
-            <ion-input color="gunung-nago-primary" label="{{ 'survey.survey-details.item' | translate }}"
+            <ion-input color="gunung-nago-survey" label="{{ 'survey.survey-details.item' | translate }}"
               label-placement="floating" fill="outline" type="number" min="0" clear-input="true" formControlName="item"
               [(ngModel)]="item" (ngModelChange)="calculateTotalItem()"></ion-input>
           </ion-col>
           <ion-col size-xs="12" size-md="3">
-            <ion-input color="gunung-nago-primary" label="{{ 'survey.survey-details.broken' | translate }}"
+            <ion-input color="gunung-nago-survey" label="{{ 'survey.survey-details.broken' | translate }}"
               label-placement="floating" fill="outline" type="number" min="0" clear-input="true"
               formControlName="broken" [(ngModel)]="broken" (ngModelChange)="calculateTotalItem()"></ion-input>
           </ion-col>
@@ -115,17 +115,17 @@
         </ion-item-divider>
         <ion-row>
           <ion-col size-xs="12" size-md="3">
-            <ion-input color="gunung-nago-primary" label="{{ 'survey.survey-details.total-item' | translate }}"
+            <ion-input color="gunung-nago-survey" label="{{ 'survey.survey-details.total-item' | translate }}"
               label-placement="floating" fill="outline" type="number" min="0" clear-input="true" [value]="totalItem"
               readonly="true"></ion-input>
           </ion-col>
           <ion-col size-xs="12" size-md="3">
-            <ion-input color="gunung-nago-primary" label="{{ 'survey.survey-details.per-hd' | translate }}"
+            <ion-input color="gunung-nago-survey" label="{{ 'survey.survey-details.per-hd' | translate }}"
               label-placement="floating" fill="outline" type="number" min="0" clear-input="true"
               [value]="(totalItem / remaining) * 100" readonly="true"></ion-input>
           </ion-col>
           <ion-col size-xs="12" size-md="3">
-            <ion-input color="gunung-nago-primary" label="{{ 'survey.survey-details.up-down' | translate }}"
+            <ion-input color="gunung-nago-survey" label="{{ 'survey.survey-details.up-down' | translate }}"
               label-placement="floating" fill="outline" type="number" min="0" clear-input="true"
               formControlName="upDownProduction"></ion-input>
           </ion-col>
@@ -136,7 +136,7 @@
         </ion-item-divider>
         <ion-row>
           <ion-col size-xs="12" size-md="6">
-            <ion-input color="gunung-nago-primary" label="{{ 'survey.survey-details.vaccine-medication' | translate }}"
+            <ion-input color="gunung-nago-survey" label="{{ 'survey.survey-details.vaccine-medication' | translate }}"
               label-placement="floating" fill="outline" type="text" clear-input="true"
               formControlName="vaccineMedication"></ion-input>
           </ion-col>
@@ -147,12 +147,12 @@
         </ion-item-divider>
         <ion-row>
           <ion-col size-xs="12" size-md="3">
-            <ion-input color="gunung-nago-primary" label="{{ 'survey.survey-details.standard-feed' | translate }}"
+            <ion-input color="gunung-nago-survey" label="{{ 'survey.survey-details.standard-feed' | translate }}"
               label-placement="floating" fill="outline" type="number" min="0" clear-input="true"
               formControlName="standardFeed"></ion-input>
           </ion-col>
           <ion-col size-xs="12" size-md="3">
-            <ion-input color="gunung-nago-primary" label="{{ 'survey.survey-details.given-feed' | translate }}"
+            <ion-input color="gunung-nago-survey" label="{{ 'survey.survey-details.given-feed' | translate }}"
               label-placement="floating" fill="outline" type="number" min="0" clear-input="true"
               formControlName="givenFeed"></ion-input>
           </ion-col>
@@ -162,7 +162,7 @@
           <ion-label>{{ 'survey.survey-details.comments' | translate }}</ion-label>
         </ion-item-divider>
         <ion-row>
-          <ion-textarea color="gunung-nago-primary" label="{{ 'survey.survey-details.comments' | translate }}"
+          <ion-textarea color="gunung-nago-survey" label="{{ 'survey.survey-details.comments' | translate }}"
             [autoGrow]="true" label-placement="floating" fill="outline" clear-input="true"
             formControlName="comments"></ion-textarea>
         </ion-row>
@@ -170,7 +170,7 @@
 
       <div class="btn-container">
         <ion-button class="cancel-btn">Cancel</ion-button>
-        <ion-button color="gunung-nago-primary">Save</ion-button>
+        <ion-button color="gunung-nago-survey">Save</ion-button>
       </div>
 
     </ion-card>

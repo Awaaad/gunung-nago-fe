@@ -17,6 +17,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
+import { SurveyApiService } from './service/api/survey.api.service';
 
 @NgModule({
   declarations: [SurveyListComponent, SurveryDetailsComponent],
@@ -27,7 +28,6 @@ import { MatButtonModule } from '@angular/material/button';
     TranslateModule,
     FormsModule,
     ReactiveFormsModule,
-
     MatCardModule,
     MatFormFieldModule,
     MatGridListModule,
@@ -37,6 +37,7 @@ import { MatButtonModule } from '@angular/material/button';
     MatPaginatorModule,
     MatSortModule,
     MatButtonModule
-  ]
+  ],
+  providers: [SurveyApiService]
 })
 export class SurveyModule { }

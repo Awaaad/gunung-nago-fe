@@ -2,20 +2,24 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { CageRoutingModule } from './cage-routing.module';
-import { CageListComponent } from './cage-list/cage-list.component';
+import { CageSurveyListComponent } from './cage-survey-list/cage-survey-list.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { IonicModule } from '@ionic/angular';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CageDetailsComponent } from './cage-details/cage-details.component';
+import { CageApiService } from './service/api/cage.api.service';
 
 
 @NgModule({
-  declarations: [CageListComponent],
+  declarations: [CageSurveyListComponent, CageDetailsComponent],
   imports: [
     CommonModule,
     CageRoutingModule,
     IonicModule,
     TranslateModule,
-    FormsModule
-  ]
+    FormsModule,
+    ReactiveFormsModule
+  ],
+  providers: [CageApiService]
 })
 export class CageModule { }

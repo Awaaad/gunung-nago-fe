@@ -9,6 +9,7 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrls: ['./flock-details.component.scss'],
 })
 export class FlockDetailsComponent {
+  
   public initialQuantity: number = 0;
   public initialAge: number = 0;
   public aquisitionDate: Date = new Date();
@@ -29,7 +30,7 @@ export class FlockDetailsComponent {
     this.translateService.use(event.value);
   }
 
-  public stockForm = new FormGroup({
+  public flockDetailsForm = new FormGroup({
     cageId: new FormControl({ value: 1, disabled: false }, Validators.compose([Validators.required])),
     initialQuantity: new FormControl({ value: null, disabled: false }, Validators.compose([Validators.required])),
     initialAge: new FormControl({ value: null, disabled: false }, Validators.compose([Validators.required])),

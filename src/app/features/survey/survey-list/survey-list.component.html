@@ -6,7 +6,7 @@
     <ion-title>
       <div class="router-links">
         <div class="title">
-          <img class="header-logo" src='./assets/header-icon/cage.png'>
+          <img class="header-logo" src='./assets/tiny-color/survey/icons8-pass-fail-64.png'>
           <h3 class="header-nav-products">{{ 'cage.cage-list.cage-list' | translate }}</h3>
         </div>
         <div>
@@ -24,61 +24,34 @@
 </ion-header>
 
 <ion-content [fullscreen]="false" class="ion-padding">
-  <div class="form-card">
-    <div class="action-btns">
-      <!-- <div class="card-title">Search Airports</div> -->
-      <div>
-        <div>
-        </div>
-      </div>
-    </div>
-
+  <form [formGroup]="airportForm">
     <ion-card>
-      <form [formGroup]="airportForm">
-        <mat-grid-list cols="4" rowHeight="100px">
-          <mat-grid-tile>
-            <mat-form-field class="input" appearance="outline">
-              <mat-label>Cage</mat-label>
-              <input matInput formControlName="country">
-            </mat-form-field>
-          </mat-grid-tile>
 
-          <mat-grid-tile>
-            <mat-form-field class="input" appearance="outline">
-              <mat-label>Date</mat-label>
-              <input matInput formControlName="city">
-            </mat-form-field>
-          </mat-grid-tile>
-          <!-- 
-                <mat-grid-tile>
-                    <mat-form-field class="input" appearance="outline">
-                        <mat-label>Region</mat-label>
-                        <input matInput formControlName="region">
-                    </mat-form-field>
-                </mat-grid-tile>
+      <ion-card-content>
+        <ion-row>
+          <ion-col size-xs="12" size-md="3">
+            <ion-select color="gunung-nago-primary" label="{{ 'flock.flock-details.cage' | translate }}"
+              label-placement="floating" fill="outline" interface="popover"
+              placeholder="{{ 'flock.flock-details.cage' | translate }}" formControlName="cageId">
+              <ion-select-option value="1">A</ion-select-option>
+              <ion-select-option value="2">B</ion-select-option>
+              <ion-select-option value="3">C</ion-select-option>
+            </ion-select>
+          </ion-col>
+        </ion-row>
 
-                <mat-grid-tile>
-                    <mat-form-field class="input" appearance="outline">
-                        <mat-label>Airport Code</mat-label>
-                        <input matInput formControlName="airportCode">
-                    </mat-form-field>
-                </mat-grid-tile> -->
-        </mat-grid-list>
 
-        <div class="action-btns">
-          <div>
-          </div>
-          <div>
-            <button [disabled]="airportForm.invalid" mat-raised-button class="primary-btn">Search</button>
-          </div>
+        <div class="btn-container">
+          <ion-button class="cancel-btn">Reset</ion-button>
+          <ion-button color="gunung-nago-primary">Search</ion-button>
         </div>
-      </form>
+      </ion-card-content>
     </ion-card>
+  </form>
 
-  </div>
 
-  <div class="form-card">
 
+  <ion-card>
     <div class="mat-elevation-z8 table-responsive">
       <table mat-table [dataSource]="stocks">
 
@@ -198,11 +171,12 @@
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-      </table>
-      <mat-paginator [pageSizeOptions]="[20, 40, 60]" showFirstLastButtons
-        aria-label="Select page of periodic elements">
-      </mat-paginator>
-    </div>
 
-  </div>
+      </table>
+      <!-- <mat-paginator [pageSizeOptions]="[20, 40, 60]" showFirstLastButtons
+        aria-label="Select page of periodic elements">
+      </mat-paginator> -->
+    </div>
+  </ion-card>
+
 </ion-content>

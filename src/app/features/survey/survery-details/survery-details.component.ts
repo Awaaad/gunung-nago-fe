@@ -2,6 +2,9 @@ import { formatDate } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
+import { SurveyApiService } from '../service/api/survey.api.service';
+import { ActivatedRoute } from '@angular/router';
+import { FlockCategory, SurveyDto } from 'generated-src/model';
 
 @Component({
   selector: 'app-survery-details',
@@ -9,7 +12,8 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrls: ['./survery-details.component.scss'],
 })
 export class SurveryDetailsComponent {
-  public population: number = 4832;
+
+  public population: number = 0;
   public dead: number = 0;
   public sterile: number = 0;
   public remaining: number = 0;
@@ -19,10 +23,21 @@ export class SurveryDetailsComponent {
   public totalItem: number = 0;
   public today: string = formatDate(new Date(), 'dd-MM-yyyy HH:mm', 'en');
   public language = "en";
+  public cageId: any = this.activatedRoute.snapshot.paramMap.get('cageId');
+  public cageName: string = '';
+  public flockCategory!: FlockCategory;
+  public flockAge: number = 0;
 
   constructor(
+    private activatedRoute: ActivatedRoute,
+    private surveyApiService: SurveyApiService,
     private translateService: TranslateService
-  ) { }
+  ) {
+  }
+
+  ionViewWillEnter() {
+    this.findSurveyDtoForSelectedCage();
+  }
 
   public ionChangeLanguage(event: any): void {
     this.translateService.use(event.detail.value);
@@ -52,5 +67,27 @@ export class SurveryDetailsComponent {
 
   public calculateTotalItem() {
     this.totalItem = (this.tie * 300) + this.item + this.broken;
+  }
+
+  private findSurveyDtoForSelectedCage(): void {
+    this.surveyApiService.findById(this.cageId).subscribe((surveyDetails: SurveyDto) => {
+      this.cageName = surveyDetails.cageName;
+      this.flockCategory = surveyDetails.flockCategory;
+      this.flockAge = surveyDetails.age;
+      this.population = surveyDetails.good;
+      this.stockForm.setValue({
+        population: surveyDetails.good,
+        dead: this.dead,
+        sterile: this.sterile,
+        tie: this.tie,
+        item: this.item,
+        broken: this.broken, 
+        upDownProduction: '',
+        vaccineMedication: '',
+        standardFeed: '',
+        givenFeed: '',
+        comments: ''
+      })
+    })
   }
 }

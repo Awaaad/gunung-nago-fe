@@ -6,7 +6,7 @@
     <ion-title>
       <div class="router-links">
         <div class="title">
-          <img class="header-logo" src='./assets/header-icon/poultry.png'>
+          <img class="header-logo" src='./assets/tiny-color/chicken/icons8-chicken-64.png'>
           <h3 class="header-nav-products">{{ 'flock.flock-details.flock-details' | translate }}</h3>
         </div>
         <div>
@@ -24,7 +24,7 @@
 </ion-header>
 
 <ion-content [fullscreen]="false" class="ion-padding">
-  <form [formGroup]="stockForm">
+  <form [formGroup]="flockDetailsForm">
     <ion-card>
       <ion-card-content>
 
@@ -55,7 +55,7 @@
           <ion-col size-xs="12" size-md="3">
             <ion-input color="gunung-nago-primary" label="{{ 'flock.flock-details.initial-population' | translate }}"
               label-placement="floating" fill="outline" type="number" min="0" clear-input="true"
-              formControlName="initialQuantity" readonly="true"></ion-input>
+              formControlName="initialQuantity"></ion-input>
           </ion-col>
         </ion-row>
 

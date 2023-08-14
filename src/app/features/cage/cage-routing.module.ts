@@ -1,11 +1,16 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { CageListComponent } from './cage-list/cage-list.component';
+import { CageSurveyListComponent } from './cage-survey-list/cage-survey-list.component';
+import { CageDetailsComponent } from './cage-details/cage-details.component';
 
 const routes: Routes = [
   {
-    path: 'cage-list',
-    component: CageListComponent
+    path: 'cage-survey-list',
+    component: CageSurveyListComponent
+  },
+  {
+    path: 'cage-details',
+    component: CageDetailsComponent
   },
 ];
 

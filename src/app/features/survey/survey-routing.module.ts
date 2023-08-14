@@ -12,6 +12,10 @@ const routes: Routes = [
     path: 'survey-details',
     component: SurveryDetailsComponent
   },
+  {
+    path: 'survey-details/:cageId',
+    component: SurveryDetailsComponent
+  },
 ];
 
 @NgModule({

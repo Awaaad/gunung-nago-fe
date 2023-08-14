@@ -117,3 +117,9 @@ ion-item-divider {
 .ion-valid.sc-ion-input-md-h {
     --highlight-color: var(--ion-color-gunung-nago-survey);
 }
+
+ion-card {
+    &:hover {
+        cursor: pointer;
+    }
+}

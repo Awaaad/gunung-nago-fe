@@ -6,12 +6,6 @@
   left: -75px;
 }
 
-ion-card {
-  &:hover {
-    cursor: pointer;
-  }
-}
-
 .card-rounded-corner {
   height: 135px;
   width: 135px;
@@ -39,7 +33,7 @@ ion-card {
 }
 
 .flock {
-  background-color: #f5b803;
+  background-color: #5F3E2A;
 }
 
 .warehouse {
@@ -55,7 +49,7 @@ ion-card {
 }
 
 .chicken-food {
-  background-color: #5F3E2A;
+  background-color: #f5b803;
 }
 
 .home-card-title {
@@ -153,4 +147,8 @@ ion-card {
 
 .custom-ripple {
   color: #501ace;
+}
+
+.card-center {
+  justify-content: center;
 }

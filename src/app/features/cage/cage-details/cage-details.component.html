@@ -1,0 +1,52 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      <div class="router-links">
+        <div class="title">
+          <img class="header-logo" src='./assets/tiny-color/cage/icons8-prison-64.png'>
+          <h3 class="header-nav-products">{{ 'cage.cage-details.cage-details' | translate }}</h3>
+        </div>
+        <div>
+          <ion-item class="language-selection">
+            <ion-select aria-label="language" interface="popover" placeholder="Select language" [(ngModel)]="language"
+              (ionChange)="ionChangeLanguage($event)">
+              <ion-select-option value="en">English</ion-select-option>
+              <ion-select-option value="id">Indonesian</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </div>
+      </div>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="false" class="ion-padding">
+  <form [formGroup]="cageDetailsForm">
+    <ion-card>
+      <ion-card-content>
+        <ion-row>
+          <ion-col size-xs="12" size-md="3">
+            <ion-toggle labelPlacement="start" class="toggle" formControlName="active" color="danger">{{
+              'cage.cage-details.active' | translate }}*</ion-toggle>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size-xs="12" size-md="3">
+            <ion-input color="gunung-nago-primary" label="{{ 'cage.cage-details.name' | translate }}*"
+              label-placement="floating" fill="outline" type="text" clear-input="true"
+              formControlName="name"></ion-input>
+          </ion-col>
+        </ion-row>
+      </ion-card-content>
+
+      <div class="btn-container">
+        <ion-button class="cancel-btn">Cancel</ion-button>
+        <ion-button color="gunung-nago-primary">Save</ion-button>
+      </div>
+
+    </ion-card>
+  </form>
+</ion-content>
