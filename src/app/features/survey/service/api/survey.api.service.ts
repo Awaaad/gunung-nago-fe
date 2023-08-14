@@ -6,7 +6,6 @@ import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class SurveyApiService {
-
   baseUrl = `${environment.apiPath}surveys/`;
 
   constructor(private http: HttpClient) { }

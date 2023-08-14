@@ -12,7 +12,6 @@ import { FlockCategory, SurveyDto } from 'generated-src/model';
   styleUrls: ['./survery-details.component.scss'],
 })
 export class SurveryDetailsComponent {
-
   public population: number = 0;
   public dead: number = 0;
   public sterile: number = 0;

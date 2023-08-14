@@ -9,7 +9,6 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrls: ['./flock-details.component.scss'],
 })
 export class FlockDetailsComponent {
-  
   public initialQuantity: number = 0;
   public initialAge: number = 0;
   public aquisitionDate: Date = new Date();

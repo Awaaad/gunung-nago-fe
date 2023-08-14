@@ -8,7 +8,6 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrls: ['./cage-details.component.scss'],
 })
 export class CageDetailsComponent {
-  
   public initialQuantity: number = 0;
   public initialAge: number = 0;
   public aquisitionDate: Date = new Date();

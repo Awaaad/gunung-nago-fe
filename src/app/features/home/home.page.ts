@@ -7,7 +7,6 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage {
-
   public language = "en";
 
   constructor(
@@ -21,5 +20,4 @@ export class HomePage {
   public matChangeLanguage(event: any): void {
     this.translateService.use(event.value);
   }
-
 }

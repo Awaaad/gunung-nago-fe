@@ -2,19 +2,17 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { CageApiService } from '../service/api/cage.api.service';
-import { CageDto } from 'generated-src/model';
+import { CageDto, CageSearchCriteriaDto } from 'generated-src/model';
 
 @Component({
-  selector: 'app-cage-list',
+  selector: 'app-cage-survey-list',
   templateUrl: './cage-survey-list.component.html',
   styleUrls: ['./cage-survey-list.component.scss'],
 })
 export class CageSurveyListComponent implements OnInit {
-
-  public cages: any[] = [];
-  public cagesDara: any[] = [];
-  public cagesDoc: any[] = [];
-
+  public cages: CageDto[] = [];
+  public cagesDara: CageDto[] = [];
+  public cagesDoc: CageDto[] = [];
   public language = "en";
 
   constructor(
@@ -40,17 +38,16 @@ export class CageSurveyListComponent implements OnInit {
   }
 
   public search() {
-    const test = {
+    const cageSearchCriteriaDto = {
       page: 0,
       size: 20,
       sortBy: "name",
       sortOrder: "ASC",
     }
-    this.cageApiService.search(test).subscribe(cages => {
+    this.cageApiService.search(cageSearchCriteriaDto).subscribe(cages => {
       this.cagesDoc = cages.content.filter((cage: { cageCategory: string; }) => cage.cageCategory === 'DOC');
       this.cagesDara = cages.content.filter((cage: { cageCategory: string; }) => cage.cageCategory === 'DARA');
       this.cages = cages.content.filter((cage: { cageCategory: string; }) => cage.cageCategory === 'NORM');
     })
   }
-
 }

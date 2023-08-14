@@ -145,23 +145,23 @@ $app-theme: mat.define-light-theme((color: (primary: $app-primary,
   --ion-color-tint: var(--ion-color-gunung-nago-survey-tint);
 }
 
-// flock
+// feed
 :root {
-  --ion-color-gunung-nago-flock: #f5b803;
-  --ion-color-gunung-nago-flock-rgb: 245, 184, 3;
-  --ion-color-gunung-nago-flock-contrast: #000000;
-  --ion-color-gunung-nago-flock-contrast-rgb: 0, 0, 0;
-  --ion-color-gunung-nago-flock-shade: #d8a203;
-  --ion-color-gunung-nago-flock-tint: #f6bf1c;
+  --ion-color-gunung-nago-feed: #f5b803;
+  --ion-color-gunung-nago-feed-rgb: 245, 184, 3;
+  --ion-color-gunung-nago-feed-contrast: #000000;
+  --ion-color-gunung-nago-feed-contrast-rgb: 0, 0, 0;
+  --ion-color-gunung-nago-feed-shade: #d8a203;
+  --ion-color-gunung-nago-feed-tint: #f6bf1c;
 }
 
-.ion-color-gunung-nago-flock {
-  --ion-color-base: var(--ion-color-gunung-nago-flock);
-  --ion-color-base-rgb: var(--ion-color-gunung-nago-flock-rgb);
-  --ion-color-contrast: var(--ion-color-gunung-nago-flock-contrast);
-  --ion-color-contrast-rgb: var(--ion-color-gunung-nago-flock-contrast-rgb);
-  --ion-color-shade: var(--ion-color-gunung-nago-flock-shade);
-  --ion-color-tint: var(--ion-color-gunung-nago-flock-tint);
+.ion-color-gunung-nago-feed {
+  --ion-color-base: var(--ion-color-gunung-nago-feed);
+  --ion-color-base-rgb: var(--ion-color-gunung-nago-feed-rgb);
+  --ion-color-contrast: var(--ion-color-gunung-nago-feed-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-gunung-nago-feed-contrast-rgb);
+  --ion-color-shade: var(--ion-color-gunung-nago-feed-shade);
+  --ion-color-tint: var(--ion-color-gunung-nago-feed-tint);
 }
 
 // warehouse 
@@ -200,6 +200,25 @@ $app-theme: mat.define-light-theme((color: (primary: $app-primary,
 	--ion-color-contrast-rgb: var(--ion-color-gunung-nago-report-contrast-rgb);
 	--ion-color-shade: var(--ion-color-gunung-nago-report-shade);
 	--ion-color-tint: var(--ion-color-gunung-nago-report-tint);
+}
+
+// flock
+:root {
+	--ion-color-gunung-nago-flock: #5F3E2A;
+	--ion-color-gunung-nago-flock-rgb: 95,62,42;
+	--ion-color-gunung-nago-flock-contrast: #ffffff;
+	--ion-color-gunung-nago-flock-contrast-rgb: 255,255,255;
+	--ion-color-gunung-nago-flock-shade: #543725;
+	--ion-color-gunung-nago-flock-tint: #6f513f;
+}
+
+.ion-color-gunung-nago-flock {
+	--ion-color-base: var(--ion-color-gunung-nago-flock);
+	--ion-color-base-rgb: var(--ion-color-gunung-nago-flock-rgb);
+	--ion-color-contrast: var(--ion-color-gunung-nago-flock-contrast);
+	--ion-color-contrast-rgb: var(--ion-color-gunung-nago-flock-contrast-rgb);
+	--ion-color-shade: var(--ion-color-gunung-nago-flock-shade);
+	--ion-color-tint: var(--ion-color-gunung-nago-flock-tint);
 }
 
 // @media (prefers-color-scheme: dark) {
