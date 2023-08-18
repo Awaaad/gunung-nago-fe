@@ -19,6 +19,10 @@ const routes: Routes = [
     loadChildren: () => import('./features/survey/survey.module').then( m => m.SurveyModule)
   },
   {
+    path: 'report',
+    loadChildren: () => import('./features/report/report.module').then( m => m.ReportModule)
+  },
+  {
     path: '',
     redirectTo: 'home',
     pathMatch: 'full'

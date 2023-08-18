@@ -1,0 +1,42 @@
+<ion-header>
+  <ion-toolbar>
+    <div class="toolbar-content">
+      <div class="title">
+        <img class="header-logo" src='./assets/header_icons/edit.png'>
+        <h3 class="header-nav-home">Edit Role</h3>
+      </div>
+      <div class="modal-close">
+        <button (click)="closeModal()" class="modal__close-btn ion-float-right">
+          <img class="close-logo" src='./assets/icon/close.png'>
+        </button>
+      </div>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content>
+  <form [formGroup]="editRoleForm">
+    <ion-row class="user-wrapper">
+      <ion-col size-lg="12" size-md="12" size-xs="12">
+        <ion-item>
+          <ion-label position="floating" color="medium">Role name*</ion-label>
+          <ion-input formControlName="role" type="text"></ion-input>
+        </ion-item>
+        <div class="error-messages">
+          <ng-container *ngFor="let error of errorMessages.roleName">
+            <div class="error-message"
+              *ngIf="editRoleForm.get('role')?.hasError(error.type) && (editRoleForm.get('role')?.dirty || editRoleForm.get('role')?.touched)">
+              {{ error.message }}
+            </div>
+          </ng-container>
+        </div>
+      </ion-col>
+    </ion-row>
+    <div class="action-button ion-text-right">
+      <ion-button (click)="closeModal()" class="add-product-btn" color="danger">Cancel</ion-button>
+      <ion-button [disabled]="editRoleForm.invalid" (click)="onSubmit()" class="submit-btn" color="secondary">Confirm
+      </ion-button>
+    </div>
+  </form>
+</ion-content>

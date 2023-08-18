@@ -5,3 +5,19 @@ ion-card {
 ion-card-content {
     font-size: 2.5em;
 }
+
+.dara {
+    border-color: var(--ion-color-gunung-nago-report);
+    color: var(--ion-color-gunung-nago-report);
+}
+
+.doc {
+    border-color: var(--ion-color-gunung-nago-flock);
+    color: var(--ion-color-gunung-nago-flock);
+}
+
+@media only screen and (min-width: 768px) {
+    .flock-modal {
+        --height: 50em;
+    }
+}

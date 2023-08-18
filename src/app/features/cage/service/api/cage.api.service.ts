@@ -11,7 +11,15 @@ export class CageApiService {
 
   constructor(private http: HttpClient) { }
 
+  public save(cages: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}`, cages, {responseType: 'text'});
+  }
+
   public search(searchValues: any): Observable<PageResult<CageDto>> {
     return this.http.get<PageResult<CageDto>>(`${this.baseUrl}search`, { params: searchValues });
+  }
+
+  public getAllActiveCages(): Observable<CageDto[]> {
+    return this.http.get<CageDto[]>(`${this.baseUrl}all`);
   }
 }

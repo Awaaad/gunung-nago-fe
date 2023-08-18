@@ -9,7 +9,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { CageDto, FlockDto } from 'generated-src/model';
 import { Subscription } from 'rxjs';
 import { UtilsService } from 'src/app/shared/services/utils.service';
-import { FlockApiService } from '../service/flock.api.service';
+import { FlockApiService } from '../service/api/flock.api.service';
 
 @Component({
   selector: 'app-flock-list',

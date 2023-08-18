@@ -25,28 +25,60 @@
 
 <ion-content [fullscreen]="false" class="ion-padding">
   <form [formGroup]="cageDetailsForm">
-    <ion-card>
-      <ion-card-content>
-        <ion-row>
-          <ion-col size-xs="12" size-md="3">
-            <ion-toggle labelPlacement="start" class="toggle" formControlName="active" color="danger">{{
-              'cage.cage-details.active' | translate }}*</ion-toggle>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col size-xs="12" size-md="3">
-            <ion-input color="gunung-nago-primary" label="{{ 'cage.cage-details.name' | translate }}*"
-              label-placement="floating" fill="outline" type="text" clear-input="true"
-              formControlName="name"></ion-input>
-          </ion-col>
-        </ion-row>
-      </ion-card-content>
-
-      <div class="btn-container">
-        <ion-button class="cancel-btn">Cancel</ion-button>
-        <ion-button color="gunung-nago-primary">Save</ion-button>
+    <div formArrayName="cageDetails" *ngFor="let cageDetails of cageDetailsFields?.controls; let i = index">
+      <div [formGroupName]="i">
+        <ion-card>
+          <ion-card-content>
+            <div class="form-array-index">
+              <h6>Cage {{i}}</h6>
+              <ion-button *ngIf="cageDetailsFields != null && cageDetailsFields.length > 1"
+                (click)="removeCageDetails(i)" class="delete-product-btn" color="gunung-nago-warehouse"><ion-icon
+                  name="trash"></ion-icon></ion-button>
+            </div>
+            <ion-row>
+              <ion-col size-xs="12" size-md="3">
+                <ion-toggle labelPlacement="start" class="toggle" formControlName="active" color="gunung-nago-report">{{
+                  'cage.cage-details.active' | translate }}*</ion-toggle>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size-xs="12" size-md="3">
+                <ion-input color="gunung-nago-primary" label="{{ 'cage.cage-details.name' | translate }}*"
+                  label-placement="floating" fill="outline" type="text" clear-input="true" maxlength="5"
+                  formControlName="name"></ion-input>
+                <div class="error-messages">
+                  <ng-container *ngFor="let error of errorMessages.name">
+                    <div class="error-message"
+                      *ngIf="cageDetails.get('name')?.hasError(error.type) && (cageDetails.get('name')?.dirty || cageDetails.get('name')?.touched)">
+                      {{ error.message }}
+                    </div>
+                  </ng-container>
+                </div>
+              </ion-col>
+              <ion-col size-xs="12" size-md="3">
+                <ion-select color="gunung-nago-primary" label="{{ 'cage.cage-details.cage-category' | translate }}"
+                  label-placement="floating" fill="outline" interface="popover"
+                  placeholder="{{ 'cage.cage-details.cage-category' | translate }}" formControlName="cageCategory">
+                  <ion-select-option *ngFor="let category of cageCategories" [value]="category">{{ category
+                    }}</ion-select-option>
+                </ion-select>
+                <div class="error-messages">
+                  <ng-container *ngFor="let error of errorMessages.cageCategory">
+                    <div class="error-message"
+                      *ngIf="cageDetails.get('cageCategory')?.hasError(error.type) && (cageDetails.get('cageCategory')?.dirty || cageDetails.get('cageCategory')?.touched)">
+                      {{ error.message }}
+                    </div>
+                  </ng-container>
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-card-content>
+        </ion-card>
       </div>
-
-    </ion-card>
+    </div>
+    <div class="btn-container">
+      <ion-button color="gunung-nago-cage mr-05" (click)="addCageDetails()">Add Cage</ion-button>
+      <ion-button color="gunung-nago-primary" (click)="save()">Save</ion-button>
+    </div>
   </form>
 </ion-content>

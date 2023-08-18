@@ -23,33 +23,39 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="false" class="ion-padding">
+<ion-content [fullscreen]="false" class="ion-padding" [scrollEvents]="true" (ionScroll)="onScroll($event)"
+  (ionScrollEnd)="handleScrollEnd()">
+  <div class="btn-container">
+    <ion-button color="gunung-nago-survey" routerLink="/cage/cage-details"><ion-icon
+        name="add"></ion-icon></ion-button>
+  </div>
   <form [formGroup]="cageForm">
     <ion-card>
-
       <ion-card-content>
         <ion-row>
           <ion-col size-xs="12" size-md="3">
-            <ion-select color="gunung-nago-primary" label="{{ 'flock.flock-details.cage' | translate }}"
+            <ion-toggle labelPlacement="start" class="toggle" formControlName="active" color="gunung-nago-report">{{
+              'cage.cage-details.active' | translate }}*</ion-toggle>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size-xs="12" size-md="3">
+            <ion-select color="gunung-nago-primary" label="{{ 'cage.cage-details.cage-category' | translate }}"
               label-placement="floating" fill="outline" interface="popover"
-              placeholder="{{ 'flock.flock-details.cage' | translate }}" formControlName="cageId">
-              <ion-select-option value="1">A</ion-select-option>
-              <ion-select-option value="2">B</ion-select-option>
-              <ion-select-option value="3">C</ion-select-option>
+              placeholder="{{ 'cage.cage-details.cage-category' | translate }}" formControlName="cageCategory">
+              <ion-select-option *ngFor="let category of cageCategories" [value]="category">{{ category
+                }}</ion-select-option>
             </ion-select>
           </ion-col>
         </ion-row>
 
-
         <div class="btn-container">
-          <ion-button class="cancel-btn">Reset</ion-button>
-          <ion-button color="gunung-nago-primary">Search</ion-button>
+          <ion-button class="cancel-btn" (click)="reset()">Reset</ion-button>
+          <ion-button color="gunung-nago-primary" (click)="search()">Search</ion-button>
         </div>
       </ion-card-content>
     </ion-card>
   </form>
-
-
 
   <ion-card>
     <div class="mat-elevation-z8 table-responsive">
@@ -85,12 +91,11 @@
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-
       </table>
     </div>
   </ion-card>
-  <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
-    <ion-infinite-scroll-content loadingSpinner="crescent" loadingText="Loading more doctors...">
+  <ion-infinite-scroll threshold="100px" position="bottom" (ionInfinite)="loadData($event)">
+    <ion-infinite-scroll-content loadingSpinner="crescent" loadingText="Loading more cages...">
     </ion-infinite-scroll-content>
   </ion-infinite-scroll>
 </ion-content>

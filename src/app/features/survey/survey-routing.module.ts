@@ -9,13 +9,9 @@ const routes: Routes = [
     component: SurveyListComponent
   },
   {
-    path: 'survey-details',
+    path: 'survey-details/:cageId/:edit',
     component: SurveryDetailsComponent
-  },
-  {
-    path: 'survey-details/:cageId',
-    component: SurveryDetailsComponent
-  },
+  }
 ];
 
 @NgModule({

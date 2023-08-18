@@ -6,7 +6,7 @@ import { LoadingController, ToastController } from '@ionic/angular';
 })
 export class UtilsService {
   public isLoading!: boolean;
-  
+
   constructor(
     private toastCtrl: ToastController,
     public loadingController: LoadingController
@@ -25,7 +25,7 @@ export class UtilsService {
     if (obj === null || obj === undefined || obj === '') {
       return true;
     } else {
-        return false;
+      return false;
     }
   }
 
@@ -34,7 +34,7 @@ export class UtilsService {
     const toast = await this.toastCtrl.create({
       message: message,
       position: 'top',
-      color: 'success',
+      color: 'gunung-nago-report',
       duration: 2000,
       cssClass: 'toast-custom'
     });

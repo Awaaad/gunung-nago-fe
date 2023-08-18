@@ -24,7 +24,7 @@
 </ion-header>
 
 <ion-content [fullscreen]="false" class="ion-padding">
-  <form [formGroup]="stockForm">
+  <form [formGroup]="surveyForm">
     <ion-card>
       <ion-card-content>
         <ion-item-divider>
@@ -85,7 +85,7 @@
           <ion-col size-xs="12" size-md="3">
             <ion-input color="gunung-nago-survey" label="{{ 'survey.survey-details.remaining' | translate }}"
               label-placement="floating" fill="outline" type="number" min="0" clear-input="true"
-              [value]="remaining"></ion-input>
+              [value]="remaining" readonly="true"></ion-input>
           </ion-col>
         </ion-row>
 
@@ -100,8 +100,8 @@
           </ion-col>
           <ion-col size-xs="12" size-md="3">
             <ion-input color="gunung-nago-survey" label="{{ 'survey.survey-details.item' | translate }}"
-              label-placement="floating" fill="outline" type="number" min="0" clear-input="true" formControlName="item"
-              [(ngModel)]="item" (ngModelChange)="calculateTotalItem()"></ion-input>
+              label-placement="floating" fill="outline" type="number" min="0" max="299" clear-input="true"
+              formControlName="item" [(ngModel)]="item" (ngModelChange)="calculateTotalItem()"></ion-input>
           </ion-col>
           <ion-col size-xs="12" size-md="3">
             <ion-input color="gunung-nago-survey" label="{{ 'survey.survey-details.broken' | translate }}"
@@ -169,8 +169,8 @@
       </ion-card-content>
 
       <div class="btn-container">
-        <ion-button class="cancel-btn">Cancel</ion-button>
-        <ion-button color="gunung-nago-survey">Save</ion-button>
+        <ion-button class="cancel-btn" (click)="cancel()">Cancel</ion-button>
+        <ion-button color="gunung-nago-survey" [disabled]="surveyForm.invalid" (click)="save()">Save</ion-button>
       </div>
 
     </ion-card>

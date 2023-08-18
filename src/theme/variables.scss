@@ -221,6 +221,25 @@ $app-theme: mat.define-light-theme((color: (primary: $app-primary,
 	--ion-color-tint: var(--ion-color-gunung-nago-flock-tint);
 }
 
+// cage
+:root {
+	--ion-color-gunung-nago-cage: #3d4142;
+	--ion-color-gunung-nago-cage-rgb: 61,65,66;
+	--ion-color-gunung-nago-cage-contrast: #ffffff;
+	--ion-color-gunung-nago-cage-contrast-rgb: 255,255,255;
+	--ion-color-gunung-nago-cage-shade: #36393a;
+	--ion-color-gunung-nago-cage-tint: #505455;
+}
+
+.ion-color-gunung-nago-cage {
+	--ion-color-base: var(--ion-color-gunung-nago-cage);
+	--ion-color-base-rgb: var(--ion-color-gunung-nago-cage-rgb);
+	--ion-color-contrast: var(--ion-color-gunung-nago-cage-contrast);
+	--ion-color-contrast-rgb: var(--ion-color-gunung-nago-cage-contrast-rgb);
+	--ion-color-shade: var(--ion-color-gunung-nago-cage-shade);
+	--ion-color-tint: var(--ion-color-gunung-nago-cage-tint);
+}
+
 // @media (prefers-color-scheme: dark) {
 //   /*
 //    * Dark Colors

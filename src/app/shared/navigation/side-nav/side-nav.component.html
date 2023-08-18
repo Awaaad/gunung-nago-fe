@@ -6,8 +6,8 @@
           <ion-menu-button autoHide='false'></ion-menu-button>
         </ion-buttons>
         <div class="header-section">
-          <img class="menu-logo" routerLink="/dashboard" src='./assets/header-icon/chicken.png' width="22px">
-          <h5 class="side-nav-home" routerLink="/dashboard">G.V-GN</h5>
+          <img class="menu-logo" routerLink="/home" src='./assets/header-icon/chicken.png' width="22px">
+          <h5 class="side-nav-home" routerLink="/home">G.V-GN</h5>
           <a *ngIf="false" routerLink="login">Login</a>
           <a *ngIf="true" routerLink="login">Logout</a>
         </div>
@@ -18,29 +18,23 @@
         <div class="side-nav" *ngIf="true">
           <ul id="myUL">
             <li>
-              <a routerLink="/dashboard">
-                <ion-icon class="ion-icon" name="analytics"></ion-icon><span>{{ 'activity.dashboard' | translate
-                  }}</span>
+              <a routerLink="/home">
+                <ion-icon name="home"></ion-icon>{{ 'activity.home' | translate }}
+              </a>
+            </li>
+            <li>
+              <a routerLink="/report/daily-report">
+                <ion-icon name="book"></ion-icon>{{ 'activity.daily-report' | translate }}
+              </a>
+            </li>
+            <li>
+              <a routerLink="/cage/cage-list">
+                <ion-icon name="grid"></ion-icon><span>{{ 'activity.cage' | translate }}</span>
               </a>
             </li>
             <li>
               <a routerLink="/cash-registry">
                 <ion-icon name="pencil"></ion-icon><span>{{ 'activity.survey' | translate }}</span>
-              </a>
-            </li>
-            <li>
-              <a routerLink="/point-of-sale/pos">
-                <ion-icon name="book"></ion-icon>{{ 'activity.daily-report' | translate }}
-              </a>
-            </li>
-            <li>
-              <a routerLink="/order/order-history">
-                <ion-icon name="home"></ion-icon>{{ 'activity.warehouse' | translate }}
-              </a>
-            </li>
-            <li>
-              <a routerLink="/order/order-history">
-                <ion-icon name="grid"></ion-icon>{{ 'activity.cage' | translate }}
               </a>
             </li>
             <li>

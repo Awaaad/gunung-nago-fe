@@ -8,7 +8,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { FlockDetailsComponent } from './flock-details/flock-details.component';
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
-import { FlockApiService } from './service/flock.api.service';
+import { FlockApiService } from './service/api/flock.api.service';
 
 
 @NgModule({

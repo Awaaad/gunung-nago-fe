@@ -29,7 +29,7 @@
       <ion-row class="card-center">
         <!-- <ion-col size-xs="0" offset-xs="0" size-sm="0" offset-sm="0" size-md="2" offset-md="1"></ion-col> -->
 
-        <ion-col size-xs="6" size-md="2">
+        <ion-col size-xs="6" size-sm="4" size-md="3">
           <ion-ripple-effect class="custom-ripple"></ion-ripple-effect>
           <ion-card routerLink="/cage/cage-survey-list">
             <div class="card-corner survey"></div>
@@ -41,8 +41,8 @@
             </ion-card-content>
           </ion-card>
         </ion-col>
-        <ion-col size-xs="6" size-md="2">
-          <ion-card>
+        <ion-col size-xs="6" size-sm="4" size-md="3">
+          <ion-card routerLink="/report/daily-report">
             <div class="card-corner report"></div>
             <ion-card-header>
               <ion-card-title class="home-card-title">{{ 'activity.daily-report' | translate }}</ion-card-title>
@@ -56,18 +56,7 @@
       </ion-row>
 
       <ion-row class="card-center">
-        <ion-col size-xs="6" size-md="2">
-          <ion-card>
-            <div class="card-corner warehouse"></div>
-            <ion-card-header>
-              <ion-card-title class="home-card-title">{{ 'activity.warehouse' | translate }}</ion-card-title>
-            </ion-card-header>
-            <ion-card-content class="home-card-content">
-              <img class="img-card-home" src="./assets/tiny-color/warehouse/icons8-warehouse-64.png" alt="report">
-            </ion-card-content>
-          </ion-card>
-        </ion-col>
-        <ion-col size-xs="6" size-md="2">
+        <ion-col size-xs="6" size-md="3">
           <ion-card routerLink="/cage/cage-list">
             <div class="card-corner cage"></div>
             <ion-card-header>
@@ -78,10 +67,7 @@
             </ion-card-content>
           </ion-card>
         </ion-col>
-      </ion-row>
-
-      <ion-row class="card-center">
-        <ion-col size-xs="6" size-md="2">
+        <ion-col size-xs="6" size-md="3">
           <ion-card routerLink="/flock/flock-list">
             <div class="card-corner flock"></div>
             <ion-card-header>
@@ -92,18 +78,18 @@
             </ion-card-content>
           </ion-card>
         </ion-col>
-        <ion-col size-xs="6" size-md="2">
+        <ion-col size-xs="6" size-md="3">
           <ion-card>
-            <div class="card-corner dashboard"></div>
+            <div class="card-corner chicken-food"></div>
             <ion-card-header>
-              <ion-card-title class="home-card-title">{{ 'activity.dashboard' | translate }}</ion-card-title>
+              <ion-card-title class="home-card-title">{{ 'activity.chicken-food' | translate }}</ion-card-title>
             </ion-card-header>
             <ion-card-content class="home-card-content">
-              <img class="img-card-home" src="./assets/tiny-color/dashboard/icons8-graph-64.png" alt="report">
+              <img class="img-card-home" src="./assets/tiny-color/feed/icons8-used-product-64.png" alt="survey">
             </ion-card-content>
           </ion-card>
         </ion-col>
-        <ion-col size-xs="6" size-md="2">
+        <ion-col size-xs="6" size-md="3">
           <ion-card>
             <div class="card-corner vaccine"></div>
             <ion-card-header>
@@ -114,14 +100,28 @@
             </ion-card-content>
           </ion-card>
         </ion-col>
-        <ion-col size-xs="6" size-md="2">
+      </ion-row>
+
+      <ion-row class="card-center">
+        <ion-col size-xs="6" size-md="3">
           <ion-card>
-            <div class="card-corner chicken-food"></div>
+            <div class="card-corner warehouse"></div>
             <ion-card-header>
-              <ion-card-title class="home-card-title">{{ 'activity.chicken-food' | translate }}</ion-card-title>
+              <ion-card-title class="home-card-title">{{ 'activity.warehouse' | translate }}</ion-card-title>
             </ion-card-header>
             <ion-card-content class="home-card-content">
-              <img class="img-card-home" src="./assets/tiny-color/feed/icons8-used-product-64.png" alt="survey">
+              <img class="img-card-home" src="./assets/tiny-color/warehouse/icons8-warehouse-64.png" alt="report">
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+        <ion-col size-xs="6" size-md="3">
+          <ion-card>
+            <div class="card-corner dashboard"></div>
+            <ion-card-header>
+              <ion-card-title class="home-card-title">{{ 'activity.dashboard' | translate }}</ion-card-title>
+            </ion-card-header>
+            <ion-card-content class="home-card-content">
+              <img class="img-card-home" src="./assets/tiny-color/dashboard/icons8-graph-64.png" alt="report">
             </ion-card-content>
           </ion-card>
         </ion-col>
