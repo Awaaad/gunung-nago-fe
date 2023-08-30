@@ -8,11 +8,16 @@ import { TranslateModule } from '@ngx-translate/core';
 import { FlockDetailsComponent } from './flock-details/flock-details.component';
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
-import { FlockApiService } from './service/api/flock.api.service';
+import { FlockApiService } from '../../shared/api/flock.api.service';
+import { FlockSaleApiService } from '../../shared/api/flock-sale.api.service';
+import { FlockSaleDetailsComponent } from './flock-sale-details/flock-sale-details.component';
+import { FlockSaleListComponent } from './flock-sale-list/flock-sale-list.component';
+import { SurveyApiService } from '../../shared/api/survey.api.service';
+import { CageApiService } from '../../shared/api/cage.api.service';
 
 
 @NgModule({
-  declarations: [FlockListComponent, FlockDetailsComponent],
+  declarations: [FlockListComponent, FlockDetailsComponent, FlockSaleDetailsComponent, FlockSaleListComponent],
   imports: [
     CommonModule,
     FlockRoutingModule,
@@ -23,6 +28,6 @@ import { FlockApiService } from './service/api/flock.api.service';
     MatTableModule,
     MatSortModule,
   ],
-  providers: [FlockApiService]
+  providers: [FlockApiService, FlockSaleApiService, SurveyApiService, CageApiService]
 })
 export class FlockModule { }

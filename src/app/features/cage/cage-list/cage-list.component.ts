@@ -4,12 +4,12 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core';
-import { CageApiService } from '../service/api/cage.api.service';
+import { CageApiService } from '../../../shared/api/cage.api.service';
 import { CageCategory, CageDto } from 'generated-src/model';
 import { Subscription } from 'rxjs';
 import { IonInfiniteScroll } from '@ionic/angular';
 import { Sort } from '@angular/material/sort';
-import { UtilsService } from 'src/app/shared/services/utils.service';
+import { UtilsService } from 'src/app/shared/util/utils.service';
 
 @Component({
   selector: 'app-cage-list',

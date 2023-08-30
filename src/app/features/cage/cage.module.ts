@@ -6,20 +6,19 @@ import { TranslateModule } from '@ngx-translate/core';
 import { IonicModule } from '@ionic/angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CageDetailsComponent } from './cage-details/cage-details.component';
-import { CageApiService } from './service/api/cage.api.service';
+import { CageApiService } from '../../shared/api/cage.api.service';
 import { CageListComponent } from './cage-list/cage-list.component';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { SurveyApiService } from '../survey/service/api/survey.api.service';
-import { ModalModule } from 'src/app/shared/modals/modal.module';
+import { SurveyApiService } from '../../shared/api/survey.api.service';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter } from '@angular/material-moment-adapter';
 import { MY_FORMATS } from '../report/report.module';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
-import { FlockApiService } from '../flock/service/api/flock.api.service';
+import { FlockApiService } from '../../shared/api/flock.api.service';
 
 
 @NgModule({

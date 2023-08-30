@@ -8,7 +8,7 @@ import { MatTableModule } from '@angular/material/table';
 import { IonicModule } from '@ionic/angular';
 import { TranslateModule } from '@ngx-translate/core';
 import { DailyReportComponent } from './daily-report/daily-report.component';
-import { ReportApiService } from './service/api/report.api.service';
+import { ReportApiService } from '../../shared/api/report.api.service';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatNativeDateModule } from '@angular/material/core';

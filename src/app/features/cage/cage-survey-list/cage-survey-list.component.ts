@@ -1,16 +1,16 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { CageApiService } from '../service/api/cage.api.service';
-import { AquisitionType, CageDto } from 'generated-src/model';
-import { SurveyApiService } from '../../survey/service/api/survey.api.service';
+import { CageApiService } from '../../../shared/api/cage.api.service';
+import { AquisitionType, CageCategory, CageDto } from 'generated-src/model';
+import { SurveyApiService } from '../../../shared/api/survey.api.service';
 import * as moment from 'moment';
 import { IonModal } from '@ionic/angular';
 import { OverlayEventDetail } from '@ionic/core/components';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { FlockSaveFrontDto } from 'generated-src/model-front';
-import { FlockApiService } from '../../flock/service/api/flock.api.service';
-import { UtilsService } from 'src/app/shared/services/utils.service';
+import { FlockApiService } from '../../../shared/api/flock.api.service';
+import { UtilsService } from 'src/app/shared/util/utils.service';
 import { HttpErrorResponse } from '@angular/common/http';
 @Component({
   selector: 'app-cage-survey-list',
@@ -85,9 +85,9 @@ export class CageSurveyListComponent implements OnInit {
 
   public getAllActiveCages() {
     this.cageApiService.getAllActiveCages().subscribe(cages => {
-      this.cagesDoc = cages.filter((cage: { cageCategory: string; }) => cage.cageCategory === 'DOC');
-      this.cagesDara = cages.filter((cage: { cageCategory: string; }) => cage.cageCategory === 'DARA');
-      this.cages = cages.filter((cage: { cageCategory: string; }) => cage.cageCategory === 'NORM');
+      this.cagesDoc = cages.filter((cage: { cageCategory: string; }) => cage.cageCategory === CageCategory.DOC);
+      this.cagesDara = cages.filter((cage: { cageCategory: string; }) => cage.cageCategory === CageCategory.DARA);
+      this.cages = cages.filter((cage: { cageCategory: string; }) => cage.cageCategory === CageCategory.NORM);
     })
   }
 

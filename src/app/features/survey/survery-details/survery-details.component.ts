@@ -1,13 +1,16 @@
 import { formatDate } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { TranslateService } from '@ngx-translate/core';
-import { SurveyApiService } from '../service/api/survey.api.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { FlockCategory, SurveyDto } from 'generated-src/model';
-import { SurveyFrontDto } from 'generated-src/model-front';
 import { HttpErrorResponse } from '@angular/common/http';
-import { UtilsService } from 'src/app/shared/services/utils.service';
+import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
+import { FeedSurveyDto, FlockCategory, FlockFeedLineDto, HealthProductDto, HealthSurveyDto, SurveyDto } from 'generated-src/model';
+import { SurveyFrontDto } from 'generated-src/model-front';
+import { debounceTime, distinctUntilChanged, filter, finalize, switchMap, tap } from 'rxjs';
+import { FlockFeedLineApiService } from 'src/app/shared/api/flock-feed-line.api.service';
+import { HealthApiService } from 'src/app/shared/api/health.api.service';
+import { UtilsService } from 'src/app/shared/util/utils.service';
+import { SurveyApiService } from '../../../shared/api/survey.api.service';
 
 @Component({
   selector: 'app-survery-details',
@@ -35,18 +38,40 @@ export class SurveryDetailsComponent implements OnInit {
   private surveyDto: SurveyFrontDto = new SurveyFrontDto();
   public surveyForm!: FormGroup;
 
+  // health section
+  public healthProducts: HealthProductDto[] = [];
+  public searchHealthProductCtrl = new FormControl();
+  public filteredHealthProducts: any;
+  public isLoading = false;
+  public errorMsg!: string;
+  public minLengthTerm = 1;
+  public selectedHealthProduct: any = "";
+  private page: number = 0;
+  private size: number = 20;
+  public sortOrder: string = 'asc';
+  public sortBy: string = 'name';
+  public selectedHealthProducts: HealthSurveyDto[] = [];
+
+  // feedSection
+  public feedSurvey: FeedSurveyDto[] = [];
+  public feedLines: FlockFeedLineDto[] = [];
+
   constructor(
     private activatedRoute: ActivatedRoute,
+    private flockFeedLineApiService: FlockFeedLineApiService,
+    private healthApiService: HealthApiService,
     private router: Router,
     private surveyApiService: SurveyApiService,
     private translateService: TranslateService,
-    private utilsService: UtilsService
+    private utilsService: UtilsService,
   ) {
   }
 
   ngOnInit(): void {
     this.initialiseFormGroup();
     this.findSurveyDtoForSelectedCage();
+    this.getAllHealthProducts();
+    this.searchHealthProduct();
   }
 
   public ionChangeLanguage(event: any): void {
@@ -73,8 +98,80 @@ export class SurveryDetailsComponent implements OnInit {
       cageId: new FormControl({ value: 0, disabled: false }, Validators.compose([])),
       flockId: new FormControl({ value: 0, disabled: false }, Validators.compose([])),
       flockStockId: new FormControl({ value: this.flockStockId, disabled: false }, Validators.compose([])),
-      eggStockId: new FormControl({ value: this.eggStockId, disabled: false }, Validators.compose([]))
+      eggStockId: new FormControl({ value: this.eggStockId, disabled: false }, Validators.compose([])),
+      comment: new FormControl({ value: '', disabled: false }, Validators.compose([]))
     });
+  }
+
+  public searchHealthProduct(): void {
+    this.searchHealthProductCtrl.valueChanges
+      .pipe(
+        filter(res => {
+          return res !== null && res.length >= this.minLengthTerm
+        }),
+        distinctUntilChanged(),
+        debounceTime(1000),
+        tap(() => {
+          this.errorMsg = "";
+          this.filteredHealthProducts = [];
+          this.isLoading = true;
+        }),
+        switchMap(value => {
+          const name = {
+            page: this.page,
+            size: this.size,
+            sortBy: this.sortBy,
+            sortOrder: this.sortOrder.toUpperCase(),
+            active: true,
+            name: value
+          }
+          return this.healthApiService.search(name).pipe(
+            finalize(() => {
+              this.isLoading = false
+            }),
+          )
+        })
+      )
+      .subscribe((data: any) => {
+        this.filteredHealthProducts = data.content
+      })
+  }
+
+  public onHealthProductSelected(): void {
+    this.selectedHealthProduct = this.selectedHealthProduct;
+    this.healthApiService.findHealthSurveyDtoByHealthProductId(this.selectedHealthProduct.id).subscribe(productHealthSurvey => {
+      this.selectedHealthProducts.push(productHealthSurvey);
+    })
+  }
+
+  public removeHealthProduct(id: number): void {
+    this.selectedHealthProducts = this.selectedHealthProducts.filter(selectedHealthProduct => {
+      selectedHealthProduct.healthProductId != id;
+    })
+  }
+
+  public displayWith(value: any): string {
+    return value?.name;
+  }
+
+  public clearSelection(): void {
+    this.selectedHealthProduct = "";
+    this.filteredHealthProducts = [];
+  }
+
+  public changeUnitsUsed(event: any, unitsTotal: number, index1: number, index2: number): void {
+    if (event > unitsTotal) {
+      this.selectedHealthProducts[index1].healthSurveyStockDtos[index2].unitsUsed = 0;
+    }
+  }
+
+  private findAllActiveFlockLinesByFlockId(flockId: number): void {
+    this.flockFeedLineApiService.findAllActiveFlockLinesByFlockId(flockId).subscribe(feedLines => {
+      this.feedLines = feedLines;
+      this.feedLines.forEach(feeLine => {
+        feeLine.bagsEaten = 0;
+      })
+    })
   }
 
   public calculateRemaining() {
@@ -85,9 +182,15 @@ export class SurveryDetailsComponent implements OnInit {
     this.totalItem = (this.tie * 300) + this.item + this.broken;
   }
 
+  private getAllHealthProducts(): void {
+    this.healthApiService.getAllHealthProducts().subscribe(healthProducts => {
+      this.healthProducts = healthProducts;
+    })
+  }
+
   private findSurveyDtoForSelectedCage(): void {
-    this.surveyApiService.findSurveyByCageId(this.cageId).subscribe((surveyDetails: SurveyDto) => {
-      if (!JSON.parse(this.edit)) {
+    if (!JSON.parse(this.edit)) {
+      this.surveyApiService.findMostRecentSurveyDtoForCage(this.cageId).subscribe((surveyDetails: SurveyDto) => {
         this.cageName = surveyDetails.cageName;
         this.flockCategory = surveyDetails.flockCategory;
         this.flockAge = surveyDetails.age;
@@ -112,9 +215,14 @@ export class SurveryDetailsComponent implements OnInit {
           cageId: surveyDetails.cageId,
           flockId: surveyDetails.flockId,
           flockStockId: null,
-          eggStockId: null
+          eggStockId: null,
+          comment: null
         })
-      } else {
+
+        this.findAllActiveFlockLinesByFlockId(surveyDetails.flockId);
+      });
+    } else {
+      this.surveyApiService.findSurveyByCageId(this.cageId).subscribe((surveyDetails: SurveyDto) => {
         this.cageName = surveyDetails.cageName;
         this.flockCategory = surveyDetails.flockCategory;
         this.flockAge = surveyDetails.age;
@@ -142,15 +250,17 @@ export class SurveryDetailsComponent implements OnInit {
           cageId: surveyDetails.cageId,
           flockId: surveyDetails.flockId,
           flockStockId: surveyDetails.flockStockId,
-          eggStockId: surveyDetails.eggStockId
+          eggStockId: surveyDetails.eggStockId,
+          comment: surveyDetails.comment
         })
-      }
-    })
+      });
+    }
   }
 
   public save(): void {
     this.utilsService.presentLoading();
     this.initialiseSurveyDto();
+    this.setFeedSurvey();
     this.populateSurveyDtoWithFormValues();
     if (!JSON.parse(this.edit)) {
       this.surveyApiService.save(this.surveyDto).subscribe({
@@ -198,7 +308,10 @@ export class SurveryDetailsComponent implements OnInit {
       sterile: null,
       good: null,
       badEggs: null,
-      goodEggs: null
+      goodEggs: null,
+      healthSurveyDtos: [],
+      feedSurveyDtos: [],
+      comment: null
     }
   }
 
@@ -217,7 +330,19 @@ export class SurveryDetailsComponent implements OnInit {
       sterile: this.surveyForm.value.sterile,
       good: this.remaining,
       badEggs: this.broken,
-      goodEggs: (this.tie * 300) + this.item
+      goodEggs: (this.tie * 300) + this.item,
+      healthSurveyDtos: this.selectedHealthProducts,
+      feedSurveyDtos: this.feedSurvey,
+      comment: this.surveyForm.value.comment
     };
+  }
+
+  private setFeedSurvey(): void {
+    this.feedLines.filter(feedLine => { return feedLine.bagsEaten !== 0 }).forEach(feedLine => {
+      const feedSurvey: FeedSurveyDto = new FeedSurveyDto();
+      feedSurvey.flockFeedLineId = feedLine.id;
+      feedSurvey.bagsEaten = feedLine.bagsEaten;
+      this.feedSurvey.push(feedSurvey);
+    })
   }
 }

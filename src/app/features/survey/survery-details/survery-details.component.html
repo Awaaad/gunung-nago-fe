@@ -24,8 +24,9 @@
 </ion-header>
 
 <ion-content [fullscreen]="false" class="ion-padding">
-  <form [formGroup]="surveyForm">
-    <ion-card>
+  <ion-card>
+    <form [formGroup]="surveyForm">
+
       <ion-card-content>
         <ion-item-divider>
           <ion-label>{{ 'survey.survey-details.general' | translate }}</ion-label>
@@ -84,8 +85,8 @@
           </ion-col>
           <ion-col size-xs="12" size-md="3">
             <ion-input color="gunung-nago-survey" label="{{ 'survey.survey-details.remaining' | translate }}"
-              label-placement="floating" fill="outline" type="number" min="0" clear-input="true"
-              [value]="remaining" readonly="true"></ion-input>
+              label-placement="floating" fill="outline" type="number" min="0" clear-input="true" [value]="remaining"
+              readonly="true"></ion-input>
           </ion-col>
         </ion-row>
 
@@ -130,49 +131,104 @@
               formControlName="upDownProduction"></ion-input>
           </ion-col>
         </ion-row>
+      </ion-card-content>
 
+      <!-- feed -->
+      <div class="ion-padding">
+        <ion-item-divider>
+          <ion-label>Feed</ion-label>
+        </ion-item-divider>
+
+        <div *ngIf="feedLines.length > 0">
+
+          <div *ngFor="let feed of feedLines; let i=index;">
+            <div class="em-title" [style.color]="i === 0 ? 'black' : 'grey'">Allocation Date: {{feed.createdDate |
+              date:'dd-MM-yyyy'}}
+            </div>
+            <ion-row>
+              <ion-col size-xs="12" size-md="3">
+                <div class="em-body-title">Bags Allocated: {{feed.bagsAllocated}}</div>
+                <div class="em-body-title">Bags Left: {{feed.bagsLeft}}</div>
+                <div>
+                  <ion-input color="gunung-nago-survey" label="Enter bags eaten" label-placement="floating"
+                    fill="outline" type="number" min="0" clear-input="true" [max]="feed.bagsLeft"
+                    [(ngModel)]="feed.bagsEaten" name="bagsEaten" [ngModelOptions]="{standalone: true}"></ion-input>
+                </div>
+              </ion-col>
+            </ion-row>
+            <br>
+          </div>
+        </div>
+      </div>
+
+      <!-- health -->
+      <div class="ion-padding">
         <ion-item-divider>
           <ion-label>{{ 'survey.survey-details.vaccine-medication' | translate }}</ion-label>
         </ion-item-divider>
-        <ion-row>
-          <ion-col size-xs="12" size-md="6">
-            <ion-input color="gunung-nago-survey" label="{{ 'survey.survey-details.vaccine-medication' | translate }}"
-              label-placement="floating" fill="outline" type="text" clear-input="true"
-              formControlName="vaccineMedication"></ion-input>
-          </ion-col>
-        </ion-row>
+        <mat-form-field class="example-full-width" appearance="outline">
+          <input matInput placeholder="Search health product" [(ngModel)]="selectedHealthProduct"
+            [matAutocomplete]="auto" [formControl]="searchHealthProductCtrl" placeholder="Seach health product">
+          <button *ngIf="selectedHealthProduct" matSuffix mat-icon-button aria-label="Clear" (click)="clearSelection()">
+            <ion-icon name="close-outline"></ion-icon>
+          </button>
+          <mat-autocomplete [panelWidth]="400" #auto="matAutocomplete" (optionSelected)="onHealthProductSelected()"
+            [displayWith]="displayWith">
+            <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+            <ng-container *ngIf="!isLoading">
+              <mat-option *ngFor="let healthProduct of filteredHealthProducts" [value]="healthProduct">
+                <span>{{healthProduct.name}}</span>
+              </mat-option>
+            </ng-container>
+          </mat-autocomplete>
+        </mat-form-field>
 
-        <ion-item-divider>
-          <ion-label>{{ 'survey.survey-details.usage' | translate }}</ion-label>
-        </ion-item-divider>
-        <ion-row>
-          <ion-col size-xs="12" size-md="3">
-            <ion-input color="gunung-nago-survey" label="{{ 'survey.survey-details.standard-feed' | translate }}"
-              label-placement="floating" fill="outline" type="number" min="0" clear-input="true"
-              formControlName="standardFeed"></ion-input>
-          </ion-col>
-          <ion-col size-xs="12" size-md="3">
-            <ion-input color="gunung-nago-survey" label="{{ 'survey.survey-details.given-feed' | translate }}"
-              label-placement="floating" fill="outline" type="number" min="0" clear-input="true"
-              formControlName="givenFeed"></ion-input>
-          </ion-col>
-        </ion-row>
+        <div *ngIf="selectedHealthProducts.length > 0">
+          <div *ngFor="let selectedHealthProduct of selectedHealthProducts; let i=index;">
+            <ion-chip color="gunung-nago-report">
+              <ion-label>{{selectedHealthProduct.healthProductName}}</ion-label>
+              <ion-icon name="close" (click)="removeHealthProduct(selectedHealthProduct.healthProductId)"></ion-icon>
+            </ion-chip>
 
-        <ion-item-divider>
-          <ion-label>{{ 'survey.survey-details.comments' | translate }}</ion-label>
-        </ion-item-divider>
-        <ion-row>
-          <ion-textarea color="gunung-nago-survey" label="{{ 'survey.survey-details.comments' | translate }}"
-            [autoGrow]="true" label-placement="floating" fill="outline" clear-input="true"
-            formControlName="comments"></ion-textarea>
-        </ion-row>
-      </ion-card-content>
-
-      <div class="btn-container">
-        <ion-button class="cancel-btn" (click)="cancel()">Cancel</ion-button>
-        <ion-button color="gunung-nago-survey" [disabled]="surveyForm.invalid" (click)="save()">Save</ion-button>
+            <div *ngFor="let healthProductStock of selectedHealthProduct.healthSurveyStockDtos; let j = index;">
+              <div class="em-title" [style.color]="j === 0 ? 'black' : 'grey'">{{j === 0 ? 'New Stock' : 'Old Stock'}}
+              </div>
+              <ion-row>
+                <ion-col size-xs="12" size-md="3">
+                  <div class="em-body-title">Total Units: {{healthProductStock.unitsTotal}}</div>
+                  <div></div>
+                  <div>
+                    <ion-input color="gunung-nago-survey" label="Enter units used" label-placement="floating"
+                      fill="outline" type="number" min="0" clear-input="true" [max]="healthProductStock.unitsTotal"
+                      [(ngModel)]="healthProductStock.unitsUsed" [ngModelOptions]="{standalone: true}"
+                      (ngModelChange)="changeUnitsUsed($event, healthProductStock.unitsTotal, i, j)"
+                      name="unitsUsed"></ion-input>
+                  </div>
+                </ion-col>
+              </ion-row>
+              <br>
+            </div>
+          </div>
+        </div>
       </div>
 
-    </ion-card>
-  </form>
+      <!-- comment -->
+      <div class="ion-padding">
+        <ion-item-divider>
+          <ion-label>Comment</ion-label>
+        </ion-item-divider>
+        <ion-row>
+          <ion-col size-xs="12" size-md="12">
+            <ion-textarea color="gunung-nago-survey" label="Comment" labelPlacement="floating" fill="outline"
+              [autoGrow]="true" formControlName="comment"></ion-textarea>
+          </ion-col>
+        </ion-row>
+      </div>
+    </form>
+
+    <div class="btn-container">
+      <ion-button class="cancel-btn" (click)="cancel()">Cancel</ion-button>
+      <ion-button color="gunung-nago-survey" [disabled]="surveyForm.invalid" (click)="save()">Save</ion-button>
+    </div>
+  </ion-card>
 </ion-content>

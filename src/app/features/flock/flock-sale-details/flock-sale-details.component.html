@@ -1,0 +1,154 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      <div class="router-links">
+        <div class="title">
+          <img class="header-logo" src='./assets/tiny-color/flock-sale/icons8-sell-64.png'>
+          <h3 class="header-nav-products">Flock Sale Details</h3>
+        </div>
+        <div>
+          <ion-item class="language-selection">
+            <ion-select aria-label="language" interface="popover" placeholder="Select language" [(ngModel)]="language"
+              (ionChange)="ionChangeLanguage($event)">
+              <ion-select-option value="en">English</ion-select-option>
+              <ion-select-option value="id">Indonesian</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </div>
+      </div>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="false" class="ion-padding">
+  <form [formGroup]="flockSaleForm">
+    <div formArrayName="flockSaleDetails"
+      *ngFor="let flockSaleDetails of flockSaleDetailsFields?.controls; let i = index">
+      <div [formGroupName]="i">
+        <ion-card>
+          <ion-card-content>
+            <div class="form-array-index">
+              <h6>Flock Sale Form {{i}}</h6>
+              <ion-button *ngIf="flockSaleDetailsFields != null && flockSaleDetailsFields.length > 1"
+                (click)="removeFlockSaleDetails(i)" class="delete-product-btn" color="gunung-nago-warehouse"><ion-icon
+                  name="trash"></ion-icon></ion-button>
+            </div>
+
+            <ion-item-divider>
+              <ion-label>Cage</ion-label>
+            </ion-item-divider>
+            <ion-row>
+              <ion-col size-xs="12" size-md="3">
+                <ion-select color="gunung-nago-primary" label="Cage" label-placement="floating" fill="outline"
+                  interface="popover" required="true" placeholder=Cage formControlName="cageId"
+                  (ionChange)="ionSelectCage($event, i)">
+                  <ion-select-option *ngFor="let cage of cages" [value]="cage.id">{{ cage.name
+                    }}</ion-select-option>
+                </ion-select>
+                <div class="error-messages">
+                  <ng-container *ngFor="let error of errorMessages.cage">
+                    <div class="error-message"
+                      *ngIf="flockSaleDetails.get('cageCategory')?.hasError(error.type) && (flockSaleDetails.get('cageCategory')?.dirty || flockSaleDetails.get('cageCategory')?.touched)">
+                      {{ error.message }}
+                    </div>
+                  </ng-container>
+                </div>
+              </ion-col>
+              <ion-col size-xs="12" size-md="3">
+                <ion-input color="gunung-nago-primary" label="Amount of sterile chicken left" label-placement="floating"
+                  fill="outline" type="text" clear-input="true" formControlName="totalSterile"></ion-input>
+              </ion-col>
+              <ion-col size-xs="12" size-md="3">
+                <ion-input color="gunung-nago-primary" label="Amount of good chicken left" label-placement="floating"
+                  fill="outline" type="text" clear-input="true" formControlName="good"></ion-input>
+              </ion-col>
+            </ion-row>
+
+            <ion-item-divider>
+              <ion-label>Sterile</ion-label>
+            </ion-item-divider>
+            <ion-row>
+              <ion-col size-xs="12" size-md="3">
+                <ion-input color="gunung-nago-primary" label="Quantity for sterile" label-placement="floating"
+                  fill="outline" type="text" clear-input="true" formControlName="quantitySoldForSterile"
+                  required="true"></ion-input>
+                <div class="error-messages">
+                  <ng-container *ngFor="let error of errorMessages.quantitySoldForSterile">
+                    <div class="error-message"
+                      *ngIf="flockSaleDetails.get('quantitySoldForSterile')?.hasError(error.type) && (flockSaleDetails.get('quantitySoldForSterile')?.dirty || flockSaleDetails.get('quantitySoldForSterile')?.touched)">
+                      {{ error.message }}
+                    </div>
+                  </ng-container>
+                </div>
+              </ion-col>
+              <ion-col size-xs="12" size-md="3">
+                <ion-input color="gunung-nago-primary" label="Price per chicken for sterile" label-placement="floating"
+                  fill="outline" type="text" clear-input="true" formControlName="pricePerChickenForSterile"
+                  required="true"></ion-input>
+                <div class="error-messages">
+                  <ng-container *ngFor="let error of errorMessages.pricePerChickenForSterile">
+                    <div class="error-message"
+                      *ngIf="flockSaleDetails.get('pricePerChickenForSterile')?.hasError(error.type) && (flockSaleDetails.get('pricePerChickenForSterile')?.dirty || flockSaleDetails.get('pricePerChickenForSterile')?.touched)">
+                      {{ error.message }}
+                    </div>
+                  </ng-container>
+                </div>
+              </ion-col>
+              <ion-col size-xs="12" size-md="3">
+                <ion-input color="gunung-nago-primary" label="Total price for sterile" label-placement="floating"
+                  fill="outline" type="text" clear-input="true" formControlName="totalPriceForSterile"
+                  readonly="true"></ion-input>
+              </ion-col>
+            </ion-row>
+
+            <ion-item-divider>
+              <ion-label>Good</ion-label>
+            </ion-item-divider>
+            <ion-row>
+              <ion-col size-xs="12" size-md="3">
+                <ion-input color="gunung-nago-primary" label="Quantity for good" label-placement="floating"
+                  fill="outline" type="text" clear-input="true" formControlName="quantitySoldForGood"
+                  required="true"></ion-input>
+                <div class="error-messages">
+                  <ng-container *ngFor="let error of errorMessages.quantitySoldForGood">
+                    <div class="error-message"
+                      *ngIf="flockSaleDetails.get('quantitySoldForGood')?.hasError(error.type) && (flockSaleDetails.get('quantitySoldForGood')?.dirty || flockSaleDetails.get('quantitySoldForGood')?.touched)">
+                      {{ error.message }}
+                    </div>
+                  </ng-container>
+                </div>
+              </ion-col>
+              <ion-col size-xs="12" size-md="3">
+                <ion-input color="gunung-nago-primary" label="Price per chicken for good" label-placement="floating"
+                  fill="outline" type="text" clear-input="true" formControlName="pricePerChickenForGood"
+                  required="true"></ion-input>
+                <div class="error-messages">
+                  <ng-container *ngFor="let error of errorMessages.pricePerChickenForGood">
+                    <div class="error-message"
+                      *ngIf="flockSaleDetails.get('pricePerChickenForGood')?.hasError(error.type) && (flockSaleDetails.get('pricePerChickenForGood')?.dirty || flockSaleDetails.get('pricePerChickenForGood')?.touched)">
+                      {{ error.message }}
+                    </div>
+                  </ng-container>
+                </div>
+              </ion-col>
+              <ion-col size-xs="12" size-md="3">
+                <ion-input color="gunung-nago-primary" label="Total price for good" label-placement="floating"
+                  fill="outline" type="text" clear-input="true" formControlName="totalPriceForGood"
+                  readonly="true"></ion-input>
+              </ion-col>
+            </ion-row>
+
+
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </div>
+    <div class="btn-container">
+      <ion-button color="gunung-nago-cage mr-05" (click)="addFlockSaleDetails()">Add Cage</ion-button>
+      <ion-button color="gunung-nago-primary" [disabled]="flockSaleForm.invalid" (click)="save()">Save</ion-button>
+    </div>
+  </form>
+</ion-content>

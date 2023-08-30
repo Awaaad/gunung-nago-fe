@@ -45,7 +45,7 @@
               <ion-col size-xs="12" size-md="3">
                 <ion-input color="gunung-nago-primary" label="{{ 'cage.cage-details.name' | translate }}*"
                   label-placement="floating" fill="outline" type="text" clear-input="true" maxlength="5"
-                  formControlName="name"></ion-input>
+                  formControlName="name" required="true"></ion-input>
                 <div class="error-messages">
                   <ng-container *ngFor="let error of errorMessages.name">
                     <div class="error-message"
@@ -57,7 +57,7 @@
               </ion-col>
               <ion-col size-xs="12" size-md="3">
                 <ion-select color="gunung-nago-primary" label="{{ 'cage.cage-details.cage-category' | translate }}"
-                  label-placement="floating" fill="outline" interface="popover"
+                  label-placement="floating" fill="outline" interface="popover" required="true"
                   placeholder="{{ 'cage.cage-details.cage-category' | translate }}" formControlName="cageCategory">
                   <ion-select-option *ngFor="let category of cageCategories" [value]="category">{{ category
                     }}</ion-select-option>
@@ -78,7 +78,7 @@
     </div>
     <div class="btn-container">
       <ion-button color="gunung-nago-cage mr-05" (click)="addCageDetails()">Add Cage</ion-button>
-      <ion-button color="gunung-nago-primary" (click)="save()">Save</ion-button>
+      <ion-button color="gunung-nago-primary" [disabled]="cageDetailsForm.invalid" (click)="save()">Save</ion-button>
     </div>
   </form>
 </ion-content>

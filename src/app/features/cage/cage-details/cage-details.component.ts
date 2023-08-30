@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder, FormArray } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { CageCategory } from 'generated-src/model';
-import { CageApiService } from '../service/api/cage.api.service';
+import { CageApiService } from '../../../shared/api/cage.api.service';
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 import { HttpErrorResponse } from '@angular/common/http';
-import { UtilsService } from 'src/app/shared/services/utils.service';
+import { UtilsService } from 'src/app/shared/util/utils.service';
 
 @Component({
   selector: 'app-cage-details',
@@ -41,11 +41,7 @@ export class CageDetailsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.cageDetailsForm = this.formBuilder.group({
-      cageDetails: this.formBuilder.array([
-        this.addCageDetailsFormGroup()
-      ])
-    });
+    this.initialiseFormBuilder();
   }
 
   public ionChangeLanguage(event: any): void {
@@ -54,6 +50,14 @@ export class CageDetailsComponent implements OnInit {
 
   public matChangeLanguage(event: any): void {
     this.translateService.use(event.value);
+  }
+
+  private initialiseFormBuilder(): void {
+    this.cageDetailsForm = this.formBuilder.group({
+      cageDetails: this.formBuilder.array([
+        this.addCageDetailsFormGroup()
+      ])
+    });
   }
 
   public addCageDetailsFormGroup(): any {

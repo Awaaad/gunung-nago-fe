@@ -1,4 +1,4 @@
-import { AquisitionType, CageCategory, FlockCategory } from "./model";
+import { AquisitionType, CageCategory, FeedSurveyDto, FlockCategory, HealthSurveyDto } from "./model";
 
 export class PageResult<T> {
     public content!: Array<T>;
@@ -27,6 +27,9 @@ export class SurveyFrontDto {
     good!: number | null | undefined;
     badEggs!: number | null | undefined;
     goodEggs!: number | null | undefined;
+    healthSurveyDtos: HealthSurveyDto[] | null | undefined;
+    feedSurveyDtos: FeedSurveyDto[] | null | undefined;
+    comment: string | null | undefined;
 }
 
 export class FlockSaveFrontDto {
@@ -41,4 +44,14 @@ export class FlockSaveFrontDto {
     sterile!: number | null | undefined;
     badEggs!: number | null | undefined;
     goodEggs!: number | null | undefined;
+}
+
+export class FlockSaleSaveFrontDto {
+    cageId!: number | null | undefined;
+    flockId!: number | null | undefined;
+    flockStockId!: number | null | undefined;
+    quantitySoldForSterile!: number | null | undefined;
+    quantitySoldForGood!: number | null | undefined;
+    pricePerChickenForSterile!: number | null | undefined;
+    pricePerChickenForGood!: number | null | undefined;
 }

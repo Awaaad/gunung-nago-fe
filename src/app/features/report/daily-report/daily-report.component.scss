@@ -38,8 +38,7 @@ tbody {
 // .mat-mdc-row,
 // .mat-mdc-footer-row,
 // .mat-mdc-table 
-.mat-mdc-header-cell
- {
+.mat-mdc-header-cell {
     border: 1px solid #CCC;
 }
 
@@ -71,3 +70,11 @@ tbody {
 .mdc-data-table__header-cell {
     color: white;
 }
+
+// .mdc-data-table__row:last-child .mat-mdc-cell {
+//     border: 1px solid #CCC;
+// }
+
+// .mdc-data-table__row:last-child .mat-mdc-cell {
+//     border-left: none;
+// }
