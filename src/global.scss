@@ -188,9 +188,16 @@ ion-card {
     box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.3);
     color: white!important;
 }
+
 .alert-negative-btn {
     background-color: white!important;
     border-radius: 4px!important;
     box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.3);
     color: black!important;
+}
+
+.filters {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 4px;
 }

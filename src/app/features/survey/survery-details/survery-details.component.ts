@@ -8,7 +8,7 @@ import { FeedSurveyDto, FlockCategory, FlockFeedLineDto, HealthProductDto, Healt
 import { SurveyFrontDto } from 'generated-src/model-front';
 import { debounceTime, distinctUntilChanged, filter, finalize, switchMap, tap } from 'rxjs';
 import { FlockFeedLineApiService } from 'src/app/shared/api/flock-feed-line.api.service';
-import { HealthApiService } from 'src/app/shared/api/health.api.service';
+import { HealthProductApiService } from 'src/app/shared/api/health-product.api.service';
 import { UtilsService } from 'src/app/shared/util/utils.service';
 import { SurveyApiService } from '../../../shared/api/survey.api.service';
 
@@ -59,7 +59,7 @@ export class SurveryDetailsComponent implements OnInit {
   constructor(
     private activatedRoute: ActivatedRoute,
     private flockFeedLineApiService: FlockFeedLineApiService,
-    private healthApiService: HealthApiService,
+    private healthProductApiService: HealthProductApiService,
     private router: Router,
     private surveyApiService: SurveyApiService,
     private translateService: TranslateService,
@@ -125,7 +125,7 @@ export class SurveryDetailsComponent implements OnInit {
             active: true,
             name: value
           }
-          return this.healthApiService.search(name).pipe(
+          return this.healthProductApiService.searchHealthProduct(name).pipe(
             finalize(() => {
               this.isLoading = false
             }),
@@ -133,13 +133,13 @@ export class SurveryDetailsComponent implements OnInit {
         })
       )
       .subscribe((data: any) => {
-        this.filteredHealthProducts = data.content
+        this.filteredHealthProducts = data
       })
   }
 
   public onHealthProductSelected(): void {
     this.selectedHealthProduct = this.selectedHealthProduct;
-    this.healthApiService.findHealthSurveyDtoByHealthProductId(this.selectedHealthProduct.id).subscribe(productHealthSurvey => {
+    this.healthProductApiService.findHealthSurveyDtoByHealthProductId(this.selectedHealthProduct.id).subscribe(productHealthSurvey => {
       this.selectedHealthProducts.push(productHealthSurvey);
     })
   }
@@ -183,7 +183,7 @@ export class SurveryDetailsComponent implements OnInit {
   }
 
   private getAllHealthProducts(): void {
-    this.healthApiService.getAllHealthProducts().subscribe(healthProducts => {
+    this.healthProductApiService.getAllHealthProducts().subscribe(healthProducts => {
       this.healthProducts = healthProducts;
     })
   }

@@ -6,8 +6,8 @@
     <ion-title>
       <div class="router-links">
         <div class="title">
-          <img class="header-logo" src='./assets/tiny-color/cage/icons8-prison-64.png'>
-          <h3 class="header-nav-products">{{ 'cage.cage-list.cage-list' | translate }}</h3>
+          <img class="header-logo" src='./assets/tiny-color/health/icons8-syringe-64.png'>
+          <h3 class="header-nav-products">Health</h3>
         </div>
         <div>
           <ion-item class="language-selection">
@@ -25,21 +25,18 @@
 
 <ion-content [fullscreen]="false" class="ion-padding" [scrollEvents]="true" (ionScroll)="onScroll($event)">
   <div class="btn-container">
-    <ion-button color="gunung-nago-survey" routerLink="/cage/cage-details"><ion-icon name="add"></ion-icon></ion-button>
+    <ion-button color="gunung-nago-survey" routerLink="/health/health-details"><ion-icon
+        name="add"></ion-icon></ion-button>
   </div>
+
   <ion-card>
     <ion-card-content>
       <ion-row>
-        <ion-col size-xs="12" size-md="3">
-          <ion-select color="gunung-nago-primary" label="{{ 'cage.cage-details.cage-category' | translate }}"
-            label-placement="floating" fill="outline" interface="popover"
-            placeholder="{{ 'cage.cage-details.cage-category' | translate }}"
-            (ionChange)="ionChangeCageCategory($event)">
-            <ion-select-option *ngFor="let category of cageCategories" [value]="category">{{ category
-              }}</ion-select-option>
-          </ion-select>
+        <ion-col size-xs="12" size-md="6">
+          <ion-searchbar placeholder="Search by health product name..." type="text" #healthProductName
+            (ionInput)="searchByHealthProductName(healthProductName.value)"></ion-searchbar>
         </ion-col>
-        <ion-col size-xs="12" size-md="9">
+        <ion-col size-xs="12" size-md="6">
           <div class="filters">
             <div>
 
@@ -54,7 +51,17 @@
         <ion-col size-xs="12" size-md="3">
           <ion-toggle labelPlacement="start" class="toggle" color="gunung-nago-report" [(ngModel)]="active"
             (ionChange)="toggleActive($event)">{{
-            'cage.cage-details.active' | translate }}*</ion-toggle>
+            'cage.cage-details.active' | translate }}</ion-toggle>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size-xs="12" size-md="3">
+          <ion-select color="gunung-nago-primary" label="{{ 'cage.cage-details.cage-category' | translate }}"
+            label-placement="floating" fill="outline" interface="popover"
+            placeholder="{{ 'cage.cage-details.cage-category' | translate }}" (ionChange)="ionChangeHealthType($event)">
+            <ion-select-option *ngFor="let healthType of healthTypes" [value]="healthType">{{ healthType
+              }}</ion-select-option>
+          </ion-select>
         </ion-col>
       </ion-row>
     </ion-card-content>
@@ -62,16 +69,22 @@
 
   <ion-card>
     <div class="mat-elevation-z8 table-responsive">
-      <table mat-table matSort (matSortChange)="sortData($event)" matSortDisableClear="true" [dataSource]="cages">
+      <table mat-table matSort (matSortChange)="sortData($event)" matSortDisableClear="true"
+        [dataSource]="healthProducts">
 
         <ng-container matColumnDef="name">
           <th mat-header-cell *matHeaderCellDef mat-sort-header="name"> Name </th>
           <td mat-cell *matCellDef="let element"> {{element.name}} </td>
         </ng-container>
 
-        <ng-container matColumnDef="cageCategory">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header="category"> Category </th>
-          <td mat-cell *matCellDef="let element"> {{element.cageCategory}} </td>
+        <ng-container matColumnDef="description">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="description"> Description </th>
+          <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="healthType">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="category"> Health Type </th>
+          <td mat-cell *matCellDef="let element"> {{element.healthType}} </td>
         </ng-container>
 
         <ng-container matColumnDef="active">
@@ -87,7 +100,7 @@
           <td mat-cell *matCellDef="let element">
             <div class="table-btn">
               <ion-button color="gunung-nago-primary" class="mr-05"><ion-icon name="create"></ion-icon></ion-button>
-              <ion-button color="gunung-nago-flock">Flock</ion-button>
+              <!-- <ion-button color="gunung-nago-flock">Flock</ion-button> -->
             </div>
           </td>
         </ng-container>
@@ -98,7 +111,7 @@
     </div>
   </ion-card>
   <ion-infinite-scroll threshold="100px" position="bottom" (ionInfinite)="loadData($event)">
-    <ion-infinite-scroll-content loadingSpinner="crescent" loadingText="Loading more cages...">
+    <ion-infinite-scroll-content loadingSpinner="crescent" loadingText="Loading more health products...">
     </ion-infinite-scroll-content>
   </ion-infinite-scroll>
 </ion-content>

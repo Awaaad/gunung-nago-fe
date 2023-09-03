@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2023-08-27 22:55:17.
+// Generated using typescript-generator version 3.2.1263 on 2023-09-03 16:45:18.
 
 export class CageDto {
     id!: number;
@@ -34,13 +34,17 @@ export class DailyProductionReportDto {
     totalEggs!: number;
     percentageHD!: number;
     surveyDate!: Date;
+    bagsEaten!: number;
+    comment!: string;
+    eggTray!: number;
+    productionRate!: number;
     healthReportDtos!: HealthReportDto[];
 }
 
-export class FeedSaveDto {
+export class FeedDto {
     id!: number;
-    name!: string;
     feedCategory!: FeedCategory;
+    name!: string;
     recommendedWeight!: number;
 }
 
@@ -48,6 +52,15 @@ export class FeedStockAllocationDto {
     flockId!: number;
     feedStockId!: number;
     bagsAllocated!: number;
+}
+
+export class FeedStockDto {
+    id!: number;
+    bags!: number;
+    createdDate!: Date;
+    price!: number;
+    weight!: number;
+    feedId!: number;
 }
 
 export class FeedSurveyDto {
@@ -124,12 +137,35 @@ export class HealthProductDto {
     description!: string;
     healthType!: HealthType;
     active!: boolean;
+    unitsPerBox!: number;
 }
 
 export class HealthProductSearchCriteriaDto {
     name!: string;
     healthType!: HealthType;
     active!: boolean;
+}
+
+export class HealthProductStockDto {
+    id!: number;
+    quantity!: number;
+    unitsPerBox!: number;
+    unitsTotal!: number;
+    pricePerBox!: number;
+    expiryDate!: Date;
+    createdDate!: Date;
+    healthProductId!: number;
+}
+
+export class HealthProductStockSaveDto {
+    healthProductId!: number;
+    name!: string;
+    description!: string;
+    healthType!: HealthType;
+    quantity!: number;
+    unitsPerBox!: number;
+    pricePerBox!: number;
+    expiryDate!: Date;
 }
 
 export class HealthReportDto {

@@ -15,6 +15,14 @@ export class CageApiService {
     return this.http.post(`${this.baseUrl}`, cages, {responseType: 'text'});
   }
 
+  public edit(cageDto: CageDto): Observable<any> {
+    return this.http.put(`${this.baseUrl}`, cageDto);
+  }
+
+  public findById(id: number): Observable<CageDto> {
+    return this.http.get<CageDto>(`${this.baseUrl}${id}`);
+  }
+
   public search(searchValues: any): Observable<PageResult<CageDto>> {
     return this.http.get<PageResult<CageDto>>(`${this.baseUrl}search`, { params: searchValues });
   }

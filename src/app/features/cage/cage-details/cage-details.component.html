@@ -7,7 +7,7 @@
       <div class="router-links">
         <div class="title">
           <img class="header-logo" src='./assets/tiny-color/cage/icons8-prison-64.png'>
-          <h3 class="header-nav-products">{{ 'cage.cage-details.cage-details' | translate }}</h3>
+          <h3 class="header-nav-products">Add Cage</h3>
         </div>
         <div>
           <ion-item class="language-selection">
@@ -77,7 +77,7 @@
       </div>
     </div>
     <div class="btn-container">
-      <ion-button color="gunung-nago-cage mr-05" (click)="addCageDetails()">Add Cage</ion-button>
+      <ion-button color="dark" (click)="addCageDetails()">Add Cage</ion-button>
       <ion-button color="gunung-nago-primary" [disabled]="cageDetailsForm.invalid" (click)="save()">Save</ion-button>
     </div>
   </form>

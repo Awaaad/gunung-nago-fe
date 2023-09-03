@@ -14,7 +14,7 @@ import * as moment from 'moment';
 })
 export class DailyReportComponent {
   public language = "en";
-  public displayedColumns: string[] = ['cageName', 'surveyDate', 'flockAge', 'flockCategory', 'initialFlockQuantity', 'deadChicken', 'sterileChicken', 'goodChicken', 'goodEggsInTie', 'goodEggsNotInTie', 'badEggsNotInTray', 'totalEggs', 'percentageHD', 'healthReportDtos', 'goodEggsInTray', 'bagsEaten', 'comment'];
+  public displayedColumns: string[] = ['cageName', 'surveyDate', 'flockAge', 'flockCategory', 'initialFlockQuantity', 'deadChicken', 'sterileChicken', 'goodChicken', 'goodEggsInTie', 'goodEggsNotInTie', 'badEggsNotInTray', 'totalEggs', 'percentageHD', 'productionRate', 'healthReportDtos', 'goodEggsInTray', 'bagsEaten', 'comment'];
   public dailyReport = new MatTableDataSource<DailyProductionReportDto>;
   public cageSearchSubscription!: Subscription;
   public date: Date = new Date();
@@ -33,9 +33,10 @@ export class DailyReportComponent {
     this.translateService.use(event.detail.value);
   }
 
-  public reportForm = new FormGroup({
-    date: new FormControl(moment(this.date), Validators.compose([Validators.required]))
-  });
+  public changeReportDate(event: any): void {
+    this.date = event;
+    this.search();
+  }
 
   public findDailyProductionReport(date: any) {
     this.dailyReport = new MatTableDataSource<DailyProductionReportDto>([]);
@@ -46,7 +47,7 @@ export class DailyReportComponent {
   }
 
   public search() {
-    const date = moment(this.reportForm.value.date).startOf('day').format(moment.HTML5_FMT.DATE);
+    const date = moment(this.date).startOf('day').format(moment.HTML5_FMT.DATE);
     this.findDailyProductionReport(date);
   }
 

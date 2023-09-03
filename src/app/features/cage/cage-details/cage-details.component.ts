@@ -3,7 +3,6 @@ import { FormGroup, FormControl, Validators, FormBuilder, FormArray } from '@ang
 import { TranslateService } from '@ngx-translate/core';
 import { CageCategory } from 'generated-src/model';
 import { CageApiService } from '../../../shared/api/cage.api.service';
-import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 import { HttpErrorResponse } from '@angular/common/http';
 import { UtilsService } from 'src/app/shared/util/utils.service';
 
