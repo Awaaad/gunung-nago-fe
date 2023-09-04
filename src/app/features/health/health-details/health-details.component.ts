@@ -50,10 +50,6 @@ export class HealthDetailsComponent implements OnInit {
     this.translateService.use(event.detail.value);
   }
 
-  public matChangeLanguage(event: any): void {
-    this.translateService.use(event.value);
-  }
-
   private initialiseFormBuilder(): void {
     this.healthProductDetailsForm = this.formBuilder.group({
       healthProductDetails: this.formBuilder.array([

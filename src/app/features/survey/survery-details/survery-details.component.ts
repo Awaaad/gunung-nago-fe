@@ -134,20 +134,20 @@ export class SurveryDetailsComponent implements OnInit {
       )
       .subscribe((data: any) => {
         this.filteredHealthProducts = data
-      })
+      });
   }
 
   public onHealthProductSelected(): void {
     this.selectedHealthProduct = this.selectedHealthProduct;
     this.healthProductApiService.findHealthSurveyDtoByHealthProductId(this.selectedHealthProduct.id).subscribe(productHealthSurvey => {
       this.selectedHealthProducts.push(productHealthSurvey);
-    })
+    });
   }
 
   public removeHealthProduct(id: number): void {
     this.selectedHealthProducts = this.selectedHealthProducts.filter(selectedHealthProduct => {
       selectedHealthProduct.healthProductId != id;
-    })
+    });
   }
 
   public displayWith(value: any): string {
@@ -170,8 +170,8 @@ export class SurveryDetailsComponent implements OnInit {
       this.feedLines = feedLines;
       this.feedLines.forEach(feeLine => {
         feeLine.bagsEaten = 0;
-      })
-    })
+      });
+    });
   }
 
   public calculateRemaining() {
@@ -185,7 +185,7 @@ export class SurveryDetailsComponent implements OnInit {
   private getAllHealthProducts(): void {
     this.healthProductApiService.getAllHealthProducts().subscribe(healthProducts => {
       this.healthProducts = healthProducts;
-    })
+    });
   }
 
   private findSurveyDtoForSelectedCage(): void {

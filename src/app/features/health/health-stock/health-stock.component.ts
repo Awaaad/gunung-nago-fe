@@ -68,7 +68,7 @@ export class HealthStockComponent {
       this.infiniteHealthProducts = [];
       this.healthProducts = new MatTableDataSource<HealthProductDto>([]);
     }
-    const cageSearchCriteriaDto = {
+    const healthProductSearchCriteriaDto = {
       page: this.page,
       size: this.size,
       sortBy: this.sortBy,
@@ -78,8 +78,8 @@ export class HealthStockComponent {
       healthType: this.healthType
     }
 
-    this.healthProductSearchSubscription = this.healthProductApiService.search(cageSearchCriteriaDto).subscribe(cages => {
-      this.infiniteHealthProducts = [...this.infiniteHealthProducts, ...cages.content];
+    this.healthProductSearchSubscription = this.healthProductApiService.search(healthProductSearchCriteriaDto).subscribe(healthProducts => {
+      this.infiniteHealthProducts = [...this.infiniteHealthProducts, ...healthProducts.content];
       this.healthProducts = new MatTableDataSource<HealthProductDto>(this.infiniteHealthProducts);
     })
   }

@@ -63,19 +63,10 @@ tbody {
 }
 
 .mat-mdc-table .mdc-data-table__header-row {
-    background: var(--ion-color-gunung-nago-health);
+    background: #cf9d06;
     color: white;
 }
 
 .mdc-data-table__header-cell {
     color: white;
-}
-
-.mat-mdc-row:hover .mat-mdc-cell {
-    background-color: #ececec;
-}
-
-ion-input {
-    margin: 5px;
-    border-bottom: 1px solid gray;
 }

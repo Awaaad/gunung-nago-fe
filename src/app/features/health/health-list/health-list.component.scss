@@ -70,3 +70,62 @@ tbody {
 .mdc-data-table__header-cell {
     color: white;
 }
+
+// expandable table row 
+.mat-table {
+    width: 100%;
+    margin-top: 2em;
+}
+
+.mat-row.example-detail-row {
+    min-height: 0;
+}
+
+.mat-row.example-element-row:not(.example-expanded-row):hover {
+    background: rgb(216, 216, 216);
+    cursor: pointer;
+}
+
+.mat-row.example-element-row:not(.example-expanded-row):active {
+    background: #efefef;
+}
+
+.flight-info-expanded {
+    display: flex;
+
+    .flight-expanded {
+        display: flex;
+
+        .departure-expanded {
+            padding: 2em;
+        }
+
+        .arrival-expanded {
+            padding: 2em;
+        }
+
+        .from-to {
+            padding-top: 2.5em;
+        }
+    }
+
+    .booking-info-expanded {
+        display: block;
+        padding: 2em;
+        padding-left: 15em;
+
+        .seats-expanded {
+            display: flex;
+        }
+
+        .seats {
+            padding-top: 4px;
+        }
+    }
+}
+
+.example-detail-row {
+    height: 0;
+    min-height: auto;
+    width: 100%;
+}

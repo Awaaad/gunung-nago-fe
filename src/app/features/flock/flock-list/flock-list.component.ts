@@ -62,7 +62,6 @@ export class FlockListComponent {
       sortBy: this.sortBy,
       sortOrder: this.sortOrder.toUpperCase(),
     }
-    this.flocks = new MatTableDataSource<FlockDto>;
     this.flockApiService.search(flocksSearchCriteriaDto).subscribe(flocks => {
       this.infiniteFlocks = [...this.infiniteFlocks, ...flocks.content];
       this.flocks = new MatTableDataSource<FlockDto>(this.infiniteFlocks);

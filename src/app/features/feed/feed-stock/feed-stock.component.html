@@ -6,8 +6,8 @@
     <ion-title>
       <div class="router-links">
         <div class="title">
-          <img class="header-logo" src='./assets/tiny-color/health/icons8-syringe-64.png'>
-          <h3 class="header-nav-products">Health Stock</h3>
+          <img class="header-logo" src='./assets/tiny-color/feed/icons8-used-product-64.png'>
+          <h3 class="header-nav-products">Feed Stock</h3>
         </div>
         <div>
           <ion-item class="language-selection">
@@ -28,43 +28,35 @@
     <ion-card-content>
       <ion-row>
         <ion-col size-xs="12" size-md="6">
-          <ion-searchbar placeholder="Search by health product name..." type="text" #healthProductName
-            (ionInput)="searchByHealthProductName(healthProductName.value)"></ion-searchbar>
+          <ion-searchbar placeholder="Search by feed name..." type="text" #feedName
+            (ionInput)="searchByFeedName(feedName.value)"></ion-searchbar>
         </ion-col>
 
       </ion-row>
     </ion-card-content>
   </ion-card>
 
-  <ion-card *ngIf="showHealthProductTable">
+  <ion-card *ngIf="showFeedTable">
     <div class="mat-elevation-z8 table-responsive">
-      <table mat-table [dataSource]="healthProducts">
+      <table mat-table [dataSource]="feeds">
 
         <ng-container matColumnDef="name">
           <th mat-header-cell *matHeaderCellDef> Name </th>
           <td mat-cell *matCellDef="let element"> {{element.name}} </td>
         </ng-container>
 
-        <ng-container matColumnDef="description">
-          <th mat-header-cell *matHeaderCellDef> Description </th>
-          <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+        <ng-container matColumnDef="feedCategory">
+          <th mat-header-cell *matHeaderCellDef> Category </th>
+          <td mat-cell *matCellDef="let element"> {{element.feedCategory}} </td>
         </ng-container>
 
-        <ng-container matColumnDef="healthType">
-          <th mat-header-cell *matHeaderCellDef> Health Type </th>
-          <td mat-cell *matCellDef="let element"> {{element.healthType}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="active">
-          <th mat-header-cell *matHeaderCellDef> Active </th>
-          <td mat-cell *matCellDef="let element">
-            <img *ngIf="element.active" src='./assets/tiny-color/active/icons8-tick-16.png'>
-            <img *ngIf="!element.active" src='./assets/tiny-color/inactive/icons8-cross-16.png'>
-          </td>
+        <ng-container matColumnDef="recommendedWeight">
+          <th mat-header-cell *matHeaderCellDef> Recommended weight </th>
+          <td mat-cell *matCellDef="let element"> {{element.recommendedWeight}} </td>
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row (click)="addHealthProductToStock(row)" [hidden]="checkIfPresent(row.id)"
+        <tr mat-row (click)="addFeedToStock(row)" [hidden]="checkIfPresent(row.id)"
           *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
     </div>
@@ -72,18 +64,24 @@
 
   <ion-card>
     <div class="mat-elevation-z8 table-responsive">
-      <table mat-table [dataSource]="healthProductsInStockTable">
+      <table mat-table [dataSource]="feedsInStockTable">
 
         <ng-container matColumnDef="name">
           <th mat-header-cell *matHeaderCellDef> Name </th>
           <td mat-cell *matCellDef="let element"> {{element.name}} </td>
         </ng-container>
 
-        <ng-container matColumnDef="quantity">
-          <th mat-header-cell *matHeaderCellDef> Quantity</th>
+
+        <ng-container matColumnDef="feedCategory">
+          <th mat-header-cell *matHeaderCellDef> Category </th>
+          <td mat-cell *matCellDef="let element"> {{element.feedCategory}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="bags">
+          <th mat-header-cell *matHeaderCellDef> Bags</th>
           <td mat-cell *matCellDef="let element">
             <ion-input color="gunung-nago-primary" type="text" clear-input="true" required="true"
-              [(ngModel)]="element.quantity"></ion-input>
+              [(ngModel)]="element.bags"></ion-input>
           </td>
         </ng-container>
 
@@ -91,21 +89,16 @@
           <th mat-header-cell *matHeaderCellDef> Price </th>
           <td mat-cell *matCellDef="let element">
             <ion-input color="gunung-nago-primary" type="text" clear-input="true" required="true"
-              [(ngModel)]="element.pricePerBox"></ion-input>
+              [(ngModel)]="element.price"></ion-input>
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="expiryDate">
-          <th mat-header-cell *matHeaderCellDef> Expiry date </th>
+        <ng-container matColumnDef="weight">
+          <th mat-header-cell *matHeaderCellDef> Weight </th>
           <td mat-cell *matCellDef="let element">
             <ion-input color="gunung-nago-primary" type="text" clear-input="true"
-              [(ngModel)]="element.expiryDate"></ion-input>
+              [(ngModel)]="element.weight"></ion-input>
           </td>
-        </ng-container>
-
-        <ng-container matColumnDef="healthType">
-          <th mat-header-cell *matHeaderCellDef> Health Type </th>
-          <td mat-cell *matCellDef="let element"> {{element.healthType}} </td>
         </ng-container>
 
         <ng-container matColumnDef="remove">

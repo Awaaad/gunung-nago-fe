@@ -1,3 +1,4 @@
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
@@ -5,7 +6,7 @@ import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { IonInfiniteScroll } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { HealthProductDto, HealthType } from 'generated-src/model';
+import { HealthProductDto, HealthSurveyStockDto, HealthType } from 'generated-src/model';
 import { Subscription } from 'rxjs';
 import { HealthProductApiService } from 'src/app/shared/api/health-product.api.service';
 import { UtilsService } from 'src/app/shared/util/utils.service';
@@ -14,6 +15,13 @@ import { UtilsService } from 'src/app/shared/util/utils.service';
   selector: 'app-health-list',
   templateUrl: './health-list.component.html',
   styleUrls: ['./health-list.component.scss'],
+  animations: [
+    trigger('detailExpand', [
+      state('collapsed', style({ height: '0px', minHeight: '0' })),
+      state('expanded', style({ height: '*', minHeight: "*" })),
+      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+    ]),
+  ],
 })
 export class HealthListComponent {
   @ViewChild(IonInfiniteScroll, { static: true }) infiniteScroll!: IonInfiniteScroll;
@@ -21,6 +29,13 @@ export class HealthListComponent {
   @ViewChild(MatSort) sort!: MatSort;
   public language = "en";
   public displayedColumns: string[] = ['name', 'description', 'healthType', 'active'];
+  // healthProductStockId!: number;
+  // boxesTotal!: number;
+  // unitsPerBox!: number;
+  // unitsTotal!: number;
+  // unitsUsed!: number;
+  // expiryDate!: Date;
+  public displayedSubColumns: string[] = ['boxesTotal', 'unitsTotal', 'unitsUsed', 'expiryDate'];
   public healthProducts = new MatTableDataSource<HealthProductDto>;
   private infiniteHealthProducts: HealthProductDto[] = [];
   public healthProductSearchSubscription!: Subscription;
@@ -32,6 +47,8 @@ export class HealthListComponent {
   public healthProductName: string = '';
   public active: boolean = true;
   public healthType: HealthType | string = '';
+  public expandedElement: any | null;
+  public healthSurveyStocks: HealthSurveyStockDto[] = [];
 
   constructor(
     private healthProductApiService: HealthProductApiService,
@@ -77,7 +94,7 @@ export class HealthListComponent {
       this.infiniteHealthProducts = [];
       this.healthProducts = new MatTableDataSource<HealthProductDto>([]);
     }
-    const cageSearchCriteriaDto = {
+    const healthProductSearchCriteriaDto = {
       page: this.page,
       size: this.size,
       sortBy: this.sortBy,
@@ -87,8 +104,8 @@ export class HealthListComponent {
       healthType: this.healthType
     }
 
-    this.healthProductSearchSubscription = this.healthProductApiService.search(cageSearchCriteriaDto).subscribe(cages => {
-      this.infiniteHealthProducts = [...this.infiniteHealthProducts, ...cages.content];
+    this.healthProductSearchSubscription = this.healthProductApiService.search(healthProductSearchCriteriaDto).subscribe(healthProducts => {
+      this.infiniteHealthProducts = [...this.infiniteHealthProducts, ...healthProducts.content];
       this.healthProducts = new MatTableDataSource<HealthProductDto>(this.infiniteHealthProducts);
 
       if (event) {
@@ -126,6 +143,19 @@ export class HealthListComponent {
 
     this.utilService.presentLoadingDuration(500).then(value => {
       this.search();
+    })
+  }
+
+  toggleRow(element: any) {
+    // Uncommnet to open only single row at once
+    // ELEMENT_DATA.forEach(row => {
+    //   row.expanded = false;
+    // })
+    console.log(element);
+    element.expanded = !element.expanded
+    this.healthSurveyStocks = [];
+    this.healthProductApiService.findHealthSurveyDtoByHealthProductId(element.id).subscribe(productHealthSurvey => {
+      this.healthSurveyStocks = productHealthSurvey.healthSurveyStockDtos;
     })
   }
 }

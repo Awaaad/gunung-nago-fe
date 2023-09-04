@@ -27,6 +27,10 @@ const routes: Routes = [
     loadChildren: () => import('./features/health/health.module').then( m => m.HealthModule)
   },
   {
+    path: 'feed',
+    loadChildren: () => import('./features/feed/feed.module').then( m => m.FeedModule)
+  },
+  {
     path: '',
     redirectTo: 'home',
     pathMatch: 'full'

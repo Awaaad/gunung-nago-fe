@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2023-09-03 16:45:18.
+// Generated using typescript-generator version 3.2.1263 on 2023-09-03 21:42:53.
 
 export class CageDto {
     id!: number;
@@ -15,30 +15,9 @@ export class CageSearchCriteriaDto {
     cageCategory!: CageCategory;
 }
 
-export class DailyProductionReportDto {
-    cageName!: string;
-    initialFlockAge!: number;
-    initialFlockQuantity!: number;
-    initialFlockCategory!: FlockCategory;
-    flockAge!: number;
-    flockCategory!: FlockCategory;
-    deadChicken!: number;
-    sterileChicken!: number;
-    goodChicken!: number;
-    goodEggsInTie!: number;
-    goodEggsNotInTie!: number;
-    goodEggsInTray!: number;
-    goodEggsNotInTray!: number;
-    badEggsInTray!: number;
-    badEggsNotInTray!: number;
-    totalEggs!: number;
-    percentageHD!: number;
-    surveyDate!: Date;
-    bagsEaten!: number;
-    comment!: string;
-    eggTray!: number;
-    productionRate!: number;
-    healthReportDtos!: HealthReportDto[];
+export class Sortable {
+    sortBy!: string;
+    sortOrder!: Order;
 }
 
 export class FeedDto {
@@ -46,6 +25,11 @@ export class FeedDto {
     feedCategory!: FeedCategory;
     name!: string;
     recommendedWeight!: number;
+}
+
+export class FeedSearchCriteriaDto {
+    name!: string;
+    feedCategory!: FeedCategory;
 }
 
 export class FeedStockAllocationDto {
@@ -61,6 +45,17 @@ export class FeedStockDto {
     price!: number;
     weight!: number;
     feedId!: number;
+}
+
+export class FeedStockSaveDto {
+    id!: number;
+    bags!: number;
+    createdDate!: Date;
+    price!: number;
+    weight!: number;
+    feedId!: number;
+    name!: string;
+    feedCategory!: FeedCategory;
 }
 
 export class FeedSurveyDto {
@@ -191,9 +186,30 @@ export class HealthSurveyStockDto {
     expiryDate!: Date;
 }
 
-export class Sortable {
-    sortBy!: string;
-    sortOrder!: Order;
+export class DailyProductionReportDto {
+    cageName!: string;
+    initialFlockAge!: number;
+    initialFlockQuantity!: number;
+    initialFlockCategory!: FlockCategory;
+    flockAge!: number;
+    flockCategory!: FlockCategory;
+    deadChicken!: number;
+    sterileChicken!: number;
+    goodChicken!: number;
+    goodEggsInTie!: number;
+    goodEggsNotInTie!: number;
+    goodEggsInTray!: number;
+    goodEggsNotInTray!: number;
+    badEggsInTray!: number;
+    badEggsNotInTray!: number;
+    totalEggs!: number;
+    percentageHD!: number;
+    surveyDate!: Date;
+    bagsEaten!: number;
+    comment!: string;
+    eggTray!: number;
+    productionRate!: number;
+    healthReportDtos!: HealthReportDto[];
 }
 
 export class SurveyDto {
@@ -224,13 +240,18 @@ export enum CageCategory {
     NORM = 'NORM',
 }
 
-export enum FlockCategory {
+export enum Order {
+    ASC = 'ASC',
+    DESC = 'DESC',
+}
+
+export enum FeedCategory {
     DOC = 'DOC',
     DARA = 'DARA',
     NORM = 'NORM',
 }
 
-export enum FeedCategory {
+export enum FlockCategory {
     DOC = 'DOC',
     DARA = 'DARA',
     NORM = 'NORM',
@@ -243,9 +264,4 @@ export enum AquisitionType {
 export enum HealthType {
     MEDICINE = 'MEDICINE',
     VACCINE = 'VACCINE',
-}
-
-export enum Order {
-    ASC = 'ASC',
-    DESC = 'DESC',
 }

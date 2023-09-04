@@ -1,0 +1,89 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      <div class="router-links">
+        <div class="title">
+          <img class="header-logo" src='./assets/tiny-color/feed/icons8-used-product-64.png'>
+          <h3 class="header-nav-products">Add Feed</h3>
+        </div>
+        <div>
+          <ion-item class="language-selection">
+            <ion-select aria-label="language" interface="popover" placeholder="Select language" [(ngModel)]="language"
+              (ionChange)="ionChangeLanguage($event)">
+              <ion-select-option value="en">English</ion-select-option>
+              <ion-select-option value="id">Indonesian</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </div>
+      </div>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="false" class="ion-padding">
+  <form [formGroup]="feedDetailsForm">
+    <div formArrayName="feedDetails" *ngFor="let feedDetails of feedDetailsFields?.controls; let i = index">
+      <div [formGroupName]="i">
+        <ion-card>
+          <ion-card-content>
+            <div class="form-array-index">
+              <h6>Feed {{i}}</h6>
+              <ion-button *ngIf="feedDetailsFields != null && feedDetailsFields.length > 1"
+                (click)="removeFeedDetails(i)" class="delete-product-btn" color="gunung-nago-warehouse"><ion-icon
+                  name="trash"></ion-icon></ion-button>
+            </div>
+            <ion-row>
+              <ion-col size-xs="12" size-md="3">
+                <ion-input color="gunung-nago-primary" label="Name*" label-placement="floating" fill="outline"
+                  type="text" clear-input="true" formControlName="name" required="true"></ion-input>
+                <div class="error-messages">
+                  <ng-container *ngFor="let error of errorMessages.name">
+                    <div class="error-message"
+                      *ngIf="feedDetails.get('name')?.hasError(error.type) && (feedDetails.get('name')?.dirty || feedDetails.get('name')?.touched)">
+                      {{ error.message }}
+                    </div>
+                  </ng-container>
+                </div>
+              </ion-col>
+              <ion-col size-xs="12" size-md="3">
+                <ion-select color="gunung-nago-primary" label="Category" label-placement="floating" fill="outline"
+                  interface="popover" required="true" placeholder="Category" formControlName="feedCategory">
+                  <ion-select-option *ngFor="let feedCategory of feedCategories" [value]="feedCategory">{{ feedCategory
+                    }}</ion-select-option>
+                </ion-select>
+                <div class="error-messages">
+                  <ng-container *ngFor="let error of errorMessages.category">
+                    <div class="error-message"
+                      *ngIf="feedDetails.get('feedCategory')?.hasError(error.type) && (feedDetails.get('feedCategory')?.dirty || feedDetails.get('feedCategory')?.touched)">
+                      {{ error.message }}
+                    </div>
+                  </ng-container>
+                </div>
+              </ion-col>
+              <ion-col size-xs="12" size-md="3">
+                <ion-input color="gunung-nago-primary" label="Recommended weight" label-placement="floating"
+                  fill="outline" type="number" clear-input="true" formControlName="recommendedWeight"
+                  required="true"></ion-input>
+                <div class="error-messages">
+                  <ng-container *ngFor="let error of errorMessages.recommendedWeight">
+                    <div class="error-message"
+                      *ngIf="feedDetails.get('recommendedWeight')?.hasError(error.type) && (feedDetails.get('recommendedWeight')?.dirty || feedDetails.get('recommendedWeight')?.touched)">
+                      {{ error.message }}
+                    </div>
+                  </ng-container>
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </div>
+    <div class="btn-container">
+      <ion-button color="dark mr-05" (click)="addFeedDetails()">Add Feed</ion-button>
+      <ion-button color="gunung-nago-primary" [disabled]="feedDetailsForm.invalid" (click)="save()">Save</ion-button>
+    </div>
+  </form>
+</ion-content>
