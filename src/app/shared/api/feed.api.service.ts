@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { FeedDto, FeedStockSaveDto } from 'generated-src/model';
+import { FeedCategory, FeedDto, FeedStockAllocationDto, FeedStockDto, FeedStockSaveDto } from 'generated-src/model';
 import { PageResult } from 'generated-src/model-front';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -21,5 +21,13 @@ export class FeedApiService {
 
   public findFeedStockByFeedId(id: number): Observable<FeedStockSaveDto> {
     return this.http.get<FeedStockSaveDto>(`${this.baseUrl}stock/${id}`);
+  }
+
+  public findFeedStockForAllocationByFeedCategory(category: FeedCategory): Observable<FeedStockDto> {
+    return this.http.get<FeedStockDto>(`${this.baseUrl}allocation?feedCategory=${category}`);
+  }
+
+  public findFeedFormAllocation(): Observable<FeedStockAllocationDto[]> {
+    return this.http.get<FeedStockAllocationDto[]>(`${this.baseUrl}allocation/form`);
   }
 }

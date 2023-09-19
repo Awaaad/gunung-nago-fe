@@ -63,7 +63,7 @@ tbody {
 }
 
 .mat-mdc-table .mdc-data-table__header-row {
-    background: var(--ion-color-gunung-nago-health);
+    background: var(--ion-color-gunung-nago-report);
     color: white;
 }
 
@@ -78,4 +78,9 @@ tbody {
 ion-input {
     margin: 5px;
     border-bottom: 1px solid gray;
+}
+
+.stock-divider {
+    border-color: var(--ion-color-gunung-nago-report);
+    color: var(--ion-color-gunung-nago-report);
 }

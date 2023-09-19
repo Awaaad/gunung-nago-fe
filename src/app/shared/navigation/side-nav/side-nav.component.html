@@ -6,7 +6,7 @@
           <ion-menu-button autoHide='false'></ion-menu-button>
         </ion-buttons>
         <div class="header-section">
-          <img class="menu-logo" routerLink="/home" src='./assets/header-icon/chicken.png' width="22px">
+          <img class="menu-logo" routerLink="/home" src='./assets/icon/chicken/icons8-chicken-64.png' width="22px">
           <h5 class="side-nav-home" routerLink="/home">G.V-GN</h5>
           <a *ngIf="false" routerLink="login">Login</a>
           <a *ngIf="true" routerLink="login">Logout</a>
@@ -14,63 +14,77 @@
       </ion-toolbar>
     </ion-header>
     <ion-content>
-      <ion-list class="ion-no-padding">
-        <div class="side-nav" *ngIf="true">
-          <ul id="myUL">
-            <li>
-              <a routerLink="/home">
-                <ion-icon name="home"></ion-icon>{{ 'activity.home' | translate }}
-              </a>
-            </li>
-            <li>
-              <a routerLink="/report/daily-report">
-                <ion-icon name="book"></ion-icon>{{ 'activity.daily-report' | translate }}
-              </a>
-            </li>
-            <li>
-              <a routerLink="/cage/cage-list">
-                <ion-icon name="grid"></ion-icon><span>{{ 'activity.cage' | translate }}</span>
-              </a>
-            </li>
-            <li>
-              <a routerLink="/cash-registry">
-                <ion-icon name="pencil"></ion-icon><span>{{ 'activity.survey' | translate }}</span>
-              </a>
-            </li>
-            <li>
-              <a routerLink="/order/order-history">
-                <ion-icon name="albums"></ion-icon>{{ 'activity.chicken-flock' | translate }}
-              </a>
-            </li>
-            <li>
-              <a routerLink="/order/order-history">
-                <ion-icon name="medkit"></ion-icon>{{ 'activity.vaccine-medication' | translate }}
-              </a>
-            </li>
-            <li>
-              <a routerLink="/order/order-history">
-                <ion-icon name="bag"></ion-icon>{{ 'activity.chicken-food' | translate }}
-              </a>
-            </li>
-          </ul>
-        </div>
+      <ion-item routerLink="/home" routerDirection="forward">
+        <ion-icon name="home" color="dark"></ion-icon>{{ 'activity.home' | translate }}
+      </ion-item>
+      <ion-item routerLink="/report/daily-report" routerDirection="forward">
+        <ion-icon name="newspaper" color="dark"></ion-icon>{{ 'activity.daily-report' | translate }}
+      </ion-item>
+      <ion-item routerLink="/cage/cage-survey-list" routerDirection="forward">
+        <ion-icon name="pencil" color="dark"></ion-icon><span>{{ 'activity.survey' | translate }}</span>
+      </ion-item>
 
-        <div class="side-nav" *ngIf="false">
-          <ul id="myUL">
-            <li>
-              <a routerLink="/point-of-sale/pos">
-                <ion-icon name="calculator"></ion-icon>Point of Sale
-              </a>
-            </li>
-            <li>
-              <a routerLink="/order/order-history">
-                <ion-icon name="albums"></ion-icon>Sale Invoice List
-              </a>
-            </li>
-            <p class="med-it-lg">Powered By ©Med-IT</p>
-          </ul>
-        </div>
-      </ion-list>
+      <ion-accordion-group>
+        <ion-accordion value="first">
+          <ion-item slot="header" color="light">
+            <ion-icon name="grid" color="dark"></ion-icon><span>{{ 'activity.cage' | translate }}</span>
+          </ion-item>
+          <div class="accordion-sub" slot="content">
+            <ion-item routerLink="/cage/cage-list">
+              <ion-icon name="list" color="dark"></ion-icon>Cage List
+            </ion-item>
+            <ion-item routerLink="/cage/cage-details">
+              <ion-icon name="add" color="dark"></ion-icon>Add Cage
+            </ion-item>
+          </div>
+        </ion-accordion>
+      </ion-accordion-group>
+
+      <ion-accordion-group>
+        <ion-accordion value="first">
+          <ion-item slot="header" color="light">
+            <ion-icon name="medkit" color="dark"></ion-icon>Health
+          </ion-item>
+          <div class="accordion-sub" slot="content">
+            <ion-item routerLink="/health/health-list">
+              <ion-icon name="list" color="dark"></ion-icon>Health Product List
+            </ion-item>
+            <ion-item routerLink="/health/health-details">
+              <ion-icon name="add" color="dark"></ion-icon>Add Health Product
+            </ion-item>
+            <ion-item routerLink="/health/health-stock">
+              <ion-icon name="logo-dropbox" color="dark"></ion-icon>Update Health Stock
+            </ion-item>
+          </div>
+        </ion-accordion>
+      </ion-accordion-group>
+
+      <ion-accordion-group>
+        <ion-accordion value="first">
+          <ion-item slot="header" color="light">
+            <ion-icon name="bag" color="dark"></ion-icon>Feed
+          </ion-item>
+          <div class="accordion-sub" slot="content">
+            <ion-item routerLink="/feed/feed-list">
+              <ion-icon name="list" color="dark"></ion-icon>Feed List
+            </ion-item>
+            <ion-item routerLink="/feed/feed-details">
+              <ion-icon name="add" color="dark"></ion-icon>Add Feed
+            </ion-item>
+            <ion-item routerLink="/feed/feed-stock">
+              <ion-icon name="logo-dropbox" color="dark"></ion-icon>Update Feed Stock
+            </ion-item>
+            <ion-item routerLink="/feed/feed-allocation">
+              <ion-icon name="expand" color="dark"></ion-icon>Feed Allocation
+            </ion-item>
+          </div>
+        </ion-accordion>
+      </ion-accordion-group>
+
+      <ion-item routerLink="/flock/flock-sale-details" routerDirection="forward">
+        <ion-icon name="pricetag" color="dark"></ion-icon><span>Flock Sale</span>
+      </ion-item>
+
     </ion-content>
   </ion-menu>
   <ion-router-outlet id="menu-content"></ion-router-outlet>

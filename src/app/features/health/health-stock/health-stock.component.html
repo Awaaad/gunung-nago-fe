@@ -6,7 +6,7 @@
     <ion-title>
       <div class="router-links">
         <div class="title">
-          <img class="header-logo" src='./assets/tiny-color/health/icons8-syringe-64.png'>
+          <img class="header-logo" src='./assets/flaticon/stock.png'>
           <h3 class="header-nav-products">Health Stock</h3>
         </div>
         <div>
@@ -58,8 +58,8 @@
         <ng-container matColumnDef="active">
           <th mat-header-cell *matHeaderCellDef> Active </th>
           <td mat-cell *matCellDef="let element">
-            <img *ngIf="element.active" src='./assets/tiny-color/active/icons8-tick-16.png'>
-            <img *ngIf="!element.active" src='./assets/tiny-color/inactive/icons8-cross-16.png'>
+            <img *ngIf="element.active" src='./assets/flaticon/tick.png'>
+            <img *ngIf="!element.active" src='./assets/flaticon/cross.png'>
           </td>
         </ng-container>
 
@@ -69,6 +69,10 @@
       </table>
     </div>
   </ion-card>
+
+  <ion-item-divider class="stock-divider">
+    <ion-label color="ion-color-gunung-nago-report">Stock</ion-label>
+  </ion-item-divider>
 
   <ion-card>
     <div class="mat-elevation-z8 table-responsive">
@@ -125,6 +129,6 @@
   </ion-card>
   <div class="btn-container">
     <ion-button class="cancel-btn" (click)="reset()">Cancel</ion-button>
-    <ion-button color="gunung-nago-primary" (click)="save()">Save</ion-button>
+    <ion-button color="positive-btn" (click)="save()">Save</ion-button>
   </div>
 </ion-content>

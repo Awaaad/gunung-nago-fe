@@ -10,7 +10,11 @@ export class FlockFeedLineApiService {
 
     constructor(private http: HttpClient) { }
 
-    public findAllActiveFlockLinesByFlockId(id: number): Observable<FlockFeedLineDto[]> {
+    public allocateFeedStockToFlock(feeds: any): Observable<any> {
+        return this.http.post(`${this.baseUrl}allocate`, feeds, { responseType: 'text' });
+    }
+
+    public findAllActiveFlockFeedLinesByFlockId(id: number): Observable<FlockFeedLineDto[]> {
         return this.http.get<FlockFeedLineDto[]>(`${this.baseUrl}${id}`);
     }
 }

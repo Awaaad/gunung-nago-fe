@@ -63,8 +63,13 @@ tbody {
 }
 
 .mat-mdc-table .mdc-data-table__header-row {
-    background: #cf9d06;
+    background: var(--ion-color-gunung-nago-feed);
     color: white;
+}
+
+.stock-divider {
+    border-color: var(--ion-color-gunung-nago-feed);
+    color: var(--ion-color-gunung-nago-feed);
 }
 
 .mdc-data-table__header-cell {

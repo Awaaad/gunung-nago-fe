@@ -17,10 +17,12 @@ import { FeedListComponent } from './feed-list/feed-list.component';
 import { FeedStockComponent } from './feed-stock/feed-stock.component';
 import { FeedApiService } from 'src/app/shared/api/feed.api.service';
 import { FeedStockApiService } from 'src/app/shared/api/feed-stock.api.service';
+import { FeedAllocationComponent } from './feed-allocation/feed-allocation.component';
+import { FlockFeedLineApiService } from 'src/app/shared/api/flock-feed-line.api.service';
 
 
 @NgModule({
-  declarations: [FeedDetailsComponent, FeedListComponent, FeedStockComponent],
+  declarations: [FeedDetailsComponent, FeedListComponent, FeedStockComponent, FeedAllocationComponent],
   imports: [
     CommonModule,
     FeedRoutingModule,
@@ -36,6 +38,6 @@ import { FeedStockApiService } from 'src/app/shared/api/feed-stock.api.service';
     MatDatepickerModule,
     MatInputModule
   ],
-  providers: [FeedApiService, FeedStockApiService]
+  providers: [FeedApiService, FeedStockApiService, FlockFeedLineApiService]
 })
 export class FeedModule { }

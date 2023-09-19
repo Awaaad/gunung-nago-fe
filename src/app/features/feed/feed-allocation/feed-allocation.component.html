@@ -1,3 +1,142 @@
-<p>
-  feed-allocation works!
-</p>
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      <div class="router-links">
+        <div class="title">
+          <img class="header-logo" src='./assets/flaticon/feed-allocation.png'>
+          <h3 class="header-nav-products">Feed Allocation</h3>
+        </div>
+        <div>
+          <ion-item class="language-selection">
+            <ion-select aria-label="language" interface="popover" placeholder="Select language" [(ngModel)]="language"
+              (ionChange)="ionChangeLanguage($event)">
+              <ion-select-option value="en">English</ion-select-option>
+              <ion-select-option value="id">Indonesian</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </div>
+      </div>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="false" class="ion-padding">
+  <div class="container">
+    <ion-item-divider class="norm">
+      <ion-label color="norm">NORMAL</ion-label>
+    </ion-item-divider>
+    <ion-row *ngIf="showFeedStockNorm">
+      <ion-col size-xs="6" size-md="3" class="mt-1e">
+        <ion-ripple-effect class="custom-ripple"></ion-ripple-effect>
+        <ion-card>
+          <ion-card-header color="gunung-nago-feed">
+            {{feedStockNorm.feedCategory}}
+          </ion-card-header>
+          <ion-card-content class="home-card-content">
+            <ion-input class="mt-1" color="gunung-nago-survey" label="Bags left" label-placement="floating"
+              fill="outline" type="number" [(ngModel)]="feedStockNorm.bags" [readonly]="true"></ion-input>
+            <ion-input class="mt-1" color="gunung-nago-survey" label="Bags allocated" label-placement="floating"
+              fill="outline" type="number" [(ngModel)]="totalBagsAllocatedNorm" [readonly]="true"></ion-input>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size-xs="6" size-md="3" class="mt-1e" *ngFor="let cage of cagesNorm">
+        <ion-ripple-effect class="custom-ripple"></ion-ripple-effect>
+        <ion-card>
+          <ion-card-header color="norm">
+            {{cage.cageName}}
+          </ion-card-header>
+          <ion-card-content class="home-card-content">
+            <ion-input class="mt-1" color="gunung-nago-survey" label="Bags left" label-placement="floating"
+              fill="outline" type="number" [(ngModel)]="cage.bagsLeft" [readonly]="true"></ion-input>
+            <ion-input class="mt-1" color="gunung-nago-survey" label="Bags to be allocated" label-placement="floating"
+              fill="outline" type="number" min="0" clear-input="true" [(ngModel)]="cage.bagsAllocated"
+              (ngModelChange)="calculateTotalBagsAllocatedForNorm()"></ion-input>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+
+    <ion-item-divider class="dara">
+      <ion-label color="dara">DARA</ion-label>
+    </ion-item-divider>
+    <ion-row *ngIf="showFeedStockDara">
+      <ion-col size-xs="6" size-md="3" class="mt-1e">
+        <ion-ripple-effect class="custom-ripple"></ion-ripple-effect>
+        <ion-card>
+          <ion-card-header color="gunung-nago-feed">
+            {{feedStockDara.feedCategory}}
+          </ion-card-header>
+          <ion-card-content class="home-card-content">
+            <ion-input class="mt-1" color="gunung-nago-survey" label="Bags left" label-placement="floating"
+              fill="outline" type="number" [(ngModel)]="feedStockDara.bags" [readonly]="true"></ion-input>
+            <ion-input class="mt-1" color="gunung-nago-survey" label="Bags allocated" label-placement="floating"
+              fill="outline" type="number" [(ngModel)]="totalBagsAllocatedDara" [readonly]="true"></ion-input>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size-xs="6" size-md="3" class="mt-1e" *ngFor="let cage of cagesDara">
+        <ion-card>
+          <ion-card-header color="dara">
+            {{cage.cageName}}
+          </ion-card-header>
+          <ion-card-content class="home-card-content">
+            <ion-input class="mt-1" color="gunung-nago-survey" label="Bags left" label-placement="floating"
+              fill="outline" type="number" [(ngModel)]="cage.bagsLeft" [readonly]="true"></ion-input>
+            <ion-input class="mt-1" color="gunung-nago-survey" label="Bags to be allocated" label-placement="floating"
+              fill="outline" type="number" min="0" clear-input="true" [(ngModel)]="cage.bagsAllocated"
+              (ngModelChange)="calculateTotalBagsAllocatedForDara()"></ion-input>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+
+    <ion-item-divider class="doc">
+      <ion-label color="doc">DOC</ion-label>
+    </ion-item-divider>
+    <ion-row *ngIf="showFeedStockDoc">
+      <ion-col size-xs="6" size-md="3" class="mt-1e">
+        <ion-ripple-effect class="custom-ripple"></ion-ripple-effect>
+        <ion-card>
+          <ion-card-header color="gunung-nago-feed">
+            {{feedStockDoc.feedCategory}}
+          </ion-card-header>
+          <ion-card-content class="home-card-content">
+            <ion-input class="mt-1" color="gunung-nago-survey" label="Bags left" label-placement="floating"
+              fill="outline" type="number" [(ngModel)]="feedStockDoc.bags" [readonly]="true"></ion-input>
+            <ion-input class="mt-1" color="gunung-nago-survey" label="Bags allocated" label-placement="floating"
+              fill="outline" type="number" [(ngModel)]="totalBagsAllocatedDoc" [readonly]="true"></ion-input>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size-xs="6" size-md="3" class="mt-1e" *ngFor="let cage of cagesDoc">
+        <ion-card>
+          <ion-card-header color="doc">
+            {{cage.cageName}}
+          </ion-card-header>
+          <ion-card-content class="home-card-content">
+            <ion-input class="mt-1" color="gunung-nago-survey" label="Bags left" label-placement="floating"
+              fill="outline" type="number" [(ngModel)]="cage.bagsLeft" [readonly]="true"></ion-input>
+            <ion-input class="mt-1" color="gunung-nago-survey" label="Bags to be allocated" label-placement="floating"
+              fill="outline" type="number" min="0" clear-input="true" [(ngModel)]="cage.bagsAllocated"
+              (ngModelChange)="calculateTotalBagsAllocatedForDoc()"></ion-input>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </div>
+
+  <div class="btn-container">
+    <ion-button class="cancel-btn" (click)="cancel()">Cancel</ion-button>
+    <ion-button color="positive-btn" (click)="save()">Save</ion-button>
+  </div>
+</ion-content>

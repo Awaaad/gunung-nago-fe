@@ -6,7 +6,7 @@
     <ion-title>
       <div class="router-links">
         <div class="title">
-          <img class="header-logo" src='./assets/tiny-color/cage/icons8-prison-64.png'>
+          <img class="header-logo" src='./assets/flaticon/cage-survey.png'>
           <h3 class="header-nav-products">{{ 'cage.cage-list.cage-list' | translate }}</h3>
         </div>
         <div>
@@ -25,13 +25,13 @@
 
 <ion-content [fullscreen]="false" class="ion-padding">
   <div class="container">
-    <ion-item-divider>
-      <ion-label>NORMAL</ion-label>
+    <ion-item-divider class="norm">
+      <ion-label color="norm">NORMAL</ion-label>
     </ion-item-divider>
     <ion-row>
       <ion-col size-xs="6" size-md="3" class="mt-1e" *ngFor="let cage of cages">
         <ion-ripple-effect class="custom-ripple"></ion-ripple-effect>
-        <ion-card color="gunung-nago-primary" (click)="routeToSurveyDetails(cage)">
+        <ion-card color="norm" (click)="routeToSurveyDetails(cage)">
           <ion-card-content class="home-card-content">
             {{cage.name}}
           </ion-card-content>
@@ -40,11 +40,11 @@
     </ion-row>
 
     <ion-item-divider class="dara">
-      <ion-label color="gunung-nago-report">DARA</ion-label>
+      <ion-label color="dara">DARA</ion-label>
     </ion-item-divider>
     <ion-row>
       <ion-col size-xs="6" size-md="3" class="mt-1e" *ngFor="let cage of cagesDara">
-        <ion-card color="gunung-nago-report" (click)="routeToSurveyDetails(cage)">
+        <ion-card color="dara" (click)="routeToSurveyDetails(cage)">
           <ion-card-content class="home-card-content">
             {{cage.name}}
           </ion-card-content>
@@ -53,11 +53,11 @@
     </ion-row>
 
     <ion-item-divider class="doc">
-      <ion-label color="gunung-nago-flock">DOC</ion-label>
+      <ion-label color="doc">DOC</ion-label>
     </ion-item-divider>
     <ion-row>
       <ion-col size-xs="6" size-md="3" class="mt-1e" *ngFor="let cage of cagesDoc">
-        <ion-card color="gunung-nago-flock" (click)="routeToSurveyDetails(cage)">
+        <ion-card color="doc" (click)="routeToSurveyDetails(cage)">
           <ion-card-content class="home-card-content">
             {{cage.name}}
           </ion-card-content>
@@ -71,7 +71,7 @@
       <ion-header>
         <ion-toolbar>
           <div class="title">
-            <img class="header-logo ml-05" src='./assets/tiny-color/chicken/icons8-chicken-64.png'>
+            <img class="header-logo ml-05" src='./assets/icon/chicken/icons8-chicken-64.png'>
             <h3 class="modal-header-text">Flock Details</h3>
           </div>
         </ion-toolbar>

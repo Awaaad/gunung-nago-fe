@@ -166,7 +166,7 @@ export class SurveryDetailsComponent implements OnInit {
   }
 
   private findAllActiveFlockLinesByFlockId(flockId: number): void {
-    this.flockFeedLineApiService.findAllActiveFlockLinesByFlockId(flockId).subscribe(feedLines => {
+    this.flockFeedLineApiService.findAllActiveFlockFeedLinesByFlockId(flockId).subscribe(feedLines => {
       this.feedLines = feedLines;
       this.feedLines.forEach(feeLine => {
         feeLine.bagsEaten = 0;
@@ -338,6 +338,7 @@ export class SurveryDetailsComponent implements OnInit {
   }
 
   private setFeedSurvey(): void {
+    this.feedSurvey = [];
     this.feedLines.filter(feedLine => { return feedLine.bagsEaten !== 0 }).forEach(feedLine => {
       const feedSurvey: FeedSurveyDto = new FeedSurveyDto();
       feedSurvey.flockFeedLineId = feedLine.id;

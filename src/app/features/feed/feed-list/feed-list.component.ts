@@ -19,7 +19,7 @@ export class FeedListComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   public language = "en";
-  public displayedColumns: string[] = ['name', 'feedCategory', 'recommendedWeight'];
+  public displayedColumns: string[] = ['name', 'feedCategory', 'recommendedWeight', 'edit'];
   public feeds = new MatTableDataSource<FeedDto>;
   private infiniteFeeds: FeedDto[] = [];
   public feedSearchSubscription!: Subscription;

@@ -6,7 +6,7 @@
     <ion-title>
       <div class="router-links">
         <div class="title">
-          <img class="header-logo" src='./assets/tiny-color/survey/icons8-pass-fail-64.png'>
+          <img class="header-logo" src='./assets/flaticon/survey.png'>
           <h3 class="header-nav-products">{{ 'survey.survey-details.survey-details' | translate }}</h3>
         </div>
         <div>
@@ -225,10 +225,10 @@
         </ion-row>
       </div>
     </form>
-
-    <div class="btn-container">
-      <ion-button class="cancel-btn" (click)="cancel()">Cancel</ion-button>
-      <ion-button color="gunung-nago-survey" [disabled]="surveyForm.invalid" (click)="save()">Save</ion-button>
-    </div>
   </ion-card>
+
+  <div class="btn-container">
+    <ion-button class="cancel-btn" (click)="cancel()">Cancel</ion-button>
+    <ion-button color="positive-btn" [disabled]="surveyForm.invalid" (click)="save()">Save</ion-button>
+  </div>
 </ion-content>
