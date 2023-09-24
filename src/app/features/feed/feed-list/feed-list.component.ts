@@ -6,8 +6,8 @@ import { IonInfiniteScroll } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { FeedCategory, FeedDto } from 'generated-src/model';
 import { Subscription } from 'rxjs';
-import { FeedApiService } from 'src/app/shared/api/feed.api.service';
-import { UtilsService } from 'src/app/shared/util/utils.service';
+import { FeedApiService } from 'src/app/shared/apis/feed.api.service';
+import { UtilsService } from 'src/app/shared/utils/utils.service';
 
 @Component({
   selector: 'app-feed-list',

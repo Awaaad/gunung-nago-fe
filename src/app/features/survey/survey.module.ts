@@ -17,11 +17,11 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
-import { SurveyApiService } from '../../shared/api/survey.api.service';
-import { HealthProductApiService } from 'src/app/shared/api/health-product.api.service';
+import { SurveyApiService } from '../../shared/apis/survey.api.service';
+import { HealthProductApiService } from 'src/app/shared/apis/health-product.api.service';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatChipsModule } from '@angular/material/chips';
-import { FlockFeedLineApiService } from 'src/app/shared/api/flock-feed-line.api.service';
+import { FlockFeedLineApiService } from 'src/app/shared/apis/flock-feed-line.api.service';
 
 @NgModule({
   declarations: [SurveyListComponent, SurveryDetailsComponent],

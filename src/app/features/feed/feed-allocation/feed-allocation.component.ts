@@ -3,9 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { CageCategory, CageDto, FeedCategory, FeedStockAllocationDto, FeedStockDto } from 'generated-src/model';
-import { FeedApiService } from 'src/app/shared/api/feed.api.service';
-import { FlockFeedLineApiService } from 'src/app/shared/api/flock-feed-line.api.service';
-import { UtilsService } from 'src/app/shared/util/utils.service';
+import { FeedApiService } from 'src/app/shared/apis/feed.api.service';
+import { FlockFeedLineApiService } from 'src/app/shared/apis/flock-feed-line.api.service';
+import { UtilsService } from 'src/app/shared/utils/utils.service';
 
 @Component({
   selector: 'app-feed-allocation',

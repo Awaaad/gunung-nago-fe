@@ -15,8 +15,8 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { IonicModule } from '@ionic/angular';
 import { TranslateModule } from '@ngx-translate/core';
-import { HealthProductApiService } from 'src/app/shared/api/health-product.api.service';
-import { HealthProductStockApiService } from 'src/app/shared/api/health-product-stock.api.service';
+import { HealthProductApiService } from 'src/app/shared/apis/health-product.api.service';
+import { HealthProductStockApiService } from 'src/app/shared/apis/health-product-stock.api.service';
 
 
 @NgModule({

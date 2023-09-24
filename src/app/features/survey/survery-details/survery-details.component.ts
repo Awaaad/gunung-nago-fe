@@ -7,10 +7,10 @@ import { TranslateService } from '@ngx-translate/core';
 import { FeedSurveyDto, FlockCategory, FlockFeedLineDto, HealthProductDto, HealthSurveyDto, SurveyDto } from 'generated-src/model';
 import { SurveyFrontDto } from 'generated-src/model-front';
 import { debounceTime, distinctUntilChanged, filter, finalize, switchMap, tap } from 'rxjs';
-import { FlockFeedLineApiService } from 'src/app/shared/api/flock-feed-line.api.service';
-import { HealthProductApiService } from 'src/app/shared/api/health-product.api.service';
-import { UtilsService } from 'src/app/shared/util/utils.service';
-import { SurveyApiService } from '../../../shared/api/survey.api.service';
+import { FlockFeedLineApiService } from 'src/app/shared/apis/flock-feed-line.api.service';
+import { HealthProductApiService } from 'src/app/shared/apis/health-product.api.service';
+import { UtilsService } from 'src/app/shared/utils/utils.service';
+import { SurveyApiService } from '../../../shared/apis/survey.api.service';
 
 @Component({
   selector: 'app-survery-details',

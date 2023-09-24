@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ModalController, NavParams } from '@ionic/angular';
-import { UtilsService } from '../../util/utils.service';
+import { UtilsService } from '../../utils/utils.service';
 
 @Component({
   selector: 'app-survey-proceed',

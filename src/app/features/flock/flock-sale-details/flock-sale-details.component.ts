@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { UtilsService } from 'src/app/shared/util/utils.service';
-import { FlockSaleApiService } from '../../../shared/api/flock-sale.api.service';
+import { UtilsService } from 'src/app/shared/utils/utils.service';
+import { FlockSaleApiService } from '../../../shared/apis/flock-sale.api.service';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { SurveyApiService } from '../../../shared/api/survey.api.service';
+import { SurveyApiService } from '../../../shared/apis/survey.api.service';
 import { AquisitionType, CageCategory, CageDto, SurveyDto } from 'generated-src/model';
 import { FlockSaleSaveFrontDto } from 'generated-src/model-front';
 import { HttpErrorResponse } from '@angular/common/http';
-import { CageApiService } from '../../../shared/api/cage.api.service';
+import { CageApiService } from '../../../shared/apis/cage.api.service';
 
 @Component({
   selector: 'app-flock-sale-details',

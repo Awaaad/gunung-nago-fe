@@ -15,10 +15,10 @@ import { TranslateModule } from '@ngx-translate/core';
 import { FeedDetailsComponent } from './feed-details/feed-details.component';
 import { FeedListComponent } from './feed-list/feed-list.component';
 import { FeedStockComponent } from './feed-stock/feed-stock.component';
-import { FeedApiService } from 'src/app/shared/api/feed.api.service';
-import { FeedStockApiService } from 'src/app/shared/api/feed-stock.api.service';
+import { FeedApiService } from 'src/app/shared/apis/feed.api.service';
+import { FeedStockApiService } from 'src/app/shared/apis/feed-stock.api.service';
 import { FeedAllocationComponent } from './feed-allocation/feed-allocation.component';
-import { FlockFeedLineApiService } from 'src/app/shared/api/flock-feed-line.api.service';
+import { FlockFeedLineApiService } from 'src/app/shared/apis/flock-feed-line.api.service';
 
 
 @NgModule({

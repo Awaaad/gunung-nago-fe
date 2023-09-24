@@ -2,9 +2,9 @@ import { Component } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core';
 import { FeedCategory, FeedDto, FeedStockDto, FeedStockSaveDto } from 'generated-src/model';
-import { FeedStockApiService } from 'src/app/shared/api/feed-stock.api.service';
-import { FeedApiService } from 'src/app/shared/api/feed.api.service';
-import { UtilsService } from 'src/app/shared/util/utils.service';
+import { FeedStockApiService } from 'src/app/shared/apis/feed-stock.api.service';
+import { FeedApiService } from 'src/app/shared/apis/feed.api.service';
+import { UtilsService } from 'src/app/shared/utils/utils.service';
 import { Subscription } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 

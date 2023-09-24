@@ -3,8 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { HealthType } from 'generated-src/model';
-import { HealthProductApiService } from 'src/app/shared/api/health-product.api.service';
-import { UtilsService } from 'src/app/shared/util/utils.service';
+import { HealthProductApiService } from 'src/app/shared/apis/health-product.api.service';
+import { UtilsService } from 'src/app/shared/utils/utils.service';
 
 @Component({
   selector: 'app-health-details',

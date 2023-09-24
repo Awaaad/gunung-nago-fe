@@ -5,9 +5,9 @@ import { MatTableDataSource } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core';
 import { HealthProductDto, HealthProductStockSaveDto, HealthType } from 'generated-src/model';
 import { Subscription } from 'rxjs';
-import { HealthProductStockApiService } from 'src/app/shared/api/health-product-stock.api.service';
-import { HealthProductApiService } from 'src/app/shared/api/health-product.api.service';
-import { UtilsService } from 'src/app/shared/util/utils.service';
+import { HealthProductStockApiService } from 'src/app/shared/apis/health-product-stock.api.service';
+import { HealthProductApiService } from 'src/app/shared/apis/health-product.api.service';
+import { UtilsService } from 'src/app/shared/utils/utils.service';
 
 @Component({
   selector: 'app-health-stock',

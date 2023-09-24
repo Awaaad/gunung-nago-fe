@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder, FormArray } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { CageCategory } from 'generated-src/model';
-import { CageApiService } from '../../../shared/api/cage.api.service';
+import { CageApiService } from '../../../shared/apis/cage.api.service';
 import { HttpErrorResponse } from '@angular/common/http';
-import { UtilsService } from 'src/app/shared/util/utils.service';
+import { UtilsService } from 'src/app/shared/utils/utils.service';
 
 @Component({
   selector: 'app-cage-details',

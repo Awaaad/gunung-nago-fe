@@ -8,12 +8,12 @@ import { TranslateModule } from '@ngx-translate/core';
 import { FlockDetailsComponent } from './flock-details/flock-details.component';
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
-import { FlockApiService } from '../../shared/api/flock.api.service';
-import { FlockSaleApiService } from '../../shared/api/flock-sale.api.service';
+import { FlockApiService } from '../../shared/apis/flock.api.service';
+import { FlockSaleApiService } from '../../shared/apis/flock-sale.api.service';
 import { FlockSaleDetailsComponent } from './flock-sale-details/flock-sale-details.component';
 import { FlockSaleListComponent } from './flock-sale-list/flock-sale-list.component';
-import { SurveyApiService } from '../../shared/api/survey.api.service';
-import { CageApiService } from '../../shared/api/cage.api.service';
+import { SurveyApiService } from '../../shared/apis/survey.api.service';
+import { CageApiService } from '../../shared/apis/cage.api.service';
 
 
 @NgModule({

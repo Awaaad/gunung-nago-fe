@@ -1,16 +1,16 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { CageApiService } from '../../../shared/api/cage.api.service';
+import { CageApiService } from '../../../shared/apis/cage.api.service';
 import { AquisitionType, CageCategory, CageDto } from 'generated-src/model';
-import { SurveyApiService } from '../../../shared/api/survey.api.service';
+import { SurveyApiService } from '../../../shared/apis/survey.api.service';
 import * as moment from 'moment';
 import { IonModal } from '@ionic/angular';
 import { OverlayEventDetail } from '@ionic/core/components';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { FlockSaveFrontDto } from 'generated-src/model-front';
-import { FlockApiService } from '../../../shared/api/flock.api.service';
-import { UtilsService } from 'src/app/shared/util/utils.service';
+import { FlockApiService } from '../../../shared/apis/flock.api.service';
+import { UtilsService } from 'src/app/shared/utils/utils.service';
 import { HttpErrorResponse } from '@angular/common/http';
 @Component({
   selector: 'app-cage-survey-list',
