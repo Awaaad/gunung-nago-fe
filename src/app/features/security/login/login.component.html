@@ -1,0 +1,81 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      <div class="router-links">
+        <div class="title">
+          <img class="header-logo" routerLink="/home" src='./assets/header_icons/login.png'>
+          <h3 class="header-nav-home" routerLink="/home">Login</h3>
+        </div>
+      </div>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <div class="login-container">
+    <div class="login-wrapper">
+      <ion-row class="ion-justify-content-center ion-align-items-center">
+        <div class="login-header">
+          <img class="cross-logo" src='./assets/icon/pharmacy.png'>
+          <h3 class="somedico-text">{{pharmacy | uppercase}}</h3>
+        </div>
+      </ion-row>
+      <ion-row class="ion-justify-content-center ion-align-items-center login-sub-container">
+        <ion-col size="8" size-md size="12" size-sm>
+          <div class="login-content__img">
+            <img src='./assets/pharmacy-login/medical1.png'>
+          </div>
+        </ion-col>
+        <ion-col size="4" size-md size="12" size-sm>
+          <ion-card class="login-card ion-no-margin">
+            <ion-card-header class="ion-text-center ion-no-padding">
+              <h3>Log in</h3>
+            </ion-card-header>
+            <form [formGroup]="formLogin" (onSubmit)="login()" (keyup.enter)="login()">
+              <ion-card-content>
+                <div class="login-content__field">
+                  <ion-item class="login-content__input">
+                    <ion-label position="floating">Username</ion-label>
+                    <ion-input formControlName="username" name="username" id="username" type="text"></ion-input>
+                  </ion-item>
+
+                  <div class="error-messages">
+                    <ng-container *ngFor="let error of errorMessages.username">
+                      <div class="error-message"
+                        *ngIf="formLogin.get('username')?.hasError(error.type) && (formLogin.get('username')?.dirty || formLogin.get('username')?.touched)">
+                        {{ error.message }}
+                      </div>
+                    </ng-container>
+                  </div>
+
+                  <ion-item class="login-content__input">
+                    <ion-label position="floating">Password</ion-label>
+                    <ion-input formControlName="password" name="password" id="password" type="password"></ion-input>
+                  </ion-item>
+
+                  <div class="error-messages">
+                    <ng-container *ngFor="let error of errorMessages.password">
+                      <div class="error-message"
+                        *ngIf="formLogin.get('password')?.hasError(error.type) && (formLogin.get('password')?.dirty || formLogin.get('password')?.touched)">
+                        {{ error.message }}
+                      </div>
+                    </ng-container>
+                  </div>
+
+                  <ion-row center>
+                    <ion-col class="ion-text-center ion-padding">
+                      <ion-button name="login" type="submit" color="secondary" (click)="login()">Grant
+                        Access</ion-button>
+                    </ion-col>
+                  </ion-row>
+                </div>
+              </ion-card-content>
+            </form>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </div>
+  </div>
+</ion-content>

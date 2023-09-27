@@ -17,7 +17,7 @@ import { UtilsService } from 'src/app/shared/utils/utils.service';
 export class HealthStockComponent {
   public language = "en";
   public displayedColumns: string[] = ['name', 'description', 'healthType', 'active'];
-  public displayedColumnsStock: string[] = ['name', 'healthType', 'quantity', 'price', 'expiryDate', 'remove'];
+  public displayedColumnsStock: string[] = ['name', 'healthType', 'boxesReceived', 'price', 'expiryDate', 'remove'];
   public healthProducts = new MatTableDataSource<HealthProductDto>;
   public healthProductsInStockTable = new MatTableDataSource<HealthProductStockSaveDto>;
   private infiniteHealthProducts: HealthProductDto[] = [];
@@ -122,8 +122,14 @@ export class HealthStockComponent {
 
   public save(): void {
     console.log(this.healthProductsInStockTable.data)
+    const healthProductPurchaseDto = {
+      invoiceNumber: 12345,
+      supplierId: 1,
+      discount: null,
+      healthProductStockDtos: this.healthProductsInStockTable.data
+    }
     this.utilsService.presentLoading();
-    this.healthProductStockApiService.save(this.healthProductsInStockTable.data).subscribe({
+    this.healthProductStockApiService.save(healthProductPurchaseDto).subscribe({
       next: (data: string) => {
         this.reset();
         this.utilsService.dismissLoading();

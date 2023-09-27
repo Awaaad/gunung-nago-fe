@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2023-09-24 16:32:35.
+// Generated using typescript-generator version 3.2.1263 on 2023-09-25 20:44:18.
 
 export class CageDto {
     id!: number;
@@ -173,10 +173,13 @@ export class HealthProductStockSaveDto {
     name!: string;
     description!: string;
     healthType!: HealthType;
-    quantity!: number;
+    boxesReceived!: number;
+    bonusBoxesReceived!: number;
     unitsPerBox!: number;
+    wholesalePrice!: number;
     pricePerBox!: number;
     expiryDate!: Date;
+    discount!: number;
 }
 
 export class HealthReportDto {
@@ -200,6 +203,13 @@ export class HealthSurveyStockDto {
     unitsTotal!: number;
     unitsUsed!: number;
     expiryDate!: Date;
+}
+
+export class HealthProductPurchaseDto {
+    invoiceNumber!: string;
+    discount!: number;
+    supplierId!: number;
+    healthProductStockDtos!: HealthProductStockSaveDto[];
 }
 
 export class DailyProductionReportDto {

@@ -9,7 +9,7 @@ import { AuthenticatedUserDto, LoginParamDto } from 'generated-src/model';
 })
 export class LoginApiService {
 
-    baseUrl = `${environment.apiPath}user/`;
+    baseUrl = `${environment.apiPath}users/`;
 
     constructor(private http: HttpClient) { }
 

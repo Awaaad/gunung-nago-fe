@@ -50,7 +50,7 @@ export class TokenInterceptor implements HttpInterceptor {
                             }
                             this.emitterService.sessionStateEmitter.emit(user);
                             localStorage.clear();
-                            this.router.navigateByUrl('/login');
+                            this.router.navigateByUrl('security/login');
                         }, 2000);
                     }
                 }
