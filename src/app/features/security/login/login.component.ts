@@ -14,7 +14,7 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
-  public pharmacy = 'test';
+  public company = 'G.V gunung nago ';
   formLogin: FormGroup;
   loggedIn: boolean = false;
   submitted = false;

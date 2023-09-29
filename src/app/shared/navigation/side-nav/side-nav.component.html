@@ -53,7 +53,7 @@
               <ion-icon name="add" color="dark"></ion-icon>Add Health Product
             </ion-item>
             <ion-item routerLink="/health/health-stock">
-              <ion-icon name="logo-dropbox" color="dark"></ion-icon>Update Health Stock
+              <ion-icon name="archive" color="dark"></ion-icon>Update Health Stock
             </ion-item>
           </div>
         </ion-accordion>
@@ -72,7 +72,7 @@
               <ion-icon name="add" color="dark"></ion-icon>Add Feed
             </ion-item>
             <ion-item routerLink="/feed/feed-stock">
-              <ion-icon name="logo-dropbox" color="dark"></ion-icon>Update Feed Stock
+              <ion-icon name="archive" color="dark"></ion-icon>Update Feed Stock
             </ion-item>
             <ion-item routerLink="/feed/feed-allocation">
               <ion-icon name="expand" color="dark"></ion-icon>Feed Allocation
@@ -85,6 +85,38 @@
         <ion-icon name="pricetag" color="dark"></ion-icon><span>Flock Sale</span>
       </ion-item>
 
+
+      <ion-accordion-group>
+        <ion-accordion value="first">
+          <ion-item slot="header" color="light">
+            <ion-icon name="server" color="dark"></ion-icon>Supplier
+          </ion-item>
+          <div class="accordion-sub" slot="content">
+            <ion-item routerLink="/supplier/supplier-list">
+              <ion-icon name="list" color="dark"></ion-icon>Supplier List
+            </ion-item>
+            <ion-item routerLink="/supplier/supplier-details">
+              <ion-icon name="add" color="dark"></ion-icon>Add Supplier
+            </ion-item>
+          </div>
+        </ion-accordion>
+      </ion-accordion-group>
+
+      <ion-accordion-group>
+        <ion-accordion value="first">
+          <ion-item slot="header" color="light">
+            <ion-icon name="people" color="dark"></ion-icon>Customer
+          </ion-item>
+          <div class="accordion-sub" slot="content">
+            <ion-item routerLink="/customer/customer-list">
+              <ion-icon name="list" color="dark"></ion-icon>Customer List
+            </ion-item>
+            <ion-item routerLink="/customer/customer-details">
+              <ion-icon name="add" color="dark"></ion-icon>Add Customer
+            </ion-item>
+          </div>
+        </ion-accordion>
+      </ion-accordion-group>
     </ion-content>
   </ion-menu>
   <ion-router-outlet id="menu-content"></ion-router-outlet>

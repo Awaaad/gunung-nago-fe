@@ -31,6 +31,14 @@ const routes: Routes = [
     loadChildren: () => import('./features/feed/feed.module').then(m => m.FeedModule)
   },
   {
+    path: 'supplier',
+    loadChildren: () => import('./features/supplier/supplier.module').then(m => m.SupplierModule)
+  },
+  {
+    path: 'customer',
+    loadChildren: () => import('./features/customer/customer.module').then(m => m.CustomerModule)
+  },
+  {
     path: 'security',
     loadChildren: () => import('./features/security/security.module').then(m => m.SecurityModule)
   },

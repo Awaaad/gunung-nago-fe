@@ -6,7 +6,7 @@
     <ion-title>
       <div class="router-links">
         <div class="title">
-          <img class="header-logo" routerLink="/home" src='./assets/header_icons/login.png'>
+          <img class="header-logo" routerLink="/home" src='./assets/flaticon/enter.png'>
           <h3 class="header-nav-home" routerLink="/home">Login</h3>
         </div>
       </div>
@@ -18,14 +18,13 @@
     <div class="login-wrapper">
       <ion-row class="ion-justify-content-center ion-align-items-center">
         <div class="login-header">
-          <img class="cross-logo" src='./assets/icon/pharmacy.png'>
-          <h3 class="somedico-text">{{pharmacy | uppercase}}</h3>
+          <h3 class="somedico-text">{{company | uppercase}}</h3>
         </div>
       </ion-row>
       <ion-row class="ion-justify-content-center ion-align-items-center login-sub-container">
         <ion-col size="8" size-md size="12" size-sm>
           <div class="login-content__img">
-            <img src='./assets/pharmacy-login/medical1.png'>
+            <img src='./assets/flaticon/farm-chicken.png'>
           </div>
         </ion-col>
         <ion-col size="4" size-md size="12" size-sm>
@@ -66,7 +65,7 @@
 
                   <ion-row center>
                     <ion-col class="ion-text-center ion-padding">
-                      <ion-button name="login" type="submit" color="secondary" (click)="login()">Grant
+                      <ion-button name="login" type="submit" color="positive-btn" (click)="login()">Grant
                         Access</ion-button>
                     </ion-col>
                   </ion-row>

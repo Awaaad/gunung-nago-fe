@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2023-09-25 20:44:18.
+// Generated using typescript-generator version 3.2.1263 on 2023-09-27 21:49:39.
 
 export class CageDto {
     id!: number;
@@ -19,6 +19,21 @@ export class CageSearchCriteriaDto {
 export class Sortable {
     sortBy!: string;
     sortOrder!: Order;
+}
+
+export class CustomerDto {
+    id!: number;
+    firstName!: string;
+    lastName!: string;
+    address!: string;
+    telephoneNumber!: number;
+    totalAmountDue!: number;
+}
+
+export class CustomerSearchCriteriaDto {
+    name!: string;
+    address!: string;
+    telephoneNumber!: number;
 }
 
 export class FarmDto {
@@ -63,9 +78,12 @@ export class FeedStockDto {
 
 export class FeedStockSaveDto {
     id!: number;
-    bags!: number;
+    bagsReceived!: number;
+    bonusBagsReceived!: number;
     createdDate!: Date;
-    price!: number;
+    wholesalePrice!: number;
+    pricePerBag!: number;
+    discount!: number;
     weight!: number;
     feedId!: number;
     name!: string;
@@ -205,6 +223,13 @@ export class HealthSurveyStockDto {
     expiryDate!: Date;
 }
 
+export class FeedPurchaseDto {
+    invoiceNumber!: string;
+    discount!: number;
+    supplierId!: number;
+    feedStockDtos!: FeedStockSaveDto[];
+}
+
 export class HealthProductPurchaseDto {
     invoiceNumber!: string;
     discount!: number;
@@ -275,6 +300,22 @@ export class UserDto {
 
 export class UserSearchCriteriaDto {
     name!: string;
+}
+
+export class SupplierDto {
+    id!: number;
+    name!: string;
+    email!: string;
+    telephoneNumber!: number;
+    address!: string;
+    farmId!: number;
+}
+
+export class SupplierSearchCriteriaDto {
+    name!: string;
+    email!: string;
+    telephoneNumber!: number;
+    address!: string;
 }
 
 export class SurveyDto {
