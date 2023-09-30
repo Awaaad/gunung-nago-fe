@@ -12,6 +12,10 @@ export class SupplierApiService {
 
     constructor(private http: HttpClient) { }
 
+    public findAll(): Observable<SupplierDto[]> {
+        return this.http.get<SupplierDto[]>(this.baseUrl);
+    }
+
     public save(suppliers: any): Observable<any> {
         return this.http.post(`${this.baseUrl}`, suppliers, { responseType: 'text' });
     }

@@ -28,7 +28,7 @@ export class HealthListComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   public language = "en";
-  public displayedColumns: string[] = ['name', 'description', 'healthType', 'active', 'edit'];
+  public displayedColumns: string[] = ['name', 'description', 'healthType', 'active', 'supplier', 'edit'];
   public displayedSubColumns: string[] = ['boxesTotal', 'unitsTotal', 'unitsUsed', 'expiryDate'];
   public healthProducts = new MatTableDataSource<HealthProductDto>;
   private infiniteHealthProducts: HealthProductDto[] = [];

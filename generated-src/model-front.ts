@@ -1,4 +1,4 @@
-import { AquisitionType, CageCategory, FeedSurveyDto, FlockCategory, HealthSurveyDto } from "./model";
+import { AquisitionType, CageCategory, CustomerDto, FeedSurveyDto, FlockCategory, FlockSaleDetailsDto, HealthSurveyDto } from "./model";
 
 export class PageResult<T> {
     public content!: Array<T>;
@@ -47,11 +47,17 @@ export class FlockSaveFrontDto {
 }
 
 export class FlockSaleSaveFrontDto {
-    cageId!: number | null | undefined;
-    flockId!: number | null | undefined;
-    flockStockId!: number | null | undefined;
-    quantitySoldForSterile!: number | null | undefined;
-    quantitySoldForGood!: number | null | undefined;
-    pricePerChickenForSterile!: number | null | undefined;
-    pricePerChickenForGood!: number | null | undefined;
+    customerDto!: CustomerFrontDto | null | undefined;
+    flockSaleDetailsDtoList!: FlockSaleDetailsDto[] | [] | null | undefined;
+    newCustomer!: boolean | null | undefined;
+}
+
+
+export class CustomerFrontDto {
+    id!: number | null | undefined | any;
+    firstName!: string | null | undefined | any;
+    lastName!: string | null | undefined | any;
+    address!: string | null | undefined | any;
+    telephoneNumber!: number | null | undefined | any;
+    totalAmountDue!: number | null | undefined | any;
 }

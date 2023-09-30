@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2023-09-27 21:49:39.
+// Generated using typescript-generator version 3.2.1263 on 2023-09-30 19:56:56.
 
 export class CageDto {
     id!: number;
@@ -48,11 +48,14 @@ export class FeedDto {
     feedCategory!: FeedCategory;
     name!: string;
     recommendedWeight!: number;
+    supplierId!: number;
+    supplierName!: string;
 }
 
 export class FeedSearchCriteriaDto {
     name!: string;
     feedCategory!: FeedCategory;
+    supplierId!: number;
     farmId!: number;
 }
 
@@ -114,13 +117,19 @@ export class FlockFeedLineDto {
     createdDate!: Date;
 }
 
-export class FlockSaleSaveDto {
+export class FlockSaleDetailsDto {
     cageId!: number;
     flockId!: number;
     quantitySoldForSterile!: number;
     quantitySoldForGood!: number;
     pricePerChickenForSterile!: number;
     pricePerChickenForGood!: number;
+}
+
+export class FlockSaleSaveDto {
+    customerDto!: CustomerDto;
+    flockSaleDetailsDtoList!: FlockSaleDetailsDto[];
+    newCustomer!: boolean;
 }
 
 export class FlockSaveDto {
@@ -166,12 +175,15 @@ export class HealthProductDto {
     healthType!: HealthType;
     active!: boolean;
     unitsPerBox!: number;
+    supplierId!: number;
+    supplierName!: string;
 }
 
 export class HealthProductSearchCriteriaDto {
     name!: string;
     healthType!: HealthType;
     active!: boolean;
+    supplierId!: number;
     farmId!: number;
 }
 
@@ -308,7 +320,6 @@ export class SupplierDto {
     email!: string;
     telephoneNumber!: number;
     address!: string;
-    farmId!: number;
 }
 
 export class SupplierSearchCriteriaDto {

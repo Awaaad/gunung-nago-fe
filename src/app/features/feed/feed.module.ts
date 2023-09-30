@@ -19,6 +19,13 @@ import { FeedApiService } from 'src/app/shared/apis/feed.api.service';
 import { FeedStockApiService } from 'src/app/shared/apis/feed-stock.api.service';
 import { FeedAllocationComponent } from './feed-allocation/feed-allocation.component';
 import { FlockFeedLineApiService } from 'src/app/shared/apis/flock-feed-line.api.service';
+import { SupplierApiService } from 'src/app/shared/apis/supplier.api.service';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatButtonModule } from '@angular/material/button';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatCardModule } from '@angular/material/card';
 
 
 @NgModule({
@@ -30,14 +37,20 @@ import { FlockFeedLineApiService } from 'src/app/shared/apis/flock-feed-line.api
     TranslateModule,
     FormsModule,
     ReactiveFormsModule,
-    MatTableModule,
-    MatSortModule,
-    MatTooltipModule,
+    MatCardModule,
     MatFormFieldModule,
+    MatGridListModule,
+    MatInputModule,
+    MatDividerModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatButtonModule,
+    MatAutocompleteModule,
+    MatTooltipModule,
     MatNativeDateModule,
     MatDatepickerModule,
-    MatInputModule
   ],
-  providers: [FeedApiService, FeedStockApiService, FlockFeedLineApiService]
+  providers: [FeedApiService, FeedStockApiService, FlockFeedLineApiService, SupplierApiService]
 })
 export class FeedModule { }

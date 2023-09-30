@@ -28,6 +28,27 @@
     <ion-card-content>
       <ion-row>
         <ion-col size-xs="12" size-md="6">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <input matInput placeholder="Search supplier" [(ngModel)]="selectedSupplier" [matAutocomplete]="auto"
+              [formControl]="searchSupplierCtrl" placeholder="Seach supplier">
+            <button *ngIf="selectedSupplier" matSuffix mat-icon-button aria-label="Clear" (click)="clearSelection()">
+              <ion-icon name="close-outline"></ion-icon>
+            </button>
+            <mat-autocomplete [panelWidth]="400" #auto="matAutocomplete" (optionSelected)="onSupplierSelected()"
+              [displayWith]="displayWith">
+              <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+              <ng-container *ngIf="!isLoading">
+                <mat-option *ngFor="let supplier of filteredSuppliers" [value]="supplier">
+                  <span>{{supplier.name}}</span>
+                </mat-option>
+              </ng-container>
+            </mat-autocomplete>
+          </mat-form-field>
+        </ion-col>
+      </ion-row>
+
+      <ion-row *ngIf="showFeedSearchBar">
+        <ion-col size-xs="12" size-md="6">
           <ion-searchbar placeholder="Search by feed name..." type="text" #feedName
             (ionInput)="searchByFeedName(feedName.value)"></ion-searchbar>
         </ion-col>
@@ -64,7 +85,7 @@
 
   <ion-item-divider class="stock-divider">
     <ion-label color="ion-color-gunung-nago-feed">Stock</ion-label>
-  </ion-item-divider> 
+  </ion-item-divider>
 
   <ion-card>
     <div class="mat-elevation-z8 table-responsive">

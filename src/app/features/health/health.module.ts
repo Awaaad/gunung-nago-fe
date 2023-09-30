@@ -17,7 +17,13 @@ import { IonicModule } from '@ionic/angular';
 import { TranslateModule } from '@ngx-translate/core';
 import { HealthProductApiService } from 'src/app/shared/apis/health-product.api.service';
 import { HealthProductStockApiService } from 'src/app/shared/apis/health-product-stock.api.service';
-
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { SupplierApiService } from 'src/app/shared/apis/supplier.api.service';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
   declarations: [HealthDetailsComponent, HealthListComponent, HealthStockComponent],
@@ -28,14 +34,17 @@ import { HealthProductStockApiService } from 'src/app/shared/apis/health-product
     TranslateModule,
     FormsModule,
     ReactiveFormsModule,
-    MatTableModule,
-    MatSortModule,
-    MatTooltipModule,
+    MatCardModule,
     MatFormFieldModule,
-    MatNativeDateModule,
-    MatDatepickerModule,
-    MatInputModule
+    MatGridListModule,
+    MatInputModule,
+    MatDividerModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatButtonModule,
+    MatAutocompleteModule,
   ],
-  providers: [HealthProductApiService, HealthProductStockApiService]
+  providers: [HealthProductApiService, HealthProductStockApiService, SupplierApiService]
 })
 export class HealthModule { }

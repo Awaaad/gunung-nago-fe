@@ -5,10 +5,12 @@ import { UtilsService } from 'src/app/shared/utils/utils.service';
 import { FlockSaleApiService } from '../../../shared/apis/flock-sale.api.service';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { SurveyApiService } from '../../../shared/apis/survey.api.service';
-import { AquisitionType, CageCategory, CageDto, SurveyDto } from 'generated-src/model';
-import { FlockSaleSaveFrontDto } from 'generated-src/model-front';
+import { CageCategory, CageDto, CustomerDto, SurveyDto } from 'generated-src/model';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CageApiService } from '../../../shared/apis/cage.api.service';
+import { Subscription, debounceTime, distinctUntilChanged, filter, finalize, switchMap, tap } from 'rxjs';
+import { CustomerApiService } from 'src/app/shared/apis/customer.api.service';
+import { CustomerFrontDto, FlockSaleSaveFrontDto } from 'generated-src/model-front';
 
 @Component({
   selector: 'app-flock-sale-details',
@@ -25,6 +27,20 @@ export class FlockSaleDetailsComponent implements OnInit {
   public totalPrice: number = 0;
   private flockSaleSaveFrontDto!: FlockSaleSaveFrontDto;
   public cages: CageDto[] = [];
+
+  public isNewCustomer: boolean = false;
+  private searchCustomerSubscription!: Subscription;
+  public searchCustomerCtrl = new FormControl();
+  public filteredCustomers: CustomerFrontDto[] = [];
+  public selectedCustomer!: CustomerFrontDto;
+  public isLoading = false;
+  public errorMsg!: string;
+  public minLengthTerm = 1;
+  private page: number = 0;
+  private size: number = 20;
+  public sortOrder: string = 'asc';
+  public sortBy: string = 'name';
+
   public errorMessages = {
     cage: [
       { type: 'required', message: 'Cage is required' },
@@ -42,12 +58,19 @@ export class FlockSaleDetailsComponent implements OnInit {
     ],
     pricePerChickenForGood: [
       { type: 'required', message: 'Price per chicken for good is required' },
-    ]
+    ],
+    firstName: [{ type: "required", message: "First name is required" }],
+    lastName: [{ type: "required", message: "Last name is required" }],
+    telephoneNumber: [
+      { type: "required", message: "Contact number is required" },
+      { type: "pattern", message: "Invalid contact number" }
+    ],
   };
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private cageApiService: CageApiService,
+    private customerApiService: CustomerApiService,
     private formBuilder: FormBuilder,
     private router: Router,
     private flockSaleApiService: FlockSaleApiService,
@@ -59,6 +82,8 @@ export class FlockSaleDetailsComponent implements OnInit {
   ngOnInit() {
     this.initialiseFormBuilder();
     this.getAllActiveCages();
+    this.initialiseSelectedCustomer();
+    this.searchCustomerAutoComplete();
   }
 
   public ionChangeLanguage(event: any): void {
@@ -71,12 +96,112 @@ export class FlockSaleDetailsComponent implements OnInit {
     })
   }
 
+  public newCustomerChange(event: any): void {
+    this.isNewCustomer = event.detail.checked;
+    this.setCustomerNewValue(this.isNewCustomer);
+  }
+
+  private setCustomerNewValue(isNewCustomer: boolean): void {
+    isNewCustomer ? this.flockSaleForm?.get("customer.firstName")?.enable() : this.flockSaleForm?.get("customer.firstName")?.disable();
+    isNewCustomer ? this.flockSaleForm?.get("customer.lastName")?.enable() : this.flockSaleForm?.get("customer.lastName")?.disable();
+    isNewCustomer ? this.flockSaleForm?.get("customer.address")?.enable() : this.flockSaleForm?.get("customer.address")?.disable();
+    isNewCustomer ? this.flockSaleForm?.get("customer.telephoneNumber")?.enable() : this.flockSaleForm?.get("customer.telephoneNumber")?.disable();
+    if (this.isNewCustomer) {
+      this.flockSaleForm?.get("customer.firstName")?.setValue("");
+      this.flockSaleForm?.get("customer.lastName")?.setValue("");
+      this.flockSaleForm?.get("customer.address")?.setValue("");
+      this.flockSaleForm?.get("customer.telephoneNumber")?.setValue("");
+    }
+  }
+
   private initialiseFormBuilder(): void {
     this.flockSaleForm = this.formBuilder.group({
+      newCustomer: new FormControl(this.isNewCustomer, Validators.compose([Validators.required])),
+      customer: this.formBuilder.group({
+        id: this.selectedCustomer?.id,
+        firstName: new FormControl({ value: '', disabled: !this.isNewCustomer }, Validators.compose([Validators.required])),
+        lastName: new FormControl({ value: '', disabled: !this.isNewCustomer }, Validators.compose([Validators.required])),
+        address: new FormControl({ value: '', disabled: !this.isNewCustomer }),
+        telephoneNumber: new FormControl({ value: '', disabled: !this.isNewCustomer }, Validators.compose([Validators.required, Validators.pattern("^[0-9]*$"),]))
+      }),
       flockSaleDetails: this.formBuilder.array([
         this.addFlockSaleFormGroup()
       ])
     });
+  }
+
+  public searchCustomerAutoComplete(): void {
+    if (this.searchCustomerSubscription) {
+      this.searchCustomerSubscription.unsubscribe();
+    }
+    this.searchCustomerSubscription = this.searchCustomerCtrl.valueChanges
+      .pipe(
+        filter(res => {
+          return res !== null && res.length >= this.minLengthTerm
+        }),
+        distinctUntilChanged(),
+        debounceTime(1000),
+        tap(() => {
+          this.errorMsg = "";
+          this.filteredCustomers = [];
+          this.isLoading = true;
+        }),
+        switchMap(value => {
+          const name = {
+            page: this.page,
+            size: this.size,
+            sortBy: this.sortBy,
+            sortOrder: this.sortOrder.toUpperCase(),
+            name: value
+          }
+          return this.customerApiService.search(name).pipe(
+            finalize(() => {
+              this.isLoading = false
+            }),
+          )
+        })
+      )
+      .subscribe((data: any) => {
+        this.filteredCustomers = data.content
+      });
+  }
+
+  public displayWith(subject: CustomerDto): any {
+    if (subject?.telephoneNumber) {
+      return subject ? `${subject.lastName}${" "}${subject.firstName} --- ${subject.telephoneNumber}` : undefined;
+    } else if (subject?.firstName != null) {
+      return subject ? `${subject.lastName}${" "}${subject.firstName}` : undefined;
+    }
+  }
+
+  private initialiseSelectedCustomer(): void {
+    this.selectedCustomer = {
+      id: null,
+      firstName: null,
+      lastName: null,
+      address: null,
+      telephoneNumber: null,
+      totalAmountDue: null
+    };
+  }
+
+  public clearCustomer(ctrl: FormControl): void {
+    ctrl.setValue(null);
+    this.flockSaleForm?.get("customer.firstName")?.setValue("");
+    this.flockSaleForm?.get("customer.lastName")?.setValue("");
+    this.flockSaleForm?.get("customer.address")?.setValue("");
+    this.flockSaleForm?.get("customer.telephoneNumber")?.setValue("");
+    this.selectedCustomer.id = null;
+  }
+
+  public setSelectedCustomer(event: any): void {
+    this.selectedCustomer = event.option.value;
+    this.selectedCustomer.id = event.option.value.id;
+    this.flockSaleForm?.get("customer.id")?.setValue(event.option.value.id);
+    this.flockSaleForm?.get("customer.firstName")?.setValue(event.option.value.firstName);
+    this.flockSaleForm?.get("customer.lastName")?.setValue(event.option.value.lastName);
+    this.flockSaleForm?.get("customer.address")?.setValue(event.option.value.address);
+    this.flockSaleForm?.get("customer.telephoneNumber")?.setValue(event.option.value.telephoneNumber);
   }
 
   public addFlockSaleFormGroup(): any {
@@ -171,25 +296,31 @@ export class FlockSaleDetailsComponent implements OnInit {
 
   private initialiseFlockSaleSaveDto(): void {
     this.flockSaleSaveFrontDto = {
-      cageId: null,
-      flockId: null,
-      flockStockId: null,
-      quantitySoldForSterile: null,
-      pricePerChickenForSterile: null,
-      quantitySoldForGood: null,
-      pricePerChickenForGood: null
+      customerDto: {
+        id: null,
+        firstName: null,
+        lastName: null,
+        address: null,
+        telephoneNumber: null,
+        totalAmountDue: null,
+      },
+      flockSaleDetailsDtoList: [],
+      newCustomer: false
     }
   }
 
   private populateFlockSaleSaveDtoWithFormValues(): void {
     this.flockSaleSaveFrontDto = {
-      cageId: this.flockSaleForm.value.cageId,
-      flockId: this.flockSaleForm.value.flockId,
-      flockStockId: this.flockSaleForm.value.flockStockId,
-      quantitySoldForSterile: this.flockSaleForm.value.quantitySold,
-      pricePerChickenForSterile: this.flockSaleForm.value.pricePerChicken,
-      quantitySoldForGood: this.flockSaleForm.value.quantitySold,
-      pricePerChickenForGood: this.flockSaleForm.value.pricePerChicken
+      customerDto: {
+        id: this.flockSaleForm?.get("customer.id")?.value,
+        firstName: this.flockSaleForm?.get("customer.firstName")?.value,
+        lastName: this.flockSaleForm?.get("customer.lastName")?.value,
+        address: this.flockSaleForm?.get("customer.address")?.value,
+        telephoneNumber: this.flockSaleForm?.get("customer.telephoneNumber")?.value,
+        totalAmountDue: null,
+      },
+      flockSaleDetailsDtoList: this.flockSaleForm.value.flockSaleDetails,
+      newCustomer: this.isNewCustomer
     }
   }
 
@@ -197,12 +328,20 @@ export class FlockSaleDetailsComponent implements OnInit {
     // this.findMostRecentSurveyDtoForCage();
   }
 
+  test(): void {
+    console.log(this.flockSaleForm.value.customer.firstName);
+    this.initialiseFlockSaleSaveDto();
+    this.populateFlockSaleSaveDtoWithFormValues();
+    console.log(this.flockSaleSaveFrontDto);
+  }
+
   public save(): void {
     this.utilsService.presentLoading();
     this.initialiseFlockSaleSaveDto();
     this.populateFlockSaleSaveDtoWithFormValues();
-    this.flockSaleApiService.save(this.flockSaleForm.value.flockSaleDetails).subscribe({
+    this.flockSaleApiService.save(this.flockSaleSaveFrontDto).subscribe({
       next: (data: string) => {
+        this.reset();
         this.utilsService.dismissLoading();
         this.utilsService.successMsg('Flock sold successfully');
         // this.router.navigate([`cage/cage-sale-list`])
@@ -212,5 +351,16 @@ export class FlockSaleDetailsComponent implements OnInit {
         this.utilsService.unsuccessMsg('Error', 'gunung-nago-warehouse');
       }
     });
+  }
+
+  private reset(): void {
+    this.flockSaleForm.reset();
+    (this.flockSaleForm.get('flockSaleDetails') as FormArray).clear();
+    this.addFlockSaleDetails();
+    this.isNewCustomer = false;
+    this.setCustomerNewValue(this.isNewCustomer);
+    if (this.searchCustomerCtrl) {
+      this.searchCustomerCtrl.setValue(null);
+    }
   }
 }

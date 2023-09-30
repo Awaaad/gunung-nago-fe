@@ -1,19 +1,22 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core';
-import { FeedCategory, FeedDto, FeedStockDto, FeedStockSaveDto } from 'generated-src/model';
+import { FeedCategory, FeedDto, FeedStockSaveDto, SupplierDto } from 'generated-src/model';
 import { FeedStockApiService } from 'src/app/shared/apis/feed-stock.api.service';
 import { FeedApiService } from 'src/app/shared/apis/feed.api.service';
 import { UtilsService } from 'src/app/shared/utils/utils.service';
-import { Subscription } from 'rxjs';
+import { Subscription, debounceTime, distinctUntilChanged, filter, finalize, switchMap, tap } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
+import { FormControl } from '@angular/forms';
+import { SupplierApiService } from 'src/app/shared/apis/supplier.api.service';
+
 
 @Component({
   selector: 'app-feed-stock',
   templateUrl: './feed-stock.component.html',
   styleUrls: ['./feed-stock.component.scss'],
 })
-export class FeedStockComponent {
+export class FeedStockComponent implements OnInit {
   public language = "en";
   public displayedColumns: string[] = ['name', 'feedCategory', 'recommendedWeight'];
   public displayedColumnsStock: string[] = ['name', 'feedCategory', 'weight', 'price', 'bags', 'remove'];
@@ -31,13 +34,26 @@ export class FeedStockComponent {
   public feedCategory: FeedCategory | string = '';
   public showFeedTable: boolean = false;
   public isFeedInStockBox: boolean = false;
+  public selectedSupplier: any = "";
+  public selectedSuppliers: SupplierDto[] = [];
+  public searchSupplierCtrl = new FormControl();
+  public filteredSuppliers: any;
+  public isLoading = false;
+  public errorMsg!: string;
+  public minLengthTerm = 1;
+  public showFeedSearchBar: boolean = false;
 
   constructor(
     private feedApiService: FeedApiService,
     private feedStockApiService: FeedStockApiService,
+    private supplierApiService: SupplierApiService,
     private translateService: TranslateService,
     private utilsService: UtilsService
   ) {
+  }
+
+  ngOnInit(): void {
+    this.searchSupplier();
   }
 
   ionViewWillEnter(): void {
@@ -45,6 +61,56 @@ export class FeedStockComponent {
 
   public ionChangeLanguage(event: any): void {
     this.translateService.use(event.detail.value);
+  }
+
+  public searchSupplier(): void {
+    this.searchSupplierCtrl.valueChanges
+      .pipe(
+        filter(res => {
+          return res !== null && res.length >= this.minLengthTerm
+        }),
+        distinctUntilChanged(),
+        debounceTime(1000),
+        tap(() => {
+          this.errorMsg = "";
+          this.filteredSuppliers = [];
+          this.isLoading = true;
+        }),
+        switchMap(value => {
+          const name = {
+            page: this.page,
+            size: this.size,
+            sortBy: this.sortBy,
+            sortOrder: this.sortOrder.toUpperCase(),
+            name: value
+          }
+          return this.supplierApiService.search(name).pipe(
+            finalize(() => {
+              this.isLoading = false
+            }),
+          )
+        })
+      )
+      .subscribe((data: any) => {
+        this.filteredSuppliers = data.content
+      });
+  }
+
+  public onSupplierSelected(): void {
+    this.selectedSupplier = this.selectedSupplier;
+    this.showFeedSearchBar = true;
+    this.reset();
+  }
+
+  public displayWith(value: any): string {
+    return value?.name;
+  }
+
+  public clearSelection(): void {
+    this.selectedSupplier = "";
+    this.showFeedSearchBar = false;
+    this.filteredSuppliers = [];
+    this.reset();
   }
 
   public searchByFeedName(feedName: any): void {
@@ -73,7 +139,8 @@ export class FeedStockComponent {
       sortBy: this.sortBy,
       sortOrder: this.sortOrder.toUpperCase(),
       name: this.feedName,
-      feedCategory: this.feedCategory
+      feedCategory: this.feedCategory,
+      supplierId: this.selectedSupplier.id
     }
 
     this.feedSearchSubscription = this.feedApiService.search(feedSearchCriteriaDto).subscribe(feeds => {

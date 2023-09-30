@@ -14,6 +14,11 @@ import { FlockSaleDetailsComponent } from './flock-sale-details/flock-sale-detai
 import { FlockSaleListComponent } from './flock-sale-list/flock-sale-list.component';
 import { SurveyApiService } from '../../shared/apis/survey.api.service';
 import { CageApiService } from '../../shared/apis/cage.api.service';
+import { CustomerApiService } from 'src/app/shared/apis/customer.api.service';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
 
 
 @NgModule({
@@ -27,7 +32,11 @@ import { CageApiService } from '../../shared/apis/cage.api.service';
     ReactiveFormsModule,
     MatTableModule,
     MatSortModule,
+    MatInputModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatAutocompleteModule
   ],
-  providers: [FlockApiService, FlockSaleApiService, SurveyApiService, CageApiService]
+  providers: [FlockApiService, FlockSaleApiService, SurveyApiService, CageApiService, CustomerApiService]
 })
 export class FlockModule { }

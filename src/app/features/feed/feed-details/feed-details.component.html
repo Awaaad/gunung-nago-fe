@@ -6,7 +6,7 @@
     <ion-title>
       <div class="router-links">
         <div class="title">
-          <img class="header-logo"src='./assets/flaticon/add-feed.png'>
+          <img class="header-logo" src='./assets/flaticon/add-feed.png'>
           <h3 class="header-nav-products">Add Feed</h3>
         </div>
         <div>
@@ -30,7 +30,7 @@
         <ion-card>
           <ion-card-content>
             <div class="form-array-index">
-              <h6>Feed {{i}}</h6>
+              <h6>Feed {{i + 1}}</h6>
               <ion-button *ngIf="feedDetailsFields != null && feedDetailsFields.length > 1"
                 (click)="removeFeedDetails(i)" class="delete-product-btn" color="gunung-nago-warehouse"><ion-icon
                   name="trash"></ion-icon></ion-button>
@@ -71,6 +71,24 @@
                   <ng-container *ngFor="let error of errorMessages.recommendedWeight">
                     <div class="error-message"
                       *ngIf="feedDetails.get('recommendedWeight')?.hasError(error.type) && (feedDetails.get('recommendedWeight')?.dirty || feedDetails.get('recommendedWeight')?.touched)">
+                      {{ error.message }}
+                    </div>
+                  </ng-container>
+                </div>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size-xs="12" size-md="3">
+                <ion-select color="gunung-nago-primary" label="Supplier*" label-placement="floating" fill="outline"
+                  interface="popover" required="true" placeholder="Supplier" formControlName="supplierId">
+                  <ion-select-option *ngFor="let supplier of suppliers" [value]="supplier.id"
+                    selected="supplier.supplierId === supplierId" color="secondary">{{ supplier.name }}
+                  </ion-select-option>
+                </ion-select>
+                <div class="error-messages">
+                  <ng-container *ngFor="let error of errorMessages.supplierId">
+                    <div class="error-message"
+                      *ngIf="feedDetails.get('supplierId')?.hasError(error.type) && (feedDetails.get('supplierId')?.dirty || feedDetails.get('supplierId')?.touched)">
                       {{ error.message }}
                     </div>
                   </ng-container>

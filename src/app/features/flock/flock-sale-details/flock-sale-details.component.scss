@@ -1,0 +1,25 @@
+.subtitle {
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    padding-left: 10px;
+
+    .cart-logo {
+        width: 23px;
+    }
+
+    .cart-text {
+        font-size: 24px;
+        padding-top: 8px;
+        margin-top: 5px;
+        padding-left: 5px;
+    }
+}
+
+.form-section-cart {
+    font-weight: 500;
+    padding-top: 9px;
+    padding-left: 7px;
+    color: black;
+    font-size: 18px;
+}

@@ -1,12 +1,13 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component } from '@angular/core';
-import { Sort } from '@angular/material/sort';
+import { Component, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core';
-import { HealthProductDto, HealthProductStockSaveDto, HealthType } from 'generated-src/model';
-import { Subscription } from 'rxjs';
+import { HealthProductDto, HealthProductStockSaveDto, HealthType, SupplierDto } from 'generated-src/model';
+import { Subscription, debounceTime, distinctUntilChanged, filter, finalize, switchMap, tap } from 'rxjs';
 import { HealthProductStockApiService } from 'src/app/shared/apis/health-product-stock.api.service';
 import { HealthProductApiService } from 'src/app/shared/apis/health-product.api.service';
+import { SupplierApiService } from 'src/app/shared/apis/supplier.api.service';
 import { UtilsService } from 'src/app/shared/utils/utils.service';
 
 @Component({
@@ -14,7 +15,7 @@ import { UtilsService } from 'src/app/shared/utils/utils.service';
   templateUrl: './health-stock.component.html',
   styleUrls: ['./health-stock.component.scss'],
 })
-export class HealthStockComponent {
+export class HealthStockComponent implements OnInit {
   public language = "en";
   public displayedColumns: string[] = ['name', 'description', 'healthType', 'active'];
   public displayedColumnsStock: string[] = ['name', 'healthType', 'boxesReceived', 'price', 'expiryDate', 'remove'];
@@ -32,13 +33,26 @@ export class HealthStockComponent {
   public healthType: HealthType | string = '';
   public showHealthProductTable: boolean = false;
   public isHealthProductInStockBox: boolean = false;
+  public selectedSupplier: any = "";
+  public selectedSuppliers: SupplierDto[] = [];
+  public searchSupplierCtrl = new FormControl();
+  public filteredSuppliers: any;
+  public isLoading = false;
+  public errorMsg!: string;
+  public minLengthTerm = 1;
+  public showHealthSearchBar: boolean = false;
 
   constructor(
     private healthProductApiService: HealthProductApiService,
     private healthProductStockApiService: HealthProductStockApiService,
+    private supplierApiService: SupplierApiService,
     private translateService: TranslateService,
     private utilsService: UtilsService
   ) {
+  }
+
+  ngOnInit(): void {
+    this.searchSupplier();
   }
 
   ionViewWillEnter(): void {
@@ -47,6 +61,58 @@ export class HealthStockComponent {
   public ionChangeLanguage(event: any): void {
     this.translateService.use(event.detail.value);
   }
+
+
+  public searchSupplier(): void {
+    this.searchSupplierCtrl.valueChanges
+      .pipe(
+        filter(res => {
+          return res !== null && res.length >= this.minLengthTerm
+        }),
+        distinctUntilChanged(),
+        debounceTime(1000),
+        tap(() => {
+          this.errorMsg = "";
+          this.filteredSuppliers = [];
+          this.isLoading = true;
+        }),
+        switchMap(value => {
+          const name = {
+            page: this.page,
+            size: this.size,
+            sortBy: this.sortBy,
+            sortOrder: this.sortOrder.toUpperCase(),
+            name: value
+          }
+          return this.supplierApiService.search(name).pipe(
+            finalize(() => {
+              this.isLoading = false
+            }),
+          )
+        })
+      )
+      .subscribe((data: any) => {
+        this.filteredSuppliers = data.content
+      });
+  }
+
+  public onSupplierSelected(): void {
+    this.selectedSupplier = this.selectedSupplier;
+    this.showHealthSearchBar = true;
+    this.reset();
+  }
+
+  public displayWith(value: any): string {
+    return value?.name;
+  }
+
+  public clearSelection(): void {
+    this.selectedSupplier = "";
+    this.showHealthSearchBar = false;
+    this.filteredSuppliers = [];
+    this.reset();
+  }
+
 
   public searchByHealthProductName(healthProductName: any): void {
     if (this.healthProductSearchSubscription) {
@@ -75,7 +141,8 @@ export class HealthStockComponent {
       sortOrder: this.sortOrder.toUpperCase(),
       name: this.healthProductName,
       active: this.active,
-      healthType: this.healthType
+      healthType: this.healthType,
+      supplierId: this.selectedSupplier.id
     }
 
     this.healthProductSearchSubscription = this.healthProductApiService.search(healthProductSearchCriteriaDto).subscribe(healthProducts => {

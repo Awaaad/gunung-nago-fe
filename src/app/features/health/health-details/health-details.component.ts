@@ -2,9 +2,11 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
-import { HealthType } from 'generated-src/model';
+import { HealthType, SupplierDto } from 'generated-src/model';
 import { HealthProductApiService } from 'src/app/shared/apis/health-product.api.service';
+import { SupplierApiService } from 'src/app/shared/apis/supplier.api.service';
 import { UtilsService } from 'src/app/shared/utils/utils.service';
+import { Subscription, debounceTime, distinctUntilChanged, filter, finalize, switchMap, tap } from 'rxjs';
 
 @Component({
   selector: 'app-health-details',
@@ -21,6 +23,7 @@ export class HealthDetailsComponent implements OnInit {
   public today: Date = new Date();
   public language = "en";
   public healthTypes!: string[];
+  public suppliers: SupplierDto[] = [];
   public errorMessages = {
     name: [
       { type: 'required', message: 'Name is required' },
@@ -30,12 +33,16 @@ export class HealthDetailsComponent implements OnInit {
     ],
     unitsPerBox: [
       { type: 'required', message: 'Units per box is required' },
+    ],
+    supplierId: [
+      { type: 'required', message: 'Supplier is required' },
     ]
   };
 
   constructor(
     private healthProductApiService: HealthProductApiService,
     private formBuilder: FormBuilder,
+    private supplierApiService: SupplierApiService,
     private translateService: TranslateService,
     private utilsService: UtilsService
   ) {
@@ -44,6 +51,7 @@ export class HealthDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.initialiseFormBuilder();
+    this.findAllSuppliers();
   }
 
   public ionChangeLanguage(event: any): void {
@@ -66,6 +74,7 @@ export class HealthDetailsComponent implements OnInit {
       description: new FormControl({ value: null, disabled: false }, Validators.compose([])),
       healthType: new FormControl({ value: null, disabled: false }, Validators.compose([Validators.required])),
       unitsPerBox: new FormControl({ value: null, disabled: false }, Validators.compose([Validators.required])),
+      supplierId: new FormControl({ value: null, disabled: false }, Validators.compose([Validators.required])),
     });
   }
 
@@ -79,6 +88,12 @@ export class HealthDetailsComponent implements OnInit {
 
   get healthProductDetailsFields() {
     return this.healthProductDetailsForm ? this.healthProductDetailsForm.get('healthProductDetails') as FormArray : null;
+  }
+
+  private findAllSuppliers(): void {
+    this.supplierApiService.findAll().subscribe((data: SupplierDto[]) => {
+      this.suppliers = data;
+    });
   }
 
   public save(): void {
@@ -98,3 +113,4 @@ export class HealthDetailsComponent implements OnInit {
     });
   }
 }
+
