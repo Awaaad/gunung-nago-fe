@@ -228,8 +228,7 @@ export class FlockSaleDetailsComponent implements OnInit {
     this.flockSaleForm?.get("customer.lastName")?.setValue(event.option.value.lastName);
     this.flockSaleForm?.get("customer.address")?.setValue(event.option.value.address);
     this.flockSaleForm?.get("customer.telephoneNumber")?.setValue(event.option.value.telephoneNumber);
-    this.flockSaleForm?.get("newCustomer")?.setValue(true);
-    console.log(this.flockSaleForm)
+    this.flockSaleForm?.get("newCustomer")?.setValue(false);
   }
 
   public addFlockSaleFormGroup(): any {

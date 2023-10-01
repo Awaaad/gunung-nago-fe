@@ -15,6 +15,10 @@ export class FeedApiService {
     return this.http.post(`${this.baseUrl}`, feeds, { responseType: 'text' });
   }
 
+  public edit(feedDto: FeedDto): Observable<any> {
+    return this.http.put(`${this.baseUrl}`, feedDto);
+  }
+
   public search(searchValues: any): Observable<PageResult<FeedDto>> {
     return this.http.get<PageResult<FeedDto>>(`${this.baseUrl}search`, { params: searchValues });
   }

@@ -86,7 +86,8 @@
           <th mat-header-cell *matHeaderCellDef> </th>
           <td mat-cell *matCellDef="let element">
             <div class="table-btn">
-              <ion-button color="neutral-btn" class="mr-05"><ion-icon name="create"></ion-icon></ion-button>
+              <ion-button color="neutral-btn" class="mr-05" (click)="openModal(element)"><ion-icon
+                  name="create"></ion-icon></ion-button>
             </div>
           </td>
         </ng-container>
@@ -100,4 +101,64 @@
     <ion-infinite-scroll-content loadingSpinner="crescent" loadingText="Loading more cages...">
     </ion-infinite-scroll-content>
   </ion-infinite-scroll>
+
+
+  <ion-modal (willDismiss)="onWillDismiss($event)" [isOpen]="isModalOpen" cssClass="cage-modal" backdropDismiss="true">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <div class="title">
+            <img class="header-logo ml-15" src='./assets/flaticon/edit.png'>
+            <h3 class="modal-header-text">Edit Cage</h3>
+          </div>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content [fullscreen]="false" class="ion-padding">
+        <form [formGroup]="cageEditForm">
+          <ion-row>
+            <ion-col size-xs="12" size-md="3">
+              <ion-toggle labelPlacement="start" class="toggle" formControlName="active" color="gunung-nago-report">{{
+                'cage.cage-details.active' | translate }}*</ion-toggle>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size-xs="12" size-md="6">
+              <ion-input color="gunung-nago-primary" label="{{ 'cage.cage-details.name' | translate }}*"
+                label-placement="floating" fill="outline" type="text" clear-input="true" maxlength="5"
+                formControlName="name" required="true"></ion-input>
+              <div class="error-messages">
+                <ng-container *ngFor="let error of errorMessages.name">
+                  <div class="error-message"
+                    *ngIf="cageEditForm.get('name')?.hasError(error.type) && (cageEditForm.get('name')?.dirty || cageEditForm.get('name')?.touched)">
+                    {{ error.message }}
+                  </div>
+                </ng-container>
+              </div>
+            </ion-col>
+            <ion-col size-xs="12" size-md="6">
+              <ion-select color="gunung-nago-primary" label="{{ 'cage.cage-details.cage-category' | translate }}"
+                label-placement="floating" fill="outline" interface="popover" required="true"
+                placeholder="{{ 'cage.cage-details.cage-category' | translate }}" formControlName="cageCategory">
+                <ion-select-option *ngFor="let category of cageCategories" [value]="category">{{ category
+                  }}</ion-select-option>
+              </ion-select>
+              <div class="error-messages">
+                <ng-container *ngFor="let error of errorMessages.cageCategory">
+                  <div class="error-message"
+                    *ngIf="cageEditForm.get('cageCategory')?.hasError(error.type) && (cageEditForm.get('cageCategory')?.dirty || cageEditForm.get('cageCategory')?.touched)">
+                    {{ error.message }}
+                  </div>
+                </ng-container>
+              </div>
+            </ion-col>
+          </ion-row>
+        </form>
+        <div class="modal-btn-container ion-text-right">
+          <ion-button class="cancel-btn" (click)="cancel()">Cancel</ion-button>
+          <ion-button color="positive-btn" (click)="confirm()">Save</ion-button>
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
 </ion-content>

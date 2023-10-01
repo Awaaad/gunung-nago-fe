@@ -85,10 +85,11 @@
         </ng-container>
 
         <ng-container matColumnDef="edit">
-          <th mat-header-cell *matHeaderCellDef> </th>
+          <th mat-header-cell *matHeaderCellDef></th>
           <td mat-cell *matCellDef="let element">
             <div class="table-btn">
-              <ion-button color="neutral-btn" class="mr-05"><ion-icon name="create"></ion-icon></ion-button>
+              <ion-button color="neutral-btn" class="mr-05" (click)="openModal(element)"><ion-icon
+                  name="create"></ion-icon></ion-button>
             </div>
           </td>
         </ng-container>
@@ -102,4 +103,85 @@
     <ion-infinite-scroll-content loadingSpinner="crescent" loadingText="Loading more feeds...">
     </ion-infinite-scroll-content>
   </ion-infinite-scroll>
+
+  <ion-modal (willDismiss)="onWillDismiss($event)" [isOpen]="isModalOpen" cssClass="feed-modal" backdropDismiss="true">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <div class="title">
+            <img class="header-logo ml-15" src='./assets/flaticon/edit.png'>
+            <h3 class="modal-header-text">Edit Feed</h3>
+          </div>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content [fullscreen]="false" class="ion-padding">
+        <form [formGroup]="feedEditForm">
+          <ion-row>
+            <ion-col size-xs="12" size-md="12">
+              <ion-input color="gunung-nago-primary" label="Name*" label-placement="floating" fill="outline" type="text"
+                clear-input="true" formControlName="name" required="true"></ion-input>
+              <div class="error-messages">
+                <ng-container *ngFor="let error of errorMessages.name">
+                  <div class="error-message"
+                    *ngIf="feedEditForm.get('name')?.hasError(error.type) && (feedEditForm.get('name')?.dirty || feedEditForm.get('name')?.touched)">
+                    {{ error.message }}
+                  </div>
+                </ng-container>
+              </div>
+            </ion-col>
+            <ion-col size-xs="12" size-md="6">
+              <ion-select color="gunung-nago-primary" label="Category" label-placement="floating" fill="outline"
+                interface="popover" required="true" placeholder="Category" formControlName="feedCategory">
+                <ion-select-option *ngFor="let feedCategory of feedCategories" [value]="feedCategory">{{ feedCategory
+                  }}</ion-select-option>
+              </ion-select>
+              <div class="error-messages">
+                <ng-container *ngFor="let error of errorMessages.category">
+                  <div class="error-message"
+                    *ngIf="feedEditForm.get('feedCategory')?.hasError(error.type) && (feedEditForm.get('feedCategory')?.dirty || feedEditForm.get('feedCategory')?.touched)">
+                    {{ error.message }}
+                  </div>
+                </ng-container>
+              </div>
+            </ion-col>
+            <ion-col size-xs="12" size-md="6">
+              <ion-input color="gunung-nago-primary" label="Recommended weight" label-placement="floating"
+                fill="outline" type="number" clear-input="true" formControlName="recommendedWeight"
+                required="true"></ion-input>
+              <div class="error-messages">
+                <ng-container *ngFor="let error of errorMessages.recommendedWeight">
+                  <div class="error-message"
+                    *ngIf="feedEditForm.get('recommendedWeight')?.hasError(error.type) && (feedEditForm.get('recommendedWeight')?.dirty || feedEditForm.get('recommendedWeight')?.touched)">
+                    {{ error.message }}
+                  </div>
+                </ng-container>
+              </div>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size-xs="12" size-md="12">
+              <ion-select color="gunung-nago-primary" label="Supplier*" label-placement="floating" fill="outline"
+                interface="popover" required="true" placeholder="Supplier" formControlName="supplierId">
+                <ion-select-option *ngFor="let supplier of suppliers" [value]="supplier.id"
+                  selected="supplier.supplierId === supplierId" color="secondary">{{ supplier.name }}
+                </ion-select-option>
+              </ion-select>
+              <div class="error-messages">
+                <ng-container *ngFor="let error of errorMessages.supplierId">
+                  <div class="error-message"
+                    *ngIf="feedEditForm.get('supplierId')?.hasError(error.type) && (feedEditForm.get('supplierId')?.dirty || feedEditForm.get('supplierId')?.touched)">
+                    {{ error.message }}
+                  </div>
+                </ng-container>
+              </div>
+            </ion-col>
+          </ion-row>
+        </form>
+        <div class="modal-btn-container ion-text-right">
+          <ion-button class="cancel-btn" (click)="cancel()">Cancel</ion-button>
+          <ion-button color="positive-btn" (click)="confirm()">Save</ion-button>
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
 </ion-content>

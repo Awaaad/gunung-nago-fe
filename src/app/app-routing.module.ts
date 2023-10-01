@@ -15,6 +15,10 @@ const routes: Routes = [
     loadChildren: () => import('./features/flock/flock.module').then(m => m.FlockModule)
   },
   {
+    path: 'egg',
+    loadChildren: () => import('./features/egg/egg.module').then(m => m.EggModule)
+  },
+  {
     path: 'survey',
     loadChildren: () => import('./features/survey/survey.module').then(m => m.SurveyModule)
   },
@@ -37,6 +41,14 @@ const routes: Routes = [
   {
     path: 'customer',
     loadChildren: () => import('./features/customer/customer.module').then(m => m.CustomerModule)
+  },
+  {
+    path: 'sales-invoice',
+    loadChildren: () => import('./features/sales-invoice/sales-invoice.module').then(m => m.SalesInvoiceModule)
+  },
+  {
+    path: 'purchase-invoice',
+    loadChildren: () => import('./features/purchase-invoice/purchase-invoice.module').then(m => m.PurchaseInvoiceModule)
   },
   {
     path: 'security',

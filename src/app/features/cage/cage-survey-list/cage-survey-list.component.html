@@ -66,12 +66,13 @@
     </ion-row>
   </div>
 
-  <ion-modal (willDismiss)="onWillDismiss($event)" [isOpen]="isModalOpen" cssClass="flock-modal" backdropDismiss="false">
+  <ion-modal (willDismiss)="onWillDismiss($event)" [isOpen]="isModalOpen" cssClass="flock-modal"
+    backdropDismiss="false">
     <ng-template>
       <ion-header>
         <ion-toolbar>
           <div class="title">
-            <img class="header-logo ml-05" src='./assets/icon/chicken/icons8-chicken-64.png'>
+            <img class="header-logo ml-15" src='./assets/icon/chicken/icons8-chicken-64.png'>
             <h3 class="modal-header-text">Flock Details</h3>
           </div>
         </ion-toolbar>
@@ -167,9 +168,9 @@
             </ion-col>
           </ion-row>
         </form>
-        <div class="btn-container ion-text-right">
+        <div class="modal-btn-container ion-text-right">
           <ion-button class="cancel-btn" (click)="cancel()">Cancel</ion-button>
-          <ion-button color="gunung-nago-primary" (click)="confirm()">Save</ion-button>
+          <ion-button color="positive-btn" (click)="confirm()">Save</ion-button>
         </div>
       </ion-content>
     </ng-template>

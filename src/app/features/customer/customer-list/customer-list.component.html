@@ -25,7 +25,8 @@
 
 <ion-content [fullscreen]="false" class="ion-padding" [scrollEvents]="true" (ionScroll)="onScroll($event)">
   <div class="btn-container">
-    <ion-button color="neutral-btn" routerLink="/customer/customer-details"><ion-icon name="add"></ion-icon></ion-button>
+    <ion-button color="neutral-btn" routerLink="/customer/customer-details"><ion-icon
+        name="add"></ion-icon></ion-button>
   </div>
   <ion-card>
     <ion-card-content>
@@ -76,7 +77,8 @@
           <th mat-header-cell *matHeaderCellDef> </th>
           <td mat-cell *matCellDef="let element">
             <div class="table-btn">
-              <ion-button color="neutral-btn" class="mr-05"><ion-icon name="create"></ion-icon></ion-button>
+              <ion-button color="neutral-btn" class="mr-05" (click)="openModal(element)"><ion-icon
+                  name="create"></ion-icon></ion-button>
             </div>
           </td>
         </ng-container>
@@ -90,4 +92,70 @@
     <ion-infinite-scroll-content loadingSpinner="crescent" loadingText="Loading more customers...">
     </ion-infinite-scroll-content>
   </ion-infinite-scroll>
+
+  <ion-modal (willDismiss)="onWillDismiss($event)" [isOpen]="isModalOpen" cssClass="customer-modal"
+    backdropDismiss="true">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <div class="title">
+            <img class="header-logo ml-15" src='./assets/flaticon/edit.png'>
+            <h3 class="modal-header-text">Edit Customer</h3>
+          </div>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content [fullscreen]="false" class="ion-padding">
+        <form [formGroup]="customerEditForm">
+          <ion-row>
+            <ion-col size-xs="12" size-md="6">
+              <ion-input color="gunung-nago-primary" label="First Name*" label-placement="floating" fill="outline"
+                type="text" clear-input="true" formControlName="firstName" required="true"></ion-input>
+              <div class="error-messages">
+                <ng-container *ngFor="let error of errorMessages.firstName">
+                  <div class="error-message"
+                    *ngIf="customerEditForm.get('firstName')?.hasError(error.type) && (customerEditForm.get('firstName')?.dirty || customerEditForm.get('firstName')?.touched)">
+                    {{ error.message }}
+                  </div>
+                </ng-container>
+              </div>
+            </ion-col>
+            <ion-col size-xs="12" size-md="6">
+              <ion-input color="gunung-nago-primary" label="Last Name*" label-placement="floating" fill="outline"
+                type="text" clear-input="true" formControlName="lastName" required="true"></ion-input>
+              <div class="error-messages">
+                <ng-container *ngFor="let error of errorMessages.lastName">
+                  <div class="error-message"
+                    *ngIf="customerEditForm.get('lastName')?.hasError(error.type) && (customerEditForm.get('lastName')?.dirty || customerEditForm.get('lastName')?.touched)">
+                    {{ error.message }}
+                  </div>
+                </ng-container>
+              </div>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size-xs="12" size-md="12">
+              <ion-input color="gunung-nago-primary" label="Address" label-placement="floating" fill="outline"
+                type="text" clear-input="true" formControlName="address"></ion-input>
+            </ion-col>
+            <ion-col size-xs="12" size-md="12">
+              <ion-input color="gunung-nago-primary" label="Telephone Number*" label-placement="floating" fill="outline"
+                type="text" clear-input="true" formControlName="telephoneNumber" required="true"></ion-input>
+              <div class="error-messages">
+                <ng-container *ngFor="let error of errorMessages.telephoneNumber">
+                  <div class="error-message"
+                    *ngIf="customerEditForm.get('telephoneNumber')?.hasError(error.type) && (customerEditForm.get('telephoneNumber')?.dirty || customerEditForm.get('telephoneNumber')?.touched)">
+                    {{ error.message }}
+                  </div>
+                </ng-container>
+              </div>
+            </ion-col>
+          </ion-row>
+        </form>
+        <div class="modal-btn-container ion-text-right">
+          <ion-button class="cancel-btn" (click)="cancel()">Cancel</ion-button>
+          <ion-button color="positive-btn" (click)="confirm()">Save</ion-button>
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
 </ion-content>

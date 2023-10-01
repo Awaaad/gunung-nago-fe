@@ -85,7 +85,6 @@ export class FeedAllocationComponent implements OnInit {
   public save(): void {
     this.cages = [];
     this.cages = [...this.cagesNorm, ...this.cagesDara, ...this.cagesDoc];
-    console.log(this.cages);
     this.utilsService.presentLoading();
     this.flockFeedLineApiService.allocateFeedStockToFlock(this.cages).subscribe({
       next: (data: string) => {

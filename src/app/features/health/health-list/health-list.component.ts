@@ -4,12 +4,15 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { IonInfiniteScroll } from '@ionic/angular';
+import { IonInfiniteScroll, IonModal } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { HealthProductDto, HealthSurveyStockDto, HealthType } from 'generated-src/model';
+import { HealthProductDto, HealthSurveyStockDto, HealthType, SupplierDto } from 'generated-src/model';
 import { Subscription } from 'rxjs';
 import { HealthProductApiService } from 'src/app/shared/apis/health-product.api.service';
 import { UtilsService } from 'src/app/shared/utils/utils.service';
+import { OverlayEventDetail } from '@ionic/core/components';
+import { HttpErrorResponse } from '@angular/common/http';
+import { SupplierApiService } from 'src/app/shared/apis/supplier.api.service';
 
 @Component({
   selector: 'app-health-list',
@@ -25,6 +28,8 @@ import { UtilsService } from 'src/app/shared/utils/utils.service';
 })
 export class HealthListComponent {
   @ViewChild(IonInfiniteScroll, { static: true }) infiniteScroll!: IonInfiniteScroll;
+  @ViewChild(IonModal) modal!: IonModal;
+  public healthProductEditForm!: FormGroup;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   public language = "en";
@@ -43,17 +48,35 @@ export class HealthListComponent {
   public healthType: HealthType | string = '';
   public expandedElement: any | null;
   public healthSurveyStocks: HealthSurveyStockDto[] = [];
+  public suppliers: SupplierDto[] = [];
+  public isModalOpen: boolean = false;
+  public errorMessages = {
+    name: [
+      { type: 'required', message: 'Name is required' },
+    ],
+    healthType: [
+      { type: 'required', message: 'Health type is required' },
+    ],
+    unitsPerBox: [
+      { type: 'required', message: 'Units per box is required' },
+    ],
+    supplierId: [
+      { type: 'required', message: 'Supplier is required' },
+    ]
+  };
 
   constructor(
     private healthProductApiService: HealthProductApiService,
+    private supplierApiService: SupplierApiService,
     private translateService: TranslateService,
-    private utilService: UtilsService
+    private utilsService: UtilsService
   ) {
   }
 
   ionViewWillEnter(): void {
     this.healthTypes = Object.keys(HealthType);
     this.search();
+    this.findAllSuppliers();
   }
 
   public ionChangeLanguage(event: any): void {
@@ -70,14 +93,14 @@ export class HealthListComponent {
 
   public toggleActive(event: any): void {
     this.active = event.detail.checked;
-    this.utilService.presentLoadingDuration(500).then(value => {
+    this.utilsService.presentLoadingDuration(500).then(value => {
       this.search();
     });
   }
 
   public ionChangeHealthType(event: any): void {
     this.healthType = event.detail.value;
-    this.utilService.presentLoadingDuration(500).then(value => {
+    this.utilsService.presentLoadingDuration(500).then(value => {
       this.search();
     });
   }
@@ -115,7 +138,7 @@ export class HealthListComponent {
     this.healthType = '';
     this.sortOrder = 'asc'.toLocaleUpperCase();
     this.sortBy = 'name';
-    this.utilService.presentLoadingDuration(500).then(value => {
+    this.utilsService.presentLoadingDuration(500).then(value => {
       this.search();
     });
   }
@@ -135,7 +158,7 @@ export class HealthListComponent {
     this.sortBy = sort.active;
     this.sortOrder = sort.direction.toUpperCase();
 
-    this.utilService.presentLoadingDuration(500).then(value => {
+    this.utilsService.presentLoadingDuration(500).then(value => {
       this.search();
     })
   }
@@ -145,11 +168,70 @@ export class HealthListComponent {
     // ELEMENT_DATA.forEach(row => {
     //   row.expanded = false;
     // })
-    console.log(element);
     element.expanded = !element.expanded
     this.healthSurveyStocks = [];
     this.healthProductApiService.findHealthSurveyDtoByHealthProductId(element.id).subscribe(productHealthSurvey => {
       this.healthSurveyStocks = productHealthSurvey.healthSurveyStockDtos;
     })
   }
+
+  private findAllSuppliers(): void {
+    this.supplierApiService.findAll().subscribe((data: SupplierDto[]) => {
+      this.suppliers = data;
+    });
+  }
+
+  public initialiseHealthProductEditForm(healthProductDetails: HealthProductDto): void {
+    this.healthProductEditForm = new FormGroup({
+      id: new FormControl({ value: healthProductDetails.id, disabled: false }, Validators.compose([Validators.required])),
+      name: new FormControl({ value: healthProductDetails.name, disabled: false }, Validators.compose([Validators.required])),
+      active: new FormControl({ value: healthProductDetails.active, disabled: false }, Validators.compose([Validators.required])),
+      description: new FormControl({ value: healthProductDetails.description, disabled: false }, Validators.compose([])),
+      healthType: new FormControl({ value: healthProductDetails.healthType, disabled: false }, Validators.compose([Validators.required])),
+      unitsPerBox: new FormControl({ value: healthProductDetails.unitsPerBox, disabled: false }, Validators.compose([Validators.required])),
+      supplierId: new FormControl({ value: healthProductDetails.supplierId, disabled: false }, Validators.compose([Validators.required])),
+    })
+  }
+
+  public openModal(element: HealthProductDto): void {
+    this.initialiseHealthProductEditForm(element);
+    this.isModalOpen = true;
+  }
+
+  public cancel(): void {
+    this.isModalOpen = false;
+    this.modal.dismiss(null, 'cancel');
+  }
+
+  public confirm(): void {
+    this.modal.dismiss(null, 'confirm');
+  }
+
+  public onWillDismiss(event: Event): void {
+    const ev = event as CustomEvent<OverlayEventDetail<string>>;
+    if (ev.detail.role === 'backdrop') {
+      this.isModalOpen = false;
+    }
+    if (ev.detail.role === 'confirm') {
+      this.isModalOpen = false;
+      this.edit();
+    }
+  }
+
+  public edit(): void {
+    this.utilsService.presentLoading();
+    this.healthProductApiService.edit(this.healthProductEditForm.value).subscribe({
+      next: (data: string) => {
+        this.healthProductEditForm.reset();
+        this.utilsService.dismissLoading();
+        this.utilsService.successMsg('Health Product successfully edited');
+        this.search();
+      },
+      error: (error: HttpErrorResponse) => {
+        this.utilsService.dismissLoading();
+        this.utilsService.unsuccessMsg('Error', 'gunung-nago-warehouse');
+      }
+    });
+  }
 }
+

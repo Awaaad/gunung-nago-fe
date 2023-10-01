@@ -1,14 +1,16 @@
 import { Component, ViewChild } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { IonInfiniteScroll } from '@ionic/angular';
+import { IonInfiniteScroll, IonModal } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { CageDto, CageCategory, CustomerDto } from 'generated-src/model';
+import { CustomerDto } from 'generated-src/model';
 import { Subscription } from 'rxjs';
-import { CageApiService } from 'src/app/shared/apis/cage.api.service';
 import { CustomerApiService } from 'src/app/shared/apis/customer.api.service';
 import { UtilsService } from 'src/app/shared/utils/utils.service';
+import { OverlayEventDetail } from '@ionic/core/components';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-customer-list',
@@ -17,10 +19,12 @@ import { UtilsService } from 'src/app/shared/utils/utils.service';
 })
 export class CustomerListComponent {
   @ViewChild(IonInfiniteScroll, { static: true }) infiniteScroll!: IonInfiniteScroll;
+  @ViewChild(IonModal) modal!: IonModal;
+  public customerEditForm!: FormGroup;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   public language = "en";
-  public displayedColumns: string[] = ['firstName', 'lastName', 'address', 'telephoneNumber'];
+  public displayedColumns: string[] = ['firstName', 'lastName', 'address', 'telephoneNumber', 'edit'];
   public customers = new MatTableDataSource<CustomerDto>;
   private infiniteCustomers: CustomerDto[] = [];
   public customerSearchSubscription!: Subscription;
@@ -29,11 +33,23 @@ export class CustomerListComponent {
   public sortOrder: string = 'asc';
   public sortBy: string = 'name';
   public customerName: string = '';
+  public isModalOpen: boolean = false;
+  public errorMessages = {
+    firstName: [
+      { type: 'required', message: 'First Name is required' },
+    ],
+    lastName: [
+      { type: 'required', message: 'Last Name is required' },
+    ],
+    telephoneNumber: [
+      { type: 'required', message: 'Telephone Number is required' },
+    ],
+  };
 
   constructor(
     private customerApiService: CustomerApiService,
     private translateService: TranslateService,
-    private utilService: UtilsService
+    private utilsService: UtilsService
   ) {
   }
 
@@ -52,7 +68,6 @@ export class CustomerListComponent {
     this.customerName = customerName;
     this.search();
   }
-
 
   public search(event?: any, isLoadevent?: any) {
     if (!isLoadevent) {
@@ -80,7 +95,7 @@ export class CustomerListComponent {
   }
 
   public reset(): void {
-    this.utilService.presentLoadingDuration(500).then(value => {
+    this.utilsService.presentLoadingDuration(500).then(value => {
       this.search();
     });
   }
@@ -100,8 +115,59 @@ export class CustomerListComponent {
     this.sortBy = sort.active;
     this.sortOrder = sort.direction.toUpperCase();
 
-    this.utilService.presentLoadingDuration(500).then(value => {
+    this.utilsService.presentLoadingDuration(500).then(value => {
       this.search();
     })
+  }
+
+  public initialiseCustomerEditForm(customerDetails: CustomerDto): void {
+    this.customerEditForm = new FormGroup({
+      id: new FormControl({ value: customerDetails.id, disabled: false }, Validators.compose([Validators.required])),
+      firstName: new FormControl({ value: customerDetails.firstName, disabled: false }, Validators.compose([Validators.required])),
+      lastName: new FormControl({ value: customerDetails.lastName, disabled: false }, Validators.compose([Validators.required])),
+      address: new FormControl({ value: customerDetails.address, disabled: false }),
+      telephoneNumber: new FormControl({ value: customerDetails.telephoneNumber, disabled: false }, Validators.compose([Validators.required]))
+    })
+  }
+
+  public openModal(element: CustomerDto): void {
+    this.initialiseCustomerEditForm(element);
+    this.isModalOpen = true;
+  }
+
+  public cancel(): void {
+    this.isModalOpen = false;
+    this.modal.dismiss(null, 'cancel');
+  }
+
+  public confirm(): void {
+    this.modal.dismiss(null, 'confirm');
+  }
+
+  public onWillDismiss(event: Event): void {
+    const ev = event as CustomEvent<OverlayEventDetail<string>>;
+    if (ev.detail.role === 'backdrop') {
+      this.isModalOpen = false;
+    }
+    if (ev.detail.role === 'confirm') {
+      this.isModalOpen = false;
+      this.edit();
+    }
+  }
+
+  public edit(): void {
+    this.utilsService.presentLoading();
+    this.customerApiService.edit(this.customerEditForm.value).subscribe({
+      next: (data: string) => {
+        this.customerEditForm.reset();
+        this.utilsService.dismissLoading();
+        this.utilsService.successMsg('Customer successfully edited');
+        this.search();
+      },
+      error: (error: HttpErrorResponse) => {
+        this.utilsService.dismissLoading();
+        this.utilsService.unsuccessMsg('Error', 'gunung-nago-warehouse');
+      }
+    });
   }
 }

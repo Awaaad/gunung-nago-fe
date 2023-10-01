@@ -164,7 +164,6 @@ export class HealthStockComponent implements OnInit {
         })
       }
     });
-    console.log(this.healthProductsInStock);
   }
 
   public resolveAddProductToStock(healthProductRow: HealthProductDto) {
@@ -192,7 +191,6 @@ export class HealthStockComponent implements OnInit {
   }
 
   public save(): void {
-    console.log(this.healthProductsInStockTable.data)
     const healthProductPurchaseDto = {
       invoiceNumber: 12345,
       supplierId: 1,
