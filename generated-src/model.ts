@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2023-09-30 19:56:56.
+// Generated using typescript-generator version 3.2.1263 on 2023-10-01 10:12:43.
 
 export class CageDto {
     id!: number;
@@ -128,7 +128,8 @@ export class FlockSaleDetailsDto {
 
 export class FlockSaleSaveDto {
     customerDto!: CustomerDto;
-    flockSaleDetailsDtoList!: FlockSaleDetailsDto[];
+    flockSaleDetailsDtos!: FlockSaleDetailsDto[];
+    paymentSaveDtos!: PaymentSaveDto[];
     newCustomer!: boolean;
 }
 
@@ -233,6 +234,13 @@ export class HealthSurveyStockDto {
     unitsTotal!: number;
     unitsUsed!: number;
     expiryDate!: Date;
+}
+
+export class PaymentSaveDto {
+    amountPaid!: number;
+    paymentDeadline!: Date;
+    previousPaymentType!: PaymentType;
+    paymentType!: PaymentType;
 }
 
 export class FeedPurchaseDto {
@@ -381,4 +389,12 @@ export enum AquisitionType {
 export enum HealthType {
     MEDICINE = 'MEDICINE',
     VACCINE = 'VACCINE',
+}
+
+export enum PaymentType {
+    CASH = 'CASH',
+    CREDIT = 'CREDIT',
+    CARD = 'CARD',
+    CHEQUE = 'CHEQUE',
+    ELECTRONIC = 'ELECTRONIC',
 }

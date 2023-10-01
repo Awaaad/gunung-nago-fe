@@ -6,7 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { FeedSurveyDto, FlockCategory, FlockFeedLineDto, HealthProductDto, HealthSurveyDto, SurveyDto } from 'generated-src/model';
 import { SurveyFrontDto } from 'generated-src/model-front';
-import { debounceTime, distinctUntilChanged, filter, finalize, switchMap, tap } from 'rxjs';
+import { Subscription, debounceTime, distinctUntilChanged, filter, finalize, switchMap, tap } from 'rxjs';
 import { FlockFeedLineApiService } from 'src/app/shared/apis/flock-feed-line.api.service';
 import { HealthProductApiService } from 'src/app/shared/apis/health-product.api.service';
 import { UtilsService } from 'src/app/shared/utils/utils.service';
@@ -51,6 +51,7 @@ export class SurveryDetailsComponent implements OnInit {
   public sortOrder: string = 'asc';
   public sortBy: string = 'name';
   public selectedHealthProducts: HealthSurveyDto[] = [];
+  private searchHealthProductSubscription!: Subscription;
 
   // feedSection
   public feedSurvey: FeedSurveyDto[] = [];
@@ -104,7 +105,10 @@ export class SurveryDetailsComponent implements OnInit {
   }
 
   public searchHealthProduct(): void {
-    this.searchHealthProductCtrl.valueChanges
+    if (this.searchHealthProductSubscription) {
+      this.searchHealthProductSubscription.unsubscribe();
+    }
+    this.searchHealthProductSubscription = this.searchHealthProductCtrl.valueChanges
       .pipe(
         filter(res => {
           return res !== null && res.length >= this.minLengthTerm

@@ -23,3 +23,27 @@
     color: black;
     font-size: 18px;
 }
+
+.add-payment-btn {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    margin-right: 5px;
+}
+
+.remove-payment-btn {
+    font-size: 12px;
+    float: right;
+    height: 30px;
+    width: 40px;
+    margin-top: 23px;
+    margin-right: 5px;
+}
+
+.add-payment-area {
+    display: flex;
+    justify-content: space-between;
+}
+
+.flock-modal {
+    --height: 50em;
+}

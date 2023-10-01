@@ -29,92 +29,100 @@
       <img class="cart-logo" src='./assets/flaticon/customer.png'>
       <div class="form-section-cart">Customer</div>
     </div>
-    <ion-card>
-      <ion-card-content>
-        <ion-item-divider>
-          <ion-label>Customer</ion-label>
-        </ion-item-divider>
-        <div>
-          <ion-row>
-            <ion-col>
-              <ion-toggle labelPlacement="start" class="toggle" formControlName="newCustomer"
-                (ionChange)="newCustomerChange($event)" color="gunung-nago-report">New
-                Customer*</ion-toggle>
-            </ion-col>
-          </ion-row>
-          <ion-row *ngIf="!isNewCustomer">
-            <ion-col size="3">
-              <mat-form-field class="example-full-width" appearance="outline">
-                <input matInput placeholder="Search customer.." [(ngModel)]="selectedCustomer" [matAutocomplete]="auto"
-                  [formControl]="searchCustomerCtrl" placeholder="Seach customer..">
-                <button *ngIf="selectedCustomer" matSuffix mat-icon-button aria-label="Clear"
-                  (click)="clearCustomer(searchCustomerCtrl)">
-                  <ion-icon name="close-outline"></ion-icon>
-                </button>
-                <mat-autocomplete [panelWidth]="400" #auto="matAutocomplete"
-                  (optionSelected)="setSelectedCustomer($event)" [displayWith]="displayWith">
-                  <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
-                  <ng-container *ngIf="!isLoading">
-                    <mat-option *ngFor="let customer of filteredCustomers" [value]="customer">
-                      <span>{{customer.lastName}} {{customer.firstName}}</span>
-                    </mat-option>
-                  </ng-container>
-                </mat-autocomplete>
-              </mat-form-field>
-            </ion-col>
-          </ion-row>
+    <ion-row>
+      <ion-col col-md-6 size="6" size-sm>
+        <ion-card>
+          <ion-card-content>
+            <ion-item-divider>
+              <ion-label>Customer</ion-label>
+            </ion-item-divider>
+            <div>
+              <ion-row>
+                <ion-col>
+                  <ion-toggle labelPlacement="start" class="toggle" formControlName="newCustomer"
+                    (ionChange)="newCustomerChange($event)" color="gunung-nago-report">New
+                    Customer*</ion-toggle>
+                </ion-col>
+              </ion-row>
+              <ion-row *ngIf="!isNewCustomer">
+                <ion-col size="3">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <input matInput placeholder="Search customer..." [(ngModel)]="selectedCustomer"
+                      [matAutocomplete]="auto" [formControl]="searchCustomerCtrl" placeholder="Seach customer...">
+                    <button *ngIf="selectedCustomer" matSuffix mat-icon-button aria-label="Clear"
+                      (click)="clearCustomer(searchCustomerCtrl)">
+                      <ion-icon name="close-outline"></ion-icon>
+                    </button>
+                    <mat-autocomplete [panelWidth]="400" #auto="matAutocomplete"
+                      (optionSelected)="setSelectedCustomer($event)" [displayWith]="displayWith">
+                      <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                      <ng-container *ngIf="!isLoading">
+                        <mat-option *ngFor="let customer of filteredCustomers" [value]="customer">
+                          <span>{{customer.lastName}} {{customer.firstName}}</span>
+                        </mat-option>
+                      </ng-container>
+                    </mat-autocomplete>
+                  </mat-form-field>
+                </ion-col>
+              </ion-row>
 
-          <ion-row formGroupName="customer">
-            <ion-col col-md-6 size="6" size-sm>
-              <ion-input formControlName="firstName" label="First Name*" label-placement="floating" fill="outline"
-                type="text" clear-input="true" required="true">
-              </ion-input>
-              <div class="error-messages">
-                <ng-container *ngFor="let error of errorMessages.firstName">
-                  <div class="error-message"
-                    *ngIf="flockSaleForm.get('customer.firstName')?.hasError(error.type) && (flockSaleForm.get('customer.firstName')?.dirty || flockSaleForm.get('customer.firstName')?.touched)">
-                    {{ error.message }}
+              <ion-row formGroupName="customer">
+                <ion-col col-md-6 size="6" size-sm>
+                  <ion-input formControlName="firstName" label="First Name*" label-placement="floating" fill="outline"
+                    type="text" clear-input="true" required="true">
+                  </ion-input>
+                  <div class="error-messages">
+                    <ng-container *ngFor="let error of errorMessages.firstName">
+                      <div class="error-message"
+                        *ngIf="flockSaleForm.get('customer.firstName')?.hasError(error.type) && (flockSaleForm.get('customer.firstName')?.dirty || flockSaleForm.get('customer.firstName')?.touched)">
+                        {{ error.message }}
+                      </div>
+                    </ng-container>
                   </div>
-                </ng-container>
-              </div>
-            </ion-col>
-            <ion-col col-md-6 size="6" size-sm>
-              <ion-input formControlName="lastName" label="Last Name*" label-placement="floating" fill="outline"
-                type="text" clear-input="true" required="true">
-              </ion-input>
-              <div class="error-messages">
-                <ng-container *ngFor="let error of errorMessages.lastName">
-                  <div class="error-message"
-                    *ngIf="flockSaleForm.get('customer.lastName')?.hasError(error.type) && (flockSaleForm.get('customer.lastName')?.dirty || flockSaleForm.get('customer.lastName')?.touched)">
-                    {{ error.message }}
+                </ion-col>
+                <ion-col col-md-6 size="6" size-sm>
+                  <ion-input formControlName="lastName" label="Last Name*" label-placement="floating" fill="outline"
+                    type="text" clear-input="true" required="true">
+                  </ion-input>
+                  <div class="error-messages">
+                    <ng-container *ngFor="let error of errorMessages.lastName">
+                      <div class="error-message"
+                        *ngIf="flockSaleForm.get('customer.lastName')?.hasError(error.type) && (flockSaleForm.get('customer.lastName')?.dirty || flockSaleForm.get('customer.lastName')?.touched)">
+                        {{ error.message }}
+                      </div>
+                    </ng-container>
                   </div>
-                </ng-container>
-              </div>
-            </ion-col>
-          </ion-row>
-          <ion-row formGroupName="customer">
-            <ion-col col-md-6 size="6" size-sm>
-              <ion-input formControlName="address" label="Address*" label-placement="floating" fill="outline"
-                type="text" clear-input="true" required="true">
-              </ion-input>
-            </ion-col>
-            <ion-col col-md-6 size="6" size-sm>
-              <ion-input formControlName="telephoneNumber" label="Telephone*" label-placement="floating" fill="outline"
-                type="text" clear-input="true" required="true">
-              </ion-input>
-              <div class="error-messages">
-                <ng-container *ngFor="let error of errorMessages.telephoneNumber">
-                  <div class="error-message"
-                    *ngIf="flockSaleForm.get('customer.telephoneNumber')?.hasError(error.type) && (flockSaleForm.get('customer.telephoneNumber')?.dirty || flockSaleForm.get('customer.telephoneNumber')?.touched)">
-                    {{ error.message }}
+                </ion-col>
+              </ion-row>
+              <ion-row formGroupName="customer">
+                <ion-col col-md-6 size="6" size-sm>
+                  <ion-input formControlName="address" label="Address" label-placement="floating" fill="outline"
+                    type="text" clear-input="true">
+                  </ion-input>
+                </ion-col>
+                <ion-col col-md-6 size="6" size-sm>
+                  <ion-input formControlName="telephoneNumber" label="Telephone*" label-placement="floating"
+                    fill="outline" type="text" clear-input="true" required="true">
+                  </ion-input>
+                  <div class="error-messages">
+                    <ng-container *ngFor="let error of errorMessages.telephoneNumber">
+                      <div class="error-message"
+                        *ngIf="flockSaleForm.get('customer.telephoneNumber')?.hasError(error.type) && (flockSaleForm.get('customer.telephoneNumber')?.dirty || flockSaleForm.get('customer.telephoneNumber')?.touched)">
+                        {{ error.message }}
+                      </div>
+                    </ng-container>
                   </div>
-                </ng-container>
-              </div>
-            </ion-col>
-          </ion-row>
-        </div>
-      </ion-card-content>
-    </ion-card>
+                </ion-col>
+              </ion-row>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col col-md-6 size="6" size-sm>
+
+      </ion-col>
+    </ion-row>
+
 
 
     <div class="subtitle">
@@ -244,7 +252,99 @@
     </div>
     <div class="btn-container">
       <ion-button color="neutral-btn mr-05" (click)="addFlockSaleDetails()">Add Cage</ion-button>
-      <ion-button color="positive-btn" [disabled]="flockSaleForm.invalid" (click)="save()">Save</ion-button>
+      <ion-button color="positive-btn" [disabled]="flockSaleForm.invalid" (click)="openModal()">Save</ion-button>
     </div>
   </form>
+
+
+  <ion-modal (willDismiss)="onWillDismiss($event)" [isOpen]="isModalOpen" cssClass="flock-modal"
+    backdropDismiss="false">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <div class="title">
+            <img class="header-logo ml-05" src='./assets/icon/chicken/confirmation.png'>
+            <h3 class="modal-header-text">Payment Confirmation</h3>
+          </div>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content [fullscreen]="false" class="ion-padding">
+        <form [formGroup]="paymentForm">
+          <ion-row>
+            <ion-col size-xs="6" size-md="3">
+              <ion-input color="gunung-nago-primary" label="Total Price" label-placement="floating" fill="outline"
+                type="number" formControlName="totalPrice"></ion-input>
+            </ion-col>
+          </ion-row>
+
+          <div class="add-payment-area">
+            <div>
+
+            </div>
+            <div>
+              <ion-button color="neutral-btn" class="add-payment-btn" (click)="addPayment()">Add Payment</ion-button>
+            </div>
+          </div>
+
+          <div formArrayName="payments" *ngFor="let payment of paymentsFields?.controls; let i = index">
+            <ion-item-divider>
+              <ion-label>Payment</ion-label>
+            </ion-item-divider>
+            <span [formGroupName]="i">
+              <ion-button *ngIf="paymentsFields != null && paymentsFields.length > 1" (click)="removePayment(i)"
+                class="remove-payment-btn" color="danger"><span class="material-icons">delete</span></ion-button>
+              <ion-row>
+                <ion-col size="6" size-sm>
+                  <ion-input color="gunung-nago-primary" label="Amount Paid" label-placement="floating" fill="outline"
+                    type="number" formControlName="amountPaid"></ion-input>
+                  <div class="error-messages">
+                    <ng-container *ngFor="let error of errorMessages.amountPaid">
+                      <div class="error-message"
+                        *ngIf="payment.get('amountPaid')?.hasError(error.type) && (payment.get('amountPaid')?.dirty || payment.get('amountPaid')?.touched)">
+                        {{ error.message }}
+                      </div>
+                    </ng-container>
+                  </div>
+                </ion-col>
+
+                <ion-col size="6">
+                  <ion-select color="gunung-nago-primary" label="Payment Mode" label-placement="floating" fill="outline"
+                    interface="popover" placeholder="Payment Mode" formControlName="paymentType">
+                    <ion-select-option *ngFor="let paymentType of paymentTypes" [value]="paymentType">{{
+                      paymentType}}</ion-select-option>
+                  </ion-select>
+                  <div class="error-messages">
+                    <ng-container *ngFor="let error of errorMessages.paymentType">
+                      <div class="error-message"
+                        *ngIf="payment.get('paymentType')?.hasError(error.type) && (payment.get('paymentType')?.dirty || payment.get('paymentType')?.touched)">
+                        {{ error.message }}
+                      </div>
+                    </ng-container>
+                  </div>
+                </ion-col>
+              </ion-row>
+
+              <ion-row *ngIf="payment.get('paymentType')?.value === 'CREDIT'">
+                <ion-col size="6">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Payment Deadline</mat-label>
+                    <input matInput [matDatepicker]="picker" [min]="today" formControlName="paymentDeadline">
+                    <mat-hint>DD/MM/YYYY</mat-hint>
+                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                  </mat-form-field>
+                </ion-col>
+              </ion-row>
+            </span>
+          </div>
+        </form>
+        <div class="modal-btn-container ion-text-right">
+          <ion-button class="cancel-btn" (click)="cancel()">Cancel</ion-button>
+          <ion-button color="positive-btn"
+            [disabled]="!checkPaymentLessThanSoldAt() || paymentForm.invalid || totalPrice < 1 || !checkPaymentCompleted()"
+            (click)="confirm()">Save</ion-button>
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
 </ion-content>

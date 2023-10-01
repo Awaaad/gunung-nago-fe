@@ -1,4 +1,4 @@
-import { AquisitionType, CageCategory, CustomerDto, FeedSurveyDto, FlockCategory, FlockSaleDetailsDto, HealthSurveyDto } from "./model";
+import { AquisitionType, CageCategory, CustomerDto, FeedSurveyDto, FlockCategory, FlockSaleDetailsDto, HealthSurveyDto, PaymentSaveDto, PaymentType } from "./model";
 
 export class PageResult<T> {
     public content!: Array<T>;
@@ -48,8 +48,16 @@ export class FlockSaveFrontDto {
 
 export class FlockSaleSaveFrontDto {
     customerDto!: CustomerFrontDto | null | undefined;
-    flockSaleDetailsDtoList!: FlockSaleDetailsDto[] | [] | null | undefined;
+    flockSaleDetailsDtos!: FlockSaleDetailsDto[] | [] | null | undefined;
+    paymentSaveDtos!: PaymentSaveFrontDto[] | [] | null | undefined;
     newCustomer!: boolean | null | undefined;
+}
+
+export class PaymentSaveFrontDto {
+    amountPaid!: number;
+    paymentDeadline!: Date | any;
+    previousPaymentType!: PaymentType;
+    paymentType!: PaymentType;
 }
 
 

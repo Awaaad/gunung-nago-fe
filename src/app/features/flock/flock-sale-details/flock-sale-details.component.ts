@@ -1,16 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { UtilsService } from 'src/app/shared/utils/utils.service';
 import { FlockSaleApiService } from '../../../shared/apis/flock-sale.api.service';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { SurveyApiService } from '../../../shared/apis/survey.api.service';
-import { CageCategory, CageDto, CustomerDto, SurveyDto } from 'generated-src/model';
+import { CageCategory, CageDto, CustomerDto, PaymentType, SurveyDto } from 'generated-src/model';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CageApiService } from '../../../shared/apis/cage.api.service';
 import { Subscription, debounceTime, distinctUntilChanged, filter, finalize, switchMap, tap } from 'rxjs';
 import { CustomerApiService } from 'src/app/shared/apis/customer.api.service';
 import { CustomerFrontDto, FlockSaleSaveFrontDto } from 'generated-src/model-front';
+import { IonModal } from '@ionic/angular';
+import { OverlayEventDetail } from '@ionic/core/components';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-flock-sale-details',
@@ -18,13 +21,14 @@ import { CustomerFrontDto, FlockSaleSaveFrontDto } from 'generated-src/model-fro
   styleUrls: ['./flock-sale-details.component.scss'],
 })
 export class FlockSaleDetailsComponent implements OnInit {
+  @ViewChild(IonModal) modal!: IonModal;
+  public isModalOpen: boolean = false;
   public language = "en";
   public flockSaleForm!: FormGroup;
   public quantitySoldForSterile: number = 0;
   public pricePerChickenForSterile: number = 0;
   public quantitySoldForGood: number = 0;
   public pricePerChickenForGood: number = 0;
-  public totalPrice: number = 0;
   private flockSaleSaveFrontDto!: FlockSaleSaveFrontDto;
   public cages: CageDto[] = [];
 
@@ -40,6 +44,11 @@ export class FlockSaleDetailsComponent implements OnInit {
   private size: number = 20;
   public sortOrder: string = 'asc';
   public sortBy: string = 'name';
+
+  public paymentForm!: FormGroup;
+  public paymentTypes: string[] = [];
+  public totalPrice: number = 0;
+  public today: Date = new Date();
 
   public errorMessages = {
     cage: [
@@ -65,6 +74,22 @@ export class FlockSaleDetailsComponent implements OnInit {
       { type: "required", message: "Contact number is required" },
       { type: "pattern", message: "Invalid contact number" }
     ],
+    amountPaid: [
+      { type: 'required', message: 'Amount paid is required' },
+      { type: 'min', message: 'Amount paid cannot be less than 0' },
+      { type: 'max', message: 'Amount paid cannot be more than Sold at' }
+    ],
+    totalPrice: [
+      { type: 'required', message: 'Total price is required' },
+    ],
+    soldAt: [
+      { type: 'required', message: 'Sold at is required' },
+      { type: 'min', message: 'Sold at cannot be less than 0' },
+      { type: 'max', message: 'Sold at cannot be more than Total Price' },
+    ],
+    paymentType: [
+      { type: 'required', message: 'Payment mode is required' },
+    ]
   };
 
   constructor(
@@ -84,6 +109,7 @@ export class FlockSaleDetailsComponent implements OnInit {
     this.getAllActiveCages();
     this.initialiseSelectedCustomer();
     this.searchCustomerAutoComplete();
+    this.paymentTypes = Object.keys(PaymentType);
   }
 
   public ionChangeLanguage(event: any): void {
@@ -191,7 +217,7 @@ export class FlockSaleDetailsComponent implements OnInit {
     this.flockSaleForm?.get("customer.lastName")?.setValue("");
     this.flockSaleForm?.get("customer.address")?.setValue("");
     this.flockSaleForm?.get("customer.telephoneNumber")?.setValue("");
-    this.selectedCustomer.id = null;
+    this.initialiseSelectedCustomer();
   }
 
   public setSelectedCustomer(event: any): void {
@@ -202,6 +228,8 @@ export class FlockSaleDetailsComponent implements OnInit {
     this.flockSaleForm?.get("customer.lastName")?.setValue(event.option.value.lastName);
     this.flockSaleForm?.get("customer.address")?.setValue(event.option.value.address);
     this.flockSaleForm?.get("customer.telephoneNumber")?.setValue(event.option.value.telephoneNumber);
+    this.flockSaleForm?.get("newCustomer")?.setValue(true);
+    console.log(this.flockSaleForm)
   }
 
   public addFlockSaleFormGroup(): any {
@@ -270,6 +298,13 @@ export class FlockSaleDetailsComponent implements OnInit {
     }
   }
 
+  private calculateTotalPrice(): void {
+    this.totalPrice = 0;
+    (this.flockSaleForm.get('flockSaleDetails') as FormArray).value.forEach((form: any) => {
+      this.totalPrice = this.totalPrice + (form.totalPriceForGood + form.totalPriceForSterile);
+    })
+  }
+
   public ionSelectCage(event: any, index: number) {
     const cageId = event.detail.value;
     this.findMostRecentSurveyDtoForCage(cageId, index);
@@ -304,7 +339,8 @@ export class FlockSaleDetailsComponent implements OnInit {
         telephoneNumber: null,
         totalAmountDue: null,
       },
-      flockSaleDetailsDtoList: [],
+      flockSaleDetailsDtos: [],
+      paymentSaveDtos: [],
       newCustomer: false
     }
   }
@@ -319,32 +355,81 @@ export class FlockSaleDetailsComponent implements OnInit {
         telephoneNumber: this.flockSaleForm?.get("customer.telephoneNumber")?.value,
         totalAmountDue: null,
       },
-      flockSaleDetailsDtoList: this.flockSaleForm.value.flockSaleDetails,
+      flockSaleDetailsDtos: this.flockSaleForm.value.flockSaleDetails,
+      paymentSaveDtos: this.paymentForm.value.payments,
       newCustomer: this.isNewCustomer
     }
   }
 
-  public cancel(): void {
-    // this.findMostRecentSurveyDtoForCage();
+  private checkIfCreditAllowed(): boolean {
+    return (this.selectedCustomer != null && this.selectedCustomer.id != null) || (this.isNewCustomer && this.flockSaleForm?.get("customer.telephoneNumber")?.value != '');
   }
 
-  test(): void {
-    console.log(this.flockSaleForm.value.customer.firstName);
-    this.initialiseFlockSaleSaveDto();
-    this.populateFlockSaleSaveDtoWithFormValues();
-    console.log(this.flockSaleSaveFrontDto);
+  addPaymentFormGroup() {
+    return this.formBuilder.group({
+      amountPaid: new FormControl(0, Validators.compose([
+        Validators.required,
+        Validators.min(0)
+      ])),
+      paymentType: new FormControl('CASH', Validators.compose([
+        Validators.required
+      ])),
+      paymentDeadline: new FormControl(moment(new Date()).startOf('day').format(moment.HTML5_FMT.DATE), Validators.compose([
+        Validators.required
+      ])),
+    })
+  }
+
+  addPayment(): void {
+    if ((this.paymentForm.get('payments') as FormArray).length < 2) {
+      (this.paymentForm.get('payments') as FormArray).push(this.addPaymentFormGroup());
+    }
+  }
+
+  removePayment(paymentGroupIndex: number): void {
+    (this.paymentForm.get('payments') as FormArray).removeAt(paymentGroupIndex);
+  }
+
+  get paymentsFields() {
+    return this.paymentForm ? this.paymentForm.get('payments') as FormArray : null;
+  }
+
+  public checkPaymentLessThanSoldAt(): boolean {
+    let totalAmountPaid = 0;
+    this.paymentForm.get('payments')?.value.forEach((payment: any) => {
+      totalAmountPaid += payment.amountPaid;
+    });
+    if (totalAmountPaid <= this.paymentForm.get('totalPrice')?.value) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public checkPaymentCompleted(): boolean {
+    let totalAmountPaid = 0;
+    this.paymentForm.get('payments')?.value.forEach((payment: any) => {
+      totalAmountPaid += payment.amountPaid;
+    });
+    if (totalAmountPaid === this.paymentForm.get('totalPrice')?.value) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   public save(): void {
     this.utilsService.presentLoading();
     this.initialiseFlockSaleSaveDto();
     this.populateFlockSaleSaveDtoWithFormValues();
+    this.flockSaleSaveFrontDto.paymentSaveDtos?.forEach(payment => {
+      payment.paymentDeadline = moment(payment.paymentDeadline).startOf('day').format(moment.HTML5_FMT.DATE)
+    })
     this.flockSaleApiService.save(this.flockSaleSaveFrontDto).subscribe({
       next: (data: string) => {
         this.reset();
         this.utilsService.dismissLoading();
         this.utilsService.successMsg('Flock sold successfully');
-        // this.router.navigate([`cage/cage-sale-list`])
       },
       error: (error: HttpErrorResponse) => {
         this.utilsService.dismissLoading();
@@ -356,11 +441,53 @@ export class FlockSaleDetailsComponent implements OnInit {
   private reset(): void {
     this.flockSaleForm.reset();
     (this.flockSaleForm.get('flockSaleDetails') as FormArray).clear();
+    this.paymentForm.reset();
+    (this.paymentForm.get('payments') as FormArray).clear();
     this.addFlockSaleDetails();
     this.isNewCustomer = false;
     this.setCustomerNewValue(this.isNewCustomer);
     if (this.searchCustomerCtrl) {
       this.searchCustomerCtrl.setValue(null);
+    }
+  }
+
+  private initialisePaymentFormBuilder(): void {
+    this.paymentForm = this.formBuilder.group({
+      totalPrice: new FormControl({ value: this.totalPrice, disabled: true }, Validators.compose([Validators.required])),
+      payments: this.formBuilder.array([
+        this.addPaymentFormGroup()
+      ])
+    });
+  }
+
+  public openModal(): void {
+    if (!this.checkIfCreditAllowed()) {
+      this.paymentTypes = this.paymentTypes.filter(payment => payment != PaymentType.CREDIT);
+    } else {
+      this.paymentTypes = Object.keys(PaymentType);
+    }
+    this.calculateTotalPrice();
+    this.initialisePaymentFormBuilder();
+    this.isModalOpen = true;
+  }
+
+  public cancel(): void {
+    this.isModalOpen = false;
+    this.modal.dismiss(null, 'cancel');
+  }
+
+  public confirm(): void {
+    this.modal.dismiss(null, 'confirm');
+  }
+
+  public onWillDismiss(event: Event): void {
+    const ev = event as CustomEvent<OverlayEventDetail<string>>;
+    if (ev.detail.role === 'backdrop') {
+      this.isModalOpen = false;
+    }
+    if (ev.detail.role === 'confirm') {
+      this.isModalOpen = false;
+      this.save();
     }
   }
 }

@@ -19,7 +19,11 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
+import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter } from '@angular/material-moment-adapter';
+import { ConstantHelper } from 'src/app/shared/helpers/constant.helper';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+export const MY_FORMATS = ConstantHelper.dateFormat;
 
 @NgModule({
   declarations: [FlockListComponent, FlockDetailsComponent, FlockSaleDetailsComponent, FlockSaleListComponent],
@@ -35,8 +39,16 @@ import { MatButtonModule } from '@angular/material/button';
     MatInputModule,
     MatButtonModule,
     MatFormFieldModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
   ],
-  providers: [FlockApiService, FlockSaleApiService, SurveyApiService, CageApiService, CustomerApiService]
+  providers: [FlockApiService, FlockSaleApiService, SurveyApiService, CageApiService, CustomerApiService,
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
+    },
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }]
 })
 export class FlockModule { }

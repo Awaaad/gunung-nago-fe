@@ -41,6 +41,7 @@ export class HealthStockComponent implements OnInit {
   public errorMsg!: string;
   public minLengthTerm = 1;
   public showHealthSearchBar: boolean = false;
+  private searchSupplierSubscription!: Subscription;
 
   constructor(
     private healthProductApiService: HealthProductApiService,
@@ -64,7 +65,10 @@ export class HealthStockComponent implements OnInit {
 
 
   public searchSupplier(): void {
-    this.searchSupplierCtrl.valueChanges
+    if (this.searchSupplierSubscription) {
+      this.searchSupplierSubscription.unsubscribe();
+    }
+    this.searchSupplierSubscription = this.searchSupplierCtrl.valueChanges
       .pipe(
         filter(res => {
           return res !== null && res.length >= this.minLengthTerm
