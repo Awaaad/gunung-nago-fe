@@ -1,3 +1,206 @@
-<p>
-  sales-invoice-list works!
-</p>
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      <div class="router-links">
+        <div class="title">
+          <img class="header-logo" src='./assets/flaticon/sales-invoice.png'>
+          <h3 class="header-nav-products">Sales Invoice List</h3>
+        </div>
+        <div>
+          <ion-item class="language-selection">
+            <ion-select aria-label="language" interface="popover" placeholder="Select language" [(ngModel)]="language"
+              (ionChange)="ionChangeLanguage($event)">
+              <ion-select-option value="en">English</ion-select-option>
+              <ion-select-option value="id">Indonesian</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </div>
+      </div>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="false" class="ion-padding" [scrollEvents]="true" (ionScroll)="onScroll($event)">
+  <div class="btn-container">
+    <ion-button color="neutral-btn" routerLink="/supplier/supplier-details"><ion-icon
+        name="add"></ion-icon></ion-button>
+  </div>
+  <ion-card>
+    <ion-card-content>
+      <ion-row>
+        <ion-col size-xs="12" size-md="6">
+          <ion-searchbar placeholder="Search by customer name..." type="text" #customerName
+            (ionInput)="searchByCustomerName(customerName.value)"></ion-searchbar>
+        </ion-col>
+        <ion-col size-xs="12" size-md="6">
+          <div class="filters">
+            <div>
+
+            </div>
+            <div>
+              <ion-button class="reset" (click)="reset()">Reset Filters</ion-button>
+            </div>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <div class="mat-elevation-z8 table-responsive">
+      <table mat-table matSort (matSortChange)="sortData($event)" matSortDisableClear="true"
+        [dataSource]="salesInvoices">
+
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="id"> Invoice Number </th>
+          <td mat-cell *matCellDef="let element"> GN{{element.id}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="name"> Customer Name </th>
+          <td mat-cell *matCellDef="let element"> {{element.customerFirstName}} <span *ngIf="element.customerLastName != 'anonymous'">{{element.customerLastName}}</span> </td>
+        </ng-container>
+
+        <ng-container matColumnDef="createdBy">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="createdBy"> Sales Person </th>
+          <td mat-cell *matCellDef="let element"> {{element.createdBy}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="salesInvoiceType">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="salesInvoiceType"> Type </th>
+          <td mat-cell *matCellDef="let element"> {{element.salesInvoiceType}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="createdDate">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="createdDate"> Date Issued </th>
+          <td mat-cell *matCellDef="let element"> {{element.createdDate | date:'dd-MM-yyyy HH:mm'}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="totalPrice">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="totalPrice"> Total Price </th>
+          <td mat-cell *matCellDef="let element"> {{element.totalPrice}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="amountPaid">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="amountPaid"> Amount Paid </th>
+          <td mat-cell *matCellDef="let element">
+            <div *ngFor="let payment of element.paymentDtos">
+              <span *ngIf="payment.paymentType !== 'CREDIT'">
+                <span *ngIf="payment.paymentType == 'CASH'">
+                  <strong>Cash:</strong> {{payment.amountPaid | number :'1.2-2'}}
+                </span>
+                <span *ngIf="payment.paymentType == 'CARD'">
+                  <strong>Card:</strong> {{payment.amountPaid | number :'1.2-2'}}
+                </span>
+                <span *ngIf="payment.paymentType == 'CHEQUE'">
+                  <strong>Cheque:</strong> {{payment.amountPaid | number :'1.2-2'}}
+                </span>
+                <span *ngIf="payment.paymentType == 'Electronic'">
+                  <strong>Electronic:</strong> {{payment.amountPaid | number :'1.2-2'}}
+                </span>
+              </span>
+            </div>
+            <div><strong>Total:</strong> {{getTotalAmountPaid(element.paymentDtos) | number :'1.2-2'}}</div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="amountDue">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="amountDue"> Amount Due </th>
+          <td mat-cell *matCellDef="let element">
+            <div *ngFor="let payment of element.paymentDtos">
+              <span *ngIf="payment.paymentType == 'CREDIT'">
+                <strong>Credit:</strong> {{payment.amountPaid | number :'1.2-2'}}
+                <br>
+                <strong>Deadline:</strong> {{payment.paymentDeadline | date:'dd-MM-yyyy'}}
+              </span>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="edit">
+          <th mat-header-cell *matHeaderCellDef> </th>
+          <td mat-cell *matCellDef="let element">
+            <div class="table-btn">
+              <ion-button color="neutral-btn" class="mr-05" (click)="openModal(element)"><ion-icon
+                  name="create"></ion-icon></ion-button>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+  </ion-card>
+  <ion-infinite-scroll threshold="100px" position="bottom" (ionInfinite)="loadData($event)">
+    <ion-infinite-scroll-content loadingSpinner="crescent" loadingText="Loading more sales invoices...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+
+  <ion-modal (willDismiss)="onWillDismiss($event)" [isOpen]="isModalOpen" cssClass="supplier-modal"
+    backdropDismiss="true">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <div class="title">
+            <img class="header-logo ml-15" src='./assets/flaticon/edit.png'>
+            <h3 class="modal-header-text">Edit Supplier</h3>
+          </div>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content [fullscreen]="false" class="ion-padding">
+        <form [formGroup]="supplierEditForm">
+          <ion-row>
+            <ion-col size-xs="12" size-md="12">
+              <ion-input color="gunung-nago-primary" label="Name*" label-placement="floating" fill="outline" type="text"
+                clear-input="true" formControlName="name" required="true"></ion-input>
+              <div class="error-messages">
+                <ng-container *ngFor="let error of errorMessages.name">
+                  <div class="error-message"
+                    *ngIf="supplierEditForm.get('name')?.hasError(error.type) && (supplierEditForm.get('name')?.dirty || supplierEditForm.get('name')?.touched)">
+                    {{ error.message }}
+                  </div>
+                </ng-container>
+              </div>
+            </ion-col>
+            <ion-col size-xs="12" size-md="12">
+              <ion-input color="gunung-nago-primary" label="Email*" label-placement="floating" fill="outline"
+                type="text" clear-input="true" formControlName="email" required="true"></ion-input>
+              <div class="error-messages">
+                <ng-container *ngFor="let error of errorMessages.email">
+                  <div class="error-message"
+                    *ngIf="supplierEditForm.get('email')?.hasError(error.type) && (supplierEditForm.get('email')?.dirty || supplierEditForm.get('email')?.touched)">
+                    {{ error.message }}
+                  </div>
+                </ng-container>
+              </div>
+            </ion-col>
+            <ion-col size-xs="12" size-md="12">
+              <ion-input color="gunung-nago-primary" label="Address" label-placement="floating" fill="outline"
+                type="text" clear-input="true" formControlName="address"></ion-input>
+            </ion-col>
+            <ion-col size-xs="12" size-md="12">
+              <ion-input color="gunung-nago-primary" label="Telephone Number*" label-placement="floating" fill="outline"
+                type="text" clear-input="true" formControlName="telephoneNumber" required="true"></ion-input>
+              <div class="error-messages">
+                <ng-container *ngFor="let error of errorMessages.telephoneNumber">
+                  <div class="error-message"
+                    *ngIf="supplierEditForm.get('telephoneNumber')?.hasError(error.type) && (supplierEditForm.get('telephoneNumber')?.dirty || supplierEditForm.get('telephoneNumber')?.touched)">
+                    {{ error.message }}
+                  </div>
+                </ng-container>
+              </div>
+            </ion-col>
+          </ion-row>
+        </form>
+        <div class="modal-btn-container ion-text-right">
+          <ion-button class="cancel-btn" (click)="cancel()">Cancel</ion-button>
+          <ion-button color="positive-btn" (click)="confirm()">Save</ion-button>
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+</ion-content>

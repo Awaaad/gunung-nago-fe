@@ -278,6 +278,7 @@ $app-theme: mat.define-light-theme((color: (primary: $app-primary,
   --ion-color-tint: var(--ion-color-gunung-nago-cage-tint);
 }
 
+// health
 :root {
   --ion-color-gunung-nago-health: #831882;
   --ion-color-gunung-nago-health-rgb: 131, 24, 130;
@@ -296,6 +297,24 @@ $app-theme: mat.define-light-theme((color: (primary: $app-primary,
   --ion-color-tint: var(--ion-color-gunung-nago-health-tint);
 }
 
+// sales invoice
+:root {
+  --ion-color-gunung-nago-sales-invoice: #37474f;
+  --ion-color-gunung-nago-sales-invoice-rgb: 55, 71, 79;
+  --ion-color-gunung-nago-sales-invoice-contrast: #ffffff;
+  --ion-color-gunung-nago-sales-invoice-contrast-rgb: 255, 255, 255;
+  --ion-color-gunung-nago-sales-invoice-shade: #303e46;
+  --ion-color-gunung-nago-sales-invoice-tint: #4b5961;
+}
+
+.ion-color-gunung-nago-sales-invoice {
+  --ion-color-base: var(--ion-color-gunung-nago-sales-invoice);
+  --ion-color-base-rgb: var(--ion-color-gunung-nago-sales-invoice-rgb);
+  --ion-color-contrast: var(--ion-color-gunung-nago-sales-invoice-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-gunung-nago-sales-invoice-contrast-rgb);
+  --ion-color-shade: var(--ion-color-gunung-nago-sales-invoice-shade);
+  --ion-color-tint: var(--ion-color-gunung-nago-sales-invoice-tint);
+}
 
 // cages
 // norm 

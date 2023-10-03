@@ -30,7 +30,7 @@
         <ion-col size-xs="12" size-md="6">
           <mat-form-field class="example-full-width" appearance="outline">
             <input matInput placeholder="Search supplier..." [(ngModel)]="selectedSupplier" [matAutocomplete]="auto"
-              [formControl]="searchSupplierCtrl" placeholder="Seach supplier">
+              [formControl]="searchSupplierCtrl" placeholder="Seach supplier...">
             <button *ngIf="selectedSupplier" matSuffix mat-icon-button aria-label="Clear" (click)="clearSelection()">
               <ion-icon name="close-outline"></ion-icon>
             </button>

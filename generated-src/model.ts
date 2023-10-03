@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2023-10-01 10:12:43.
+// Generated using typescript-generator version 3.2.1263 on 2023-10-03 20:04:13.
 
 export class CageDto {
     id!: number;
@@ -34,6 +34,35 @@ export class CustomerSearchCriteriaDto {
     name!: string;
     address!: string;
     telephoneNumber!: number;
+}
+
+export class EggSaleSaveDto {
+    customerDto!: CustomerDto;
+    paymentSaveDtos!: PaymentSaveDto[];
+    goodPiece!: number;
+    goodPricePerPiece!: number;
+    goodTie!: number;
+    goodPricePerTie!: number;
+    goodTray!: number;
+    goodPricePerTray!: number;
+    badPiece!: number;
+    badPricePerPiece!: number;
+    badTie!: number;
+    badPricePerTie!: number;
+    badTray!: number;
+    badPricePerTray!: number;
+    totalEggs!: number;
+    totalPrice!: number;
+    newCustomer!: boolean;
+}
+
+export class EggSaleSaveDtoBuilder {
+}
+
+export class EggStockDto {
+    goodEggs!: number;
+    badEggs!: number;
+    totalEggs!: number;
 }
 
 export class FarmDto {
@@ -236,6 +265,14 @@ export class HealthSurveyStockDto {
     expiryDate!: Date;
 }
 
+export class PaymentDto {
+    id!: number;
+    amountPaid!: number;
+    paymentDeadline!: Date;
+    previousPaymentType!: PaymentType;
+    paymentType!: PaymentType;
+}
+
 export class PaymentSaveDto {
     amountPaid!: number;
     paymentDeadline!: Date;
@@ -281,6 +318,36 @@ export class DailyProductionReportDto {
     eggTray!: number;
     productionRate!: number;
     healthReportDtos!: HealthReportDto[];
+}
+
+export class SalesInvoiceDto {
+    id!: number;
+    salesInvoiceType!: SalesInvoiceType;
+    totalPrice!: number;
+    soldAt!: number;
+    createdBy!: string;
+    createdDate!: Date;
+    customerFirstName!: string;
+    customerLastName!: string;
+    paymentDtos!: PaymentDto[];
+}
+
+export class SalesInvoiceSearchCriteriaDto {
+    customerName!: string;
+    createdBy!: string;
+    dateFrom!: Date;
+    dateTo!: Date;
+    paymentMode!: string;
+    farmId!: number;
+}
+
+export class SalesInvoiceLineDto {
+    id!: number;
+    salesInvoiceId!: number;
+    feedStockId!: number;
+    boxesOrdered!: number;
+    unitsOrdered!: number;
+    totalPrice!: number;
 }
 
 export class AuthenticatedUserDetailsDto {
@@ -397,4 +464,10 @@ export enum PaymentType {
     CARD = 'CARD',
     CHEQUE = 'CHEQUE',
     ELECTRONIC = 'ELECTRONIC',
+}
+
+export enum SalesInvoiceType {
+    FLOCK = 'FLOCK',
+    EGG = 'EGG',
+    FEED = 'FEED',
 }
