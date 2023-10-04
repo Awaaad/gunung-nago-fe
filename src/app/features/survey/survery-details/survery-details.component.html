@@ -93,17 +93,60 @@
         <ion-item-divider>
           <ion-label>{{ 'survey.survey-details.production' | translate }}</ion-label>
         </ion-item-divider>
+        <ion-item-divider>
+          <ion-label>Big Eggs</ion-label>
+        </ion-item-divider>
         <ion-row>
           <ion-col size-xs="12" size-md="3">
             <ion-input color="gunung-nago-survey" label="{{ 'survey.survey-details.tie' | translate }}"
-              label-placement="floating" fill="outline" type="number" min="0" clear-input="true" formControlName="tie"
-              [(ngModel)]="tie" (ngModelChange)="calculateTotalItem()"></ion-input>
+              label-placement="floating" fill="outline" type="number" min="0" clear-input="true"
+              formControlName="bigEggsTie" [(ngModel)]="bigEggsTie" (ngModelChange)="calculateTotalItem()"></ion-input>
           </ion-col>
           <ion-col size-xs="12" size-md="3">
             <ion-input color="gunung-nago-survey" label="{{ 'survey.survey-details.item' | translate }}"
-              label-placement="floating" fill="outline" type="number" min="0" max="299" clear-input="true"
-              formControlName="item" [(ngModel)]="item" (ngModelChange)="calculateTotalItem()"></ion-input>
+              label-placement="floating" fill="outline" type="number" min="0" max="299" maxlength="3" clear-input="true"
+              formControlName="bigEggsItem" [(ngModel)]="bigEggsItem"
+              (ngModelChange)="validateItem($event); calculateTotalItem()"></ion-input>
           </ion-col>
+        </ion-row>
+        <ion-item-divider>
+          <ion-label>Medium Eggs</ion-label>
+        </ion-item-divider>
+        <ion-row>
+          <ion-col size-xs="12" size-md="3">
+            <ion-input color="gunung-nago-survey" label="{{ 'survey.survey-details.tie' | translate }}"
+              label-placement="floating" fill="outline" type="number" min="0" clear-input="true"
+              formControlName="mediumEggsTie" [(ngModel)]="mediumEggsTie"
+              (ngModelChange)="calculateTotalItem()"></ion-input>
+          </ion-col>
+          <ion-col size-xs="12" size-md="3">
+            <ion-input color="gunung-nago-survey" label="{{ 'survey.survey-details.item' | translate }}"
+              label-placement="floating" fill="outline" type="number" min="0" max="299" maxlength="3" clear-input="true"
+              formControlName="mediumEggsItem" [(ngModel)]="mediumEggsItem"
+              (ngModelChange)="validateItem($event); calculateTotalItem()"></ion-input>
+          </ion-col>
+        </ion-row>
+        <ion-item-divider>
+          <ion-label>Small Eggs</ion-label>
+        </ion-item-divider>
+        <ion-row>
+          <ion-col size-xs="12" size-md="3">
+            <ion-input color="gunung-nago-survey" label="{{ 'survey.survey-details.tie' | translate }}"
+              label-placement="floating" fill="outline" type="number" min="0" clear-input="true"
+              formControlName="smallEggsTie" [(ngModel)]="smallEggsTie"
+              (ngModelChange)="calculateTotalItem()"></ion-input>
+          </ion-col>
+          <ion-col size-xs="12" size-md="3">
+            <ion-input color="gunung-nago-survey" label="{{ 'survey.survey-details.item' | translate }}"
+              label-placement="floating" fill="outline" type="number" min="0" max="299" maxlength="3" clear-input="true"
+              formControlName="smallEggsItem" [(ngModel)]="smallEggsItem"
+              (ngModelChange)="validateItem($event); calculateTotalItem()"></ion-input>
+          </ion-col>
+        </ion-row>
+        <ion-item-divider>
+          <ion-label>Bad Eggs</ion-label>
+        </ion-item-divider>
+        <ion-row>
           <ion-col size-xs="12" size-md="3">
             <ion-input color="gunung-nago-survey" label="{{ 'survey.survey-details.broken' | translate }}"
               label-placement="floating" fill="outline" type="number" min="0" clear-input="true"

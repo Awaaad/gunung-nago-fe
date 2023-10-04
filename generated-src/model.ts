@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2023-10-03 20:04:13.
+// Generated using typescript-generator version 3.2.1263 on 2023-10-04 21:23:34.
 
 export class CageDto {
     id!: number;
@@ -37,22 +37,36 @@ export class CustomerSearchCriteriaDto {
 }
 
 export class EggSaleSaveDto {
+    big!: boolean;
+    medium!: boolean;
+    small!: boolean;
+    bad!: boolean;
     customerDto!: CustomerDto;
     paymentSaveDtos!: PaymentSaveDto[];
-    goodPiece!: number;
-    goodPricePerPiece!: number;
-    goodTie!: number;
-    goodPricePerTie!: number;
-    goodTray!: number;
-    goodPricePerTray!: number;
+    bigGoodPiece!: number;
+    bigGoodPricePerPiece!: number;
+    bigGoodTie!: number;
+    bigGoodPricePerTie!: number;
+    bigGoodTray!: number;
+    bigGoodPricePerTray!: number;
+    mediumGoodPiece!: number;
+    mediumGoodPricePerPiece!: number;
+    mediumGoodTie!: number;
+    mediumGoodPricePerTie!: number;
+    mediumGoodTray!: number;
+    mediumGoodPricePerTray!: number;
+    smallGoodPiece!: number;
+    smallGoodPricePerPiece!: number;
+    smallGoodTie!: number;
+    smallGoodPricePerTie!: number;
+    smallGoodTray!: number;
+    smallGoodPricePerTray!: number;
     badPiece!: number;
     badPricePerPiece!: number;
     badTie!: number;
     badPricePerTie!: number;
     badTray!: number;
     badPricePerTray!: number;
-    totalEggs!: number;
-    totalPrice!: number;
     newCustomer!: boolean;
 }
 
@@ -61,6 +75,9 @@ export class EggSaleSaveDtoBuilder {
 
 export class EggStockDto {
     goodEggs!: number;
+    bigEggs!: number;
+    mediumEggs!: number;
+    smallEggs!: number;
     badEggs!: number;
     totalEggs!: number;
 }
@@ -308,6 +325,9 @@ export class DailyProductionReportDto {
     goodEggsNotInTie!: number;
     goodEggsInTray!: number;
     goodEggsNotInTray!: number;
+    bigEggs!: number;
+    mediumEggs!: number;
+    smallEggs!: number;
     badEggsInTray!: number;
     badEggsNotInTray!: number;
     totalEggs!: number;
@@ -418,7 +438,9 @@ export class SurveyDto {
     sterile!: number;
     good!: number;
     badEggs!: number;
-    goodEggs!: number;
+    bigEggs!: number;
+    mediumEggs!: number;
+    smallEggs!: number;
     alive!: number;
     totalSterile!: number;
     comment!: string;

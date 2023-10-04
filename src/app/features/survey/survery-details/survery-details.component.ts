@@ -22,8 +22,12 @@ export class SurveryDetailsComponent implements OnInit {
   public dead: number = 0;
   public sterile: number = 0;
   public remaining: number = 0;
-  public tie: number = 0;
-  public item: number = 0;
+  public bigEggsItem: number = 0;
+  public bigEggsTie: number = 0;
+  public mediumEggsItem: number = 0;
+  public mediumEggsTie: number = 0;
+  public smallEggsItem: number = 0;
+  public smallEggsTie: number = 0;
   public broken: number = 0;
   public totalItem: number = 0;
   public flockStockId!: number;
@@ -88,8 +92,12 @@ export class SurveryDetailsComponent implements OnInit {
       population: new FormControl({ value: this.population, disabled: false }, Validators.compose([])),
       dead: new FormControl({ value: this.dead, disabled: false }, Validators.compose([])),
       sterile: new FormControl({ value: this.sterile, disabled: false }, Validators.compose([])),
-      tie: new FormControl({ value: this.tie, disabled: false }, Validators.compose([])),
-      item: new FormControl({ value: this.item, disabled: false }, Validators.compose([])),
+      bigEggsTie: new FormControl({ value: this.bigEggsTie, disabled: false }, Validators.compose([])),
+      bigEggsItem: new FormControl({ value: this.bigEggsItem, disabled: false }, Validators.compose([])),
+      mediumEggsTie: new FormControl({ value: this.mediumEggsTie, disabled: false }, Validators.compose([])),
+      mediumEggsItem: new FormControl({ value: this.mediumEggsItem, disabled: false }, Validators.compose([])),
+      smallEggsTie: new FormControl({ value: this.smallEggsTie, disabled: false }, Validators.compose([])),
+      smallEggsItem: new FormControl({ value: this.smallEggsItem, disabled: false }, Validators.compose([])),
       broken: new FormControl({ value: this.broken, disabled: false }, Validators.compose([])),
       upDownProduction: new FormControl({ value: '', disabled: false }, Validators.compose([])),
       vaccineMedication: new FormControl({ value: '', disabled: false }, Validators.compose([])),
@@ -183,7 +191,16 @@ export class SurveryDetailsComponent implements OnInit {
   }
 
   public calculateTotalItem() {
-    this.totalItem = (this.tie * 300) + this.item + this.broken;
+    this.totalItem = (this.bigEggsTie * 300) + this.bigEggsItem + (this.mediumEggsTie * 300) + this.mediumEggsItem + (this.smallEggsTie * 300) + this.smallEggsItem + this.broken;
+  }
+
+  public validateItem(event: any) {
+    // if (event > 300) {
+    //   this.item = 300
+    // }
+    // if (event < 0) {
+    //   this.item = 0;
+    // }
   }
 
   private getAllHealthProducts(): void {
@@ -201,15 +218,17 @@ export class SurveryDetailsComponent implements OnInit {
         this.population = surveyDetails.good;
         this.dead = 0;
         this.sterile = 0;
-        this.tie = 0;
-        this.item = 0;
         this.broken = 0;
         this.surveyForm.setValue({
           population: surveyDetails.good,
           dead: this.dead,
           sterile: this.sterile,
-          tie: this.tie,
-          item: this.item,
+          bigEggsTie: this.bigEggsTie,
+          bigEggsItem: this.bigEggsItem,
+          mediumEggsTie: this.mediumEggsTie,
+          mediumEggsItem: this.mediumEggsItem,
+          smallEggsTie: this.smallEggsTie,
+          smallEggsItem: this.smallEggsItem,
           broken: this.broken,
           upDownProduction: '',
           vaccineMedication: '',
@@ -235,16 +254,24 @@ export class SurveryDetailsComponent implements OnInit {
         this.eggStockId = surveyDetails.eggStockId;
         this.dead = surveyDetails.death;
         this.sterile = surveyDetails.sterile;
-        this.tie = Math.floor(surveyDetails.goodEggs / 300);
-        this.item = surveyDetails.goodEggs % 300;
+        this.bigEggsTie = Math.floor(surveyDetails.bigEggs / 300);
+        this.bigEggsItem = surveyDetails.bigEggs % 300;
+        this.mediumEggsTie = Math.floor(surveyDetails.mediumEggs / 300);
+        this.mediumEggsItem = surveyDetails.mediumEggs % 300;
+        this.smallEggsTie = Math.floor(surveyDetails.smallEggs / 300);
+        this.smallEggsItem = surveyDetails.smallEggs % 300;
         this.broken = surveyDetails.badEggs;
 
         this.surveyForm.setValue({
           population: surveyDetails.good + surveyDetails.death + surveyDetails.sterile,
           dead: this.dead,
           sterile: this.sterile,
-          tie: this.tie,
-          item: this.item,
+          bigEggsTie: this.bigEggsTie,
+          bigEggsItem: this.bigEggsItem,
+          mediumEggsTie: this.mediumEggsTie,
+          mediumEggsItem: this.mediumEggsItem,
+          smallEggsTie: this.smallEggsTie,
+          smallEggsItem: this.smallEggsItem,
           broken: this.broken,
           upDownProduction: '',
           vaccineMedication: '',
@@ -312,7 +339,9 @@ export class SurveryDetailsComponent implements OnInit {
       sterile: null,
       good: null,
       badEggs: null,
-      goodEggs: null,
+      bigEggs: null,
+      mediumEggs: null,
+      smallEggs: null,
       healthSurveyDtos: [],
       feedSurveyDtos: [],
       comment: null
@@ -334,7 +363,9 @@ export class SurveryDetailsComponent implements OnInit {
       sterile: this.surveyForm.value.sterile,
       good: this.remaining,
       badEggs: this.broken,
-      goodEggs: (this.tie * 300) + this.item,
+      bigEggs: (this.bigEggsTie * 300) + this.surveyForm.value.bigEggsItem,
+      mediumEggs: (this.mediumEggsTie * 300) + this.surveyForm.value.mediumEggsItem,
+      smallEggs: (this.smallEggsTie * 300) + this.surveyForm.value.smallEggsItem,
       healthSurveyDtos: this.selectedHealthProducts,
       feedSurveyDtos: this.feedSurvey,
       comment: this.surveyForm.value.comment

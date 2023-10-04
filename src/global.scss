@@ -164,6 +164,10 @@ ion-card {
     margin-left: 0.5em;
 }
 
+.ml-1 {
+    margin-left: 1em;
+}
+
 .ml-15 {
     margin-left: 1.5em;
 }
@@ -226,4 +230,13 @@ ion-card {
 
 strong {
     font-weight: 500;
+}
+
+.divider-wrapper {
+    display: flex;
+}
+
+.divider-text {
+    width: 100%;
+    margin-left: 15px;
 }

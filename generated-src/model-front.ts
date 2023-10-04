@@ -1,4 +1,4 @@
-import { AquisitionType, CageCategory, CustomerDto, FeedSurveyDto, FlockCategory, FlockSaleDetailsDto, HealthSurveyDto, PaymentSaveDto, PaymentType } from "./model";
+import { AquisitionType, CageCategory, FeedSurveyDto, FlockCategory, FlockSaleDetailsDto, HealthSurveyDto, PaymentType } from "./model";
 
 export class PageResult<T> {
     public content!: Array<T>;
@@ -26,7 +26,9 @@ export class SurveyFrontDto {
     sterile!: number | null | undefined;
     good!: number | null | undefined;
     badEggs!: number | null | undefined;
-    goodEggs!: number | null | undefined;
+    bigEggs!: number | null | undefined;
+    mediumEggs!: number | null | undefined;
+    smallEggs!: number | null | undefined;
     healthSurveyDtos: HealthSurveyDto[] | null | undefined;
     feedSurveyDtos: FeedSurveyDto[] | null | undefined;
     comment: string | null | undefined;
@@ -51,6 +53,40 @@ export class FlockSaleSaveFrontDto {
     flockSaleDetailsDtos!: FlockSaleDetailsDto[] | [] | null | undefined;
     paymentSaveDtos!: PaymentSaveFrontDto[] | [] | null | undefined;
     newCustomer!: boolean | null | undefined;
+}
+
+export class EggSaleSaveFrontDto {
+    customerDto!: CustomerFrontDto | null | undefined;
+    paymentSaveDtos!: PaymentSaveFrontDto[] | [] | null | undefined;
+    bigGoodPiece!: number | null | undefined;
+    bigGoodPricePerPiece!: number | null | undefined;
+    bigGoodTie!: number | null | undefined;
+    bigGoodPricePerTie!: number | null | undefined;
+    bigGoodTray!: number | null | undefined;
+    bigGoodPricePerTray!: number | null | undefined;
+    mediumGoodPiece!: number | null | undefined;
+    mediumGoodPricePerPiece!: number | null | undefined;
+    mediumGoodTie!: number | null | undefined;
+    mediumGoodPricePerTie!: number | null | undefined;
+    mediumGoodTray!: number | null | undefined;
+    mediumGoodPricePerTray!: number | null | undefined;
+    smallGoodPiece!: number | null | undefined;
+    smallGoodPricePerPiece!: number | null | undefined;
+    smallGoodTie!: number | null | undefined;
+    smallGoodPricePerTie!: number | null | undefined;
+    smallGoodTray!: number | null | undefined;
+    smallGoodPricePerTray!: number;
+    badPiece!: number | null | undefined;
+    badPricePerPiece!: number | null | undefined;
+    badTie!: number | null | undefined;
+    badPricePerTie!: number | null | undefined;
+    badTray!: number | null | undefined;
+    badPricePerTray!: number | null | undefined;
+    newCustomer!: boolean | null | undefined;
+    big: boolean | null | undefined;
+    medium: boolean | null | undefined;
+    small: boolean | null | undefined;
+    bad: boolean | null | undefined;
 }
 
 export class PaymentSaveFrontDto {
