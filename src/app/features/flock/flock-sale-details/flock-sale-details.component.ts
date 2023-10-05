@@ -437,11 +437,13 @@ export class FlockSaleDetailsComponent implements OnInit {
     });
   }
 
-  private reset(): void {
+  public reset(): void {
     this.flockSaleForm.reset();
     (this.flockSaleForm.get('flockSaleDetails') as FormArray).clear();
-    this.paymentForm.reset();
-    (this.paymentForm.get('payments') as FormArray).clear();
+    if (this.paymentForm) {
+      this.paymentForm.reset();
+      (this.paymentForm.get('payments') as FormArray).clear();
+    }
     this.addFlockSaleDetails();
     this.isNewCustomer = false;
     this.setCustomerNewValue(this.isNewCustomer);

@@ -9,6 +9,7 @@ import { Subscription, debounceTime, distinctUntilChanged, filter, finalize, swi
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormControl } from '@angular/forms';
 import { SupplierApiService } from 'src/app/shared/apis/supplier.api.service';
+import { MaskitoElementPredicateAsync, MaskitoOptions } from '@maskito/core';
 
 
 @Component({
@@ -19,7 +20,7 @@ import { SupplierApiService } from 'src/app/shared/apis/supplier.api.service';
 export class FeedStockComponent implements OnInit {
   public language = "en";
   public displayedColumns: string[] = ['name', 'feedCategory', 'recommendedWeight'];
-  public displayedColumnsStock: string[] = ['name', 'feedCategory', 'weight', 'price', 'bags', 'remove'];
+  public displayedColumnsStock: string[] = ['name', 'feedCategory', 'weight', 'bags', 'bonus', 'wholesalePrice', 'price', 'discount', 'expiryDate', 'tax', 'remove'];
   public feeds = new MatTableDataSource<FeedDto>;
   public feedsInStockTable = new MatTableDataSource<FeedStockSaveDto>;
   private infiniteFeeds: FeedDto[] = [];
@@ -27,6 +28,7 @@ export class FeedStockComponent implements OnInit {
   public feedsInStock: FeedStockSaveDto[] = [];
   private page: number = 0;
   private size: number = 20;
+  public subTotal = 0;
   public sortOrder: string = 'asc';
   public sortBy: string = 'name';
   public feedName: string = '';
@@ -43,6 +45,8 @@ export class FeedStockComponent implements OnInit {
   public minLengthTerm = 1;
   public showFeedSearchBar: boolean = false;
   private searchSupplierSubscription!: Subscription;
+  readonly predicate: MaskitoElementPredicateAsync = async (el) => (el as HTMLIonInputElement).getInputElement();
+  readonly maskitoOptions: MaskitoOptions = { mask: [/\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, '-', /\d/, /\d/] };
 
   constructor(
     private feedApiService: FeedApiService,
@@ -189,9 +193,16 @@ export class FeedStockComponent implements OnInit {
   }
 
   public save(): void {
+    const feedPurchaseDto = {
+      invoiceNumber: 12345,
+      supplierId: this.selectedSupplier.id,
+      discount: null,
+      feedStockDtos: this.feedsInStockTable.data
+    }
     this.utilsService.presentLoading();
-    this.feedStockApiService.save(this.feedsInStockTable.data).subscribe({
+    this.feedStockApiService.save(feedPurchaseDto).subscribe({
       next: (data: string) => {
+        this.subTotal = 0;
         this.reset();
         this.utilsService.dismissLoading();
         this.utilsService.successMsg('Feed stock updated successfully');
@@ -209,5 +220,35 @@ export class FeedStockComponent implements OnInit {
     this.feedsInStockTable = new MatTableDataSource<FeedStockSaveDto>(this.feedsInStock);
     this.infiniteFeeds = [];
     this.feeds = new MatTableDataSource<FeedDto>(this.infiniteFeeds);
+  }
+
+  public calculateInvoice() {
+    this.subTotal = 0;
+    this.feedsInStockTable.data.forEach((product, index) => {
+      if (this.feedsInStockTable.data[index].bonusBagsReceived && this.feedsInStockTable.data[index].tax && this.feedsInStockTable.data[index].discount) {
+        this.subTotal = this.subTotal + (((this.feedsInStockTable.data[index].bagsReceived - this.feedsInStockTable.data[index].bonusBagsReceived) * (this.feedsInStockTable.data[index].wholesalePrice * 1.15)) - ((this.feedsInStockTable.data[index].wholesalePrice * 1.15) * (this.feedsInStockTable.data[index].discount / 100)));
+
+      } else if (this.feedsInStockTable.data[index].bonusBagsReceived && this.feedsInStockTable.data[index].tax) {
+        this.subTotal = this.subTotal + (this.feedsInStockTable.data[index].bagsReceived - this.feedsInStockTable.data[index].bonusBagsReceived) * (this.feedsInStockTable.data[index].wholesalePrice * 1.15);
+
+      } else if (this.feedsInStockTable.data[index].tax && this.feedsInStockTable.data[index].discount) {
+        this.subTotal = this.subTotal + (((this.feedsInStockTable.data[index].bagsReceived) * (this.feedsInStockTable.data[index].wholesalePrice * 1.15)) - ((this.feedsInStockTable.data[index].wholesalePrice * 1.15) * (this.feedsInStockTable.data[index].discount / 100)));
+
+      } else if (this.feedsInStockTable.data[index].bonusBagsReceived && this.feedsInStockTable.data[index].discount) {
+        this.subTotal = this.subTotal + (this.feedsInStockTable.data[index].bagsReceived - this.feedsInStockTable.data[index].bonusBagsReceived) * (this.feedsInStockTable.data[index].wholesalePrice * ((100 - this.feedsInStockTable.data[index].discount) / 100));
+
+      } else if (this.feedsInStockTable.data[index].bonusBagsReceived) {
+        this.subTotal = this.subTotal + (this.feedsInStockTable.data[index].bagsReceived - this.feedsInStockTable.data[index].bonusBagsReceived) * this.feedsInStockTable.data[index].wholesalePrice;
+
+      } else if (this.feedsInStockTable.data[index].tax) {
+        this.subTotal = this.subTotal + (this.feedsInStockTable.data[index].bagsReceived) * (this.feedsInStockTable.data[index].wholesalePrice * 1.15);
+
+      } else if (this.feedsInStockTable.data[index].discount) {
+        this.subTotal = this.subTotal + (this.feedsInStockTable.data[index].bagsReceived) * (this.feedsInStockTable.data[index].wholesalePrice * ((100 - this.feedsInStockTable.data[index].discount) / 100));
+
+      } else {
+        this.subTotal = this.subTotal + (this.feedsInStockTable.data[index].bagsReceived) * this.feedsInStockTable.data[index].wholesalePrice;
+      }
+    });
   }
 }

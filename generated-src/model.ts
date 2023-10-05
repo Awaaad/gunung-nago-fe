@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2023-10-04 21:23:34.
+// Generated using typescript-generator version 3.2.1263 on 2023-10-05 23:03:21.
 
 export class CageDto {
     id!: number;
@@ -133,6 +133,7 @@ export class FeedStockSaveDto {
     wholesalePrice!: number;
     pricePerBag!: number;
     discount!: number;
+    tax!: boolean;
     weight!: number;
     feedId!: number;
     name!: string;
@@ -257,6 +258,7 @@ export class HealthProductStockSaveDto {
     pricePerBox!: number;
     expiryDate!: Date;
     discount!: number;
+    tax!: boolean;
 }
 
 export class HealthReportDto {
@@ -309,6 +311,25 @@ export class HealthProductPurchaseDto {
     discount!: number;
     supplierId!: number;
     healthProductStockDtos!: HealthProductStockSaveDto[];
+}
+
+export class PurchaseInvoiceDto {
+    id!: number;
+    purchaseInvoiceType!: PurchaseInvoiceType;
+    totalPrice!: number;
+    createdBy!: string;
+    createdDate!: Date;
+    supplierName!: string;
+    number!: string;
+    discount!: number;
+}
+
+export class PurchaseInvoiceSearchCriteriaDto {
+    supplierName!: string;
+    createdBy!: string;
+    dateFrom!: Date;
+    dateTo!: Date;
+    farmId!: number;
 }
 
 export class DailyProductionReportDto {
@@ -486,6 +507,12 @@ export enum PaymentType {
     CARD = 'CARD',
     CHEQUE = 'CHEQUE',
     ELECTRONIC = 'ELECTRONIC',
+}
+
+export enum PurchaseInvoiceType {
+    FLOCK = 'FLOCK',
+    FEED = 'FEED',
+    HEALTH_PRODUCT = 'HEALTH_PRODUCT',
 }
 
 export enum SalesInvoiceType {

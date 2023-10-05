@@ -209,7 +209,7 @@
         <ion-item-divider>
           <ion-label>{{ 'survey.survey-details.vaccine-medication' | translate }}</ion-label>
         </ion-item-divider>
-        <mat-form-field class="example-full-width" appearance="outline">
+        <mat-form-field class="autocomplete-full-width" appearance="outline">
           <input matInput placeholder="Search health product..." [(ngModel)]="selectedHealthProduct"
             [matAutocomplete]="auto" [formControl]="searchHealthProductCtrl" placeholder="Seach health product">
           <button *ngIf="selectedHealthProduct" matSuffix mat-icon-button aria-label="Clear" (click)="clearSelection()">

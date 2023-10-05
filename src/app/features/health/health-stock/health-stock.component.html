@@ -28,7 +28,7 @@
     <ion-card-content>
       <ion-row>
         <ion-col size-xs="12" size-md="6">
-          <mat-form-field class="example-full-width" appearance="outline">
+          <mat-form-field class="autocomplete-full-width" appearance="outline">
             <input matInput placeholder="Search supplier..." [(ngModel)]="selectedSupplier" [matAutocomplete]="auto"
               [formControl]="searchSupplierCtrl" placeholder="Seach supplier...">
             <button *ngIf="selectedSupplier" matSuffix mat-icon-button aria-label="Clear" (click)="clearSelection()">
@@ -56,7 +56,19 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-card *ngIf="showHealthProductTable">
+
+  <div class="divider-wrapper" *ngIf="showHealthProductTable">
+    <div>
+      <img class="divider-health-product-img" src='./assets/flaticon/health-products.png'>
+    </div>
+    <div class="divider-text">
+      <ion-item-divider class="stock-divider">
+        <ion-label>Health Products</ion-label>
+      </ion-item-divider>
+    </div>
+  </div>
+
+  <ion-card *ngIf="showHealthProductTable" class="mb-4">
     <div class="mat-elevation-z8 table-responsive">
       <table mat-table [dataSource]="healthProducts">
 
@@ -90,9 +102,20 @@
     </div>
   </ion-card>
 
-  <ion-item-divider class="stock-divider">
+  <!-- <ion-item-divider class="stock-divider">
     <ion-label color="ion-color-gunung-nago-report">Stock</ion-label>
-  </ion-item-divider>
+  </ion-item-divider> -->
+
+  <div class="divider-wrapper">
+    <div>
+      <img class="divider-stock-img" src='./assets/flaticon/stock.png'>
+    </div>
+    <div class="divider-text">
+      <ion-item-divider class="stock-divider">
+        <ion-label>Stock</ion-label>
+      </ion-item-divider>
+    </div>
+  </div>
 
   <ion-card>
     <div class="mat-elevation-z8 table-responsive">
@@ -103,33 +126,67 @@
           <td mat-cell *matCellDef="let element"> {{element.name}} </td>
         </ng-container>
 
+        <ng-container matColumnDef="healthType">
+          <th mat-header-cell *matHeaderCellDef> Health Type </th>
+          <td mat-cell *matCellDef="let element"> {{element.healthType}} </td>
+        </ng-container>
+
+
         <ng-container matColumnDef="boxesReceived">
           <th mat-header-cell *matHeaderCellDef> Quantity</th>
           <td mat-cell *matCellDef="let element">
             <ion-input color="gunung-nago-primary" type="text" clear-input="true" required="true"
-              [(ngModel)]="element.boxesReceived"></ion-input>
+              [(ngModel)]="element.boxesReceived" (ngModelChange)="calculateInvoice()"></ion-input>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="bonus">
+          <th mat-header-cell *matHeaderCellDef> Bonus Quantity</th>
+          <td mat-cell *matCellDef="let element">
+            <ion-input color="gunung-nago-primary" type="text" clear-input="true" required="true"
+              [(ngModel)]="element.bonusBoxesReceived" (ngModelChange)="calculateInvoice()"></ion-input>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="wholesalePrice">
+          <th mat-header-cell *matHeaderCellDef> Wholesale / Buying Price </th>
+          <td mat-cell *matCellDef="let element">
+            <ion-input color="gunung-nago-primary" type="text" clear-input="true" required="true"
+              [(ngModel)]="element.wholesalePrice" (ngModelChange)="calculateInvoice()"></ion-input>
           </td>
         </ng-container>
 
         <ng-container matColumnDef="price">
-          <th mat-header-cell *matHeaderCellDef> Price </th>
+          <th mat-header-cell *matHeaderCellDef> Retail Price </th>
           <td mat-cell *matCellDef="let element">
             <ion-input color="gunung-nago-primary" type="text" clear-input="true" required="true"
-              [(ngModel)]="element.pricePerBox"></ion-input>
+              [(ngModel)]="element.pricePerBox" (ngModelChange)="calculateInvoice()"></ion-input>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="discount">
+          <th mat-header-cell *matHeaderCellDef> Discount </th>
+          <td mat-cell *matCellDef="let element">
+            <ion-input color="gunung-nago-primary" type="text" clear-input="true" required="true"
+              [(ngModel)]="element.discount" (ngModelChange)="calculateInvoice()"></ion-input>
           </td>
         </ng-container>
 
         <ng-container matColumnDef="expiryDate">
           <th mat-header-cell *matHeaderCellDef> Expiry date </th>
           <td mat-cell *matCellDef="let element">
-            <ion-input color="gunung-nago-primary" type="text" clear-input="true"
-              [(ngModel)]="element.expiryDate"></ion-input>
+            <ion-input color="gunung-nago-primary" type="text" clear-input="true" [(ngModel)]="element.expiryDate"
+              placeholder="YYYY-MM-DD" type="text" [maskito]="maskitoOptions" [maskitoElement]="predicate"
+              (ngModelChange)="calculateInvoice()"></ion-input>
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="healthType">
-          <th mat-header-cell *matHeaderCellDef> Health Type </th>
-          <td mat-cell *matCellDef="let element"> {{element.healthType}} </td>
+        <ng-container matColumnDef="tax">
+          <th mat-header-cell *matHeaderCellDef> Tax </th>
+          <td mat-cell *matCellDef="let element">
+            <ion-toggle class="toggle" value="15" [(ngModel)]="element.tax" color="danger"
+              (ngModelChange)="calculateInvoice()"></ion-toggle>
+          </td>
         </ng-container>
 
         <ng-container matColumnDef="remove">
@@ -152,3 +209,5 @@
     <ion-button color="positive-btn" (click)="save()">Save</ion-button>
   </div>
 </ion-content>
+
+{{subTotal}}

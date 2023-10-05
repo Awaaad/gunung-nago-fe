@@ -45,8 +45,8 @@
                 </ion-col>
               </ion-row>
               <ion-row *ngIf="!isNewCustomer">
-                <ion-col size="3">
-                  <mat-form-field class="example-full-width" appearance="outline">
+                <ion-col size="12">
+                  <mat-form-field class="autocomplete-full-width" appearance="outline">
                     <input matInput placeholder="Search customer..." [(ngModel)]="selectedCustomer"
                       [matAutocomplete]="auto" [formControl]="searchCustomerCtrl" placeholder="Seach customer...">
                     <button *ngIf="selectedCustomer" matSuffix mat-icon-button aria-label="Clear"
@@ -208,20 +208,20 @@
             </ion-item-divider>
             <ion-list>
               <ion-item>
-                <ion-checkbox justify="space-between" formControlName="big" [(ngModel)]="big"
-                  color="positive-btn" (ionChange)="bigCheckboxChange($event)">Big</ion-checkbox>
+                <ion-checkbox justify="space-between" formControlName="big" [(ngModel)]="big" color="positive-btn"
+                  (ionChange)="bigCheckboxChange($event)">Big</ion-checkbox>
               </ion-item>
               <ion-item>
-                <ion-checkbox justify="space-between" formControlName="medium" [(ngModel)]="medium"
-                  color="positive-btn" (ionChange)="mediumCheckboxChange($event)">Medium</ion-checkbox>
+                <ion-checkbox justify="space-between" formControlName="medium" [(ngModel)]="medium" color="positive-btn"
+                  (ionChange)="mediumCheckboxChange($event)">Medium</ion-checkbox>
               </ion-item>
               <ion-item>
-                <ion-checkbox justify="space-between" formControlName="small" [(ngModel)]="small"
-                  color="positive-btn" (ionChange)="smallCheckboxChange($event)">Small</ion-checkbox>
+                <ion-checkbox justify="space-between" formControlName="small" [(ngModel)]="small" color="positive-btn"
+                  (ionChange)="smallCheckboxChange($event)">Small</ion-checkbox>
               </ion-item>
               <ion-item class="bad-checkbox-item">
-                <ion-checkbox justify="space-between" formControlName="bad" [(ngModel)]="bad"
-                  color="positive-btn" (ionChange)="badCheckboxChange($event)">Bad</ion-checkbox>
+                <ion-checkbox justify="space-between" formControlName="bad" [(ngModel)]="bad" color="positive-btn"
+                  (ionChange)="badCheckboxChange($event)">Bad</ion-checkbox>
               </ion-item>
             </ion-list>
           </ion-card-content>
@@ -269,7 +269,6 @@
                 </div>
                 <img class="eggs" src='./assets/flaticon/bad-eggs.png'>
                 <div class="egg-count">
-                  <strong>{{eggStock.badEggs}}</strong>
                   <strong>{{eggStock.badEggs - (badPiece + (badTray * 30) + (badTie * 300))}}</strong>
                 </div>
               </div>
@@ -899,7 +898,7 @@
 
               <ion-row *ngIf="payment.get('paymentType')?.value === 'CREDIT'">
                 <ion-col size="6">
-                  <mat-form-field class="example-full-width" appearance="outline">
+                  <mat-form-field class="date-full-width" appearance="outline">
                     <mat-label>Payment Deadline</mat-label>
                     <input matInput [matDatepicker]="picker" [min]="today" formControlName="paymentDeadline">
                     <mat-hint>DD/MM/YYYY</mat-hint>

@@ -26,11 +26,13 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
+import { MaskitoModule } from '@maskito/angular';
 
 
 @NgModule({
   declarations: [FeedDetailsComponent, FeedListComponent, FeedStockComponent, FeedAllocationComponent],
   imports: [
+    MaskitoModule,
     CommonModule,
     FeedRoutingModule,
     IonicModule,
