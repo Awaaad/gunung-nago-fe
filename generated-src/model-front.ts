@@ -1,4 +1,4 @@
-import { AquisitionType, CageCategory, FeedSurveyDto, FlockCategory, FlockSaleDetailsDto, HealthSurveyDto, PaymentType } from "./model";
+import { AquisitionType, CageCategory, FeedSurveyDto, FlockCategory, FlockSaleDetailsDto, HealthSurveyDto, PaymentType, PurchaseInvoiceFeedDetailsDto, PurchaseInvoiceHealthProductDetailsDto, PurchaseInvoiceType } from "./model";
 
 export class PageResult<T> {
     public content!: Array<T>;
@@ -104,4 +104,32 @@ export class CustomerFrontDto {
     address!: string | null | undefined | any;
     telephoneNumber!: number | null | undefined | any;
     totalAmountDue!: number | null | undefined | any;
+}
+
+export class FeedPurchaseInvoiceDetailsFrontDto {
+    id!: number | null | undefined | any;
+    number!: string | null | undefined | any;
+    supplierName!: string | null | undefined | any;
+    supplierAddress!: string | null | undefined | any;
+    supplierTelephoneNumber!: number | null | undefined | any;
+    createdBy!: string | null | undefined | any;
+    createdDate!: Date | null | undefined | any;
+    purchaseInvoiceType!: PurchaseInvoiceType | null | undefined | any;
+    discount!: number | null | undefined | any;
+    totalPrice!: number | null | undefined | any;
+    purchaseInvoiceFeedDetailsDtos!: PurchaseInvoiceFeedDetailsDto[] | [] | null | undefined;
+}
+
+export class HealthPurchaseInvoiceDetailsFrontDto {
+    id!: number | null | undefined | any;
+    number!: string | null | undefined | any;
+    supplierName!: string | null | undefined | any;
+    supplierAddress!: string | null | undefined | any;
+    supplierTelephoneNumber!: number | null | undefined | any;
+    createdBy!: string | null | undefined | any;
+    createdDate!: Date | null | undefined | any;
+    purchaseInvoiceType!: PurchaseInvoiceType | null | undefined | any;
+    discount!: number | null | undefined | any;
+    totalPrice!: number | null | undefined | any;
+    purchaseInvoiceHealthProductDetailsDtos!: PurchaseInvoiceHealthProductDetailsDto[] | [] | null | undefined;
 }

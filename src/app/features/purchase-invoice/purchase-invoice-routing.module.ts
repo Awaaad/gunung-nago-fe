@@ -9,7 +9,7 @@ const routes: Routes = [
     component: PurchaseInvoiceListComponent
   },
   {
-    path: 'purchase-invoice-details',
+    path: 'purchase-invoice-details/:type/:purchaseInvoiceId',
     component: PurchaseInvoiceDetailsComponent
   },
 ];

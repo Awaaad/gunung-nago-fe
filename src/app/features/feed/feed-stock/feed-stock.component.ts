@@ -226,13 +226,13 @@ export class FeedStockComponent implements OnInit {
     this.subTotal = 0;
     this.feedsInStockTable.data.forEach((product, index) => {
       if (this.feedsInStockTable.data[index].bonusBagsReceived && this.feedsInStockTable.data[index].tax && this.feedsInStockTable.data[index].discount) {
-        this.subTotal = this.subTotal + (((this.feedsInStockTable.data[index].bagsReceived - this.feedsInStockTable.data[index].bonusBagsReceived) * (this.feedsInStockTable.data[index].wholesalePrice * 1.15)) - ((this.feedsInStockTable.data[index].wholesalePrice * 1.15) * (this.feedsInStockTable.data[index].discount / 100)));
+        this.subTotal = this.subTotal + (((this.feedsInStockTable.data[index].bagsReceived - this.feedsInStockTable.data[index].bonusBagsReceived) * (this.feedsInStockTable.data[index].wholesalePrice * ((this.feedsInStockTable.data[index].tax + 100)/100))) - ((this.feedsInStockTable.data[index].wholesalePrice * ((this.feedsInStockTable.data[index].tax + 100)/100)) * (this.feedsInStockTable.data[index].discount / 100)));
 
       } else if (this.feedsInStockTable.data[index].bonusBagsReceived && this.feedsInStockTable.data[index].tax) {
-        this.subTotal = this.subTotal + (this.feedsInStockTable.data[index].bagsReceived - this.feedsInStockTable.data[index].bonusBagsReceived) * (this.feedsInStockTable.data[index].wholesalePrice * 1.15);
+        this.subTotal = this.subTotal + (this.feedsInStockTable.data[index].bagsReceived - this.feedsInStockTable.data[index].bonusBagsReceived) * (this.feedsInStockTable.data[index].wholesalePrice * ((this.feedsInStockTable.data[index].tax + 100)/100));
 
       } else if (this.feedsInStockTable.data[index].tax && this.feedsInStockTable.data[index].discount) {
-        this.subTotal = this.subTotal + (((this.feedsInStockTable.data[index].bagsReceived) * (this.feedsInStockTable.data[index].wholesalePrice * 1.15)) - ((this.feedsInStockTable.data[index].wholesalePrice * 1.15) * (this.feedsInStockTable.data[index].discount / 100)));
+        this.subTotal = this.subTotal + (((this.feedsInStockTable.data[index].bagsReceived) * (this.feedsInStockTable.data[index].wholesalePrice * ((this.feedsInStockTable.data[index].tax + 100)/100))) - ((this.feedsInStockTable.data[index].wholesalePrice * ((this.feedsInStockTable.data[index].tax + 100)/100)) * (this.feedsInStockTable.data[index].discount / 100)));
 
       } else if (this.feedsInStockTable.data[index].bonusBagsReceived && this.feedsInStockTable.data[index].discount) {
         this.subTotal = this.subTotal + (this.feedsInStockTable.data[index].bagsReceived - this.feedsInStockTable.data[index].bonusBagsReceived) * (this.feedsInStockTable.data[index].wholesalePrice * ((100 - this.feedsInStockTable.data[index].discount) / 100));
@@ -241,7 +241,7 @@ export class FeedStockComponent implements OnInit {
         this.subTotal = this.subTotal + (this.feedsInStockTable.data[index].bagsReceived - this.feedsInStockTable.data[index].bonusBagsReceived) * this.feedsInStockTable.data[index].wholesalePrice;
 
       } else if (this.feedsInStockTable.data[index].tax) {
-        this.subTotal = this.subTotal + (this.feedsInStockTable.data[index].bagsReceived) * (this.feedsInStockTable.data[index].wholesalePrice * 1.15);
+        this.subTotal = this.subTotal + (this.feedsInStockTable.data[index].bagsReceived) * (this.feedsInStockTable.data[index].wholesalePrice * ((this.feedsInStockTable.data[index].tax + 100)/100));
 
       } else if (this.feedsInStockTable.data[index].discount) {
         this.subTotal = this.subTotal + (this.feedsInStockTable.data[index].bagsReceived) * (this.feedsInStockTable.data[index].wholesalePrice * ((100 - this.feedsInStockTable.data[index].discount) / 100));

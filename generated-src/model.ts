@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2023-10-05 23:03:21.
+// Generated using typescript-generator version 3.2.1263 on 2023-10-07 00:18:53.
 
 export class CageDto {
     id!: number;
@@ -133,7 +133,7 @@ export class FeedStockSaveDto {
     wholesalePrice!: number;
     pricePerBag!: number;
     discount!: number;
-    tax!: boolean;
+    tax!: number;
     weight!: number;
     feedId!: number;
     name!: string;
@@ -258,7 +258,7 @@ export class HealthProductStockSaveDto {
     pricePerBox!: number;
     expiryDate!: Date;
     discount!: number;
-    tax!: boolean;
+    tax!: number;
 }
 
 export class HealthReportDto {
@@ -313,6 +313,34 @@ export class HealthProductPurchaseDto {
     healthProductStockDtos!: HealthProductStockSaveDto[];
 }
 
+export class FeedPurchaseInvoiceDetailsDto {
+    id!: number;
+    number!: string;
+    supplierName!: string;
+    supplierAddress!: string;
+    supplierTelephoneNumber!: number;
+    createdBy!: string;
+    createdDate!: Date;
+    purchaseInvoiceType!: PurchaseInvoiceType;
+    discount!: number;
+    totalPrice!: number;
+    purchaseInvoiceFeedDetailsDtos!: PurchaseInvoiceFeedDetailsDto[];
+}
+
+export class HealthPurchaseInvoiceDetailsDto {
+    id!: number;
+    number!: string;
+    supplierName!: string;
+    supplierAddress!: string;
+    supplierTelephoneNumber!: number;
+    createdBy!: string;
+    createdDate!: Date;
+    purchaseInvoiceType!: PurchaseInvoiceType;
+    discount!: number;
+    totalPrice!: number;
+    purchaseInvoiceHealthProductDetailsDtos!: PurchaseInvoiceHealthProductDetailsDto[];
+}
+
 export class PurchaseInvoiceDto {
     id!: number;
     purchaseInvoiceType!: PurchaseInvoiceType;
@@ -324,7 +352,35 @@ export class PurchaseInvoiceDto {
     discount!: number;
 }
 
+export class PurchaseInvoiceFeedDetailsDto {
+    feedId!: number;
+    feedName!: string;
+    feedCategory!: FeedCategory;
+    weight!: number;
+    unitsPerBox!: number;
+    boxesReceived!: number;
+    bonusBoxesReceived!: number;
+    wholesalePrice!: number;
+    pricePerBox!: number;
+    tax!: number;
+    discount!: number;
+}
+
+export class PurchaseInvoiceHealthProductDetailsDto {
+    healthProductId!: number;
+    healthProductName!: string;
+    healthType!: HealthType;
+    boxesReceived!: number;
+    bonusBoxesReceived!: number;
+    wholesalePrice!: number;
+    pricePerBox!: number;
+    tax!: number;
+    discount!: number;
+    expiryDate!: Date;
+}
+
 export class PurchaseInvoiceSearchCriteriaDto {
+    invoiceNumber!: string;
     supplierName!: string;
     createdBy!: string;
     dateFrom!: Date;

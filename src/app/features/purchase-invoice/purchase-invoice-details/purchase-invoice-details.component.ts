@@ -1,14 +1,80 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
+import { PurchaseInvoiceType } from 'generated-src/model';
+import { FeedPurchaseInvoiceDetailsFrontDto, HealthPurchaseInvoiceDetailsFrontDto } from 'generated-src/model-front';
+import { PurchaseInvoiceApiService } from 'src/app/shared/apis/purchase-invoice.api.service';
 
 @Component({
   selector: 'app-purchase-invoice-details',
   templateUrl: './purchase-invoice-details.component.html',
   styleUrls: ['./purchase-invoice-details.component.scss'],
 })
-export class PurchaseInvoiceDetailsComponent  implements OnInit {
+export class PurchaseInvoiceDetailsComponent implements OnInit {
+  public purchaseInvoiceId: any = this.activatedRoute.snapshot.paramMap.get('purchaseInvoiceId');
+  public type: any = this.activatedRoute.snapshot.paramMap.get('type');
+  public language = "en";
+  public healthPurchaseInvoiceDetailsDto!: HealthPurchaseInvoiceDetailsFrontDto;
+  public feedPurchaseInvoiceDetailsDto!: FeedPurchaseInvoiceDetailsFrontDto;
 
-  constructor() { }
+  constructor(
+    private readonly activatedRoute: ActivatedRoute,
+    private translateService: TranslateService,
+    private purchaseInvoiceApiService: PurchaseInvoiceApiService,
+  ) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.initialisePurchaseInvoices();
+    if (this.type === PurchaseInvoiceType.HEALTH_PRODUCT) {
+      this.findHealthPurchaseInvoiceDetailsById();
+    } else if (this.type === PurchaseInvoiceType.FEED) {
+      this.findFeedPurchaseInvoiceDetailsById();
+    }
+  }
 
+  public ionChangeLanguage(event: any): void {
+    this.translateService.use(event.detail.value);
+  }
+
+  public findHealthPurchaseInvoiceDetailsById(): void {
+    this.purchaseInvoiceApiService.findHealthPurchaseInvoiceDetailsById(this.purchaseInvoiceId).subscribe(purchaseInvoiceDetailsDto => {
+      this.healthPurchaseInvoiceDetailsDto = purchaseInvoiceDetailsDto;
+    })
+  }
+
+  public findFeedPurchaseInvoiceDetailsById(): void {
+    this.purchaseInvoiceApiService.findFeedPurchaseInvoiceDetailsById(this.purchaseInvoiceId).subscribe(purchaseInvoiceDetailsDto => {
+      this.feedPurchaseInvoiceDetailsDto = purchaseInvoiceDetailsDto;
+    })
+  }
+
+  private initialisePurchaseInvoices(): void {
+    this.healthPurchaseInvoiceDetailsDto = {
+      id: 0,
+      number: null,
+      supplierName: null,
+      supplierAddress: null,
+      supplierTelephoneNumber: null,
+      createdBy: null,
+      createdDate: null,
+      purchaseInvoiceType: null,
+      discount: null,
+      totalPrice: null,
+      purchaseInvoiceHealthProductDetailsDtos: []
+    }
+
+    this.feedPurchaseInvoiceDetailsDto = {
+      id: 0,
+      number: null,
+      supplierName: null,
+      supplierAddress: null,
+      supplierTelephoneNumber: null,
+      createdBy: null,
+      createdDate: null,
+      purchaseInvoiceType: null,
+      discount: null,
+      totalPrice: null,
+      purchaseInvoiceFeedDetailsDtos: []
+    }
+  }
 }

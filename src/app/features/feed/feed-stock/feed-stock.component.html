@@ -123,7 +123,7 @@
         <ng-container matColumnDef="bags">
           <th mat-header-cell *matHeaderCellDef> Bags</th>
           <td mat-cell *matCellDef="let element">
-            <ion-input color="gunung-nago-primary" type="text" clear-input="true" required="true"
+            <ion-input color="gunung-nago-primary" type="number" clear-input="true" required="true"
               [(ngModel)]="element.bagsReceived"></ion-input>
           </td>
         </ng-container>
@@ -131,7 +131,7 @@
         <ng-container matColumnDef="weight">
           <th mat-header-cell *matHeaderCellDef> Weight </th>
           <td mat-cell *matCellDef="let element">
-            <ion-input color="gunung-nago-primary" type="text" clear-input="true"
+            <ion-input color="gunung-nago-primary" type="number" clear-input="true"
               [(ngModel)]="element.weight"></ion-input>
           </td>
         </ng-container>
@@ -139,7 +139,7 @@
         <ng-container matColumnDef="bonus">
           <th mat-header-cell *matHeaderCellDef> Bonus Bags</th>
           <td mat-cell *matCellDef="let element">
-            <ion-input color="gunung-nago-primary" type="text" clear-input="true" required="true"
+            <ion-input color="gunung-nago-primary" type="number" clear-input="true" required="true"
               [(ngModel)]="element.bonusBagsReceived" (ngModelChange)="calculateInvoice()"></ion-input>
           </td>
         </ng-container>
@@ -147,7 +147,7 @@
         <ng-container matColumnDef="wholesalePrice">
           <th mat-header-cell *matHeaderCellDef> Wholesale / Buying Price </th>
           <td mat-cell *matCellDef="let element">
-            <ion-input color="gunung-nago-primary" type="text" clear-input="true" required="true"
+            <ion-input color="gunung-nago-primary" type="number" clear-input="true" required="true"
               [(ngModel)]="element.wholesalePrice" (ngModelChange)="calculateInvoice()"></ion-input>
           </td>
         </ng-container>
@@ -155,15 +155,15 @@
         <ng-container matColumnDef="price">
           <th mat-header-cell *matHeaderCellDef> Retail Price </th>
           <td mat-cell *matCellDef="let element">
-            <ion-input color="gunung-nago-primary" type="text" clear-input="true" required="true"
+            <ion-input color="gunung-nago-primary" type="number" clear-input="true" required="true"
               [(ngModel)]="element.pricePerBag" (ngModelChange)="calculateInvoice()"></ion-input>
           </td>
         </ng-container>
 
         <ng-container matColumnDef="discount">
-          <th mat-header-cell *matHeaderCellDef> Discount </th>
+          <th mat-header-cell *matHeaderCellDef> Discount (%) </th>
           <td mat-cell *matCellDef="let element">
-            <ion-input color="gunung-nago-primary" type="text" clear-input="true" required="true"
+            <ion-input color="gunung-nago-primary" type="number" clear-input="true" required="true"
               [(ngModel)]="element.discount" (ngModelChange)="calculateInvoice()"></ion-input>
           </td>
         </ng-container>
@@ -178,10 +178,10 @@
         </ng-container>
 
         <ng-container matColumnDef="tax">
-          <th mat-header-cell *matHeaderCellDef> Tax </th>
+          <th mat-header-cell *matHeaderCellDef> Tax (%) </th>
           <td mat-cell *matCellDef="let element">
-            <ion-toggle class="toggle" value="15" [(ngModel)]="element.tax" color="danger"
-              (ngModelChange)="calculateInvoice()"></ion-toggle>
+            <ion-input color="gunung-nago-primary" type="number" clear-input="true" required="true"
+              [(ngModel)]="element.tax" (ngModelChange)="calculateInvoice()"></ion-input>
           </td>
         </ng-container>
 
@@ -205,3 +205,5 @@
     <ion-button color="positive-btn" (click)="save()">Save</ion-button>
   </div>
 </ion-content>
+
+{{subTotal}}

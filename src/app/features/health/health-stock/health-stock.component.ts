@@ -121,7 +121,6 @@ export class HealthStockComponent implements OnInit {
     this.reset();
   }
 
-
   public searchByHealthProductName(healthProductName: any): void {
     if (this.healthProductSearchSubscription) {
       this.healthProductSearchSubscription.unsubscribe();
@@ -229,28 +228,45 @@ export class HealthStockComponent implements OnInit {
     this.subTotal = 0;
     this.healthProductsInStockTable.data.forEach((product, index) => {
       if (this.healthProductsInStockTable.data[index].bonusBoxesReceived && this.healthProductsInStockTable.data[index].tax && this.healthProductsInStockTable.data[index].discount) {
-        this.subTotal = this.subTotal + (((this.healthProductsInStockTable.data[index].boxesReceived - this.healthProductsInStockTable.data[index].bonusBoxesReceived) * (this.healthProductsInStockTable.data[index].wholesalePrice * 1.15)) - ((this.healthProductsInStockTable.data[index].wholesalePrice * 1.15) * (this.healthProductsInStockTable.data[index].discount / 100)));
-
+        this.subTotal =
+          this.subTotal +
+          (((this.healthProductsInStockTable.data[index].boxesReceived - this.healthProductsInStockTable.data[index].bonusBoxesReceived) * (this.healthProductsInStockTable.data[index].wholesalePrice * ((this.healthProductsInStockTable.data[index].tax + 100) / 100))) -
+            ((this.healthProductsInStockTable.data[index].wholesalePrice * ((this.healthProductsInStockTable.data[index].tax + 100) / 100)) * (this.healthProductsInStockTable.data[index].discount / 100)));
       } else if (this.healthProductsInStockTable.data[index].bonusBoxesReceived && this.healthProductsInStockTable.data[index].tax) {
-        this.subTotal = this.subTotal + (this.healthProductsInStockTable.data[index].boxesReceived - this.healthProductsInStockTable.data[index].bonusBoxesReceived) * (this.healthProductsInStockTable.data[index].wholesalePrice * 1.15);
-
+        this.subTotal = this.subTotal +
+          (this.healthProductsInStockTable.data[index].boxesReceived -
+            this.healthProductsInStockTable.data[index].bonusBoxesReceived) *
+          (this.healthProductsInStockTable.data[index].wholesalePrice * ((this.healthProductsInStockTable.data[index].tax + 100) / 100));
       } else if (this.healthProductsInStockTable.data[index].tax && this.healthProductsInStockTable.data[index].discount) {
-        this.subTotal = this.subTotal + (((this.healthProductsInStockTable.data[index].boxesReceived) * (this.healthProductsInStockTable.data[index].wholesalePrice * 1.15)) - ((this.healthProductsInStockTable.data[index].wholesalePrice * 1.15) * (this.healthProductsInStockTable.data[index].discount / 100)));
-
+        this.subTotal =
+          this.subTotal +
+          (((this.healthProductsInStockTable.data[index].boxesReceived) * (this.healthProductsInStockTable.data[index].wholesalePrice * ((this.healthProductsInStockTable.data[index].tax + 100) / 100))) -
+            ((this.healthProductsInStockTable.data[index].wholesalePrice * ((this.healthProductsInStockTable.data[index].tax + 100) / 100)) * (this.healthProductsInStockTable.data[index].discount / 100)));
       } else if (this.healthProductsInStockTable.data[index].bonusBoxesReceived && this.healthProductsInStockTable.data[index].discount) {
-        this.subTotal = this.subTotal + (this.healthProductsInStockTable.data[index].boxesReceived - this.healthProductsInStockTable.data[index].bonusBoxesReceived) * (this.healthProductsInStockTable.data[index].wholesalePrice * ((100 - this.healthProductsInStockTable.data[index].discount) / 100));
-
+        this.subTotal =
+          this.subTotal +
+          (this.healthProductsInStockTable.data[index].boxesReceived - this.healthProductsInStockTable.data[index].bonusBoxesReceived) *
+          (this.healthProductsInStockTable.data[index].wholesalePrice * ((100 - this.healthProductsInStockTable.data[index].discount) / 100));
       } else if (this.healthProductsInStockTable.data[index].bonusBoxesReceived) {
-        this.subTotal = this.subTotal + (this.healthProductsInStockTable.data[index].boxesReceived - this.healthProductsInStockTable.data[index].bonusBoxesReceived) * this.healthProductsInStockTable.data[index].wholesalePrice;
-
+        this.subTotal =
+          this.subTotal +
+          (this.healthProductsInStockTable.data[index].boxesReceived - this.healthProductsInStockTable.data[index].bonusBoxesReceived) *
+          this.healthProductsInStockTable.data[index].wholesalePrice;
       } else if (this.healthProductsInStockTable.data[index].tax) {
-        this.subTotal = this.subTotal + (this.healthProductsInStockTable.data[index].boxesReceived) * (this.healthProductsInStockTable.data[index].wholesalePrice * 1.15);
-
+        this.subTotal =
+          this.subTotal +
+          (this.healthProductsInStockTable.data[index].boxesReceived) *
+          (this.healthProductsInStockTable.data[index].wholesalePrice * ((this.healthProductsInStockTable.data[index].tax + 100) / 100));
       } else if (this.healthProductsInStockTable.data[index].discount) {
-        this.subTotal = this.subTotal + (this.healthProductsInStockTable.data[index].boxesReceived) * (this.healthProductsInStockTable.data[index].wholesalePrice * ((100 - this.healthProductsInStockTable.data[index].discount) / 100));
-
+        this.subTotal =
+          this.subTotal +
+          (this.healthProductsInStockTable.data[index].boxesReceived) *
+          (this.healthProductsInStockTable.data[index].wholesalePrice * ((100 - this.healthProductsInStockTable.data[index].discount) / 100));
       } else {
-        this.subTotal = this.subTotal + (this.healthProductsInStockTable.data[index].boxesReceived) * this.healthProductsInStockTable.data[index].wholesalePrice;
+        this.subTotal =
+          this.subTotal +
+          (this.healthProductsInStockTable.data[index].boxesReceived) *
+          this.healthProductsInStockTable.data[index].wholesalePrice;
       }
     });
   }

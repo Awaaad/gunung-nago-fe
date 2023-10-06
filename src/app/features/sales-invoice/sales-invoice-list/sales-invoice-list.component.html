@@ -81,7 +81,7 @@
 
         <ng-container matColumnDef="totalPrice">
           <th mat-header-cell *matHeaderCellDef mat-sort-header="totalPrice"> Total Price </th>
-          <td mat-cell *matCellDef="let element"> {{element.totalPrice}} </td>
+          <td mat-cell *matCellDef="let element"> {{element.totalPrice | number :'1.2-2'}} </td>
         </ng-container>
 
         <ng-container matColumnDef="amountPaid">
