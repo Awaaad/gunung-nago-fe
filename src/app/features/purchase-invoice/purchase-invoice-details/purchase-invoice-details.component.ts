@@ -16,6 +16,10 @@ export class PurchaseInvoiceDetailsComponent implements OnInit {
   public language = "en";
   public healthPurchaseInvoiceDetailsDto!: HealthPurchaseInvoiceDetailsFrontDto;
   public feedPurchaseInvoiceDetailsDto!: FeedPurchaseInvoiceDetailsFrontDto;
+  public totalQuantity: number = 0;
+  public totalWholesalePrice: number = 0;
+  public totalRetailPrice: number = 0;
+  public totalBonusBoxesReceived: number = 0;
 
   constructor(
     private readonly activatedRoute: ActivatedRoute,
@@ -39,12 +43,32 @@ export class PurchaseInvoiceDetailsComponent implements OnInit {
   public findHealthPurchaseInvoiceDetailsById(): void {
     this.purchaseInvoiceApiService.findHealthPurchaseInvoiceDetailsById(this.purchaseInvoiceId).subscribe(purchaseInvoiceDetailsDto => {
       this.healthPurchaseInvoiceDetailsDto = purchaseInvoiceDetailsDto;
+      this.totalQuantity = 0;
+      this.totalWholesalePrice = 0;
+      this.totalRetailPrice = 0;
+      this.totalBonusBoxesReceived = 0;
+      this.healthPurchaseInvoiceDetailsDto?.purchaseInvoiceHealthProductDetailsDtos?.forEach(healthProduct => {
+        this.totalQuantity = this.totalQuantity + healthProduct.boxesReceived;
+        this.totalWholesalePrice = this.totalWholesalePrice + healthProduct.wholesalePrice;
+        this.totalRetailPrice = this.totalRetailPrice + healthProduct.pricePerBox;
+        this.totalBonusBoxesReceived = this.totalBonusBoxesReceived + healthProduct.bonusBoxesReceived;
+      })
     })
   }
 
   public findFeedPurchaseInvoiceDetailsById(): void {
     this.purchaseInvoiceApiService.findFeedPurchaseInvoiceDetailsById(this.purchaseInvoiceId).subscribe(purchaseInvoiceDetailsDto => {
       this.feedPurchaseInvoiceDetailsDto = purchaseInvoiceDetailsDto;
+      this.totalQuantity = 0;
+      this.totalWholesalePrice = 0;
+      this.totalRetailPrice = 0;
+      this.totalBonusBoxesReceived = 0;
+      this.feedPurchaseInvoiceDetailsDto?.purchaseInvoiceFeedDetailsDtos?.forEach(feed => {
+        this.totalQuantity = this.totalQuantity + feed.boxesReceived;
+        this.totalWholesalePrice = this.totalWholesalePrice + feed.wholesalePrice;
+        this.totalRetailPrice = this.totalRetailPrice + feed.pricePerBox;
+        this.totalBonusBoxesReceived = this.totalBonusBoxesReceived + feed.bonusBoxesReceived;
+      })
     })
   }
 

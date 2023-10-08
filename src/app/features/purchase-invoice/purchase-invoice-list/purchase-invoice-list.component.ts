@@ -30,8 +30,8 @@ export class PurchaseInvoiceListComponent {
   public purchaseInvoiceSearchSubscription!: Subscription;
   private page: number = 0;
   private size: number = 20;
-  public sortOrder: string = 'asc';
-  public sortBy: string = 'name';
+  public sortOrder: string = 'desc';
+  public sortBy: string = 'createdDate';
   public invoiceNumber: string = '';
   public isModalOpen: boolean = false;
   public errorMessages = {

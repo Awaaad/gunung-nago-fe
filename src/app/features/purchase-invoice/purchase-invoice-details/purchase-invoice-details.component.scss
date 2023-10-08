@@ -3,16 +3,6 @@ h5 {
     margin-bottom: 0;
 }
 
-.router-links {
-    display: flex;
-    justify-content: space-between;
-
-    .add-button {
-        margin-top: 5px;
-        margin-right: 5px;
-    }
-}
-
 ion-card-content {
     .main {
         color: black;
@@ -92,61 +82,86 @@ ion-card-content {
 }
 
 
-.responsive-table {
-    padding-left: 0;
-    padding-right: 0;
-
-    li {
-        padding: 15px 0;
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 10px;
-        font-size: 13px;
-    }
-
-    .table-header {
-        color: black;
-        background-color: white;
-        font-size: 13px;
-        text-transform: none;
-        letter-spacing: 0.03em;
-        border-bottom: 1px solid lightgray;
-        font-weight: 500;
-    }
-
-    .col-1 {
-        flex-basis: 28%;
-    }
-    
-    .col-2 {
-        flex-basis: 10%;
-    }
-
-    .col-3 {
-        flex-basis: 8%;
-    }
-
-    .col-4 {
-        flex-basis: 15%;
-    }
-
-    .col-5 {
-        flex-basis: 13.5%;
-    }
-
-    .col-6 {
-        flex-basis: 13.5%;
-    }
-
-    .col-7 {
-        flex-basis: 7%;
-    }
-
-    .col-8 {
-        flex-basis: 5%;
-    }
+table {
+    border-collapse: collapse;
+    margin: 0;
+    padding: 0;
+    table-layout: fixed;
+    margin-top: 2em;
+    color: black;
 }
 
-.table-row {
-    color: black;
+.invoice-table {
+    width: 100%;
+}
+
+.summary-table {
+    margin-top: 0;
+}
+
+table caption {
+    font-size: 1.5em;
+    margin: .5em 0 .75em;
+}
+
+table tr {
+    padding: .35em;
+}
+
+table th,
+table td {
+    padding: .625em;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+table th {
+    font-size: .85em;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+}
+
+@media screen and (max-width: 600px) {
+    table {
+        border: 0;
+    }
+
+    table caption {
+        font-size: 1.3em;
+    }
+
+    table thead {
+        border: none;
+        clip: rect(0 0 0 0);
+        height: 1px;
+        margin: -1px;
+        overflow: hidden;
+        padding: 0;
+        position: absolute;
+        width: 1px;
+    }
+
+    table tr {
+        border-bottom: 3px solid #ddd;
+        display: block;
+        margin-bottom: .625em;
+    }
+
+    table td {
+        border-bottom: 1px solid #ddd;
+        display: block;
+        font-size: .8em;
+        text-align: right;
+    }
+
+    table td::before {
+        content: attr(data-label);
+        float: left;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    table td:last-child {
+        border-bottom: 0;
+    }
 }
