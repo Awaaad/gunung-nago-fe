@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2023-10-07 00:18:53.
+// Generated using typescript-generator version 3.2.1263 on 2023-10-07 17:09:58.
 
 export class CageDto {
     id!: number;
@@ -27,6 +27,8 @@ export class CustomerDto {
     lastName!: string;
     address!: string;
     telephoneNumber!: number;
+    telephoneNumberTwo!: number;
+    telephoneNumberThree!: number;
     totalAmountDue!: number;
 }
 
@@ -43,6 +45,9 @@ export class EggSaleSaveDto {
     bad!: boolean;
     customerDto!: CustomerDto;
     paymentSaveDtos!: PaymentSaveDto[];
+    salesInvoiceCategory!: SalesInvoiceCategory;
+    driverId!: number;
+    comment!: string;
     bigGoodPiece!: number;
     bigGoodPricePerPiece!: number;
     bigGoodTie!: number;
@@ -177,6 +182,9 @@ export class FlockSaleSaveDto {
     customerDto!: CustomerDto;
     flockSaleDetailsDtos!: FlockSaleDetailsDto[];
     paymentSaveDtos!: PaymentSaveDto[];
+    salesInvoiceCategory!: SalesInvoiceCategory;
+    driverId!: number;
+    comment!: string;
     newCustomer!: boolean;
 }
 
@@ -303,6 +311,7 @@ export class FeedPurchaseDto {
     invoiceNumber!: string;
     discount!: number;
     supplierId!: number;
+    comment!: string;
     feedStockDtos!: FeedStockSaveDto[];
 }
 
@@ -310,6 +319,7 @@ export class HealthProductPurchaseDto {
     invoiceNumber!: string;
     discount!: number;
     supplierId!: number;
+    comment!: string;
     healthProductStockDtos!: HealthProductStockSaveDto[];
 }
 
@@ -319,11 +329,14 @@ export class FeedPurchaseInvoiceDetailsDto {
     supplierName!: string;
     supplierAddress!: string;
     supplierTelephoneNumber!: number;
+    supplierTelephoneNumberTwo!: number;
+    supplierTelephoneNumberThree!: number;
     createdBy!: string;
     createdDate!: Date;
     purchaseInvoiceType!: PurchaseInvoiceType;
     discount!: number;
     totalPrice!: number;
+    comment!: string;
     purchaseInvoiceFeedDetailsDtos!: PurchaseInvoiceFeedDetailsDto[];
 }
 
@@ -333,11 +346,14 @@ export class HealthPurchaseInvoiceDetailsDto {
     supplierName!: string;
     supplierAddress!: string;
     supplierTelephoneNumber!: number;
+    supplierTelephoneNumberTwo!: number;
+    supplierTelephoneNumberThree!: number;
     createdBy!: string;
     createdDate!: Date;
     purchaseInvoiceType!: PurchaseInvoiceType;
     discount!: number;
     totalPrice!: number;
+    comment!: string;
     purchaseInvoiceHealthProductDetailsDtos!: PurchaseInvoiceHealthProductDetailsDto[];
 }
 
@@ -426,6 +442,10 @@ export class SalesInvoiceDto {
     createdDate!: Date;
     customerFirstName!: string;
     customerLastName!: string;
+    driverFirstName!: string;
+    driverLastName!: string;
+    salesInvoiceCategory!: SalesInvoiceCategory;
+    salesInvoiceStatus!: SalesInvoiceStatus;
     paymentDtos!: PaymentDto[];
 }
 
@@ -491,6 +511,8 @@ export class SupplierDto {
     name!: string;
     email!: string;
     telephoneNumber!: number;
+    telephoneNumberTwo!: number;
+    telephoneNumberThree!: number;
     address!: string;
 }
 
@@ -536,6 +558,11 @@ export enum Order {
     DESC = 'DESC',
 }
 
+export enum SalesInvoiceCategory {
+    IN_STORE = 'IN_STORE',
+    DELIVERY = 'DELIVERY',
+}
+
 export enum FeedCategory {
     DOC = 'DOC',
     DARA = 'DARA',
@@ -575,4 +602,12 @@ export enum SalesInvoiceType {
     FLOCK = 'FLOCK',
     EGG = 'EGG',
     FEED = 'FEED',
+}
+
+export enum SalesInvoiceStatus {
+    PENDING = 'PENDING',
+    CANCELLED = 'CANCELLED',
+    APPROVED = 'APPROVED',
+    COMPLETED = 'COMPLETED',
+    PAID = 'PAID',
 }

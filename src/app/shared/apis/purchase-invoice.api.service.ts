@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { FeedPurchaseInvoiceDetailsDto, HealthPurchaseInvoiceDetailsDto, PurchaseInvoiceDto } from 'generated-src/model';
-import { PageResult } from 'generated-src/model-front';
+import { FeedPurchaseInvoiceDetailsFrontDto, HealthPurchaseInvoiceDetailsFrontDto, PageResult } from 'generated-src/model-front';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
 
@@ -15,11 +15,11 @@ export class PurchaseInvoiceApiService {
         return this.http.get<PageResult<PurchaseInvoiceDto>>(`${this.baseUrl}search`, { params: searchValues });
     }
 
-    public findHealthPurchaseInvoiceDetailsById(id: number): Observable<HealthPurchaseInvoiceDetailsDto> {
-        return this.http.get<HealthPurchaseInvoiceDetailsDto>(`${this.baseUrl}health/${id}`);
+    public findHealthPurchaseInvoiceDetailsById(id: number): Observable<HealthPurchaseInvoiceDetailsFrontDto> {
+        return this.http.get<HealthPurchaseInvoiceDetailsFrontDto>(`${this.baseUrl}health/${id}`);
     }
 
-    public findFeedPurchaseInvoiceDetailsById(id: number): Observable<FeedPurchaseInvoiceDetailsDto> {
-        return this.http.get<FeedPurchaseInvoiceDetailsDto>(`${this.baseUrl}feed/${id}`);
+    public findFeedPurchaseInvoiceDetailsById(id: number): Observable<FeedPurchaseInvoiceDetailsFrontDto> {
+        return this.http.get<FeedPurchaseInvoiceDetailsFrontDto>(`${this.baseUrl}feed/${id}`);
     }
 }

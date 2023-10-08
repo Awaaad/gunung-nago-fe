@@ -61,7 +61,8 @@
 
         <ng-container matColumnDef="name">
           <th mat-header-cell *matHeaderCellDef mat-sort-header="name"> Customer Name </th>
-          <td mat-cell *matCellDef="let element"> {{element.customerFirstName}} <span *ngIf="element.customerLastName != 'anonymous'">{{element.customerLastName}}</span> </td>
+          <td mat-cell *matCellDef="let element"> {{element.customerFirstName}} <span
+              *ngIf="element.customerLastName != 'anonymous'">{{element.customerLastName}}</span> </td>
         </ng-container>
 
         <ng-container matColumnDef="createdBy">
@@ -77,6 +78,21 @@
         <ng-container matColumnDef="createdDate">
           <th mat-header-cell *matHeaderCellDef mat-sort-header="createdDate"> Date Issued </th>
           <td mat-cell *matCellDef="let element"> {{element.createdDate | date:'dd-MM-yyyy HH:mm'}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="category">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="category"> Option </th>
+          <td mat-cell *matCellDef="let element"> {{element.salesInvoiceCategory}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="status"> Status </th>
+          <td mat-cell *matCellDef="let element"> {{element.salesInvoiceStatus}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="driver">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="driver"> Driver </th>
+          <td mat-cell *matCellDef="let element"> {{element.driverFirstName}} {{element.driverLastName}} </td>
         </ng-container>
 
         <ng-container matColumnDef="totalPrice">

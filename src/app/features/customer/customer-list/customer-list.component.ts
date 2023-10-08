@@ -126,7 +126,9 @@ export class CustomerListComponent {
       firstName: new FormControl({ value: customerDetails.firstName, disabled: false }, Validators.compose([Validators.required])),
       lastName: new FormControl({ value: customerDetails.lastName, disabled: false }, Validators.compose([Validators.required])),
       address: new FormControl({ value: customerDetails.address, disabled: false }),
-      telephoneNumber: new FormControl({ value: customerDetails.telephoneNumber, disabled: false }, Validators.compose([Validators.required]))
+      telephoneNumber: new FormControl({ value: customerDetails.telephoneNumber, disabled: false }, Validators.compose([Validators.required])),
+      telephoneNumberTwo: new FormControl({ value: customerDetails.telephoneNumberTwo, disabled: false }),
+      telephoneNumberThree: new FormControl({ value: customerDetails.telephoneNumberThree, disabled: false }),
     })
   }
 

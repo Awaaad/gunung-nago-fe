@@ -821,7 +821,6 @@
         (eggStock.totalEggs - ((bigGoodPiece + (bigGoodTray * 30) + (bigGoodTie * 300)) +
         (mediumGoodPiece + (mediumGoodTray * 30) + (mediumGoodTie * 300)) + (smallGoodPiece + (smallGoodTray
         * 30) + (smallGoodTie * 300)) + (badPiece + (badTray * 30) + (badTie * 300)))) < 0) || 
-
         (bad && ((eggStock.badEggs - (badPiece + (badTray * 30) + (badTie * 300))) < 0)) ||
         (big && ((eggStock.bigEggs - (bigGoodPiece + (bigGoodTray * 30) + (bigGoodTie * 300))) < 0)) ||
         (medium && ((eggStock.mediumEggs - (mediumGoodPiece + (mediumGoodTray * 30) + (mediumGoodTie * 300))) < 0)) ||
@@ -836,7 +835,7 @@
         <ion-toolbar>
           <div class="title">
             <img class="header-logo ml-15" src='./assets/flaticon/confirmation.png'>
-            <h3 class="modal-header-text">Payment Confirmation</h3>
+            <h3 class="modal-header-text">Sales Confirmation</h3>
           </div>
         </ion-toolbar>
       </ion-header>
@@ -910,6 +909,35 @@
             </span>
           </div>
         </form>
+        <ion-row>
+          <ion-col size="3">
+            <ion-item-divider>
+              <ion-label>Option</ion-label>
+            </ion-item-divider>
+            <ion-radio-group [(ngModel)]="salesInvoiceCategory" (ionChange)="selectSalesInvoiceCategory($event)">
+              <div *ngFor="let salesInvoiceCategory of salesInvoiceCategories" class="radio-class">
+                <ion-radio color="positive-btn"
+                  [value]="salesInvoiceCategory">{{salesInvoiceCategory}}</ion-radio><br />
+              </div>
+            </ion-radio-group>
+          </ion-col>
+          <ion-col size="9" *ngIf="showDriver">
+            <ion-item-divider>
+              <ion-label>Driver</ion-label>
+            </ion-item-divider>
+            <ion-select color="gunung-nago-primary" label="Driver" label-placement="floating" fill="outline"
+              interface="popover" placeholder="Driver" [(ngModel)]="selectedDriver">
+              <ion-select-option *ngFor="let driver of drivers" [value]="driver">{{driver.firstName}}
+                {{driver.lastName}}</ion-select-option>
+            </ion-select>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="12" size-sm>
+            <ion-textarea class="comment" color="gunung-nago-primary" label="Comments" label-placement="floating"
+              fill="outline" type="text" clear-input="true" [(ngModel)]="comment" [autoGrow]="true"></ion-textarea>
+          </ion-col>
+        </ion-row>
         <div class="modal-btn-container ion-text-right">
           <ion-button class="cancel-btn" (click)="cancel()">Cancel</ion-button>
           <ion-button color="positive-btn"

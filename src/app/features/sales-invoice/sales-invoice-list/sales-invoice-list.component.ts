@@ -23,7 +23,7 @@ export class SalesInvoiceListComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   public language = "en";
-  public displayedColumns: string[] = ['id', 'name', 'createdBy', 'salesInvoiceType', 'createdDate', 'totalPrice', 'amountPaid', 'amountDue'];
+  public displayedColumns: string[] = ['id', 'name', 'createdBy', 'salesInvoiceType', 'createdDate', 'category', 'driver', 'totalPrice', 'amountPaid', 'amountDue', 'status'];
   public salesInvoices = new MatTableDataSource<SalesInvoiceDto>;
   private infiniteSalesInvoices: SalesInvoiceDto[] = [];
   public salesInvoiceSearchSubscription!: Subscription;

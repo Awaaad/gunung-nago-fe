@@ -15,6 +15,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { IonicModule } from '@ionic/angular';
 import { TranslateModule } from '@ngx-translate/core';
 import { PurchaseInvoiceApiService } from 'src/app/shared/apis/purchase-invoice.api.service';
+import { LoginApiService } from 'src/app/shared/apis/security.api.service';
 
 
 @NgModule({
@@ -34,6 +35,6 @@ import { PurchaseInvoiceApiService } from 'src/app/shared/apis/purchase-invoice.
     MatDatepickerModule,
     MatInputModule
   ],
-  providers: [PurchaseInvoiceApiService]
+  providers: [PurchaseInvoiceApiService, LoginApiService]
 })
 export class PurchaseInvoiceModule { }

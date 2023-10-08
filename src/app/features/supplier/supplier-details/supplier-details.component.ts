@@ -65,7 +65,9 @@ export class SupplierDetailsComponent implements OnInit {
       name: new FormControl({ value: null, disabled: false }, Validators.compose([Validators.required])),
       email: new FormControl({ value: null, disabled: false }, Validators.compose([Validators.required])),
       address: new FormControl({ value: null, disabled: false }),
-      telephoneNumber: new FormControl({ value: null, disabled: false }, Validators.compose([Validators.required]))
+      telephoneNumber: new FormControl({ value: null, disabled: false }, Validators.compose([Validators.required])),
+      telephoneNumberTwo: new FormControl({ value: null, disabled: false }),
+      telephoneNumberThree: new FormControl({ value: null, disabled: false }),
     });
   }
 

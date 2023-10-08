@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core';
 import { FeedCategory, FeedDto, FeedStockSaveDto, SupplierDto } from 'generated-src/model';
@@ -7,10 +7,11 @@ import { FeedApiService } from 'src/app/shared/apis/feed.api.service';
 import { UtilsService } from 'src/app/shared/utils/utils.service';
 import { Subscription, debounceTime, distinctUntilChanged, filter, finalize, switchMap, tap } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
-import { FormControl } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { SupplierApiService } from 'src/app/shared/apis/supplier.api.service';
 import { MaskitoElementPredicateAsync, MaskitoOptions } from '@maskito/core';
-
+import { IonModal } from '@ionic/angular';
+import { OverlayEventDetail } from '@ionic/core/components';
 
 @Component({
   selector: 'app-feed-stock',
@@ -18,6 +19,9 @@ import { MaskitoElementPredicateAsync, MaskitoOptions } from '@maskito/core';
   styleUrls: ['./feed-stock.component.scss'],
 })
 export class FeedStockComponent implements OnInit {
+  @ViewChild(IonModal) modal!: IonModal;
+  public isModalOpen: boolean = false;
+  public confirmInvoiceForm!: FormGroup;
   public language = "en";
   public displayedColumns: string[] = ['name', 'feedCategory', 'recommendedWeight'];
   public displayedColumnsStock: string[] = ['name', 'feedCategory', 'weight', 'bags', 'bonus', 'wholesalePrice', 'price', 'discount', 'expiryDate', 'tax', 'remove'];
@@ -44,13 +48,20 @@ export class FeedStockComponent implements OnInit {
   public errorMsg!: string;
   public minLengthTerm = 1;
   public showFeedSearchBar: boolean = false;
+  public today: Date = new Date();
   private searchSupplierSubscription!: Subscription;
   readonly predicate: MaskitoElementPredicateAsync = async (el) => (el as HTMLIonInputElement).getInputElement();
   readonly maskitoOptions: MaskitoOptions = { mask: [/\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, '-', /\d/, /\d/] };
+  public errorMessages = {
+    invoiceNumber: [
+      { type: "required", message: "Invoice number is required" },
+    ]
+  };
 
   constructor(
     private feedApiService: FeedApiService,
     private feedStockApiService: FeedStockApiService,
+    private formBuilder: FormBuilder,
     private supplierApiService: SupplierApiService,
     private translateService: TranslateService,
     private utilsService: UtilsService
@@ -194,9 +205,10 @@ export class FeedStockComponent implements OnInit {
 
   public save(): void {
     const feedPurchaseDto = {
-      invoiceNumber: 12345,
+      invoiceNumber: this.confirmInvoiceForm.value.invoiceNumber,
       supplierId: this.selectedSupplier.id,
       discount: null,
+      comment: this.confirmInvoiceForm.value.comment,
       feedStockDtos: this.feedsInStockTable.data
     }
     this.utilsService.presentLoading();
@@ -226,13 +238,13 @@ export class FeedStockComponent implements OnInit {
     this.subTotal = 0;
     this.feedsInStockTable.data.forEach((product, index) => {
       if (this.feedsInStockTable.data[index].bonusBagsReceived && this.feedsInStockTable.data[index].tax && this.feedsInStockTable.data[index].discount) {
-        this.subTotal = this.subTotal + (((this.feedsInStockTable.data[index].bagsReceived - this.feedsInStockTable.data[index].bonusBagsReceived) * (this.feedsInStockTable.data[index].wholesalePrice * ((this.feedsInStockTable.data[index].tax + 100)/100))) - ((this.feedsInStockTable.data[index].wholesalePrice * ((this.feedsInStockTable.data[index].tax + 100)/100)) * (this.feedsInStockTable.data[index].discount / 100)));
+        this.subTotal = this.subTotal + (((this.feedsInStockTable.data[index].bagsReceived - this.feedsInStockTable.data[index].bonusBagsReceived) * (this.feedsInStockTable.data[index].wholesalePrice * ((this.feedsInStockTable.data[index].tax + 100) / 100))) - ((this.feedsInStockTable.data[index].wholesalePrice * ((this.feedsInStockTable.data[index].tax + 100) / 100)) * (this.feedsInStockTable.data[index].discount / 100)));
 
       } else if (this.feedsInStockTable.data[index].bonusBagsReceived && this.feedsInStockTable.data[index].tax) {
-        this.subTotal = this.subTotal + (this.feedsInStockTable.data[index].bagsReceived - this.feedsInStockTable.data[index].bonusBagsReceived) * (this.feedsInStockTable.data[index].wholesalePrice * ((this.feedsInStockTable.data[index].tax + 100)/100));
+        this.subTotal = this.subTotal + (this.feedsInStockTable.data[index].bagsReceived - this.feedsInStockTable.data[index].bonusBagsReceived) * (this.feedsInStockTable.data[index].wholesalePrice * ((this.feedsInStockTable.data[index].tax + 100) / 100));
 
       } else if (this.feedsInStockTable.data[index].tax && this.feedsInStockTable.data[index].discount) {
-        this.subTotal = this.subTotal + (((this.feedsInStockTable.data[index].bagsReceived) * (this.feedsInStockTable.data[index].wholesalePrice * ((this.feedsInStockTable.data[index].tax + 100)/100))) - ((this.feedsInStockTable.data[index].wholesalePrice * ((this.feedsInStockTable.data[index].tax + 100)/100)) * (this.feedsInStockTable.data[index].discount / 100)));
+        this.subTotal = this.subTotal + (((this.feedsInStockTable.data[index].bagsReceived) * (this.feedsInStockTable.data[index].wholesalePrice * ((this.feedsInStockTable.data[index].tax + 100) / 100))) - ((this.feedsInStockTable.data[index].wholesalePrice * ((this.feedsInStockTable.data[index].tax + 100) / 100)) * (this.feedsInStockTable.data[index].discount / 100)));
 
       } else if (this.feedsInStockTable.data[index].bonusBagsReceived && this.feedsInStockTable.data[index].discount) {
         this.subTotal = this.subTotal + (this.feedsInStockTable.data[index].bagsReceived - this.feedsInStockTable.data[index].bonusBagsReceived) * (this.feedsInStockTable.data[index].wholesalePrice * ((100 - this.feedsInStockTable.data[index].discount) / 100));
@@ -241,7 +253,7 @@ export class FeedStockComponent implements OnInit {
         this.subTotal = this.subTotal + (this.feedsInStockTable.data[index].bagsReceived - this.feedsInStockTable.data[index].bonusBagsReceived) * this.feedsInStockTable.data[index].wholesalePrice;
 
       } else if (this.feedsInStockTable.data[index].tax) {
-        this.subTotal = this.subTotal + (this.feedsInStockTable.data[index].bagsReceived) * (this.feedsInStockTable.data[index].wholesalePrice * ((this.feedsInStockTable.data[index].tax + 100)/100));
+        this.subTotal = this.subTotal + (this.feedsInStockTable.data[index].bagsReceived) * (this.feedsInStockTable.data[index].wholesalePrice * ((this.feedsInStockTable.data[index].tax + 100) / 100));
 
       } else if (this.feedsInStockTable.data[index].discount) {
         this.subTotal = this.subTotal + (this.feedsInStockTable.data[index].bagsReceived) * (this.feedsInStockTable.data[index].wholesalePrice * ((100 - this.feedsInStockTable.data[index].discount) / 100));
@@ -251,4 +263,38 @@ export class FeedStockComponent implements OnInit {
       }
     });
   }
+
+  private initialiseConfirmPurchaseInvoiceForm(): void {
+    this.confirmInvoiceForm = this.formBuilder.group({
+      invoiceNumber: new FormControl("", Validators.compose([Validators.required])),
+      total: new FormControl({ value: this.subTotal.toFixed(2), disabled: true }, Validators.compose([Validators.required])),
+      comment: new FormControl(""),
+    });
+  }
+
+  public openModal(): void {
+    this.initialiseConfirmPurchaseInvoiceForm();
+    this.isModalOpen = true;
+  }
+
+  public cancel(): void {
+    this.isModalOpen = false;
+    this.modal.dismiss(null, 'cancel');
+  }
+
+  public confirm(): void {
+    this.modal.dismiss(null, 'confirm');
+  }
+
+  public onWillDismiss(event: Event): void {
+    const ev = event as CustomEvent<OverlayEventDetail<string>>;
+    if (ev.detail.role === 'backdrop') {
+      this.isModalOpen = false;
+    }
+    if (ev.detail.role === 'confirm') {
+      this.isModalOpen = false;
+      this.save();
+    }
+  }
 }
+

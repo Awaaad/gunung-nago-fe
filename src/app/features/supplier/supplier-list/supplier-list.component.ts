@@ -127,7 +127,9 @@ export class SupplierListComponent {
       name: new FormControl({ value: supplierDetails.name, disabled: false }, Validators.compose([Validators.required])),
       email: new FormControl({ value: supplierDetails.email, disabled: false }, Validators.compose([Validators.required])),
       address: new FormControl({ value: supplierDetails.address, disabled: false }),
-      telephoneNumber: new FormControl({ value: supplierDetails.telephoneNumber, disabled: false }, Validators.compose([Validators.required]))
+      telephoneNumber: new FormControl({ value: supplierDetails.telephoneNumber, disabled: false }, Validators.compose([Validators.required])),
+      telephoneNumberTwo: new FormControl({ value: supplierDetails.telephoneNumberTwo, disabled: false }),
+      telephoneNumberThree: new FormControl({ value: supplierDetails.telephoneNumberThree, disabled: false }),
     })
   }
 

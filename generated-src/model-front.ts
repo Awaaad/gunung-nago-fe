@@ -1,4 +1,4 @@
-import { AquisitionType, CageCategory, FeedSurveyDto, FlockCategory, FlockSaleDetailsDto, HealthSurveyDto, PaymentType, PurchaseInvoiceFeedDetailsDto, PurchaseInvoiceHealthProductDetailsDto, PurchaseInvoiceType } from "./model";
+import { AquisitionType, CageCategory, FarmDto, FeedSurveyDto, FlockCategory, FlockSaleDetailsDto, HealthSurveyDto, PaymentType, PurchaseInvoiceFeedDetailsDto, PurchaseInvoiceHealthProductDetailsDto, PurchaseInvoiceType, RoleDto, SalesInvoiceCategory } from "./model";
 
 export class PageResult<T> {
     public content!: Array<T>;
@@ -53,11 +53,17 @@ export class FlockSaleSaveFrontDto {
     flockSaleDetailsDtos!: FlockSaleDetailsDto[] | [] | null | undefined;
     paymentSaveDtos!: PaymentSaveFrontDto[] | [] | null | undefined;
     newCustomer!: boolean | null | undefined;
+    salesInvoiceCategory!: SalesInvoiceCategory | null | undefined;
+    driverId!: number | null | undefined;
+    comment!: string | null | undefined;
 }
 
 export class EggSaleSaveFrontDto {
     customerDto!: CustomerFrontDto | null | undefined;
     paymentSaveDtos!: PaymentSaveFrontDto[] | [] | null | undefined;
+    salesInvoiceCategory!: SalesInvoiceCategory | null | undefined;
+    driverId!: number | null | undefined;
+    comment!: string | null | undefined;
     bigGoodPiece!: number | null | undefined;
     bigGoodPricePerPiece!: number | null | undefined;
     bigGoodTie!: number | null | undefined;
@@ -112,6 +118,8 @@ export class FeedPurchaseInvoiceDetailsFrontDto {
     supplierName!: string | null | undefined | any;
     supplierAddress!: string | null | undefined | any;
     supplierTelephoneNumber!: number | null | undefined | any;
+    supplierTelephoneNumberTwo!: number | null | undefined | any;
+    supplierTelephoneNumberThree!: number | null | undefined | any;
     createdBy!: string | null | undefined | any;
     createdDate!: Date | null | undefined | any;
     purchaseInvoiceType!: PurchaseInvoiceType | null | undefined | any;
@@ -126,10 +134,25 @@ export class HealthPurchaseInvoiceDetailsFrontDto {
     supplierName!: string | null | undefined | any;
     supplierAddress!: string | null | undefined | any;
     supplierTelephoneNumber!: number | null | undefined | any;
+    supplierTelephoneNumberTwo!: number | null | undefined | any;
+    supplierTelephoneNumberThree!: number | null | undefined | any;
     createdBy!: string | null | undefined | any;
     createdDate!: Date | null | undefined | any;
     purchaseInvoiceType!: PurchaseInvoiceType | null | undefined | any;
     discount!: number | null | undefined | any;
     totalPrice!: number | null | undefined | any;
     purchaseInvoiceHealthProductDetailsDtos!: PurchaseInvoiceHealthProductDetailsDto[] | [] | null | undefined;
+}
+
+export class UserFrontDto {
+    id!: number | null | undefined | any;
+    username!: string | null | undefined | any;
+    firstName!: string | null | undefined | any;
+    lastName!: string | null | undefined | any;
+    dateOfBirth!: Date | null | undefined | any;
+    email!: string | null | undefined | any;
+    phone!: number | null | undefined | any;
+    password!: string | null | undefined | any;
+    roles!: RoleDto[] | [] | null | undefined | any;
+    farms!: FarmDto[] | [] | null | undefined | any;
 }

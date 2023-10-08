@@ -6,8 +6,8 @@
     <ion-title>
       <div class="router-links">
         <div class="title">
-          <img class="header-logo" src='./assets/flaticon/purchase-invoice.png'>
-          <h3 class="header-nav-products">Purchase Invoice List</h3>
+          <img class="header-logo" src='./assets/flaticon/official-documents.png'>
+          <h3 class="header-nav-products">Purchase Invoice</h3>
         </div>
         <div>
           <ion-item class="language-selection">
@@ -41,8 +41,11 @@
             <div class="cashier-name main">Address: <span
                 class="sub">{{healthPurchaseInvoiceDetailsDto.supplierAddress}}</span>
             </div>
-            <div class="cashier-name main">Tel: <span
-                class="sub">{{healthPurchaseInvoiceDetailsDto.supplierTelephoneNumber}}</span></div>
+            <div class="cashier-name main">Tel:
+              <span class="sub">{{healthPurchaseInvoiceDetailsDto.supplierTelephoneNumber}}</span>
+              <span class="sub" *ngIf="healthPurchaseInvoiceDetailsDto.supplierTelephoneNumberTwo">, {{healthPurchaseInvoiceDetailsDto.supplierTelephoneNumberTwo}}</span>
+              <span class="sub" *ngIf="healthPurchaseInvoiceDetailsDto.supplierTelephoneNumberThree">, {{healthPurchaseInvoiceDetailsDto.supplierTelephoneNumberThree}}</span>
+            </div>
           </div>
           <div>
             <div class="invoice-date-title main">Invoice Date:</div>
@@ -62,17 +65,6 @@
             <div class="col col-7">Discount</div>
             <div class="col col-8">Tax</div>
           </li>
-          <!-- healthProductId!: number;
-          healthProductName!: string;
-          healthType!: HealthType;
-          unitsPerBox!: number;
-          boxesReceived!: number;
-          bonusBoxesReceived!: number;
-          wholesalePrice!: number;
-          pricePerBox!: number;
-          tax!: number;
-          discount!: number;
-          expiryDate!: Date; -->
           <li class="table-row"
             *ngFor="let invoiceDetail of healthPurchaseInvoiceDetailsDto?.purchaseInvoiceHealthProductDetailsDtos">
             <div class="col col-1" data-label="Product Name">{{invoiceDetail?.healthProductName |
@@ -81,8 +73,8 @@
             <div class="col col-3" data-label="Bonus">{{invoiceDetail?.bonusBoxesReceived?
               invoiceDetail?.bonusBoxesReceived: 0}}</div>
             <div class="col col-4" data-label="Expiry Date">{{invoiceDetail?.expiryDate}}</div>
-            <div class="col col-5" data-label="Retail Price">Rs {{invoiceDetail?.pricePerBox | number : '1.2-2'}}</div>
-            <div class="col col-6" data-label="Wholesale Price">Rs {{invoiceDetail?.wholesalePrice | number : '1.2-2'}}
+            <div class="col col-5" data-label="Retail Price">Rp {{invoiceDetail?.pricePerBox | number : '1.2-2'}}</div>
+            <div class="col col-6" data-label="Wholesale Price">Rp {{invoiceDetail?.wholesalePrice | number : '1.2-2'}}
             </div>
             <div class="col col-7" data-label="Discount">
               <span *ngIf="invoiceDetail?.discount">{{invoiceDetail?.discount | number :'1.2-2'}}%</span>
@@ -99,7 +91,7 @@
             <div class="sub">© {{pharmacy}}</div> -->
           </div>
           <div>
-            <div class="invoice-date-title main">Total: Rs {{healthPurchaseInvoiceDetailsDto.totalPrice | number :
+            <div class="invoice-date-title main">Total: Rp {{healthPurchaseInvoiceDetailsDto.totalPrice | number :
               '1.2-2'}}</div>
           </div>
         </div>
@@ -124,8 +116,11 @@
             <div class="cashier-name main">Address: <span
                 class="sub">{{feedPurchaseInvoiceDetailsDto.supplierAddress}}</span>
             </div>
-            <div class="cashier-name main">Tel: <span
-                class="sub">{{feedPurchaseInvoiceDetailsDto.supplierTelephoneNumber}}</span></div>
+            <div class="cashier-name main">Tel:
+              <span class="sub">{{feedPurchaseInvoiceDetailsDto.supplierTelephoneNumber}}</span>
+              <span class="sub" *ngIf="feedPurchaseInvoiceDetailsDto.supplierTelephoneNumberTwo">, {{feedPurchaseInvoiceDetailsDto.supplierTelephoneNumberTwo}}</span>
+              <span class="sub" *ngIf="feedPurchaseInvoiceDetailsDto.supplierTelephoneNumberThree">, {{feedPurchaseInvoiceDetailsDto.supplierTelephoneNumberThree}}</span>
+            </div>
           </div>
           <div>
             <div class="invoice-date-title main">Invoice Date:</div>
@@ -137,36 +132,25 @@
         <ul class="responsive-table">
           <li class="table-header">
             <div class="col col-1">Product Name</div>
-            <div class="col col-2">Quantity</div>
-            <div class="col col-3">Bonus</div>
-            <div class="col col-4">Expiry Date</div>
+            <div class="col col-2">Weight</div>
+            <div class="col col-3">Bags</div>
+            <div class="col col-4">Bonus</div>
             <div class="col col-5">Retail Price</div>
             <div class="col col-6">Wholesale Price</div>
             <div class="col col-7">Discount</div>
             <div class="col col-8">Tax</div>
           </li>
-          <!-- healthProductId!: number;
-          healthProductName!: string;
-          healthType!: HealthType;
-          unitsPerBox!: number;
-          boxesReceived!: number;
-          bonusBoxesReceived!: number;
-          wholesalePrice!: number;
-          pricePerBox!: number;
-          tax!: number;
-          discount!: number;
-          expiryDate!: Date; -->
           <li class="table-row"
             *ngFor="let invoiceDetail of feedPurchaseInvoiceDetailsDto?.purchaseInvoiceFeedDetailsDtos">
             <div class="col col-1" data-label="Product Name">{{invoiceDetail?.feedName |
               titlecase}}</div>
-            <div class="col col-4" data-label="Weight">{{invoiceDetail?.weight}} kg</div>
+            <div class="col col-2" data-label="Weight">{{invoiceDetail?.weight}} kg</div>
 
             <div class="col col-3" data-label="Quantity">{{invoiceDetail?.boxesReceived}}</div>
             <div class="col col-4" data-label="Bonus">{{invoiceDetail?.bonusBoxesReceived?
               invoiceDetail?.bonusBoxesReceived: 0}}</div>
-            <div class="col col-5" data-label="Retail Price">Rs {{invoiceDetail?.pricePerBox | number : '1.2-2'}}</div>
-            <div class="col col-6" data-label="Wholesale Price">Rs {{invoiceDetail?.wholesalePrice | number : '1.2-2'}}
+            <div class="col col-5" data-label="Retail Price">Rp {{invoiceDetail?.pricePerBox | number : '1.2-2'}}</div>
+            <div class="col col-6" data-label="Wholesale Price">Rp {{invoiceDetail?.wholesalePrice | number : '1.2-2'}}
             </div>
             <div class="col col-7" data-label="Discount">
               <span *ngIf="invoiceDetail?.discount">{{invoiceDetail?.discount | number :'1.2-2'}}%</span>
@@ -183,7 +167,7 @@
             <div class="sub">© {{pharmacy}}</div> -->
           </div>
           <div>
-            <div class="invoice-date-title main">Total: Rs {{feedPurchaseInvoiceDetailsDto.totalPrice | number :
+            <div class="invoice-date-title main">Total: Rp {{feedPurchaseInvoiceDetailsDto.totalPrice | number :
               '1.2-2'}}</div>
           </div>
         </div>

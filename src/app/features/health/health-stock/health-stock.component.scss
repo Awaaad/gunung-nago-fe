@@ -94,3 +94,322 @@ ion-input {
     margin: 4px 0px 0 10px;
     width: 2.5em;
 }
+
+.wrapper-bottom {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.sub-total {
+    margin: 0 1em 1em 1em;
+    font-size: 18px;
+    font-weight: 500;
+    color: red;
+}
+
+
+h5 {
+    font-size: 24px;
+    margin-bottom: 0;
+}
+
+ion-card-content {
+    .main {
+        color: black;
+        font-size: 15px;
+    }
+
+    .sub {
+        color: black;
+        font-size: 15px;
+    }
+}
+
+.invoice-margin {
+    max-width: 85em;
+    margin: 20px auto;
+
+    .invoice {
+        margin-right: 10px;
+        margin-left: 10px;
+
+        .invoice-title {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            padding-bottom: 15px;
+            border-bottom: 1px solid lightgray;
+
+            .invoice-logo {
+                display: flex;
+                align-items: center;
+
+                .logo-img {
+                    width: 48px;
+                    padding-right: 10px;
+
+                    &:hover {
+                        cursor: pointer;
+                    }
+
+                    &:focus {
+                        outline: none;
+                    }
+                }
+
+                .logo-text {
+                    color: black;
+                    text-decoration: none;
+
+                    &:hover {
+                        cursor: pointer;
+                    }
+
+                    &:focus {
+                        outline: none;
+                    }
+                }
+            }
+        }
+    }
+
+    .print {
+        float: right;
+        margin-right: 7px;
+    }
+
+    .invoice-subtitle {
+        margin-top: 20px;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .invoice-footer {
+        margin-top: 20px;
+        display: flex;
+        justify-content: space-between;
+    }
+}
+
+
+.responsive-table {
+    padding-left: 0;
+    padding-right: 0;
+
+    li {
+        padding: 15px 0;
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        font-size: 13px;
+    }
+
+    .table-header {
+        color: black;
+        background-color: white;
+        font-size: 13px;
+        text-transform: none;
+        letter-spacing: 0.03em;
+        border-bottom: 1px solid lightgray;
+        font-weight: 500;
+    }
+
+    .col-1 {
+        flex-basis: 28%;
+    }
+    
+    .col-2 {
+        flex-basis: 10%;
+    }
+
+    .col-3 {
+        flex-basis: 8%;
+    }
+
+    .col-4 {
+        flex-basis: 15%;
+    }
+
+    .col-5 {
+        flex-basis: 13.5%;
+    }
+
+    .col-6 {
+        flex-basis: 13.5%;
+    }
+
+    .col-7 {
+        flex-basis: 7%;
+    }
+
+    .col-8 {
+        flex-basis: 5%;
+    }
+}
+
+.table-row {
+    color: black;
+}
+
+.invoice {
+    margin-right: 10px;
+    margin-left: 10px;
+  
+    .invoice-title {
+        margin-top: 20px;
+        display: flex;
+        justify-content: space-between;
+        padding-bottom: 15px;
+        border-bottom: 1px solid lightrgb(141, 140, 140);
+  
+        .invoice-logo {
+            display: flex;
+            align-items: center;
+  
+            .logo-img {
+                width: 48px;
+                padding-right: 10px;
+  
+                &:hover {
+                    cursor: pointer;
+                }
+  
+                &:focus {
+                    outline: none;
+                }
+            }
+  
+            .logo-text {
+                color: black;
+                text-decoration: none;
+  
+                &:hover {
+                    cursor: pointer;
+                }
+  
+                &:focus {
+                    outline: none;
+                }
+            }
+        }
+    }
+  }
+  
+  .print {
+    float: right;
+    margin-right: 7px;
+  }
+  
+  .invoice-subtitle {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .invoice-footer {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .main {
+    color: black;
+    font-size: 15px;
+  }
+  
+  .sub {
+    color: black;
+    font-size: 15px;
+  }
+  
+  .responsive-table-invoice {
+    padding-left: 0;
+    padding-right: 0;
+  
+    li {
+        padding: 15px 0;
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        font-size: 13px;
+    }
+  
+    .table-header {
+        color: black;
+        background-color: white;
+        font-size: 13px;
+        text-transform: none;
+        letter-spacing: 0.03em;
+        border-bottom: 1px solid lightrgb(141, 140, 140);
+        font-weight: 500;
+    }
+  
+    .col-1 {
+      flex-basis: 28%;
+  }
+  
+    .col-2 {
+        flex-basis: 10%;
+    }
+  
+    .col-3 {
+        flex-basis: 8%;
+    }
+  
+    .col-4 {
+        flex-basis: 15%;
+    }
+  
+    .col-5 {
+        flex-basis: 13.5%;
+    }
+  
+    .col-6 {
+        flex-basis: 13.5%;
+    }
+  
+    .col-7 {
+        flex-basis: 7%;
+    }
+  
+    .col-8 {
+        flex-basis: 5%;
+    }
+}
+  
+.subtitle {
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+  
+    .cart-logo {
+      width: 23px;
+    }
+  
+    .cart-text {
+      font-size: 24px;
+      padding-top: 8px;
+      margin-top: 5px;
+      padding-left: 5px;
+    }
+}
+
+.form-section-cart {
+    font-weight: 500;
+    padding-top: 10px;
+    padding-left: 7px;
+    color: #000;
+    font-size: 18px;
+}
+
+ion-modal {
+    ion-input {
+        border-bottom: none;
+    }
+
+    .comment {
+        padding-left: 10px;
+    }
+}
+

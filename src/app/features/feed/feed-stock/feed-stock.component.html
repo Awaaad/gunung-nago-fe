@@ -124,7 +124,7 @@
           <th mat-header-cell *matHeaderCellDef> Bags</th>
           <td mat-cell *matCellDef="let element">
             <ion-input color="gunung-nago-primary" type="number" clear-input="true" required="true"
-              [(ngModel)]="element.bagsReceived"></ion-input>
+              [(ngModel)]="element.bagsReceived" (ngModelChange)="calculateInvoice()"></ion-input>
           </td>
         </ng-container>
 
@@ -200,10 +200,145 @@
       </table>
     </div>
   </ion-card>
-  <div class="btn-container">
-    <ion-button class="cancel-btn" (click)="reset()">Cancel</ion-button>
-    <ion-button color="positive-btn" (click)="save()">Save</ion-button>
+  <div class="wrapper-bottom">
+    <div class="sub-total">
+      <span *ngIf="subTotal > 0">Sub Total: {{ subTotal | number : '1.2-2' }}</span>
+    </div>
+    <div class="btn-container-stock">
+      <ion-button class="cancel-btn" (click)="reset()">Cancel</ion-button>
+      <ion-button color="positive-btn" (click)="openModal()" [disabled]="subTotal < 1">Update Stock</ion-button>
+    </div>
   </div>
-</ion-content>
 
-{{subTotal}}
+  <ion-row>
+    <ion-col size-lg="8" size-md="6" size-xs="12">
+      <ion-card class="invoice" *ngIf="subTotal > 1">
+        <ion-card-content>
+          <div class="subtitle">
+            <img class="cart-logo" src='./assets/flaticon/official-documents.png'>
+            <div class="form-section-cart">Preview Purchase Invoice</div>
+          </div>
+          <div class="invoice-title">
+            <div class="invoice-logo">
+              <h5 class="logo-text">Invoice No: ................</h5>
+            </div>
+            <div>
+            </div>
+          </div>
+          <div class="invoice-subtitle">
+            <div>
+              <div class="cashier-name main">Supplier: <span class="sub">{{selectedSupplier?.name}}</span></div>
+              <div class="cashier-name main">Address: <span class="sub">{{selectedSupplier?.address}}</span></div>
+              <div class="cashier-name main">Tel:
+                <span class="sub">{{selectedSupplier.telephoneNumber}}</span>
+                <span class="sub" *ngIf="selectedSupplier.telephoneNumberTwo">, {{selectedSupplier.telephoneNumberTwo}}</span>
+                <span class="sub" *ngIf="selectedSupplier.telephoneNumberThree">, {{selectedSupplier.telephoneNumberThree}}</span>
+              </div>
+            </div>
+            <div>
+              <div class="invoice-date-title main">Invoice Date:</div>
+              <div class="invoice-date sub">{{today | date:'EEEE, MMMM d, y HH:mm'}}</div>
+            </div>
+          </div>
+
+          <ul class="responsive-table">
+            <li class="table-header">
+              <div class="col col-1">Product Name</div>
+              <div class="col col-2">Weight</div>
+              <div class="col col-3">Bags</div>
+              <div class="col col-4">Bonus</div>
+              <div class="col col-5">Retail Price</div>
+              <div class="col col-6">Wholesale Price</div>
+              <div class="col col-7">Discount</div>
+              <div class="col col-8">Tax</div>
+            </li>
+            <li class="table-row" *ngFor="let invoiceDetail of feedsInStockTable?.data">
+              <div class="col col-1" data-label="Product Name">{{invoiceDetail?.name |
+                titlecase}}</div>
+              <div class="col col-2" data-label="Weight">{{invoiceDetail?.weight}} kg</div>
+
+              <div class="col col-3" data-label="Quantity">{{invoiceDetail?.bagsReceived}}</div>
+              <div class="col col-4" data-label="Bonus">{{invoiceDetail?.bonusBagsReceived?
+                invoiceDetail?.bonusBagsReceived: 0}}</div>
+              <div class="col col-5" data-label="Retail Price">Rp {{invoiceDetail?.pricePerBag | number : '1.2-2'}}
+              </div>
+              <div class="col col-6" data-label="Wholesale Price">Rp {{invoiceDetail?.wholesalePrice | number :
+                '1.2-2'}}
+              </div>
+              <div class="col col-7" data-label="Discount">
+                <span *ngIf="invoiceDetail?.discount">{{invoiceDetail?.discount | number :'1.2-2'}}%</span>
+              </div>
+              <div class="col col-8" data-label="Tax">
+                <span *ngIf="invoiceDetail?.tax">{{invoiceDetail?.tax | number :'1.2-2'}}%</span>
+              </div>
+            </li>
+          </ul>
+
+          <div class="invoice-footer">
+            <div>
+              <!-- <div class="sub">Thank you for your purchase</div>
+              <div class="sub">© {{pharmacy}}</div> -->
+            </div>
+            <div>
+              <div class="invoice-date-title main">Total: Rp {{subTotal | number : '1.2-2'}}</div>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </ion-col>
+    <ion-col size-lg="4" size-md="6" size-xs="12">
+
+    </ion-col>
+  </ion-row>
+
+  <ion-modal (willDismiss)="onWillDismiss($event)" [isOpen]="isModalOpen" cssClass="health-stock-modal"
+    backdropDismiss="false">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <div class="title">
+            <img class="header-logo ml-15" src='./assets/flaticon/confirm-stock.png'>
+            <h3 class="modal-header-text">Confirm Purchase Invoice</h3>
+          </div>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content [fullscreen]="false" class="ion-padding">
+
+        <form [formGroup]="confirmInvoiceForm">
+          <ion-row>
+            <ion-col size="12" size-sm>
+              <ion-input color="gunung-nago-primary" label="Total" label-placement="floating" fill="outline"
+                type="number" formControlName="total"></ion-input>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="12" size-sm>
+              <ion-input color="gunung-nago-primary" label="Invoice Number*" label-placement="floating" fill="outline"
+                type="string" formControlName="invoiceNumber"></ion-input>
+              <div class="error-messages">
+                <ng-container *ngFor="let error of errorMessages.invoiceNumber">
+                  <div class="error-message"
+                    *ngIf="confirmInvoiceForm.get('invoiceNumber')?.hasError(error.type) && (confirmInvoiceForm.get('invoiceNumber')?.dirty || confirmInvoiceForm.get('invoiceNumber')?.touched)">
+                    {{ error.message }}
+                  </div>
+                </ng-container>
+              </div>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="12" size-sm>
+              <ion-textarea class="comment" color="gunung-nago-primary" label="Comments" label-placement="floating"
+                fill="outline" type="text" clear-input="true" formControlName="comment"
+                [autoGrow]="true"></ion-textarea>
+            </ion-col>
+          </ion-row>
+          <div class="action-button ion-text-right">
+            <ion-button class="cancel-btn" (click)="cancel()">Cancel</ion-button>
+            <ion-button [disabled]="confirmInvoiceForm.invalid" color="positive-btn"
+              (click)="confirm()">Save</ion-button>
+          </div>
+        </form>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+</ion-content>

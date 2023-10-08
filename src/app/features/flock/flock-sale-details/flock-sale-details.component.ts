@@ -5,7 +5,7 @@ import { UtilsService } from 'src/app/shared/utils/utils.service';
 import { FlockSaleApiService } from '../../../shared/apis/flock-sale.api.service';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { SurveyApiService } from '../../../shared/apis/survey.api.service';
-import { CageCategory, CageDto, CustomerDto, PaymentType, SurveyDto } from 'generated-src/model';
+import { CageCategory, CageDto, CustomerDto, PaymentType, SalesInvoiceCategory, SurveyDto, UserDto } from 'generated-src/model';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CageApiService } from '../../../shared/apis/cage.api.service';
 import { Subscription, debounceTime, distinctUntilChanged, filter, finalize, switchMap, tap } from 'rxjs';
@@ -14,6 +14,7 @@ import { CustomerFrontDto, FlockSaleSaveFrontDto } from 'generated-src/model-fro
 import { IonModal } from '@ionic/angular';
 import { OverlayEventDetail } from '@ionic/core/components';
 import * as moment from 'moment';
+import { LoginApiService } from 'src/app/shared/apis/security.api.service';
 
 @Component({
   selector: 'app-flock-sale-details',
@@ -49,6 +50,13 @@ export class FlockSaleDetailsComponent implements OnInit {
   public paymentTypes: string[] = [];
   public totalPrice: number = 0;
   public today: Date = new Date();
+
+  public salesInvoiceCategories: string[] = [];
+  public salesInvoiceCategory: SalesInvoiceCategory = SalesInvoiceCategory.IN_STORE;
+  public showDriver: boolean = false;
+  public drivers: UserDto[] = [];
+  public selectedDriver!: UserDto | null;
+  public comment!: string | null;
 
   public errorMessages = {
     cage: [
@@ -97,6 +105,7 @@ export class FlockSaleDetailsComponent implements OnInit {
     private cageApiService: CageApiService,
     private customerApiService: CustomerApiService,
     private formBuilder: FormBuilder,
+    private loginApiService: LoginApiService,
     private router: Router,
     private flockSaleApiService: FlockSaleApiService,
     private surveyApiService: SurveyApiService,
@@ -110,6 +119,7 @@ export class FlockSaleDetailsComponent implements OnInit {
     this.initialiseSelectedCustomer();
     this.searchCustomerAutoComplete();
     this.paymentTypes = Object.keys(PaymentType);
+    this.salesInvoiceCategories = Object.keys(SalesInvoiceCategory);
   }
 
   public ionChangeLanguage(event: any): void {
@@ -340,7 +350,10 @@ export class FlockSaleDetailsComponent implements OnInit {
       },
       flockSaleDetailsDtos: [],
       paymentSaveDtos: [],
-      newCustomer: false
+      newCustomer: false,
+      driverId: null,
+      salesInvoiceCategory: null,
+      comment: null
     }
   }
 
@@ -356,7 +369,10 @@ export class FlockSaleDetailsComponent implements OnInit {
       },
       flockSaleDetailsDtos: this.flockSaleForm.value.flockSaleDetails,
       paymentSaveDtos: this.paymentForm.value.payments,
-      newCustomer: this.isNewCustomer
+      newCustomer: this.isNewCustomer,
+      driverId: this.selectedDriver?.id,
+      salesInvoiceCategory: this.salesInvoiceCategory,
+      comment: this.comment
     }
   }
 
@@ -427,6 +443,9 @@ export class FlockSaleDetailsComponent implements OnInit {
     this.flockSaleApiService.save(this.flockSaleSaveFrontDto).subscribe({
       next: (data: string) => {
         this.reset();
+        this.salesInvoiceCategory = SalesInvoiceCategory.IN_STORE;
+        this.selectedDriver = null;
+        this.comment = null;
         this.utilsService.dismissLoading();
         this.utilsService.successMsg('Flock sold successfully');
       },
@@ -490,5 +509,20 @@ export class FlockSaleDetailsComponent implements OnInit {
       this.isModalOpen = false;
       this.save();
     }
+  }
+
+  public selectSalesInvoiceCategory(event: any): void {
+    if (event.detail.value === SalesInvoiceCategory.DELIVERY) {
+      this.getAllDrivers();
+      this.showDriver = true;
+    } else {
+      this.showDriver = false;
+    }
+  }
+
+  private getAllDrivers(): void {
+    this.loginApiService.getAllDrivers().subscribe(drivers => {
+      this.drivers = drivers;
+    })
   }
 }

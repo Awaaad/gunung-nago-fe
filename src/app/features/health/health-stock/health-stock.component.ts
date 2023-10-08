@@ -1,8 +1,9 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
-import { MaskitoElementPredicate, MaskitoElementPredicateAsync, MaskitoOptions } from '@maskito/core';
+import { IonModal } from '@ionic/angular';
+import { MaskitoElementPredicateAsync, MaskitoOptions } from '@maskito/core';
 import { TranslateService } from '@ngx-translate/core';
 import { HealthProductDto, HealthProductStockSaveDto, HealthType, SupplierDto } from 'generated-src/model';
 import { Subscription, debounceTime, distinctUntilChanged, filter, finalize, switchMap, tap } from 'rxjs';
@@ -10,6 +11,7 @@ import { HealthProductStockApiService } from 'src/app/shared/apis/health-product
 import { HealthProductApiService } from 'src/app/shared/apis/health-product.api.service';
 import { SupplierApiService } from 'src/app/shared/apis/supplier.api.service';
 import { UtilsService } from 'src/app/shared/utils/utils.service';
+import { OverlayEventDetail } from '@ionic/core/components';
 
 @Component({
   selector: 'app-health-stock',
@@ -17,7 +19,10 @@ import { UtilsService } from 'src/app/shared/utils/utils.service';
   styleUrls: ['./health-stock.component.scss'],
 })
 export class HealthStockComponent implements OnInit {
+  @ViewChild(IonModal) modal!: IonModal;
+  public isModalOpen: boolean = false;
   public language = "en";
+  public confirmInvoiceForm!: FormGroup;
   public displayedColumns: string[] = ['name', 'description', 'healthType', 'active'];
   public displayedColumnsStock: string[] = ['name', 'healthType', 'boxesReceived', 'bonus', 'wholesalePrice', 'price', 'discount', 'expiryDate', 'tax', 'remove'];
   public healthProducts = new MatTableDataSource<HealthProductDto>;
@@ -44,10 +49,17 @@ export class HealthStockComponent implements OnInit {
   public minLengthTerm = 1;
   public showHealthSearchBar: boolean = false;
   private searchSupplierSubscription!: Subscription;
+  public today: Date = new Date();
   readonly predicate: MaskitoElementPredicateAsync = async (el) => (el as HTMLIonInputElement).getInputElement();
   readonly maskitoOptions: MaskitoOptions = { mask: [/\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, '-', /\d/, /\d/] };
+  public errorMessages = {
+    invoiceNumber: [
+      { type: "required", message: "Invoice number is required" },
+    ]
+  };
 
   constructor(
+    private formBuilder: FormBuilder,
     private healthProductApiService: HealthProductApiService,
     private healthProductStockApiService: HealthProductStockApiService,
     private supplierApiService: SupplierApiService,
@@ -196,9 +208,10 @@ export class HealthStockComponent implements OnInit {
 
   public save(): void {
     const healthProductPurchaseDto = {
-      invoiceNumber: 12345,
+      invoiceNumber: this.confirmInvoiceForm.value.invoiceNumber,
       supplierId: this.selectedSupplier.id,
       discount: null,
+      comment: this.confirmInvoiceForm.value.comment,
       healthProductStockDtos: this.healthProductsInStockTable.data
     }
     this.utilsService.presentLoading();
@@ -269,5 +282,38 @@ export class HealthStockComponent implements OnInit {
           this.healthProductsInStockTable.data[index].wholesalePrice;
       }
     });
+  }
+
+  private initialiseConfirmPurchaseInvoiceForm(): void {
+    this.confirmInvoiceForm = this.formBuilder.group({
+      invoiceNumber: new FormControl("", Validators.compose([Validators.required])),
+      total: new FormControl({ value: this.subTotal.toFixed(2), disabled: true }, Validators.compose([Validators.required])),
+      comment: new FormControl(""),
+    });
+  }
+
+  public openModal(): void {
+    this.initialiseConfirmPurchaseInvoiceForm();
+    this.isModalOpen = true;
+  }
+
+  public cancel(): void {
+    this.isModalOpen = false;
+    this.modal.dismiss(null, 'cancel');
+  }
+
+  public confirm(): void {
+    this.modal.dismiss(null, 'confirm');
+  }
+
+  public onWillDismiss(event: Event): void {
+    const ev = event as CustomEvent<OverlayEventDetail<string>>;
+    if (ev.detail.role === 'backdrop') {
+      this.isModalOpen = false;
+    }
+    if (ev.detail.role === 'confirm') {
+      this.isModalOpen = false;
+      this.save();
+    }
   }
 }

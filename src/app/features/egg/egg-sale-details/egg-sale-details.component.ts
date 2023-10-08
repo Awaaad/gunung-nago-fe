@@ -4,7 +4,7 @@ import { FormGroup, FormControl, FormBuilder, Validators, FormArray } from '@ang
 import { ActivatedRoute, Router } from '@angular/router';
 import { IonModal } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { PaymentType, CustomerDto, EggStockDto } from 'generated-src/model';
+import { PaymentType, CustomerDto, EggStockDto, SalesInvoiceCategory, UserDto } from 'generated-src/model';
 import { CustomerFrontDto, EggSaleSaveFrontDto } from 'generated-src/model-front';
 import * as moment from 'moment';
 import { Subscription, filter, distinctUntilChanged, debounceTime, tap, switchMap, finalize } from 'rxjs';
@@ -13,6 +13,7 @@ import { UtilsService } from 'src/app/shared/utils/utils.service';
 import { OverlayEventDetail } from '@ionic/core/components';
 import { EggSaleApiService } from 'src/app/shared/apis/egg-sale.api.service';
 import { EggStockApiService } from 'src/app/shared/apis/egg-stock.api.service';
+import { LoginApiService } from 'src/app/shared/apis/security.api.service';
 @Component({
   selector: 'app-egg-sale-details',
   templateUrl: './egg-sale-details.component.html',
@@ -76,6 +77,12 @@ export class EggSaleDetailsComponent implements OnInit {
   public paymentTypes: string[] = [];
   public totalPrice: number = 0;
   public today: Date = new Date();
+  public salesInvoiceCategories: string[] = [];
+  public salesInvoiceCategory: SalesInvoiceCategory = SalesInvoiceCategory.IN_STORE;
+  public showDriver: boolean = false;
+  public drivers: UserDto[] = [];
+  public selectedDriver!: UserDto | null;
+  public comment!: string | null;
 
   public errorMessages = {
     firstName: [{ type: "required", message: "First name is required" }],
@@ -112,6 +119,7 @@ export class EggSaleDetailsComponent implements OnInit {
     private router: Router,
     private eggSaleApiService: EggSaleApiService,
     private eggStockApiService: EggStockApiService,
+    private loginApiService: LoginApiService,
     private translateService: TranslateService,
     private utilsService: UtilsService
   ) { }
@@ -122,6 +130,7 @@ export class EggSaleDetailsComponent implements OnInit {
     this.initialiseSelectedCustomer();
     this.searchCustomerAutoComplete();
     this.paymentTypes = Object.keys(PaymentType);
+    this.salesInvoiceCategories = Object.keys(SalesInvoiceCategory);
   }
 
   ionViewWillEnter(): void {
@@ -342,6 +351,9 @@ export class EggSaleDetailsComponent implements OnInit {
         telephoneNumber: null,
         totalAmountDue: null,
       },
+      driverId: null,
+      salesInvoiceCategory: null,
+      comment: null,
       paymentSaveDtos: [],
       newCustomer: false,
       big: false,
@@ -388,6 +400,9 @@ export class EggSaleDetailsComponent implements OnInit {
         telephoneNumber: this.eggSaleForm?.get("customer.telephoneNumber")?.value,
         totalAmountDue: null,
       },
+      driverId: this.selectedDriver ? this.selectedDriver.id : null,
+      salesInvoiceCategory: this.salesInvoiceCategory,
+      comment: this.comment,
       paymentSaveDtos: this.paymentForm.value.payments,
       newCustomer: this.isNewCustomer,
       big: this.big,
@@ -491,6 +506,9 @@ export class EggSaleDetailsComponent implements OnInit {
     })
     this.eggSaleApiService.save(this.eggSaleSaveDto).subscribe({
       next: (data: string) => {
+        this.salesInvoiceCategory = SalesInvoiceCategory.IN_STORE;
+        this.selectedDriver = null;
+        this.comment = null;
         this.reset();
         this.utilsService.dismissLoading();
         this.utilsService.successMsg('Flock sold successfully');
@@ -604,5 +622,20 @@ export class EggSaleDetailsComponent implements OnInit {
     } else if (event < 0) {
       this.badPiece = 0;
     }
+  }
+
+  public selectSalesInvoiceCategory(event: any): void {
+    if (event.detail.value === SalesInvoiceCategory.DELIVERY) {
+      this.getAllDrivers();
+      this.showDriver = true;
+    } else {
+      this.showDriver = false;
+    }
+  }
+
+  private getAllDrivers(): void {
+    this.loginApiService.getAllDrivers().subscribe(drivers => {
+      this.drivers = drivers;
+    })
   }
 }

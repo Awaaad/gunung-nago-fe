@@ -17,6 +17,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { EggSaleApiService } from 'src/app/shared/apis/egg-sale.api.service';
 import { EggStockApiService } from 'src/app/shared/apis/egg-stock.api.service';
 import { CustomerApiService } from 'src/app/shared/apis/customer.api.service';
+import { LoginApiService } from 'src/app/shared/apis/security.api.service';
 
 
 @NgModule({
@@ -37,6 +38,6 @@ import { CustomerApiService } from 'src/app/shared/apis/customer.api.service';
     MatDatepickerModule,
     MatNativeDateModule,
   ],
-  providers: [CustomerApiService, EggStockApiService, EggSaleApiService]
+  providers: [CustomerApiService, EggStockApiService, EggSaleApiService, LoginApiService]
 })
 export class EggModule { }

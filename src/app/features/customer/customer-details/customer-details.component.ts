@@ -67,6 +67,8 @@ export class CustomerDetailsComponent implements OnInit {
       lastName: new FormControl({ value: null, disabled: false }, Validators.compose([Validators.required])),
       address: new FormControl({ value: null, disabled: false }),
       telephoneNumber: new FormControl({ value: null, disabled: false }, Validators.compose([Validators.required])),
+      telephoneNumberTwo: new FormControl({ value: null, disabled: false }),
+      telephoneNumberThree: new FormControl({ value: null, disabled: false }),
       totalAmountDue: null
     });
   }

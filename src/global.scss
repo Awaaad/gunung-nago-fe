@@ -252,3 +252,25 @@ strong {
 .date-full-width {
     width: 100%;
 }
+
+.telephone-column {
+    margin: 5px 0 5px 0;
+}
+
+.supplier-modal {
+    --height: 36em;
+}
+
+.customer-modal {
+    --height: 32em;
+}
+
+.btn-container-stock {
+    display: flex;
+    justify-content: end;
+    margin: 0em 1em 1em 0
+}
+
+.health-stock-modal {
+
+}
