@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { PurchaseInvoiceType } from 'generated-src/model';
 import { FeedPurchaseInvoiceDetailsFrontDto, HealthPurchaseInvoiceDetailsFrontDto } from 'generated-src/model-front';
+import { FileApiService } from 'src/app/shared/apis/file.api.service';
 import { PurchaseInvoiceApiService } from 'src/app/shared/apis/purchase-invoice.api.service';
 
 @Component({
@@ -23,6 +24,7 @@ export class PurchaseInvoiceDetailsComponent implements OnInit {
 
   constructor(
     private readonly activatedRoute: ActivatedRoute,
+    private readonly fileApiService: FileApiService,
     private translateService: TranslateService,
     private purchaseInvoiceApiService: PurchaseInvoiceApiService,
   ) { }
@@ -38,6 +40,12 @@ export class PurchaseInvoiceDetailsComponent implements OnInit {
 
   public ionChangeLanguage(event: any): void {
     this.translateService.use(event.detail.value);
+  }
+
+  public generatePurchaseInvoicePdf(): void {
+    this.fileApiService.generatePurchaseInvoicePdf(this.purchaseInvoiceId).subscribe(data => {
+      console.log(data);
+    })
   }
 
   public findHealthPurchaseInvoiceDetailsById(): void {

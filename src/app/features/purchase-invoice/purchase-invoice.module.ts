@@ -19,6 +19,7 @@ import { SecurityApiService } from 'src/app/shared/apis/security.api.service';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { SupplierApiService } from 'src/app/shared/apis/supplier.api.service';
 import { MatButtonModule } from '@angular/material/button';
+import { FileApiService } from 'src/app/shared/apis/file.api.service';
 
 
 @NgModule({
@@ -40,6 +41,6 @@ import { MatButtonModule } from '@angular/material/button';
     MatButtonModule,
     MatAutocompleteModule,
   ],
-  providers: [PurchaseInvoiceApiService, SecurityApiService, SupplierApiService]
+  providers: [PurchaseInvoiceApiService, SecurityApiService, SupplierApiService, FileApiService]
 })
 export class PurchaseInvoiceModule { }
