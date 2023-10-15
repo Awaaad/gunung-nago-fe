@@ -15,7 +15,10 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { IonicModule } from '@ionic/angular';
 import { TranslateModule } from '@ngx-translate/core';
 import { PurchaseInvoiceApiService } from 'src/app/shared/apis/purchase-invoice.api.service';
-import { LoginApiService } from 'src/app/shared/apis/security.api.service';
+import { SecurityApiService } from 'src/app/shared/apis/security.api.service';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { SupplierApiService } from 'src/app/shared/apis/supplier.api.service';
+import { MatButtonModule } from '@angular/material/button';
 
 
 @NgModule({
@@ -33,8 +36,10 @@ import { LoginApiService } from 'src/app/shared/apis/security.api.service';
     MatFormFieldModule,
     MatNativeDateModule,
     MatDatepickerModule,
-    MatInputModule
+    MatInputModule,
+    MatButtonModule,
+    MatAutocompleteModule,
   ],
-  providers: [PurchaseInvoiceApiService, LoginApiService]
+  providers: [PurchaseInvoiceApiService, SecurityApiService, SupplierApiService]
 })
 export class PurchaseInvoiceModule { }

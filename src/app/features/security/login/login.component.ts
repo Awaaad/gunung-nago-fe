@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoginParamDto } from 'generated-src/model';
-import { LoginApiService } from 'src/app/shared/apis/security.api.service';
+import { SecurityApiService } from 'src/app/shared/apis/security.api.service';
 import { LoginLogoutService } from 'src/app/shared/auths/login.logout.service';
 import { EmitterService } from 'src/app/shared/emitters/emitter.service';
 import { UtilsService } from 'src/app/shared/utils/utils.service';
@@ -14,7 +14,7 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
-  public company = 'G.V gunung nago ';
+  public company = 'C.V gunung nago ';
   formLogin: FormGroup;
   loggedIn: boolean = false;
   submitted = false;
@@ -32,7 +32,7 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private readonly loginApiService: LoginApiService,
+    private readonly securityApiService: SecurityApiService,
     private readonly router: Router,
     private readonly loginLogoutService: LoginLogoutService,
     private readonly utilService: UtilsService,
@@ -61,7 +61,7 @@ export class LoginComponent implements OnInit {
       this.utilService.unsuccessMsg('Invalid Username or Password', 'danger');
     } else {
       this.loggedIn = true;
-      this.loginApiService.authenticateUser(loginParam).subscribe(data => {
+      this.securityApiService.authenticateUser(loginParam).subscribe(data => {
         {
           localStorage.setItem('id', JSON.stringify(data.userDto.id));
           localStorage.setItem('username', data.userDto.username);

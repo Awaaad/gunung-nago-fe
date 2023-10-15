@@ -1,15 +1,15 @@
 import { Component, ViewChild } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { IonInfiniteScroll, IonModal } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { PaymentDto, PaymentType, SalesInvoiceDto, SupplierDto } from 'generated-src/model';
+import { PaymentDto, PaymentType, SalesInvoiceCategory, SalesInvoiceDto, SalesInvoiceStatus, SalesInvoiceType, UserDto } from 'generated-src/model';
 import { Subscription } from 'rxjs';
 import { UtilsService } from 'src/app/shared/utils/utils.service';
-import { OverlayEventDetail } from '@ionic/core/components';
 import { SalesInvoiceApiService } from 'src/app/shared/apis/sales-invoice.api.service';
+import { Router } from '@angular/router';
+import { SecurityApiService } from 'src/app/shared/apis/security.api.service';
 
 @Component({
   selector: 'app-sales-invoice-list',
@@ -17,21 +17,33 @@ import { SalesInvoiceApiService } from 'src/app/shared/apis/sales-invoice.api.se
   styleUrls: ['./sales-invoice-list.component.scss'],
 })
 export class SalesInvoiceListComponent {
+  @ViewChild('picker') picker: any;
   @ViewChild(IonInfiniteScroll, { static: true }) infiniteScroll!: IonInfiniteScroll;
   @ViewChild(IonModal) modal!: IonModal;
-  public supplierEditForm!: FormGroup;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   public language = "en";
-  public displayedColumns: string[] = ['id', 'name', 'createdBy', 'salesInvoiceType', 'createdDate', 'category', 'driver', 'totalPrice', 'amountPaid', 'amountDue', 'status'];
+  public displayedColumns: string[] = ['id', 'name', 'createdBy', 'salesInvoiceType', 'createdDate', 'category', 'driver', 'totalPrice', 'status'];
   public salesInvoices = new MatTableDataSource<SalesInvoiceDto>;
   private infiniteSalesInvoices: SalesInvoiceDto[] = [];
   public salesInvoiceSearchSubscription!: Subscription;
   private page: number = 0;
   private size: number = 20;
-  public sortOrder: string = 'asc';
-  public sortBy: string = 'name';
+  public sortOrder: string = 'desc';
+  public sortBy: string = 'createdDate';
   public customerName: string = '';
+  public dateFrom: Date | any = null;
+  public dateTo: Date | any = null;
+  public usernames: string[] = [];
+  public username: string = '';
+  public drivers: UserDto[] = [];
+  public selectedDriverId: number | any = '0';
+  public salesInvoiceTypes: string[] = [];
+  public salesInvoiceType: SalesInvoiceType | string = '';
+  public salesInvoiceStatuses: string[] = [];
+  public salesInvoiceStatus: SalesInvoiceStatus | string = '';
+  public salesInvoiceCategories: string[] = [];
+  public salesInvoiceCategory: SalesInvoiceCategory | string = '';
   public isModalOpen: boolean = false;
   public errorMessages = {
     name: [
@@ -47,17 +59,36 @@ export class SalesInvoiceListComponent {
 
   constructor(
     private salesInvoiceApiService: SalesInvoiceApiService,
+    private router: Router,
+    private securityApiService: SecurityApiService,
     private translateService: TranslateService,
     private utilsService: UtilsService
   ) {
   }
 
   ionViewWillEnter(): void {
+    this.salesInvoiceTypes = Object.keys(SalesInvoiceType);
+    this.salesInvoiceStatuses = Object.keys(SalesInvoiceStatus);
+    this.salesInvoiceCategories = Object.keys(SalesInvoiceCategory);
+    this.getAllUsernames();
+    this.getAllDrivers();
     this.search();
   }
 
   public ionChangeLanguage(event: any): void {
     this.translateService.use(event.detail.value);
+  }
+
+  private getAllUsernames(): void {
+    this.securityApiService.getAllUsernames().subscribe(usernames => {
+      this.usernames = usernames;
+    })
+  }
+
+  private getAllDrivers(): void {
+    this.securityApiService.getAllDrivers().subscribe(drivers => {
+      this.drivers = drivers;
+    })
   }
 
   public searchByCustomerName(customerName: any): void {
@@ -68,6 +99,74 @@ export class SalesInvoiceListComponent {
     this.search();
   }
 
+  public ionChangeType(event: any): void {
+    this.salesInvoiceType = event.detail.value;
+    this.utilsService.presentLoadingDuration(500).then(() => {
+      this.search();
+    });
+  }
+
+  public ionChangeStatus(event: any): void {
+    this.salesInvoiceStatus = event.detail.value;
+    this.utilsService.presentLoadingDuration(500).then(() => {
+      this.search();
+    });
+  }
+
+  public ionChangeCategory(event: any): void {
+    this.salesInvoiceCategory = event.detail.value;
+    this.utilsService.presentLoadingDuration(500).then(() => {
+      this.search();
+    });
+  }
+
+  public ionChangeUsername(event: any): void {
+    this.username = event.detail.value;
+    this.utilsService.presentLoadingDuration(500).then(() => {
+      this.search();
+    });
+  }
+
+  public ionChangeDriver(event: any): void {
+    this.selectedDriverId = event.detail.value;
+    this.utilsService.presentLoadingDuration(500).then(() => {
+      this.search();
+    });
+  }
+
+  public routeToSalesInvoiceDetails(salesInvoiceDto: SalesInvoiceDto): void {
+    if (salesInvoiceDto.salesInvoiceType === SalesInvoiceType.EGG) {
+      this.router.navigate([`sales-invoice/sales-invoice-details/${SalesInvoiceType.EGG}/${salesInvoiceDto.id}`]);
+    } else if (salesInvoiceDto.salesInvoiceType === SalesInvoiceType.FLOCK) {
+      this.router.navigate([`sales-invoice/sales-invoice-details/${SalesInvoiceType.FLOCK}/${salesInvoiceDto.id}`]);
+    }
+  }
+
+  public selectDateFrom(): void {
+    this.utilsService.presentLoadingDuration(500).then(() => {
+      this.search();
+    });
+  }
+
+  public clearDateFrom(): void {
+    this.dateFrom = null;
+    this.utilsService.presentLoadingDuration(500).then(() => {
+      this.search();
+    });
+  }
+
+  public selectDateTo(): void {
+    this.utilsService.presentLoadingDuration(500).then(() => {
+      this.search();
+    });
+  }
+
+  public clearDateTo(): void {
+    this.dateTo = null;
+    this.utilsService.presentLoadingDuration(500).then(() => {
+      this.search();
+    });
+  }
 
   public search(event?: any, isLoadevent?: any) {
     if (!isLoadevent) {
@@ -75,12 +174,24 @@ export class SalesInvoiceListComponent {
       this.infiniteSalesInvoices = [];
       this.salesInvoices = new MatTableDataSource<SalesInvoiceDto>([]);
     }
-    const salesInvoiceSearchCriteriaDto = {
+    const salesInvoiceSearchCriteriaDto: any = {
+      createdBy: this.username === '' || this.username === null ? null : this.username,
+      driverId: this.selectedDriverId === '0' || this.selectedDriverId === null ? '' : this.selectedDriverId,
+      dateFrom: this.dateFrom === null ? '' : this.dateFrom,
+      dateTo: this.dateTo === null ? '' : this.dateTo,
       customerName: this.customerName,
+      salesInvoiceType: this.salesInvoiceType,
+      salesInvoiceStatus: this.salesInvoiceStatus,
+      salesInvoiceCategory: this.salesInvoiceCategory,
+
       page: this.page,
       size: this.size,
       sortBy: this.sortBy,
       sortOrder: this.sortOrder.toUpperCase(),
+    }
+
+    if (salesInvoiceSearchCriteriaDto.createdBy === null) {
+      delete salesInvoiceSearchCriteriaDto.createdBy;
     }
 
     this.salesInvoiceSearchSubscription = this.salesInvoiceApiService.search(salesInvoiceSearchCriteriaDto).subscribe(salesInvoices => {
@@ -95,7 +206,15 @@ export class SalesInvoiceListComponent {
   }
 
   public reset(): void {
-    this.utilsService.presentLoadingDuration(500).then(value => {
+    this.dateFrom = null;
+    this.dateTo = null;
+    this.selectedDriverId = '0';
+    this.customerName = '';
+    this.salesInvoiceType = '';
+    this.salesInvoiceStatus = '';
+    this.salesInvoiceCategory = '';
+    this.username = '';
+    this.utilsService.presentLoadingDuration(500).then(() => {
       this.search();
     });
   }
@@ -127,57 +246,6 @@ export class SalesInvoiceListComponent {
         sum = sum + payment.amountPaid;
     })
     return sum;
-  }
-
-  public initialiseSupplierEditForm(supplierDetails: SupplierDto): void {
-    this.supplierEditForm = new FormGroup({
-      id: new FormControl({ value: supplierDetails.id, disabled: false }, Validators.compose([Validators.required])),
-      name: new FormControl({ value: supplierDetails.name, disabled: false }, Validators.compose([Validators.required])),
-      email: new FormControl({ value: supplierDetails.email, disabled: false }, Validators.compose([Validators.required])),
-      address: new FormControl({ value: supplierDetails.address, disabled: false }),
-      telephoneNumber: new FormControl({ value: supplierDetails.telephoneNumber, disabled: false }, Validators.compose([Validators.required]))
-    })
-  }
-
-  public openModal(element: SupplierDto): void {
-    this.initialiseSupplierEditForm(element);
-    this.isModalOpen = true;
-  }
-
-  public cancel(): void {
-    this.isModalOpen = false;
-    this.modal.dismiss(null, 'cancel');
-  }
-
-  public confirm(): void {
-    this.modal.dismiss(null, 'confirm');
-  }
-
-  public onWillDismiss(event: Event): void {
-    const ev = event as CustomEvent<OverlayEventDetail<string>>;
-    if (ev.detail.role === 'backdrop') {
-      this.isModalOpen = false;
-    }
-    if (ev.detail.role === 'confirm') {
-      this.isModalOpen = false;
-      this.edit();
-    }
-  }
-
-  public edit(): void {
-    this.utilsService.presentLoading();
-    // this.supplierApiService.edit(this.supplierEditForm.value).subscribe({
-    //   next: (data: string) => {
-    //     this.supplierEditForm.reset();
-    //     this.utilsService.dismissLoading();
-    //     this.utilsService.successMsg('Supplier successfully edited');
-    //     this.search();
-    //   },
-    //   error: (error: HttpErrorResponse) => {
-    //     this.utilsService.dismissLoading();
-    //     this.utilsService.unsuccessMsg('Error', 'gunung-nago-warehouse');
-    //   }
-    // });
   }
 }
 

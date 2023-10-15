@@ -23,10 +23,11 @@ import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatNativeDateModule } f
 import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter } from '@angular/material-moment-adapter';
 import { ConstantHelper } from 'src/app/shared/helpers/constant.helper';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { FlockStockComponent } from './flock-stock/flock-stock.component';
 export const MY_FORMATS = ConstantHelper.dateFormat;
 
 @NgModule({
-  declarations: [FlockListComponent, FlockDetailsComponent, FlockSaleDetailsComponent, FlockSaleListComponent],
+  declarations: [FlockListComponent, FlockDetailsComponent, FlockSaleDetailsComponent, FlockSaleListComponent, FlockStockComponent],
   imports: [
     CommonModule,
     FlockRoutingModule,

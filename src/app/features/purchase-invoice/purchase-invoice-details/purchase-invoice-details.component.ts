@@ -86,6 +86,7 @@ export class PurchaseInvoiceDetailsComponent implements OnInit {
       purchaseInvoiceType: null,
       discount: null,
       totalPrice: null,
+      comment: null,
       purchaseInvoiceHealthProductDetailsDtos: []
     }
 
@@ -102,6 +103,7 @@ export class PurchaseInvoiceDetailsComponent implements OnInit {
       purchaseInvoiceType: null,
       discount: null,
       totalPrice: null,
+      comment: null,
       purchaseInvoiceFeedDetailsDtos: []
     }
   }

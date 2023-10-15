@@ -14,7 +14,7 @@ import { CustomerFrontDto, FlockSaleSaveFrontDto } from 'generated-src/model-fro
 import { IonModal } from '@ionic/angular';
 import { OverlayEventDetail } from '@ionic/core/components';
 import * as moment from 'moment';
-import { LoginApiService } from 'src/app/shared/apis/security.api.service';
+import { SecurityApiService } from 'src/app/shared/apis/security.api.service';
 
 @Component({
   selector: 'app-flock-sale-details',
@@ -105,7 +105,7 @@ export class FlockSaleDetailsComponent implements OnInit {
     private cageApiService: CageApiService,
     private customerApiService: CustomerApiService,
     private formBuilder: FormBuilder,
-    private loginApiService: LoginApiService,
+    private securityApiService: SecurityApiService,
     private router: Router,
     private flockSaleApiService: FlockSaleApiService,
     private surveyApiService: SurveyApiService,
@@ -521,7 +521,7 @@ export class FlockSaleDetailsComponent implements OnInit {
   }
 
   private getAllDrivers(): void {
-    this.loginApiService.getAllDrivers().subscribe(drivers => {
+    this.securityApiService.getAllDrivers().subscribe(drivers => {
       this.drivers = drivers;
     })
   }

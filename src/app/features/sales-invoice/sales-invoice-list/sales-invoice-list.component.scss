@@ -70,3 +70,40 @@ tbody {
 .mdc-data-table__header-cell {
     color: white;
 }
+
+
+.chip-paid {
+    background-color: var(--ion-color-gunung-nago-report);
+    color: white;
+    font-size: 15px;
+}
+
+.chip-pending {
+    background-color: var(--ion-color-gunung-nago-feed);
+    color: white;
+    font-size: 15px;
+}
+
+.chip-cancelled {
+    background-color: var(--ion-color-gunung-nago-warehouse);
+    color: white;
+    font-size: 15px;
+}
+
+.chip-approved {
+    background-color: var(--ion-color-gunung-nago-survey);
+    color: white;
+    font-size: 15px;
+}
+
+.chip-completed {
+    background-color: var(--ion-color-gunung-nago-survey);
+    color: white;
+    font-size: 15px;
+}
+
+.red {
+    ion-datetime-button::part(native) {
+        background: #FFF;
+    }
+}

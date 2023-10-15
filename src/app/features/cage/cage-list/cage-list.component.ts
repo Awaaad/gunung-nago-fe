@@ -105,6 +105,7 @@ export class CageListComponent {
   public reset(): void {
     this.cageCategory = '';
     this.active = true;
+    this.page = 0;
     this.utilsService.presentLoadingDuration(500).then(value => {
       this.search();
     });

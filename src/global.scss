@@ -271,6 +271,33 @@ strong {
     margin: 0em 1em 1em 0
 }
 
-.health-stock-modal {
+.health-stock-modal {}
 
+.table-content-wrapper {
+    display: flex;
+}
+
+.table-content-icon {
+    width: 24px;
+    margin-right: 10px;
+}
+
+.table-content-text {
+    padding-top: 4px;
+}
+
+.date-time-picker-container {
+    display: flex;
+}
+
+.date-time-picker-clear-icon {
+    margin: 0;
+    color: black;
+}
+
+.date-time-picer-clear {
+    border-radius: 9px;
+    height: 30px;
+    color: black;
+    background: var(--ion-color-step-300, #edeef0);
 }

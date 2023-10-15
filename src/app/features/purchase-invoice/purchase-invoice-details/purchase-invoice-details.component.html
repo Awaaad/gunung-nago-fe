@@ -50,8 +50,8 @@
             </div>
           </div>
           <div>
-            <div class="invoice-date-title main">Invoice Date:</div>
-            <div class="invoice-date sub">{{healthPurchaseInvoiceDetailsDto.createdDate | date:'EEEE, MMMM d, yHH:mm'}}
+            <div class="invoice-date-title main">Invoice Date: </div>
+            <div class="invoice-date sub">{{healthPurchaseInvoiceDetailsDto.createdDate | date:'EEEE, MMMM d, y HH:mm'}}
             </div>
           </div>
         </div>
@@ -115,6 +115,10 @@
             </div>
           </div>
         </div>
+
+        <textarea name="" id="" cols="30" rows="3"
+          [disabled]="true">{{healthPurchaseInvoiceDetailsDto.comment}}</textarea>
+
       </ion-card-content>
     </ion-card>
   </div>
@@ -145,8 +149,8 @@
             </div>
           </div>
           <div>
-            <div class="invoice-date-title main">Invoice Date:</div>
-            <div class="invoice-date sub">{{feedPurchaseInvoiceDetailsDto.createdDate | date:'EEEE, MMMM d, yHH:mm'}}
+            <div class="invoice-date-title main">Invoice Date: </div>
+            <div class="invoice-date sub">{{feedPurchaseInvoiceDetailsDto.createdDate | date:'EEEE, MMMM d, y HH:mm'}}
             </div>
           </div>
         </div>
@@ -210,6 +214,10 @@
             </div>
           </div>
         </div>
+
+        <textarea name="" id="" cols="30" rows="3"
+          [disabled]="true">{{feedPurchaseInvoiceDetailsDto.comment}}</textarea>
+
       </ion-card-content>
     </ion-card>
   </div>

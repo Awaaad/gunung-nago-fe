@@ -9,7 +9,7 @@ const routes: Routes = [
     component: SalesInvoiceListComponent
   },
   {
-    path: 'sales-invoice-details',
+    path: 'sales-invoice-details/:type/:salesInvoiceId',
     component: SalesInvoiceDetailsComponent
   },
 ];

@@ -238,7 +238,7 @@
               </div>
             </div>
             <div>
-              <div class="invoice-date-title main">Invoice Date:</div>
+              <div class="invoice-date-title main">Invoice Date: </div>
               <div class="invoice-date sub">{{today | date:'EEEE, MMMM d, y HH:mm'}}</div>
             </div>
           </div>
@@ -266,8 +266,10 @@
                 <td data-label="Bonus">{{invoiceDetail?.bonusBagsReceived? invoiceDetail?.bonusBagsReceived: 0}}</td>
                 <td data-label="Wholesale Price">Rp {{invoiceDetail?.wholesalePrice | number : '1.2-2'}}</td>
                 <td data-label="Retail Price">Rp {{invoiceDetail?.pricePerBag | number : '1.2-2'}}</td>
-                <td data-label="Discount">{{invoiceDetail?.discount | number :'1.2-2'}}<span *ngIf="invoiceDetail?.discount">%</span></td>
-                <td data-label="Tax">{{invoiceDetail?.tax | number :'1.2-2'}}<span *ngIf="invoiceDetail?.tax">%</span></td>
+                <td data-label="Discount">{{invoiceDetail?.discount | number :'1.2-2'}}<span
+                    *ngIf="invoiceDetail?.discount">%</span></td>
+                <td data-label="Tax">{{invoiceDetail?.tax | number :'1.2-2'}}<span *ngIf="invoiceDetail?.tax">%</span>
+                </td>
               </tr>
             </tbody>
             <!-- <tfoot>

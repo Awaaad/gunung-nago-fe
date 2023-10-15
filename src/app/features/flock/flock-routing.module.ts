@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { FlockListComponent } from './flock-list/flock-list.component';
 import { FlockDetailsComponent } from './flock-details/flock-details.component';
 import { FlockSaleDetailsComponent } from './flock-sale-details/flock-sale-details.component';
+import { FlockStockComponent } from './flock-stock/flock-stock.component';
 
 const routes: Routes = [
   {
@@ -16,6 +17,10 @@ const routes: Routes = [
   {
     path: 'flock-details',
     component: FlockDetailsComponent
+  },
+  {
+    path: 'flock-stock',
+    component: FlockStockComponent
   },
 ];
 

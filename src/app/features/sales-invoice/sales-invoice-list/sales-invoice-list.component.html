@@ -24,10 +24,6 @@
 </ion-header>
 
 <ion-content [fullscreen]="false" class="ion-padding" [scrollEvents]="true" (ionScroll)="onScroll($event)">
-  <div class="btn-container">
-    <ion-button color="neutral-btn" routerLink="/supplier/supplier-details"><ion-icon
-        name="add"></ion-icon></ion-button>
-  </div>
   <ion-card>
     <ion-card-content>
       <ion-row>
@@ -46,6 +42,95 @@
           </div>
         </ion-col>
       </ion-row>
+
+      <ion-row>
+        <ion-col size-xs="12" size-md="3">
+          <ion-select color="gunung-nago-primary" label="Salesperson" label-placement="floating" fill="outline"
+            interface="popover" placeholder="" [(ngModel)]="username" (ionChange)="ionChangeUsername($event)">
+            <ion-select-option value='' selected="true">All</ion-select-option>
+            <ion-select-option *ngFor="let username of usernames" [value]="username">{{username |
+              titlecase}}</ion-select-option>
+          </ion-select>
+        </ion-col>
+
+        <ion-col size-xs="12" size-md="3">
+          <ion-select color="gunung-nago-primary" label="Driver" label-placement="floating" fill="outline"
+            interface="popover" placeholder="Driver" [(ngModel)]="selectedDriverId"
+            (ionChange)="ionChangeDriver($event)">
+            <ion-select-option value='0' selected="true">All</ion-select-option>
+            <ion-select-option *ngFor="let driver of drivers" [value]="driver.id">{{driver.firstName}}
+              {{driver.lastName}}</ion-select-option>
+          </ion-select>
+        </ion-col>
+
+        <ion-col size-xs="12" size-md="2">
+          <ion-label>Date Issued From </ion-label>
+          <div class="date-time-picker-container">
+            <ion-datetime-button datetime="datetimeFrom"></ion-datetime-button>
+            <ion-chip class="date-time-picer-clear" (click)="clearDateFrom()" *ngIf="dateFrom">
+              <ion-icon class="date-time-picker-clear-icon" name="close-outline"></ion-icon>
+            </ion-chip>
+          </div>
+
+          <ion-popover [keepContentsMounted]="true">
+            <ng-template>
+              <ion-datetime id="datetimeFrom" [(ngModel)]="dateFrom" (ngModelChange)="selectDateFrom()"></ion-datetime>
+            </ng-template>
+          </ion-popover>
+        </ion-col>
+
+        <ion-col size-xs="12" size-md="2">
+          <ion-label>Date Issued To </ion-label>
+          <div class="date-time-picker-container">
+            <ion-datetime-button datetime="datetimeTo"></ion-datetime-button>
+            <ion-chip class="date-time-picer-clear" (click)="clearDateTo()" *ngIf="dateTo">
+              <ion-icon class="date-time-picker-clear-icon" name="close-outline"></ion-icon>
+            </ion-chip>
+          </div>
+
+          <ion-popover [keepContentsMounted]="true">
+            <ng-template>
+              <ion-datetime id="datetimeTo" [(ngModel)]="dateTo" (ngModelChange)="selectDateTo()"></ion-datetime>
+            </ng-template>
+          </ion-popover>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col size-xs="12" size-md="3">
+          <ion-select color="gunung-nago-primary" label="Type" label-placement="floating" fill="outline"
+            interface="popover" clear-input="true" placeholder="Type" [(ngModel)]="salesInvoiceType"
+            (ionChange)="ionChangeType($event)">
+            <ion-select-option value='' selected="true">All</ion-select-option>
+            <ion-select-option *ngFor="let salesInvoiceType of salesInvoiceTypes" [value]="salesInvoiceType">{{
+              salesInvoiceType | titlecase
+              }}</ion-select-option>
+          </ion-select>
+        </ion-col>
+
+        <ion-col size-xs="12" size-md="3">
+          <ion-select color="gunung-nago-primary" label="Status" label-placement="floating" fill="outline"
+            interface="popover" clear-input="true" placeholder="Status" [(ngModel)]="salesInvoiceStatus"
+            (ionChange)="ionChangeStatus($event)">
+            <ion-select-option value='' selected="true">All</ion-select-option>
+            <ion-select-option *ngFor="let salesInvoiceStatus of salesInvoiceStatuses" [value]="salesInvoiceStatus">{{
+              salesInvoiceStatus | titlecase
+              }}</ion-select-option>
+          </ion-select>
+        </ion-col>
+
+        <ion-col size-xs="12" size-md="3">
+          <ion-select color="gunung-nago-primary" label="Option" label-placement="floating" fill="outline"
+            interface="popover" clear-input="true" placeholder="Status" [(ngModel)]="salesInvoiceCategory"
+            (ionChange)="ionChangeCategory($event)">
+            <ion-select-option value='' selected="true">All</ion-select-option>
+            <ion-select-option *ngFor="let salesInvoiceCategory of salesInvoiceCategories"
+              [value]="salesInvoiceCategory">{{
+              salesInvoiceCategory | titlecase
+              }}</ion-select-option>
+          </ion-select>
+        </ion-col>
+      </ion-row>
     </ion-card-content>
   </ion-card>
 
@@ -56,23 +141,34 @@
 
         <ng-container matColumnDef="id">
           <th mat-header-cell *matHeaderCellDef mat-sort-header="id"> Invoice Number </th>
-          <td mat-cell *matCellDef="let element"> GN{{element.id}} </td>
+          <td mat-cell *matCellDef="let element"> {{element.id}} </td>
         </ng-container>
 
         <ng-container matColumnDef="name">
           <th mat-header-cell *matHeaderCellDef mat-sort-header="name"> Customer Name </th>
-          <td mat-cell *matCellDef="let element"> {{element.customerFirstName}} <span
-              *ngIf="element.customerLastName != 'anonymous'">{{element.customerLastName}}</span> </td>
+          <td mat-cell *matCellDef="let element">
+            <span *ngIf="element.customerFirstName != 'anonymous'">{{element.customerFirstName}}</span>
+            <span *ngIf="element.customerLastName != 'anonymous'"> {{element.customerLastName}}</span>
+          </td>
         </ng-container>
 
         <ng-container matColumnDef="createdBy">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header="createdBy"> Sales Person </th>
-          <td mat-cell *matCellDef="let element"> {{element.createdBy}} </td>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="createdBy"> Salesperson </th>
+          <td mat-cell *matCellDef="let element"> {{element.createdBy | titlecase}} </td>
         </ng-container>
 
         <ng-container matColumnDef="salesInvoiceType">
           <th mat-header-cell *matHeaderCellDef mat-sort-header="salesInvoiceType"> Type </th>
-          <td mat-cell *matCellDef="let element"> {{element.salesInvoiceType}} </td>
+          <td mat-cell *matCellDef="let element">
+            <div *ngIf="element.salesInvoiceType === 'FLOCK'" class="table-content-wrapper">
+              <img class="table-content-icon" src='./assets/flaticon/flock.png'>
+              <div class="table-content-text">Flock</div>
+            </div>
+            <div *ngIf="element.salesInvoiceType === 'EGG'" class="table-content-wrapper">
+              <img class="table-content-icon" src='./assets/flaticon/eggs.png'>
+              <div class="table-content-text">Egg</div>
+            </div>
+          </td>
         </ng-container>
 
         <ng-container matColumnDef="createdDate">
@@ -82,12 +178,40 @@
 
         <ng-container matColumnDef="category">
           <th mat-header-cell *matHeaderCellDef mat-sort-header="category"> Option </th>
-          <td mat-cell *matCellDef="let element"> {{element.salesInvoiceCategory}} </td>
+          <td mat-cell *matCellDef="let element">
+            <div *ngIf="element.salesInvoiceCategory === 'IN_STORE'" class="table-content-wrapper">
+              <img class="table-content-icon" src='./assets/flaticon/in-store.png'>
+              <div class="table-content-text">In Store</div>
+            </div>
+            <div *ngIf="element.salesInvoiceCategory === 'DELIVERY'" class="table-content-wrapper">
+              <img class="table-content-icon" src='./assets/flaticon/delivery.png'>
+              <div class="table-content-text">Delivery</div>
+            </div>
+          </td>
         </ng-container>
 
         <ng-container matColumnDef="status">
           <th mat-header-cell *matHeaderCellDef mat-sort-header="status"> Status </th>
-          <td mat-cell *matCellDef="let element"> {{element.salesInvoiceStatus}} </td>
+          <td mat-cell *matCellDef="let element">
+            <ion-chip class="chip-paid" *ngIf="element.salesInvoiceStatus === 'PAID'">
+              <ion-label>{{element.salesInvoiceStatus | titlecase}}</ion-label>
+            </ion-chip>
+            <ion-chip class="chip-pending" *ngIf="element.salesInvoiceStatus === 'PENDING'">
+              <ion-label>{{element.salesInvoiceStatus | titlecase}}</ion-label>
+            </ion-chip>
+            <ion-chip class="chip-cancelled" *ngIf="element.salesInvoiceStatus === 'CANCELLED'">
+              <ion-label>{{element.salesInvoiceStatus | titlecase}}</ion-label>
+            </ion-chip>
+            <ion-chip class="chip-approved" *ngIf="element.salesInvoiceStatus === 'APPROVED'">
+              <ion-label>{{element.salesInvoiceStatus | titlecase}}</ion-label>
+            </ion-chip>
+            <ion-chip class="chip-cancelled" *ngIf="element.salesInvoiceStatus === 'CANCELLED'">
+              <ion-label>{{element.salesInvoiceStatus | titlecase}}</ion-label>
+            </ion-chip>
+            <ion-chip class="chip-completed" *ngIf="element.salesInvoiceStatus === 'COMPLETED'">
+              <ion-label>{{element.salesInvoiceStatus | titlecase}}</ion-label>
+            </ion-chip>
+          </td>
         </ng-container>
 
         <ng-container matColumnDef="driver">
@@ -100,7 +224,16 @@
           <td mat-cell *matCellDef="let element"> {{element.totalPrice | number :'1.2-2'}} </td>
         </ng-container>
 
-        <ng-container matColumnDef="amountPaid">
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef> Actions </th>
+          <td mat-cell *matCellDef="let element">
+            <div class="table-btn">
+              <ion-button color="neutral-btn" class="mr-05"><ion-icon name="create"></ion-icon></ion-button>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- <ng-container matColumnDef="amountPaid">
           <th mat-header-cell *matHeaderCellDef mat-sort-header="amountPaid"> Amount Paid </th>
           <td mat-cell *matCellDef="let element">
             <div *ngFor="let payment of element.paymentDtos">
@@ -134,20 +267,10 @@
               </span>
             </div>
           </td>
-        </ng-container>
-
-        <ng-container matColumnDef="edit">
-          <th mat-header-cell *matHeaderCellDef> </th>
-          <td mat-cell *matCellDef="let element">
-            <div class="table-btn">
-              <ion-button color="neutral-btn" class="mr-05" (click)="openModal(element)"><ion-icon
-                  name="create"></ion-icon></ion-button>
-            </div>
-          </td>
-        </ng-container>
+        </ng-container> -->
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        <tr mat-row (click)="routeToSalesInvoiceDetails(row)" *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
     </div>
   </ion-card>
@@ -155,68 +278,4 @@
     <ion-infinite-scroll-content loadingSpinner="crescent" loadingText="Loading more sales invoices...">
     </ion-infinite-scroll-content>
   </ion-infinite-scroll>
-
-  <ion-modal (willDismiss)="onWillDismiss($event)" [isOpen]="isModalOpen" cssClass="supplier-modal"
-    backdropDismiss="true">
-    <ng-template>
-      <ion-header>
-        <ion-toolbar>
-          <div class="title">
-            <img class="header-logo ml-15" src='./assets/flaticon/edit.png'>
-            <h3 class="modal-header-text">Edit Supplier</h3>
-          </div>
-        </ion-toolbar>
-      </ion-header>
-      <ion-content [fullscreen]="false" class="ion-padding">
-        <form [formGroup]="supplierEditForm">
-          <ion-row>
-            <ion-col size-xs="12" size-md="12">
-              <ion-input color="gunung-nago-primary" label="Name*" label-placement="floating" fill="outline" type="text"
-                clear-input="true" formControlName="name" required="true"></ion-input>
-              <div class="error-messages">
-                <ng-container *ngFor="let error of errorMessages.name">
-                  <div class="error-message"
-                    *ngIf="supplierEditForm.get('name')?.hasError(error.type) && (supplierEditForm.get('name')?.dirty || supplierEditForm.get('name')?.touched)">
-                    {{ error.message }}
-                  </div>
-                </ng-container>
-              </div>
-            </ion-col>
-            <ion-col size-xs="12" size-md="12">
-              <ion-input color="gunung-nago-primary" label="Email*" label-placement="floating" fill="outline"
-                type="text" clear-input="true" formControlName="email" required="true"></ion-input>
-              <div class="error-messages">
-                <ng-container *ngFor="let error of errorMessages.email">
-                  <div class="error-message"
-                    *ngIf="supplierEditForm.get('email')?.hasError(error.type) && (supplierEditForm.get('email')?.dirty || supplierEditForm.get('email')?.touched)">
-                    {{ error.message }}
-                  </div>
-                </ng-container>
-              </div>
-            </ion-col>
-            <ion-col size-xs="12" size-md="12">
-              <ion-input color="gunung-nago-primary" label="Address" label-placement="floating" fill="outline"
-                type="text" clear-input="true" formControlName="address"></ion-input>
-            </ion-col>
-            <ion-col size-xs="12" size-md="12">
-              <ion-input color="gunung-nago-primary" label="Telephone Number*" label-placement="floating" fill="outline"
-                type="text" clear-input="true" formControlName="telephoneNumber" required="true"></ion-input>
-              <div class="error-messages">
-                <ng-container *ngFor="let error of errorMessages.telephoneNumber">
-                  <div class="error-message"
-                    *ngIf="supplierEditForm.get('telephoneNumber')?.hasError(error.type) && (supplierEditForm.get('telephoneNumber')?.dirty || supplierEditForm.get('telephoneNumber')?.touched)">
-                    {{ error.message }}
-                  </div>
-                </ng-container>
-              </div>
-            </ion-col>
-          </ion-row>
-        </form>
-        <div class="modal-btn-container ion-text-right">
-          <ion-button class="cancel-btn" (click)="cancel()">Cancel</ion-button>
-          <ion-button color="positive-btn" (click)="confirm()">Save</ion-button>
-        </div>
-      </ion-content>
-    </ng-template>
-  </ion-modal>
 </ion-content>

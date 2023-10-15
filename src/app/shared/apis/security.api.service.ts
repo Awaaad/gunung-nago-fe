@@ -7,7 +7,7 @@ import { AuthenticatedUserDto, LoginParamDto, UserDto } from 'generated-src/mode
 @Injectable({
     providedIn: 'root'
 })
-export class LoginApiService {
+export class SecurityApiService {
 
     baseUrl = `${environment.apiPath}users/`;
 
@@ -17,7 +17,11 @@ export class LoginApiService {
         return this.http.post<AuthenticatedUserDto>(`${this.baseUrl}authenticate`, loginParam);
     }
 
+    public getAllUsernames(): Observable<string[]> {
+        return this.http.get<string[]>(`${this.baseUrl}usernames`);
+    }
+
     public getAllDrivers(): Observable<UserDto[]> {
         return this.http.get<UserDto[]>(`${this.baseUrl}drivers`);
-      }
+    }
 }

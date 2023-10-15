@@ -13,7 +13,7 @@ import { UtilsService } from 'src/app/shared/utils/utils.service';
 import { OverlayEventDetail } from '@ionic/core/components';
 import { EggSaleApiService } from 'src/app/shared/apis/egg-sale.api.service';
 import { EggStockApiService } from 'src/app/shared/apis/egg-stock.api.service';
-import { LoginApiService } from 'src/app/shared/apis/security.api.service';
+import { SecurityApiService } from 'src/app/shared/apis/security.api.service';
 @Component({
   selector: 'app-egg-sale-details',
   templateUrl: './egg-sale-details.component.html',
@@ -119,7 +119,7 @@ export class EggSaleDetailsComponent implements OnInit {
     private router: Router,
     private eggSaleApiService: EggSaleApiService,
     private eggStockApiService: EggStockApiService,
-    private loginApiService: LoginApiService,
+    private securityApiService: SecurityApiService,
     private translateService: TranslateService,
     private utilsService: UtilsService
   ) { }
@@ -634,7 +634,7 @@ export class EggSaleDetailsComponent implements OnInit {
   }
 
   private getAllDrivers(): void {
-    this.loginApiService.getAllDrivers().subscribe(drivers => {
+    this.securityApiService.getAllDrivers().subscribe(drivers => {
       this.drivers = drivers;
     })
   }

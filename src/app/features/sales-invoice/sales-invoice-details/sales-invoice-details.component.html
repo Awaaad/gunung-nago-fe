@@ -1,39 +1,303 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      <div class="router-links">
+        <div class="title">
+          <img class="header-logo" src='./assets/flaticon/official-documents.png'>
+          <h3 class="header-nav-products">Sales Invoice</h3>
+        </div>
+        <div>
+          <ion-item class="language-selection">
+            <ion-select aria-label="language" interface="popover" placeholder="Select language" [(ngModel)]="language"
+              (ionChange)="ionChangeLanguage($event)">
+              <ion-select-option value="en">English</ion-select-option>
+              <ion-select-option value="id">Indonesian</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </div>
+      </div>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
 <ion-content>
-  <table>
-    <caption>Statement Summary</caption>
-    <thead>
-      <tr>
-        <th scope="col">Account</th>
-        <th scope="col">Due Date</th>
-        <th scope="col">Amount</th>
-        <th scope="col">Period</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td data-label="Account">Visa - 3412</td>
-        <td data-label="Due Date">04/01/2016</td>
-        <td data-label="Amount">$1,190</td>
-        <td data-label="Period">03/01/2016 - 03/31/2016</td>
-      </tr>
-      <tr>
-        <td scope="row" data-label="Account">Visa - 6076</td>
-        <td data-label="Due Date">03/01/2016</td>
-        <td data-label="Amount">$2,443</td>
-        <td data-label="Period">02/01/2016 - 02/29/2016</td>
-      </tr>
-      <tr>
-        <td scope="row" data-label="Account">Corporate AMEX</td>
-        <td data-label="Due Date">03/01/2016</td>
-        <td data-label="Amount">$1,181</td>
-        <td data-label="Period">02/01/2016 - 02/29/2016</td>
-      </tr>
-      <tr>
-        <td scope="row" data-label="Acount">Visa - 3412</td>
-        <td data-label="Due Date">02/01/2016</td>
-        <td data-label="Amount">$842</td>
-        <td data-label="Period">01/01/2016 - 01/31/2016</td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="invoice-margin" *ngIf="type === 'FLOCK'">
+    <ion-card class="invoice">
+      <ion-card-content>
+        <div class="invoice-title">
+          <div>
+            <div class="invoice-logo">
+              <img class="logo-img" src='./assets/icon/chicken/icons8-chicken-64.png'>
+              <h5 class="logo-text"><strong>{{company}}</strong></h5>
+            </div>
+            <div>
+              <div class="sub"><strong>Address:</strong> {{address}} </div>
+              <div class="sub"><strong>Telephone Number(s):</strong> {{phone}}</div>
+              <div class="sub"><strong>Email:</strong> {{email}}</div>
+              <div class="sub"><strong>Registration Number (SIUP):</strong> {{regNo}}</div>
+              <div class="sub"><strong>Year of Establishment:</strong> {{yoe}}</div>
+            </div>
+          </div>
+
+          <div>
+            <span class="main"><strong>Invoice No: {{flockSalesInvoiceDetailsDto.id}}</strong></span>
+            <div class="sub"><strong>Date Issued:</strong> </div>
+            <div class="sub">{{flockSalesInvoiceDetailsDto.createdDate | date:'EEEE, MMMM d, y HH:mm'}}
+            </div>
+          </div>
+        </div>
+        <div class="invoice-subtitle">
+          <div *ngIf="flockSalesInvoiceDetailsDto.customerFirstName != 'anonymous'">
+            <div class="sub"><strong>Invoice To:</strong></div>
+            <span class="sub"><strong>Name:
+              </strong> {{flockSalesInvoiceDetailsDto.customerFirstName}}
+              {{flockSalesInvoiceDetailsDto.customerLastName}}</span>
+            <div class="sub">
+              <strong>Address:</strong> {{flockSalesInvoiceDetailsDto.customerAddress}}
+            </div>
+            <div class="sub"><strong>Telephone
+                Number:</strong> {{flockSalesInvoiceDetailsDto.customerTelephoneNumber}}</div>
+          </div>
+          <div>
+            <div *ngIf="flockSalesInvoiceDetailsDto.salesPerson != null" class="salesperson">
+              <div class="sub"><strong>Salesperson:</strong> {{flockSalesInvoiceDetailsDto.salesPerson}}</div>
+            </div>
+            <div *ngIf="flockSalesInvoiceDetailsDto.driverFirstName != null">
+              <div class="sub"><strong>Driver:</strong> {{flockSalesInvoiceDetailsDto.driverFirstName}}
+                {{flockSalesInvoiceDetailsDto.driverLastName}}</div>
+            </div>
+          </div>
+        </div>
+
+        <table class="invoice-table">
+          <thead>
+            <tr>
+              <th scope="col">No.</th>
+              <th scope="col">Quantity For Good</th>
+              <th scope="col">Price Per Chicken (Good)</th>
+              <th scope="col">Quantity For Sterile</th>
+              <th scope="col">Price Per Chicken (Sterile)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let invoiceDetail of flockSalesInvoiceDetailsDto?.salesInvoiceFlockDetailsDtos let i = index">
+              <td data-label="No.">{{i+1}}</td>
+              <td data-label="Quantity For Good">{{invoiceDetail?.quantityForGood}}</td>
+              <td data-label="Price Per Chicken (Good)">Rp {{invoiceDetail?.pricePerChickenForGood | number : '1.2-2'}}
+              </td>
+              <td data-label="Quantity For Sterile">{{invoiceDetail?.quantityForSterile}}</td>
+              <td data-label="Price Per Chicken (Sterile)">Rp {{invoiceDetail?.pricePerChickenForSterile | number :
+                '1.2-2'}}</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <th id="total" colspan="1">Total :</th>
+              <td>{{totalQuantityForGoodChicken}}</td>
+              <td>Rp {{totalPriceForGoodChicken | number :'1.2-2'}}</td>
+              <td>{{totalPriceForSterileChicken}}</td>
+              <td>Rp {{totalPriceForSterileChicken | number :'1.2-2'}}</td>
+            </tr>
+          </tfoot>
+        </table>
+
+        <div class="invoice-footer">
+          <div>
+          </div>
+          <div>
+            <div class="invoice-date-title">
+              <table class="summary-table">
+                <tbody>
+                  <tr>
+                    <th id="total" colspan="1">SubTotal :</th>
+                    <td>{{flockSalesInvoiceDetailsDto.totalPrice | number :'1.2-2'}}</td>
+                  </tr>
+                  <tr>
+                    <th id="total" colspan="1">Discount :</th>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <th id="total" colspan="1">Tax :</th>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <th id="total" colspan="1">Total :</th>
+                    <td>Rp {{flockSalesInvoiceDetailsDto.totalPrice | number :'1.2-2'}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <textarea name="" id="" cols="30" rows="3" [disabled]="true">{{flockSalesInvoiceDetailsDto.comment}}</textarea>
+
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <div class="invoice-margin" *ngIf="type === 'EGG'">
+    <ion-card class="invoice">
+      <ion-card-content>
+        <div class="invoice-title">
+          <div>
+            <div class="invoice-logo">
+              <img class="logo-img" src='./assets/icon/chicken/icons8-chicken-64.png'>
+              <h5 class="logo-text"><strong>{{company}}</strong></h5>
+            </div>
+            <div>
+              <div class="sub"><strong>Address:</strong> {{address}} </div>
+              <div class="sub"><strong>Telephone Number(s):</strong> {{phone}}</div>
+              <div class="sub"><strong>Email:</strong> {{email}}</div>
+              <div class="sub"><strong>Registration Number (SIUP):</strong> {{regNo}}</div>
+              <div class="sub"><strong>Year of Establishment:</strong> {{yoe}}</div>
+            </div>
+          </div>
+
+          <div>
+            <span class="main"><strong>Invoice No: {{eggSalesInvoiceDetailsFrontDto.id}}</strong></span>
+            <div class="sub"><strong>Date Issued:</strong> </div>
+            <div class="sub">{{eggSalesInvoiceDetailsFrontDto.createdDate | date:'EEEE, MMMM d, y HH:mm'}}
+            </div>
+          </div>
+        </div>
+        <div class="invoice-subtitle">
+          <div *ngIf="eggSalesInvoiceDetailsFrontDto.customerFirstName != 'anonymous'">
+            <div class="sub"><strong>Invoice To:</strong></div>
+            <span class="sub"><strong>Name:
+              </strong> {{eggSalesInvoiceDetailsFrontDto.customerFirstName}}
+              {{eggSalesInvoiceDetailsFrontDto.customerLastName}}</span>
+            <div class="sub">
+              <strong>Address:</strong> {{eggSalesInvoiceDetailsFrontDto.customerAddress}}
+            </div>
+            <div class="sub"><strong>Telephone
+                Number:</strong> {{eggSalesInvoiceDetailsFrontDto.customerTelephoneNumber}}</div>
+          </div>
+          <div>
+            <div *ngIf="eggSalesInvoiceDetailsFrontDto.salesPerson != null" class="salesperson">
+              <div class="sub"><strong>Salesperson:</strong> {{eggSalesInvoiceDetailsFrontDto.salesPerson}}</div>
+            </div>
+            <div *ngIf="eggSalesInvoiceDetailsFrontDto.driverFirstName != null">
+              <div class="sub"><strong>Driver:</strong> {{eggSalesInvoiceDetailsFrontDto.driverFirstName}}
+                {{eggSalesInvoiceDetailsFrontDto.driverLastName}}</div>
+            </div>
+          </div>
+        </div>
+
+        <table class="invoice-table">
+          <thead>
+            <tr>
+              <th scope="col">Category</th>
+              <th scope="col">Tie</th>
+              <th scope="col">Price Per Tie</th>
+              <th scope="col">Tray</th>
+              <th scope="col">Price Per Tray</th>
+              <th scope="col">Piece</th>
+              <th scope="col">Price Per Piece</th>
+              <th scope="col">Total Eggs</th>
+              <th scope="col">Total Price</th>
+            </tr>
+          </thead>
+
+          <tbody *ngFor="let invoiceDetail of eggSalesInvoiceDetailsFrontDto?.salesInvoiceEggDetailsDtos let i = index">
+            <tr *ngIf="invoiceDetail.bigGoodPiece > 0 || invoiceDetail.bigGoodTray > 0 || invoiceDetail.bigGoodTie > 0">
+              <td data-label="Category">BIG</td>
+              <td data-label="Tie">{{invoiceDetail?.bigGoodTie}}</td>
+              <td data-label="Price Per Tie">Rp {{invoiceDetail?.bigGoodPricePerTie | number :'1.2-2'}}</td>
+              <td data-label="Tray">{{invoiceDetail?.bigGoodTray}}</td>
+              <td data-label="Price Per Tray">Rp {{invoiceDetail?.bigGoodPricePerTray | number :'1.2-2'}}</td>
+              <td data-label="Piece">{{invoiceDetail?.bigGoodPiece}}</td>
+              <td data-label="Price Per Piece">Rp {{invoiceDetail?.bigGoodPricePerPiece | number :'1.2-2'}}</td>
+              <td data-label="Total Eggs">{{calculateTotalBigEggs(invoiceDetail)}}</td>
+              <td data-label="Total Price">Rp {{calculateTotalPriceBigEggs(invoiceDetail) | number :'1.2-2'}}</td>
+            </tr>
+            <tr
+              *ngIf="invoiceDetail.mediumGoodPiece > 0 || invoiceDetail.mediumGoodTray > 0 || invoiceDetail.mediumGoodTie > 0">
+              <td data-label="Category">MEDIUM</td>
+              <td data-label="Tie">{{invoiceDetail?.mediumGoodTie}}</td>
+              <td data-label="Price Per Tie">Rp {{invoiceDetail?.mediumGoodPricePerTie | number :'1.2-2'}}</td>
+              <td data-label="Tray">{{invoiceDetail?.mediumGoodTray}}</td>
+              <td data-label="Price Per Tray">Rp {{invoiceDetail?.mediumGoodPricePerTray | number :'1.2-2'}}</td>
+              <td data-label="Piece">{{invoiceDetail?.mediumGoodPiece}}</td>
+              <td data-label="Price Per Piece">Rp {{invoiceDetail?.mediumGoodPricePerPiece | number :'1.2-2'}}</td>
+              <td data-label="Total Eggs">{{calculateTotalMediumEggs(invoiceDetail)}}</td>
+              <td data-label="Total Price">Rp {{calculateTotalPriceMediumEggs(invoiceDetail) | number :'1.2-2'}}</td>
+            </tr>
+            <tr
+              *ngIf="invoiceDetail.smallGoodPiece > 0 || invoiceDetail.smallGoodTray > 0 || invoiceDetail.smallGoodTie > 0">
+              <td data-label="Category">SMALL</td>
+              <td data-label="Tie">{{invoiceDetail?.smallGoodTie}}</td>
+              <td data-label="Price Per Tie">Rp {{invoiceDetail?.smallGoodPricePerTie | number :'1.2-2'}}</td>
+              <td data-label="Tray">{{invoiceDetail?.smallGoodTray}}</td>
+              <td data-label="Price Per Tray">Rp {{invoiceDetail?.smallGoodPricePerTray | number :'1.2-2'}}</td>
+              <td data-label="Piece">{{invoiceDetail?.smallGoodPiece}}</td>
+              <td data-label="Price Per Piece">Rp {{invoiceDetail?.smallGoodPricePerPiece | number :'1.2-2'}}</td>
+              <td data-label="Total Eggs">{{calculateTotalSmallEggs(invoiceDetail)}}</td>
+              <td data-label="Total Price">Rp {{calculateTotalPriceSmallEggs(invoiceDetail) | number :'1.2-2'}}</td>
+            </tr>
+            <tr *ngIf="invoiceDetail.badPiece > 0 || invoiceDetail.badPricePerTray > 0 || invoiceDetail.badTie > 0">
+              <td data-label="Category">BAD</td>
+              <td data-label="Tie">{{invoiceDetail?.badTie}}</td>
+              <td data-label="Price Per Tie">Rp {{invoiceDetail?.badPricePerTie | number :'1.2-2'}}</td>
+              <td data-label="Tray">{{invoiceDetail?.badPricePerTray}}</td>
+              <td data-label="Price Per Tray">Rp {{invoiceDetail?.badPricePerTray | number :'1.2-2'}}</td>
+              <td data-label="Piece">{{invoiceDetail?.badPiece}}</td>
+              <td data-label="Price Per Piece">Rp {{invoiceDetail?.badPricePerPiece | number :'1.2-2'}}</td>
+              <td data-label="Total Eggs">{{calculateTotalBadEggs(invoiceDetail)}}</td>
+              <td data-label="Total Price">Rp {{calculateTotalPriceBadEggs(invoiceDetail) | number :'1.2-2'}}</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <th id="total" colspan="1">Total :</th>
+              <td>{{totalTie}}</td>
+              <td>Rp {{totalPriceTie | number :'1.2-2'}}</td>
+              <td>{{totalTray}}</td>
+              <td>Rp {{totalPriceTray | number :'1.2-2'}}</td>
+              <td>{{totalPiece}}</td>
+              <td>Rp {{totalPricePiece | number :'1.2-2'}}</td>
+              <td>{{totalEggs}}</td>
+              <td>Rp {{totalPrice | number :'1.2-2'}}</td>
+            </tr>
+          </tfoot>
+        </table>
+
+        <div class="invoice-footer">
+          <div>
+          </div>
+          <div>
+            <div class="invoice-date-title">
+              <table class="summary-table">
+                <tbody>
+                  <tr>
+                    <th id="total" colspan="1">SubTotal :</th>
+                    <td>Rp {{eggSalesInvoiceDetailsFrontDto.totalPrice | number :'1.2-2'}}</td>
+                  </tr>
+                  <tr>
+                    <th id="total" colspan="1">Discount :</th>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <th id="total" colspan="1">Tax :</th>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <th id="total" colspan="1">Total :</th>
+                    <td>Rp {{eggSalesInvoiceDetailsFrontDto.totalPrice | number :'1.2-2'}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <textarea name="" id="" cols="30" rows="3"
+          [disabled]="true">{{eggSalesInvoiceDetailsFrontDto.comment}}</textarea>
+
+      </ion-card-content>
+    </ion-card>
+  </div>
 </ion-content>

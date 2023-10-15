@@ -24,10 +24,13 @@ export class SurveryDetailsComponent implements OnInit {
   public remaining: number = 0;
   public bigEggsItem: number = 0;
   public bigEggsTie: number = 0;
+  public bigEggsTray: number = 0;
   public mediumEggsItem: number = 0;
   public mediumEggsTie: number = 0;
+  public mediumEggsTray: number = 0;
   public smallEggsItem: number = 0;
   public smallEggsTie: number = 0;
+  public smallEggsTray: number = 0;
   public broken: number = 0;
   public totalItem: number = 0;
   public flockStockId!: number;
@@ -61,6 +64,15 @@ export class SurveryDetailsComponent implements OnInit {
   public feedSurvey: FeedSurveyDto[] = [];
   public feedLines: FlockFeedLineDto[] = [];
 
+  public errorMessages = {
+    tray: [
+      { type: 'max', message: 'Tray cannot be more than 9' },
+    ],
+    item: [
+      { type: 'max', message: 'Item cannot be more than 29' },
+    ]
+  };
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private flockFeedLineApiService: FlockFeedLineApiService,
@@ -93,11 +105,14 @@ export class SurveryDetailsComponent implements OnInit {
       dead: new FormControl({ value: this.dead, disabled: false }, Validators.compose([])),
       sterile: new FormControl({ value: this.sterile, disabled: false }, Validators.compose([])),
       bigEggsTie: new FormControl({ value: this.bigEggsTie, disabled: false }, Validators.compose([])),
-      bigEggsItem: new FormControl({ value: this.bigEggsItem, disabled: false }, Validators.compose([])),
+      bigEggsTray: new FormControl({ value: this.bigEggsTie, disabled: false }, Validators.compose([Validators.max(9)])),
+      bigEggsItem: new FormControl({ value: this.bigEggsItem, disabled: false }, Validators.compose([Validators.max(29)])),
       mediumEggsTie: new FormControl({ value: this.mediumEggsTie, disabled: false }, Validators.compose([])),
-      mediumEggsItem: new FormControl({ value: this.mediumEggsItem, disabled: false }, Validators.compose([])),
+      mediumEggsTray: new FormControl({ value: this.mediumEggsTie, disabled: false }, Validators.compose([Validators.max(9)])),
+      mediumEggsItem: new FormControl({ value: this.mediumEggsItem, disabled: false }, Validators.compose([Validators.max(29)])),
       smallEggsTie: new FormControl({ value: this.smallEggsTie, disabled: false }, Validators.compose([])),
-      smallEggsItem: new FormControl({ value: this.smallEggsItem, disabled: false }, Validators.compose([])),
+      smallEggsTray: new FormControl({ value: this.smallEggsTie, disabled: false }, Validators.compose([Validators.max(9)])),
+      smallEggsItem: new FormControl({ value: this.smallEggsItem, disabled: false }, Validators.compose([Validators.max(29)])),
       broken: new FormControl({ value: this.broken, disabled: false }, Validators.compose([])),
       upDownProduction: new FormControl({ value: '', disabled: false }, Validators.compose([])),
       vaccineMedication: new FormControl({ value: '', disabled: false }, Validators.compose([])),
@@ -191,7 +206,7 @@ export class SurveryDetailsComponent implements OnInit {
   }
 
   public calculateTotalItem() {
-    this.totalItem = (this.bigEggsTie * 300) + this.bigEggsItem + (this.mediumEggsTie * 300) + this.mediumEggsItem + (this.smallEggsTie * 300) + this.smallEggsItem + this.broken;
+    this.totalItem = (this.bigEggsTie * 300) + (this.bigEggsTray * 30) + this.bigEggsItem + (this.mediumEggsTie * 300) + (this.mediumEggsTray * 30) + this.mediumEggsItem + (this.smallEggsTie * 300) + (this.smallEggsTray * 30) + this.smallEggsItem + this.broken;
   }
 
   public validateItem(event: any) {
