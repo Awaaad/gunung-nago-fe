@@ -194,6 +194,8 @@ export class PurchaseInvoiceListComponent {
       this.router.navigate([`purchase-invoice/purchase-invoice-details/${PurchaseInvoiceType.HEALTH_PRODUCT}/${purchaseInvoiceDto.id}`]);
     } else if (purchaseInvoiceDto.purchaseInvoiceType === PurchaseInvoiceType.FEED) {
       this.router.navigate([`purchase-invoice/purchase-invoice-details/${PurchaseInvoiceType.FEED}/${purchaseInvoiceDto.id}`]);
+    } else if (purchaseInvoiceDto.purchaseInvoiceType === PurchaseInvoiceType.FLOCK) {
+      this.router.navigate([`purchase-invoice/purchase-invoice-details/${PurchaseInvoiceType.FLOCK}/${purchaseInvoiceDto.id}`]);
     }
   }
 

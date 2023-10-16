@@ -64,6 +64,18 @@
                   </ng-container>
                 </div>
               </ion-col>
+              <ion-col size-xs="12" size-md="3">
+                <ion-input color="gunung-nago-primary" label="Email" label-placement="floating" fill="outline"
+                  type="text" clear-input="true" formControlName="email" required="true"></ion-input>
+                <div class="error-messages">
+                  <ng-container *ngFor="let error of errorMessages.email">
+                    <div class="error-message"
+                      *ngIf="customerDetails.get('email')?.hasError(error.type) && (customerDetails.get('email')?.dirty || customerDetails.get('email')?.touched)">
+                      {{ error.message }}
+                    </div>
+                  </ng-container>
+                </div>
+              </ion-col>
             </ion-row>
             <ion-row>
               <ion-col size-xs="12" size-md="6">

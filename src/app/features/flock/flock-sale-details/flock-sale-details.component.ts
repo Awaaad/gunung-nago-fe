@@ -15,6 +15,7 @@ import { IonModal } from '@ionic/angular';
 import { OverlayEventDetail } from '@ionic/core/components';
 import * as moment from 'moment';
 import { SecurityApiService } from 'src/app/shared/apis/security.api.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-flock-sale-details',
@@ -57,6 +58,13 @@ export class FlockSaleDetailsComponent implements OnInit {
   public drivers: UserDto[] = [];
   public selectedDriver!: UserDto | null;
   public comment!: string | null;
+
+  public company = environment.company;
+  public address = environment.address;
+  public phone = environment.phone;
+  public email = environment.email;
+  public regNo = environment.regNo;
+  public yoe = environment.yoe;
 
   public errorMessages = {
     cage: [
@@ -307,7 +315,7 @@ export class FlockSaleDetailsComponent implements OnInit {
     }
   }
 
-  private calculateTotalPrice(): void {
+  public calculateTotalPrice(): void {
     this.totalPrice = 0;
     (this.flockSaleForm.get('flockSaleDetails') as FormArray).value.forEach((form: any) => {
       this.totalPrice = this.totalPrice + (form.totalPriceForGood + form.totalPriceForSterile);

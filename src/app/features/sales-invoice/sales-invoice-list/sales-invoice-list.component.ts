@@ -139,6 +139,8 @@ export class SalesInvoiceListComponent {
       this.router.navigate([`sales-invoice/sales-invoice-details/${SalesInvoiceType.EGG}/${salesInvoiceDto.id}`]);
     } else if (salesInvoiceDto.salesInvoiceType === SalesInvoiceType.FLOCK) {
       this.router.navigate([`sales-invoice/sales-invoice-details/${SalesInvoiceType.FLOCK}/${salesInvoiceDto.id}`]);
+    } else if (salesInvoiceDto.salesInvoiceType === SalesInvoiceType.MANURE) {
+      this.router.navigate([`sales-invoice/sales-invoice-details/${SalesInvoiceType.MANURE}/${salesInvoiceDto.id}`]);
     }
   }
 

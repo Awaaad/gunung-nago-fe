@@ -32,9 +32,9 @@ export class HealthStockComponent implements OnInit {
   public healthProductsInStock: HealthProductStockSaveDto[] = [];
   private page: number = 0;
   private size: number = 20;
-  public subTotal = 0;
   public sortOrder: string = 'asc';
   public sortBy: string = 'name';
+  public subTotal = 0;
   public healthProductName: string = '';
   public active: boolean = true;
   public healthType: HealthType | string = '';

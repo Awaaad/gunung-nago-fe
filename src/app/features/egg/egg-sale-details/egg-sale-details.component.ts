@@ -341,7 +341,7 @@ export class EggSaleDetailsComponent implements OnInit {
     this.eggSaleForm?.get("newCustomer")?.setValue(false);
   }
 
-  private initialiseFlockSaleSaveDto(): void {
+  private initialiseEggSaleSaveDto(): void {
     this.eggSaleSaveDto = {
       customerDto: {
         id: null,
@@ -499,7 +499,7 @@ export class EggSaleDetailsComponent implements OnInit {
 
   public save(): void {
     this.utilsService.presentLoading();
-    this.initialiseFlockSaleSaveDto();
+    this.initialiseEggSaleSaveDto();
     this.populateFlockSaleSaveDtoWithFormValues();
     this.eggSaleSaveDto.paymentSaveDtos?.forEach(payment => {
       payment.paymentDeadline = moment(payment.paymentDeadline).startOf('day').format(moment.HTML5_FMT.DATE)

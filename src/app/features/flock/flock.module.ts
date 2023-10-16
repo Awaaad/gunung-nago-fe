@@ -24,6 +24,7 @@ import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter } from '@angular/mat
 import { ConstantHelper } from 'src/app/shared/helpers/constant.helper';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { FlockStockComponent } from './flock-stock/flock-stock.component';
+import { SupplierApiService } from 'src/app/shared/apis/supplier.api.service';
 export const MY_FORMATS = ConstantHelper.dateFormat;
 
 @NgModule({
@@ -44,7 +45,7 @@ export const MY_FORMATS = ConstantHelper.dateFormat;
     MatDatepickerModule,
     MatNativeDateModule,
   ],
-  providers: [FlockApiService, FlockSaleApiService, SurveyApiService, CageApiService, CustomerApiService,
+  providers: [FlockApiService, FlockSaleApiService, SurveyApiService, CageApiService, CustomerApiService, SupplierApiService,
     {
       provide: DateAdapter,
       useClass: MomentDateAdapter,

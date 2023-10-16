@@ -124,7 +124,7 @@
 
         <ng-container matColumnDef="healthType">
           <th mat-header-cell *matHeaderCellDef> Health Type </th>
-          <td mat-cell *matCellDef="let element"> {{element.healthType}} </td>
+          <td mat-cell *matCellDef="let element"> {{element.healthType | titlecase}} </td>
         </ng-container>
 
 

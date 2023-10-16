@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2023-10-10 16:14:17.
+// Generated using typescript-generator version 3.2.1263 on 2023-10-16 22:40:32.
 
 export class CageDto {
     id!: number;
@@ -85,6 +85,9 @@ export class EggStockDto {
     smallEggs!: number;
     badEggs!: number;
     totalEggs!: number;
+}
+
+export class EggStockDtoBuilder {
 }
 
 export class FarmDto {
@@ -190,16 +193,23 @@ export class FlockSaleSaveDto {
 
 export class FlockSaveDto {
     id!: number;
+    name!: string;
+    cageId!: number;
     active!: boolean;
     initialAge!: number;
     initialQuantity!: number;
+    bonusQuantity!: number;
     aquisitionDate!: Date;
     aquisitionType!: AquisitionType;
-    cageId!: number;
     death!: number;
     sterile!: number;
     badEggs!: number;
     goodEggs!: number;
+    wholesalePrice!: number;
+    pricePerChicken!: number;
+    discount!: number;
+    tax!: number;
+    createdDate!: Date;
 }
 
 export class FlockSearchCriteriaDto {
@@ -293,6 +303,29 @@ export class HealthSurveyStockDto {
     expiryDate!: Date;
 }
 
+export class ManureSaleSaveDto {
+    customerDto!: CustomerDto;
+    paymentSaveDtos!: PaymentSaveDto[];
+    salesInvoiceCategory!: SalesInvoiceCategory;
+    quantity!: number;
+    price!: number;
+    driverId!: number;
+    comment!: string;
+    newCustomer!: boolean;
+}
+
+export class ManureSaleSaveDtoBuilder {
+}
+
+export class ManureStockDto {
+    id!: number;
+    weight!: number;
+    bags!: number;
+}
+
+export class ManureStockDtoBuilder {
+}
+
 export class PaymentDto {
     id!: number;
     amountPaid!: number;
@@ -314,6 +347,14 @@ export class FeedPurchaseDto {
     supplierId!: number;
     comment!: string;
     feedStockDtos!: FeedStockSaveDto[];
+}
+
+export class FlockPurchaseDto {
+    invoiceNumber!: string;
+    discount!: number;
+    supplierId!: number;
+    comment!: string;
+    flockDtos!: FlockSaveDto[];
 }
 
 export class HealthProductPurchaseDto {
@@ -339,6 +380,23 @@ export class FeedPurchaseInvoiceDetailsDto {
     totalPrice!: number;
     comment!: string;
     purchaseInvoiceFeedDetailsDtos!: PurchaseInvoiceFeedDetailsDto[];
+}
+
+export class FlockPurchaseInvoiceDetailsDto {
+    id!: number;
+    number!: string;
+    supplierName!: string;
+    supplierAddress!: string;
+    supplierTelephoneNumber!: number;
+    supplierTelephoneNumberTwo!: number;
+    supplierTelephoneNumberThree!: number;
+    createdBy!: string;
+    createdDate!: Date;
+    purchaseInvoiceType!: PurchaseInvoiceType;
+    discount!: number;
+    totalPrice!: number;
+    comment!: string;
+    purchaseInvoiceFlockDetailsDtos!: PurchaseInvoiceFlockDetailsDto[];
 }
 
 export class HealthPurchaseInvoiceDetailsDto {
@@ -383,6 +441,18 @@ export class PurchaseInvoiceFeedDetailsDto {
     discount!: number;
 }
 
+export class PurchaseInvoiceFlockDetailsDto {
+    flockId!: number;
+    name!: string;
+    age!: number;
+    boxesReceived!: number;
+    bonusBoxesReceived!: number;
+    wholesalePrice!: number;
+    pricePerBox!: number;
+    tax!: number;
+    discount!: number;
+}
+
 export class PurchaseInvoiceHealthProductDetailsDto {
     healthProductId!: number;
     healthProductName!: string;
@@ -398,10 +468,11 @@ export class PurchaseInvoiceHealthProductDetailsDto {
 
 export class PurchaseInvoiceSearchCriteriaDto {
     invoiceNumber!: string;
-    supplierName!: string;
+    supplierId!: number;
     createdBy!: string;
     dateFrom!: Date;
     dateTo!: Date;
+    purchaseInvoiceType!: PurchaseInvoiceType;
     farmId!: number;
 }
 
@@ -480,6 +551,7 @@ export class DailyProductionReportDto {
 
 export class EggSalesInvoiceDetailsDto {
     id!: number;
+    receiptId!: number;
     salesInvoiceType!: SalesInvoiceType;
     totalPrice!: number;
     soldAt!: number;
@@ -500,6 +572,7 @@ export class EggSalesInvoiceDetailsDto {
 
 export class FlockSalesInvoiceDetailsDto {
     id!: number;
+    receiptId!: number;
     salesInvoiceType!: SalesInvoiceType;
     totalPrice!: number;
     soldAt!: number;
@@ -518,8 +591,30 @@ export class FlockSalesInvoiceDetailsDto {
     salesInvoiceFlockDetailsDtos!: SalesInvoiceFlockDetailsDto[];
 }
 
+export class ManureSalesInvoiceDetailsDto {
+    id!: number;
+    receiptId!: number;
+    salesInvoiceType!: SalesInvoiceType;
+    totalPrice!: number;
+    soldAt!: number;
+    createdBy!: string;
+    createdDate!: Date;
+    customerFirstName!: string;
+    customerLastName!: string;
+    customerAddress!: string;
+    customerTelephoneNumber!: number;
+    driverFirstName!: string;
+    driverLastName!: string;
+    salesPerson!: string;
+    salesInvoiceCategory!: SalesInvoiceCategory;
+    salesInvoiceStatus!: SalesInvoiceStatus;
+    comment!: string;
+    salesInvoiceManureDetailsDtos!: SalesInvoiceManureDetailsDto[];
+}
+
 export class SalesInvoiceDto {
     id!: number;
+    receiptId!: number;
     salesInvoiceType!: SalesInvoiceType;
     totalPrice!: number;
     soldAt!: number;
@@ -572,11 +667,21 @@ export class SalesInvoiceFlockDetailsDto {
     pricePerChickenForGood!: number;
 }
 
+export class SalesInvoiceManureDetailsDto {
+    id!: number;
+    price!: number;
+    quantity!: number;
+}
+
 export class SalesInvoiceSearchCriteriaDto {
     customerName!: string;
     createdBy!: string;
+    driverId!: number;
     dateFrom!: Date;
     dateTo!: Date;
+    salesInvoiceType!: SalesInvoiceType;
+    salesInvoiceStatus!: SalesInvoiceStatus;
+    salesInvoiceCategory!: SalesInvoiceCategory;
     farmId!: number;
 }
 
@@ -724,6 +829,7 @@ export enum SalesInvoiceType {
     FLOCK = 'FLOCK',
     EGG = 'EGG',
     FEED = 'FEED',
+    MANURE = 'MANURE',
 }
 
 export enum SalesInvoiceStatus {

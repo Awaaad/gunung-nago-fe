@@ -58,7 +58,8 @@
               <ion-col size-xs="12" size-md="3">
                 <ion-select color="gunung-nago-primary" label="Health type" label-placement="floating" fill="outline"
                   interface="popover" required="true" placeholder="Health type" formControlName="healthType">
-                  <ion-select-option *ngFor="let healthType of healthTypes" [value]="healthType">{{ healthType
+                  <ion-select-option *ngFor="let healthType of healthTypes" [value]="healthType">{{ healthType |
+                    titlecase
                     }}</ion-select-option>
                 </ion-select>
                 <div class="error-messages">

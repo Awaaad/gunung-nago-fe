@@ -1,3 +1,327 @@
-<p>
-  flock-stock works!
-</p>
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      <div class="router-links">
+        <div class="title">
+          <img class="header-logo" src='./assets/flaticon/stock.png'>
+          <h3 class="header-nav-products">Flock Stock</h3>
+        </div>
+        <div>
+          <ion-item class="language-selection">
+            <ion-select aria-label="language" interface="popover" placeholder="Select language" [(ngModel)]="language"
+              (ionChange)="ionChangeLanguage($event)">
+              <ion-select-option value="en">English</ion-select-option>
+              <ion-select-option value="id">Indonesian</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </div>
+      </div>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="false" class="ion-padding">
+  <ion-card>
+    <ion-card-content>
+      <ion-row>
+        <ion-col size-xs="12" size-md="6">
+          <mat-form-field class="autocomplete-full-width" appearance="outline">
+            <input matInput placeholder="Search supplier..." [(ngModel)]="selectedSupplier" [matAutocomplete]="auto"
+              [formControl]="searchSupplierCtrl" placeholder="Seach supplier...">
+            <button *ngIf="selectedSupplier" matSuffix mat-icon-button aria-label="Clear" (click)="clearSelection()">
+              <ion-icon name="close-outline"></ion-icon>
+            </button>
+            <mat-autocomplete [panelWidth]="400" #auto="matAutocomplete" (optionSelected)="onSupplierSelected()"
+              [displayWith]="displayWith">
+              <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+              <ng-container *ngIf="!isLoading">
+                <mat-option *ngFor="let supplier of filteredSuppliers" [value]="supplier">
+                  <span>{{supplier.name}}</span>
+                </mat-option>
+              </ng-container>
+            </mat-autocomplete>
+          </mat-form-field>
+        </ion-col>
+      </ion-row>
+    </ion-card-content>
+  </ion-card>
+
+  <div class="divider-wrapper" *ngIf="showStock">
+    <div>
+      <img class="divider-stock-img" src='./assets/flaticon/flock.png'>
+    </div>
+    <div class="divider-text">
+      <ion-item-divider class="stock-divider">
+        <ion-label>Flock</ion-label>
+      </ion-item-divider>
+    </div>
+  </div>
+
+  <ion-row *ngIf="showStock">
+    <ion-col size-xs="12" size-md="6">
+      <div class="flock-btn">
+        <ion-button color="gunung-nago-flock" (click)="addFlockToStock()">ADD FLOCK</ion-button>
+      </div>
+    </ion-col>
+  </ion-row>
+
+  <div class="divider-wrapper">
+    <div>
+      <img class="divider-stock-img" src='./assets/flaticon/stock.png'>
+    </div>
+    <div class="divider-text">
+      <ion-item-divider class="stock-divider">
+        <ion-label>Stock</ion-label>
+      </ion-item-divider>
+    </div>
+  </div>
+
+  <ion-card>
+    <div class="mat-elevation-z8 table-responsive">
+      <table mat-table [dataSource]="flocksInStockTable">
+
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef> Name </th>
+          <td mat-cell *matCellDef="let element">
+            <ion-input color="gunung-nago-primary" type="text" clear-input="true" required="true"
+              [(ngModel)]="element.name"></ion-input>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="age">
+          <th mat-header-cell *matHeaderCellDef> Age </th>
+          <td mat-cell *matCellDef="let element">
+            <ion-input color="gunung-nago-primary" type="number" clear-input="true" required="true"
+              [(ngModel)]="element.initialAge"></ion-input>
+          </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="quantity">
+          <th mat-header-cell *matHeaderCellDef> Quantity</th>
+          <td mat-cell *matCellDef="let element">
+            <ion-input color="gunung-nago-primary" type="number" clear-input="true" required="true"
+              [(ngModel)]="element.initialQuantity" (ngModelChange)="calculateInvoice()"></ion-input>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="bonus">
+          <th mat-header-cell *matHeaderCellDef> Bonus Quantity</th>
+          <td mat-cell *matCellDef="let element">
+            <ion-input color="gunung-nago-primary" type="number" clear-input="true" required="true"
+              [(ngModel)]="element.bonusQuantity" (ngModelChange)="calculateInvoice()"></ion-input>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="wholesalePrice">
+          <th mat-header-cell *matHeaderCellDef> Wholesale / Buying Price </th>
+          <td mat-cell *matCellDef="let element">
+            <ion-input color="gunung-nago-primary" type="number" clear-input="true" required="true"
+              [(ngModel)]="element.wholesalePrice" (ngModelChange)="calculateInvoice()"></ion-input>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="price">
+          <th mat-header-cell *matHeaderCellDef> Retail Price </th>
+          <td mat-cell *matCellDef="let element">
+            <ion-input color="gunung-nago-primary" type="number" clear-input="true" required="true"
+              [(ngModel)]="element.pricePerChicken" (ngModelChange)="calculateInvoice()"></ion-input>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="discount">
+          <th mat-header-cell *matHeaderCellDef> Discount (%) </th>
+          <td mat-cell *matCellDef="let element">
+            <ion-input color="gunung-nago-primary" type="number" clear-input="true" required="true"
+              [(ngModel)]="element.discount" (ngModelChange)="calculateInvoice()"></ion-input>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="tax">
+          <th mat-header-cell *matHeaderCellDef> Tax (%) </th>
+          <td mat-cell *matCellDef="let element">
+            <ion-input color="gunung-nago-primary" type="number" clear-input="true" required="true"
+              [(ngModel)]="element.tax" (ngModelChange)="calculateInvoice()"></ion-input>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="remove">
+          <th mat-header-cell *matHeaderCellDef> </th>
+          <td mat-cell *matCellDef="let element; let i = index;">
+            <div class="table-btn">
+              <ion-button color="gunung-nago-warehouse" class="mr-05" (click)="removeFlockInStock(element, i)"><ion-icon
+                  name="trash"></ion-icon></ion-button>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumnsStock"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumnsStock;"></tr>
+      </table>
+    </div>
+  </ion-card>
+
+  <div class="wrapper-bottom">
+    <div class="sub-total">
+      <span *ngIf="subTotal > 0">Sub Total: {{ subTotal | number : '1.2-2' }}</span>
+    </div>
+    <div class="btn-container-stock">
+      <ion-button class="cancel-btn" (click)="reset()">Cancel</ion-button>
+      <ion-button color="positive-btn" (click)="openModal()" [disabled]="subTotal < 1">Update Stock</ion-button>
+    </div>
+  </div>
+
+  <ion-row>
+    <ion-col size-lg="8" size-md="6" size-xs="12">
+      <ion-card class="invoice" *ngIf="subTotal > 1">
+        <ion-card-content>
+          <div class="subtitle">
+            <img class="cart-logo" src='./assets/flaticon/official-documents.png'>
+            <div class="form-section-cart">Preview Purchase Invoice</div>
+          </div>
+          <div class="invoice-title">
+            <div class="invoice-logo">
+              <h5 class="logo-text">Invoice No: ................</h5>
+            </div>
+            <div>
+            </div>
+          </div>
+          <div class="invoice-subtitle">
+            <div>
+              <div class="cashier-name main">Supplier: <span class="sub">{{selectedSupplier?.name}}</span></div>
+              <div class="cashier-name main">Address: <span class="sub">{{selectedSupplier?.address}}</span></div>
+              <div class="cashier-name main">Tel:
+                <span class="sub">{{selectedSupplier.telephoneNumber}}</span>
+                <span class="sub" *ngIf="selectedSupplier.telephoneNumberTwo">,
+                  {{selectedSupplier.telephoneNumberTwo}}</span>
+                <span class="sub" *ngIf="selectedSupplier.telephoneNumberThree">,
+                  {{selectedSupplier.telephoneNumberThree}}</span>
+              </div>
+            </div>
+            <div>
+              <div class="invoice-date-title main">Invoice Date: </div>
+              <div class="invoice-date sub">{{today | date:'EEEE, MMMM d, y HH:mm'}}</div>
+            </div>
+          </div>
+
+          <table class="invoice-table">
+            <thead>
+              <tr>
+                <th scope="col">No.</th>
+                <th scope="col">Name</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Bonus</th>
+                <th scope="col">Wholesale Price</th>
+                <th scope="col">Retail Price</th>
+                <th scope="col">Discount</th>
+                <th scope="col">Tax</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let invoiceDetail of flocksInStockTable?.data let i = index">
+                <td data-label="No.">{{i+1}}</td>
+                <td data-label="Name">{{invoiceDetail?.name | titlecase}}</td>
+                <td data-label="Quantity">{{invoiceDetail?.initialQuantity}}</td>
+                <td data-label="Bonus">{{invoiceDetail?.bonusQuantity? invoiceDetail?.bonusQuantity: 0}}</td>
+                <td data-label="Wholesale Price">Rp {{invoiceDetail?.wholesalePrice | number : '1.2-2'}}</td>
+                <td data-label="Retail Price">Rp {{invoiceDetail?.pricePerChicken | number : '1.2-2'}}</td>
+                <td data-label="Discount">{{invoiceDetail?.discount | number :'1.2-2'}}<span
+                    *ngIf="invoiceDetail?.discount">%</span></td>
+                <td data-label="Tax">{{invoiceDetail?.tax | number :'1.2-2'}}<span *ngIf="invoiceDetail?.tax">%</span>
+                </td>
+              </tr>
+            </tbody>
+            <!-- <tfoot>
+              <tr>
+                <th id="total" colspan="1">Total :</th>
+                <td></td>
+                <td>{{totalQuantity}}</td>
+                <td>{{totalBonusBoxesReceived}}</td>
+                <td></td>
+                <td>Rp {{totalWholesalePrice | number :'1.2-2'}}</td>
+                <td>Rp {{totalRetailPrice | number :'1.2-2'}}</td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tfoot> -->
+          </table>
+
+          <div class="invoice-footer">
+            <div>
+            </div>
+            <div>
+              <div class="invoice-date-title main">
+                <table class="summary-table">
+                  <tbody>
+                    <tr>
+                      <th id="total" colspan="1">Total :</th>
+                      <td>Rp {{subTotal | number :'1.2-2'}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </ion-col>
+    <ion-col size-lg="4" size-md="6" size-xs="12">
+
+    </ion-col>
+  </ion-row>
+
+
+  <ion-modal (willDismiss)="onWillDismiss($event)" [isOpen]="isModalOpen" cssClass="health-stock-modal"
+    backdropDismiss="false">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <div class="title">
+            <img class="header-logo ml-15" src='./assets/flaticon/confirm-stock.png'>
+            <h3 class="modal-header-text">Confirm Purchase Invoice</h3>
+          </div>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content [fullscreen]="false" class="ion-padding">
+
+        <form [formGroup]="confirmInvoiceForm">
+          <ion-row>
+            <ion-col size="12" size-sm>
+              <ion-input color="gunung-nago-primary" label="Total" label-placement="floating" fill="outline"
+                type="number" formControlName="total"></ion-input>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="12" size-sm>
+              <ion-input color="gunung-nago-primary" label="Invoice Number*" label-placement="floating" fill="outline"
+                type="string" formControlName="invoiceNumber"></ion-input>
+              <div class="error-messages">
+                <ng-container *ngFor="let error of errorMessages.invoiceNumber">
+                  <div class="error-message"
+                    *ngIf="confirmInvoiceForm.get('invoiceNumber')?.hasError(error.type) && (confirmInvoiceForm.get('invoiceNumber')?.dirty || confirmInvoiceForm.get('invoiceNumber')?.touched)">
+                    {{ error.message }}
+                  </div>
+                </ng-container>
+              </div>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="12" size-sm>
+              <ion-textarea class="comment" color="gunung-nago-primary" label="Comments" label-placement="floating"
+                fill="outline" type="text" clear-input="true" formControlName="comment"
+                [autoGrow]="true"></ion-textarea>
+            </ion-col>
+          </ion-row>
+          <div class="action-button ion-text-right">
+            <ion-button class="cancel-btn" (click)="cancel()">Cancel</ion-button>
+            <ion-button [disabled]="confirmInvoiceForm.invalid" color="positive-btn"
+              (click)="confirm()">Save</ion-button>
+          </div>
+        </form>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+</ion-content>

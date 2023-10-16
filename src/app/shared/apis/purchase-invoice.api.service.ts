@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { FeedPurchaseInvoiceDetailsDto, HealthPurchaseInvoiceDetailsDto, PurchaseInvoiceDto } from 'generated-src/model';
-import { FeedPurchaseInvoiceDetailsFrontDto, HealthPurchaseInvoiceDetailsFrontDto, PageResult } from 'generated-src/model-front';
+import { FeedPurchaseInvoiceDetailsFrontDto, FlockPurchaseInvoiceDetailsFrontDto, HealthPurchaseInvoiceDetailsFrontDto, PageResult } from 'generated-src/model-front';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
 
@@ -21,5 +21,9 @@ export class PurchaseInvoiceApiService {
 
     public findFeedPurchaseInvoiceDetailsById(id: number): Observable<FeedPurchaseInvoiceDetailsFrontDto> {
         return this.http.get<FeedPurchaseInvoiceDetailsFrontDto>(`${this.baseUrl}feed/${id}`);
+    }
+
+    public findFlockPurchaseInvoiceDetailsById(id: number): Observable<FlockPurchaseInvoiceDetailsFrontDto> {
+        return this.http.get<FlockPurchaseInvoiceDetailsFrontDto>(`${this.baseUrl}flock/${id}`);
     }
 }

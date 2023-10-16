@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { FlockSalesInvoiceDetailsDto, SalesInvoiceEggDetailsDto, SalesInvoiceType } from 'generated-src/model';
-import { EggSalesInvoiceDetailsFrontDto, FlockSalesInvoiceDetailsFrontDto } from 'generated-src/model-front';
+import { EggSalesInvoiceDetailsFrontDto, FlockSalesInvoiceDetailsFrontDto, ManureSalesInvoiceDetailsFrontDto } from 'generated-src/model-front';
 import { ReceiptApiService } from 'src/app/shared/apis/receipt.api.service';
 import { SalesInvoiceApiService } from 'src/app/shared/apis/sales-invoice.api.service';
 import { environment } from 'src/environments/environment';
@@ -18,6 +18,7 @@ export class SalesInvoiceDetailsComponent implements OnInit {
   public language = "en";
   public flockSalesInvoiceDetailsDto!: FlockSalesInvoiceDetailsFrontDto;
   public eggSalesInvoiceDetailsFrontDto!: EggSalesInvoiceDetailsFrontDto;
+  public manureSalesInvoiceDetailsFrontDto!: ManureSalesInvoiceDetailsFrontDto;
   public totalPiece: number = 0;
   public totalTray: number = 0;
   public totalTie: number = 0;
@@ -30,6 +31,8 @@ export class SalesInvoiceDetailsComponent implements OnInit {
   public totalQuantityForSterileChicken: number = 0;
   public totalPriceForGoodChicken: number = 0;
   public totalPriceForSterileChicken: number = 0;
+  public totalQuantityManure: number = 0;
+  public totalPriceManure: number = 0;
   public company = environment.company;
   public address = environment.address;
   public phone = environment.phone;
@@ -50,10 +53,13 @@ export class SalesInvoiceDetailsComponent implements OnInit {
       this.findEggSalesInvoiceDetailsById();
     } else if (this.type === SalesInvoiceType.FLOCK) {
       this.findFlockSalesInvoiceDetailsById();
+    } else if (this.type === SalesInvoiceType.MANURE) {
+      this.findManureSalesInvoiceDetailsById();
     }
-    this.receiptApiService.findFlockReceiptDetailsById(this.salesInvoiceId).subscribe(data => {
-      console.log(data);
-    })
+
+    // this.receiptApiService.findFlockReceiptDetailsById(this.salesInvoiceId).subscribe(data => {
+    //   console.log(data);
+    // })
   }
 
   public ionChangeLanguage(event: any): void {
@@ -88,9 +94,20 @@ export class SalesInvoiceDetailsComponent implements OnInit {
     })
   }
 
+  public findManureSalesInvoiceDetailsById(): void {
+    this.salesInvoiceApiService.findManureSalesInvoiceDetailsById(this.salesInvoiceId).subscribe(manureSalesInvoiceDetailsDto => {
+      this.manureSalesInvoiceDetailsFrontDto = manureSalesInvoiceDetailsDto;
+      this.manureSalesInvoiceDetailsFrontDto.salesInvoiceManureDetailsDtos?.forEach(salesInvoice => {
+        this.totalQuantityManure = this.totalQuantityManure + salesInvoice.quantity;
+        this.totalPriceManure = this.totalPriceManure + salesInvoice.price;
+      })
+    })
+  }
+
   public initialiseSalesInvoices(): void {
     this.flockSalesInvoiceDetailsDto = {
       id: null,
+      receiptId: null,
       salesInvoiceType: null,
       totalPrice: null,
       soldAt: null,
@@ -111,6 +128,7 @@ export class SalesInvoiceDetailsComponent implements OnInit {
 
     this.eggSalesInvoiceDetailsFrontDto = {
       id: null,
+      receiptId: null,
       salesInvoiceType: null,
       totalPrice: null,
       soldAt: null,
@@ -127,6 +145,27 @@ export class SalesInvoiceDetailsComponent implements OnInit {
       salesInvoiceStatus: null,
       comment: null,
       salesInvoiceEggDetailsDtos: []
+    }
+
+    this.manureSalesInvoiceDetailsFrontDto = {
+      id: null,
+      receiptId: null,
+      salesInvoiceType: null,
+      totalPrice: null,
+      soldAt: null,
+      createdBy: null,
+      createdDate: null,
+      customerFirstName: null,
+      customerLastName: null,
+      customerAddress: null,
+      customerTelephoneNumber: null,
+      driverFirstName: null,
+      driverLastName: null,
+      salesPerson: null,
+      salesInvoiceCategory: null,
+      salesInvoiceStatus: null,
+      comment: null,
+      salesInvoiceManureDetailsDtos: []
     }
   }
 

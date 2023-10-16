@@ -6,8 +6,8 @@
     <ion-title>
       <div class="router-links">
         <div class="title">
-          <img class="header-logo" src='./assets/flaticon/flock-sale.png'>
-          <h3 class="header-nav-products">Flock Sale Details</h3>
+          <img class="header-logo" src='./assets/flaticon/manure-sale.png'>
+          <h3 class="header-nav-products">Manure Sale Details</h3>
         </div>
         <div>
           <ion-item class="language-selection">
@@ -24,7 +24,7 @@
 </ion-header>
 
 <ion-content [fullscreen]="false" class="ion-padding">
-  <form [formGroup]="flockSaleForm">
+  <form [formGroup]="manureSaleForm">
     <ion-row>
       <ion-col col-md-6 size="6" size-sm>
         <div class="subtitle">
@@ -74,7 +74,7 @@
                   <div class="error-messages">
                     <ng-container *ngFor="let error of errorMessages.firstName">
                       <div class="error-message"
-                        *ngIf="flockSaleForm.get('customer.firstName')?.hasError(error.type) && (flockSaleForm.get('customer.firstName')?.dirty || flockSaleForm.get('customer.firstName')?.touched)">
+                        *ngIf="manureSaleForm.get('customer.firstName')?.hasError(error.type) && (manureSaleForm.get('customer.firstName')?.dirty || manureSaleForm.get('customer.firstName')?.touched)">
                         {{ error.message }}
                       </div>
                     </ng-container>
@@ -87,7 +87,7 @@
                   <div class="error-messages">
                     <ng-container *ngFor="let error of errorMessages.lastName">
                       <div class="error-message"
-                        *ngIf="flockSaleForm.get('customer.lastName')?.hasError(error.type) && (flockSaleForm.get('customer.lastName')?.dirty || flockSaleForm.get('customer.lastName')?.touched)">
+                        *ngIf="manureSaleForm.get('customer.lastName')?.hasError(error.type) && (manureSaleForm.get('customer.lastName')?.dirty || manureSaleForm.get('customer.lastName')?.touched)">
                         {{ error.message }}
                       </div>
                     </ng-container>
@@ -107,7 +107,7 @@
                   <div class="error-messages">
                     <ng-container *ngFor="let error of errorMessages.telephoneNumber">
                       <div class="error-message"
-                        *ngIf="flockSaleForm.get('customer.telephoneNumber')?.hasError(error.type) && (flockSaleForm.get('customer.telephoneNumber')?.dirty || flockSaleForm.get('customer.telephoneNumber')?.touched)">
+                        *ngIf="manureSaleForm.get('customer.telephoneNumber')?.hasError(error.type) && (manureSaleForm.get('customer.telephoneNumber')?.dirty || manureSaleForm.get('customer.telephoneNumber')?.touched)">
                         {{ error.message }}
                       </div>
                     </ng-container>
@@ -119,172 +119,98 @@
         </ion-card>
       </ion-col>
       <ion-col col-md-6 size="6" size-sm>
-
+        <div class="subtitle">
+          <img class="cart-logo" src='./assets/flaticon/manure.png'>
+          <div class="form-section-cart">Manure</div>
+        </div>
+        <ion-card>
+          <ion-card-content>
+            <ion-item-divider>
+              <ion-label>Manure Stock</ion-label>
+            </ion-item-divider>
+            <div class="manure-stock">
+              <div class="manure-section">
+                <div>
+                  <strong>Bags</strong>
+                </div>
+                <img class="manures" src='./assets/flaticon/manure-bag.png'>
+                <div class="manure-count">
+                  <strong>{{manureStock.bags}}</strong>
+                </div>
+              </div>
+            </div>
+          </ion-card-content>
+        </ion-card>
       </ion-col>
     </ion-row>
 
-
-
     <div class="subtitle">
-      <img class="cart-logo" src='./assets/flaticon/cage.png'>
-      <div class="form-section-cart">Cage | Quantity and Price</div>
+      <img class="cart-logo" src='./assets/flaticon/manure-bag.png'>
+      <div class="form-section-cart">Quantity and Price</div>
     </div>
-    <div formArrayName="flockSaleDetails"
-      *ngFor="let flockSaleDetails of flockSaleDetailsFields?.controls; let i = index">
-      <div [formGroupName]="i">
-        <ion-card>
-          <ion-card-content>
-            <div class="form-array-index">
-              <h6>Flock Sale Form {{i + 1}}</h6>
-              <ion-button *ngIf="flockSaleDetailsFields != null && flockSaleDetailsFields.length > 1"
-                (click)="removeFlockSaleDetails(i)" class="delete-product-btn" color="gunung-nago-warehouse"><ion-icon
-                  name="trash"></ion-icon></ion-button>
+
+    <ion-card>
+      <ion-card-content>
+        <ion-row>
+          <ion-col size-xs="12" size-md="4">
+            <div class="divider-wrapper">
+              <div class="manure-section">
+                <img class="manure-img" src='./assets/flaticon/manure-bag.png'>
+                <div class="manure-count">
+                  <strong>{{manureStock.bags - quantity}}</strong>
+                </div>
+              </div>
+              <div class="divider-text">
+                <ion-item-divider>
+                  <ion-label>Bags</ion-label>
+                </ion-item-divider>
+              </div>
             </div>
 
-            <ion-item-divider>
-              <ion-label>Cage</ion-label>
-            </ion-item-divider>
-            <ion-row>
-              <ion-col size-xs="12" size-md="3">
-                <ion-select color="gunung-nago-primary" label="Cage" label-placement="floating" fill="outline"
-                  interface="popover" required="true" placeholder=Cage formControlName="cageId"
-                  (ionChange)="ionSelectCage($event, i)">
-                  <ion-select-option *ngFor="let cage of cages" [value]="cage.id">{{ cage.name
-                    }}</ion-select-option>
-                </ion-select>
-                <div class="error-messages">
-                  <ng-container *ngFor="let error of errorMessages.cage">
-                    <div class="error-message"
-                      *ngIf="flockSaleDetails.get('cageCategory')?.hasError(error.type) && (flockSaleDetails.get('cageCategory')?.dirty || flockSaleDetails.get('cageCategory')?.touched)">
-                      {{ error.message }}
-                    </div>
-                  </ng-container>
-                </div>
-              </ion-col>
-            </ion-row>
-
-
-            <ion-row>
-              <ion-col size-xs="12" size-md="4">
-                <div class="flock-form-section-left">
-                  <div class="divider-wrapper">
-                    <div class="flock-section">
-                      <img class="flock-img" src='./assets/flaticon/sterile-chicken.png'>
-                      <div class="flock-count">
-                        <strong>{{flockSaleDetails.get('totalSterile')?.value -
-                          flockSaleDetails.get('quantitySoldForSterile')?.value}}</strong>
-                      </div>
-                    </div>
-                    <div class="divider-text">
-                      <ion-item-divider>
-                        <ion-label>Sterile</ion-label>
-                      </ion-item-divider>
-                    </div>
+            <div>
+              <ion-input color="gunung-nago-survey" label="Quantity" label-placement="floating" fill="outline"
+                type="number" min="0" clear-input="true" formControlName="quantity" [(ngModel)]="quantity"></ion-input>
+              <div class="error-messages">
+                <ng-container *ngFor="let error of errorMessages.minValue">
+                  <div class="error-message"
+                    *ngIf="manureSaleForm.get('quantity')?.hasError(error.type) && (manureSaleForm.get('quantity')?.dirty || manureSaleForm.get('quantity')?.touched)">
+                    {{ error.message }}
                   </div>
-
-                  <div>
-                    <ion-input color="gunung-nago-primary" label="Quantity for sterile" label-placement="floating"
-                      fill="outline" type="number" clear-input="true" formControlName="quantitySoldForSterile"
-                      required="true" (change)="calculateTotalPrice()"></ion-input>
-                    <div class="error-messages">
-                      <ng-container *ngFor="let error of errorMessages.quantitySoldForSterile">
-                        <div class="error-message"
-                          *ngIf="flockSaleDetails.get('quantitySoldForSterile')?.hasError(error.type) && (flockSaleDetails.get('quantitySoldForSterile')?.dirty || flockSaleDetails.get('quantitySoldForSterile')?.touched)">
-                          {{ error.message }}
-                        </div>
-                      </ng-container>
-                    </div>
+                </ng-container>
+              </div>
+            </div>
+            <div class="mt-1">
+              <ion-input color="gunung-nago-survey" label="Price" label-placement="floating" fill="outline"
+                type="number" min="0" clear-input="true" formControlName="price" [(ngModel)]="price"></ion-input>
+              <div class="error-messages">
+                <ng-container *ngFor="let error of errorMessages.minValue">
+                  <div class="error-message"
+                    *ngIf="manureSaleForm.get('price')?.hasError(error.type) && (manureSaleForm.get('price')?.dirty || manureSaleForm.get('price')?.touched)">
+                    {{ error.message }}
                   </div>
+                </ng-container>
+              </div>
+            </div>
 
-                  <div class="mt-1">
-                    <ion-input color="gunung-nago-primary" label="Price per chicken for sterile"
-                      label-placement="floating" fill="outline" type="number" clear-input="true"
-                      formControlName="pricePerChickenForSterile" required="true"
-                      (change)="calculateTotalPrice()"></ion-input>
-                    <div class="error-messages">
-                      <ng-container *ngFor="let error of errorMessages.pricePerChickenForSterile">
-                        <div class="error-message"
-                          *ngIf="flockSaleDetails.get('pricePerChickenForSterile')?.hasError(error.type) && (flockSaleDetails.get('pricePerChickenForSterile')?.dirty || flockSaleDetails.get('pricePerChickenForSterile')?.touched)">
-                          {{ error.message }}
-                        </div>
-                      </ng-container>
-                    </div>
-                  </div>
+            <div class="total-per">
+              <strong>Total Price: {{quantity * price}}</strong>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-card-content>
+    </ion-card>
 
-                  <div class="total-per ml-05">
-                    <strong>Total Price: {{flockSaleDetails.get('totalPriceForSterile')?.value}}</strong>
-                  </div>
-                </div>
-              </ion-col>
-
-
-              <ion-col size-xs="12" size-md="4">
-                <div class="flock-form-section-right">
-
-                  <div class="divider-wrapper">
-                    <div class="flock-section">
-                      <img class="flock-img" src='./assets/flaticon/good-chicken.png'>
-                      <div class="flock-count">
-                        <strong>{{flockSaleDetails.get('good')?.value -
-                          flockSaleDetails.get('quantitySoldForGood')?.value}}</strong>
-                      </div>
-                    </div>
-                    <div class="divider-text">
-                      <ion-item-divider>
-                        <ion-label>Good</ion-label>
-                      </ion-item-divider>
-                    </div>
-                  </div>
-
-                  <div>
-                    <ion-input color="gunung-nago-primary" label="Quantity for good" label-placement="floating"
-                      fill="outline" type="number" clear-input="true" formControlName="quantitySoldForGood"
-                      (change)="calculateTotalPrice()" required="true"></ion-input>
-                    <div class="error-messages">
-                      <ng-container *ngFor="let error of errorMessages.quantitySoldForGood">
-                        <div class="error-message"
-                          *ngIf="flockSaleDetails.get('quantitySoldForGood')?.hasError(error.type) && (flockSaleDetails.get('quantitySoldForGood')?.dirty || flockSaleDetails.get('quantitySoldForGood')?.touched)">
-                          {{ error.message }}
-                        </div>
-                      </ng-container>
-                    </div>
-                  </div>
-
-                  <div class="mt-1">
-                    <ion-input color="gunung-nago-primary" label="Price per chicken for good" label-placement="floating"
-                      fill="outline" type="number" clear-input="true" formControlName="pricePerChickenForGood"
-                      (change)="calculateTotalPrice()" required="true"></ion-input>
-                    <div class="error-messages">
-                      <ng-container *ngFor="let error of errorMessages.pricePerChickenForGood">
-                        <div class="error-message"
-                          *ngIf="flockSaleDetails.get('pricePerChickenForGood')?.hasError(error.type) && (flockSaleDetails.get('pricePerChickenForGood')?.dirty || flockSaleDetails.get('pricePerChickenForGood')?.touched)">
-                          {{ error.message }}
-                        </div>
-                      </ng-container>
-                    </div>
-                  </div>
-
-                  <div class="total-per ml-05">
-                    <strong>Total Price: {{flockSaleDetails.get('totalPriceForGood')?.value}}</strong>
-                  </div>
-                </div>
-              </ion-col>
-            </ion-row>
-
-          </ion-card-content>
-        </ion-card>
-      </div>
-    </div>
     <div class="btn-container">
-      <ion-button color="neutral-btn mr-05" (click)="addFlockSaleDetails()">Add Cage</ion-button>
       <ion-button class="cancel-btn" (click)="reset()">Cancel</ion-button>
-      <ion-button color="positive-btn" [disabled]="flockSaleForm.invalid" (click)="openModal()">Save</ion-button>
+      <ion-button color="positive-btn"
+        [disabled]="manureSaleForm.invalid || (quantity > manureStock.bags) || (quantity < 1) || price < 1"
+        (click)="openModal()">Save</ion-button>
     </div>
   </form>
 
   <ion-row>
     <ion-col size-lg="8" size-md="6" size-xs="12">
-      <ion-card class="invoice" *ngIf="totalPrice > 0">
+      <ion-card class="invoice" *ngIf="(quantity * price > 1) && !(quantity > manureStock.bags)">
         <ion-card-content>
           <div class="subtitle">
             <img class="cart-logo" src='./assets/flaticon/official-documents.png'>
@@ -314,16 +240,16 @@
           </div>
           <div class="invoice-subtitle">
             <div
-              *ngIf="flockSaleForm.get('customer.firstName')?.value != 'anonymous' && flockSaleForm.get('customer.firstName')?.value != null && flockSaleForm.get('customer.firstName')?.value != ''">
+              *ngIf="manureSaleForm.get('customer.firstName')?.value != 'anonymous' && manureSaleForm.get('customer.firstName')?.value != null && manureSaleForm.get('customer.firstName')?.value != ''">
               <div class="sub"><strong>Invoice To:</strong></div>
               <span class="sub"><strong>Name:
-                </strong> {{flockSaleForm.get('customer.firstName')?.value}}
-                {{flockSaleForm.get('customer.lastName')?.value}}</span>
+                </strong> {{manureSaleForm.get('customer.firstName')?.value}}
+                {{manureSaleForm.get('customer.lastName')?.value}}</span>
               <div class="sub">
-                <strong>Address:</strong> {{flockSaleForm.get('customer.address')?.value}}
+                <strong>Address:</strong> {{manureSaleForm.get('customer.address')?.value}}
               </div>
               <div class="sub"><strong>Telephone
-                  Number:</strong> {{flockSaleForm.get('customer.telephoneNumber')?.value}}</div>
+                  Number:</strong> {{manureSaleForm.get('customer.telephoneNumber')?.value}}</div>
             </div>
             <div>
               <!-- <div *ngIf="manureSalesInvoiceDetailsFrontDto.salesPerson != null" class="salesperson">
@@ -346,26 +272,11 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let invoiceDetail of flockSaleForm.get('flockSaleDetails')?.value let i = index">
-                <td data-label="Product" *ngIf="invoiceDetail.quantitySoldForGood > 0">Good Chicken</td>
-                <td data-label="Quantity" *ngIf="invoiceDetail.quantitySoldForGood > 0">
-                  {{invoiceDetail?.quantitySoldForGood}}
-                </td>
-                <td data-label="Unit Price" *ngIf="invoiceDetail.quantitySoldForGood > 0">Rp
-                  {{invoiceDetail?.pricePerChickenForGood | number : '1.2-2'}}</td>
-                <td data-label="Amount" *ngIf="invoiceDetail.quantitySoldForGood > 0">Rp
-                  {{invoiceDetail.pricePerChickenForGood * invoiceDetail.quantitySoldForGood | number :
-                  '1.2-2'}}</td>
-
-                <td data-label="No." *ngIf="invoiceDetail.quantitySoldForSterile > 0">{{i+1}}</td>
-                <td data-label="Product" *ngIf="invoiceDetail.quantitySoldForSterile > 0">Sterile Chicken</td>
-                <td data-label="Quantity" *ngIf="invoiceDetail.quantitySoldForSterile > 0">
-                  {{invoiceDetail?.quantitySoldForSterile}}</td>
-                <td data-label="Unit Price" *ngIf="invoiceDetail.quantitySoldForSterile > 0">Rp
-                  {{invoiceDetail?.pricePerChickenForSterile | number : '1.2-2'}}</td>
-                <td data-label="Amount" *ngIf="invoiceDetail.quantitySoldForSterile > 0">Rp
-                  {{invoiceDetail.pricePerChickenForSterile * invoiceDetail.quantitySoldForSterile |
-                  number : '1.2-2'}}</td>
+              <tr>
+                <td data-label="No.">Manure</td>
+                <td data-label="Quantity">{{quantity}}</td>
+                <td data-label="Unit Price">Rp {{price | number : '1.2-2'}}</td>
+                <td data-label="Amount">Rp {{quantity * price | number : '1.2-2'}}</td>
               </tr>
             </tbody>
           </table>
@@ -379,11 +290,11 @@
                   <tbody>
                     <tr>
                       <th id="total" colspan="1">SubTotal :</th>
-                      <td>Rp {{totalPrice | number :'1.2-2'}}</td>
+                      <td>Rp {{quantity * price | number :'1.2-2'}}</td>
                     </tr>
                     <tr>
                       <th id="total" colspan="1">Total :</th>
-                      <td>Rp {{totalPrice | number :'1.2-2'}}</td>
+                      <td>Rp {{quantity * price | number :'1.2-2'}}</td>
                     </tr>
                   </tbody>
                 </table>

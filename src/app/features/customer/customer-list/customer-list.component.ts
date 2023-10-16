@@ -24,7 +24,7 @@ export class CustomerListComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   public language = "en";
-  public displayedColumns: string[] = ['firstName', 'lastName', 'address', 'telephoneNumber', 'edit'];
+  public displayedColumns: string[] = ['firstName', 'lastName', 'email', 'telephoneNumber', 'address', 'edit'];
   public customers = new MatTableDataSource<CustomerDto>;
   private infiniteCustomers: CustomerDto[] = [];
   public customerSearchSubscription!: Subscription;

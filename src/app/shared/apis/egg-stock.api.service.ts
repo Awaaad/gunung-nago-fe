@@ -12,6 +12,5 @@ export class EggStockApiService {
 
   public findEggStockForSale(): Observable<EggStockDto> {
     return this.http.get<EggStockDto>(`${this.baseUrl}`);
-
   }
 }

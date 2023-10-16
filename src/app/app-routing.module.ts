@@ -35,6 +35,10 @@ const routes: Routes = [
     loadChildren: () => import('./features/feed/feed.module').then(m => m.FeedModule)
   },
   {
+    path: 'manure',
+    loadChildren: () => import('./features/manure/manure.module').then(m => m.ManureModule)
+  },
+  {
     path: 'supplier',
     loadChildren: () => import('./features/supplier/supplier.module').then(m => m.SupplierModule)
   },

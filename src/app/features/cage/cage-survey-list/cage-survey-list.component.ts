@@ -145,35 +145,35 @@ export class CageSurveyListComponent implements OnInit {
   }
 
   private initialiseFlockSaveDto(): void {
-    this.flockSaveDto = {
-      id: null,
-      active: true,
-      initialAge: null,
-      initialQuantity: null,
-      aquisitionDate: null,
-      aquisitionType: null,
-      cageId: null,
-      death: null,
-      sterile: null,
-      badEggs: null,
-      goodEggs: null
-    }
+    // this.flockSaveDto = {
+    //   id: null,
+    //   active: true,
+    //   initialAge: null,
+    //   initialQuantity: null,
+    //   aquisitionDate: null,
+    //   aquisitionType: null,
+    //   cageId: null,
+    //   death: null,
+    //   sterile: null,
+    //   badEggs: null,
+    //   goodEggs: null
+    // }
   }
 
   private populateFlockSaveDtoWithFormValues(): void {
-    this.flockSaveDto = {
-      id: null,
-      active: true,
-      initialAge: this.flockForm.value.age,
-      initialQuantity: this.flockForm.value.population,
-      aquisitionDate: this.flockForm.value.aquisitionDate,
-      aquisitionType: this.flockForm.value.aquisitionType,
-      cageId: this.selectedCageId,
-      death: this.flockForm.value.dead,
-      sterile: this.flockForm.value.sterile,
-      badEggs: this.broken,
-      goodEggs: (this.tie * 300) + this.item
-    };
+    // this.flockSaveDto = {
+    //   id: null,
+    //   active: true,
+    //   initialAge: this.flockForm.value.age,
+    //   initialQuantity: this.flockForm.value.population,
+    //   aquisitionDate: this.flockForm.value.aquisitionDate,
+    //   aquisitionType: this.flockForm.value.aquisitionType,
+    //   cageId: this.selectedCageId,
+    //   death: this.flockForm.value.dead,
+    //   sterile: this.flockForm.value.sterile,
+    //   badEggs: this.broken,
+    //   goodEggs: (this.tie * 300) + this.item
+    // };
   }
 
   private saveFlock(): void {

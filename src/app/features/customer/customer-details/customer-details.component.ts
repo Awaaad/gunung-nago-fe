@@ -30,6 +30,9 @@ export class CustomerDetailsComponent implements OnInit {
     telephoneNumber: [
       { type: 'required', message: 'Telephone Number is required' },
     ],
+    email: [
+      { type: 'email', message: 'Email is invalid' },
+    ],
   };
 
   constructor(
@@ -65,6 +68,7 @@ export class CustomerDetailsComponent implements OnInit {
       id: null,
       firstName: new FormControl({ value: null, disabled: false }, Validators.compose([Validators.required])),
       lastName: new FormControl({ value: null, disabled: false }, Validators.compose([Validators.required])),
+      email: new FormControl({ value: null, disabled: false }, Validators.compose([Validators.required, Validators.email])),
       address: new FormControl({ value: null, disabled: false }),
       telephoneNumber: new FormControl({ value: null, disabled: false }, Validators.compose([Validators.required])),
       telephoneNumberTwo: new FormControl({ value: null, disabled: false }),

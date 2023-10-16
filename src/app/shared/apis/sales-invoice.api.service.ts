@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { SalesInvoiceDto } from 'generated-src/model';
-import { EggSalesInvoiceDetailsFrontDto, FlockSalesInvoiceDetailsFrontDto, PageResult } from 'generated-src/model-front';
+import { EggSalesInvoiceDetailsFrontDto, FlockSalesInvoiceDetailsFrontDto, ManureSalesInvoiceDetailsFrontDto, PageResult } from 'generated-src/model-front';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
 
@@ -21,5 +21,9 @@ export class SalesInvoiceApiService {
 
     public findFlockSalesInvoiceDetailsById(id: number): Observable<FlockSalesInvoiceDetailsFrontDto> {
         return this.http.get<any>(`${this.baseUrl}flock/${id}`);
+    }
+
+    public findManureSalesInvoiceDetailsById(id: number): Observable<ManureSalesInvoiceDetailsFrontDto> {
+        return this.http.get<any>(`${this.baseUrl}manure/${id}`);
     }
 }
