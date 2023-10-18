@@ -82,4 +82,18 @@ export class UtilsService {
 
     const { role, data } = await loading.onDidDismiss();
   }
+
+  public downloadTemplate(fileResponse: any, filename: string): void {
+    const downloadURL = window.URL.createObjectURL(fileResponse);
+    const link = document.createElement('a');
+    link.href = downloadURL;
+    link.download = filename;
+    link.click();
+  }
+
+  public openTemplateInNewTab(fileResponse: any): void {
+    const fileURL = URL.createObjectURL(fileResponse);
+    window.open(fileURL, '_blank');
+  }
+
 }

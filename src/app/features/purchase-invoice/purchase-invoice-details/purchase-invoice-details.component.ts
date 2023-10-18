@@ -5,6 +5,7 @@ import { PurchaseInvoiceType } from 'generated-src/model';
 import { FeedPurchaseInvoiceDetailsFrontDto, FlockPurchaseInvoiceDetailsFrontDto, HealthPurchaseInvoiceDetailsFrontDto } from 'generated-src/model-front';
 import { FileApiService } from 'src/app/shared/apis/file.api.service';
 import { PurchaseInvoiceApiService } from 'src/app/shared/apis/purchase-invoice.api.service';
+import { UtilsService } from 'src/app/shared/utils/utils.service';
 
 @Component({
   selector: 'app-purchase-invoice-details',
@@ -28,6 +29,7 @@ export class PurchaseInvoiceDetailsComponent implements OnInit {
     private readonly fileApiService: FileApiService,
     private translateService: TranslateService,
     private purchaseInvoiceApiService: PurchaseInvoiceApiService,
+    private utilsService: UtilsService
   ) { }
 
   ngOnInit() {
@@ -46,8 +48,8 @@ export class PurchaseInvoiceDetailsComponent implements OnInit {
   }
 
   public generatePurchaseInvoicePdf(): void {
-    this.fileApiService.generatePurchaseInvoicePdf(this.purchaseInvoiceId).subscribe(data => {
-      console.log(data);
+    this.fileApiService.generatePurchaseInvoicePdf(this.purchaseInvoiceId).subscribe(fileResponse => {
+      this.utilsService.openTemplateInNewTab(fileResponse);
     })
   }
 

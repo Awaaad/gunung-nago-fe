@@ -17,6 +17,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { SalesInvoiceApiService } from 'src/app/shared/apis/sales-invoice.api.service';
 import { ReceiptApiService } from 'src/app/shared/apis/receipt.api.service';
 import { SecurityApiService } from 'src/app/shared/apis/security.api.service';
+import { FileApiService } from 'src/app/shared/apis/file.api.service';
 
 @NgModule({
   declarations: [SalesInvoiceListComponent, SalesInvoiceDetailsComponent],
@@ -35,6 +36,6 @@ import { SecurityApiService } from 'src/app/shared/apis/security.api.service';
     MatDatepickerModule,
     MatInputModule
   ],
-  providers: [SalesInvoiceApiService, ReceiptApiService, SecurityApiService]
+  providers: [SalesInvoiceApiService, ReceiptApiService, SecurityApiService, FileApiService]
 })
 export class SalesInvoiceModule { }

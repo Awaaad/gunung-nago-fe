@@ -3,8 +3,10 @@ import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { FlockSalesInvoiceDetailsDto, SalesInvoiceEggDetailsDto, SalesInvoiceType } from 'generated-src/model';
 import { EggSalesInvoiceDetailsFrontDto, FlockSalesInvoiceDetailsFrontDto, ManureSalesInvoiceDetailsFrontDto } from 'generated-src/model-front';
+import { FileApiService } from 'src/app/shared/apis/file.api.service';
 import { ReceiptApiService } from 'src/app/shared/apis/receipt.api.service';
 import { SalesInvoiceApiService } from 'src/app/shared/apis/sales-invoice.api.service';
+import { UtilsService } from 'src/app/shared/utils/utils.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -42,9 +44,11 @@ export class SalesInvoiceDetailsComponent implements OnInit {
 
   constructor(
     private readonly activatedRoute: ActivatedRoute,
+    private readonly fileApiService: FileApiService,
     private salesInvoiceApiService: SalesInvoiceApiService,
     private translateService: TranslateService,
-    private receiptApiService: ReceiptApiService
+    private receiptApiService: ReceiptApiService,
+    private utilsService: UtilsService
   ) { }
 
   ngOnInit() {
@@ -60,6 +64,18 @@ export class SalesInvoiceDetailsComponent implements OnInit {
     // this.receiptApiService.findFlockReceiptDetailsById(this.salesInvoiceId).subscribe(data => {
     //   console.log(data);
     // })
+  }
+
+  public generateEggSaleInvoicePdf(): void {
+    if (this.type === SalesInvoiceType.EGG) {
+      this.fileApiService.generateEggSaleInvoicePdf(this.salesInvoiceId).subscribe(data => {
+        console.log(data);
+      })
+    } else if (this.type === SalesInvoiceType.FLOCK) {
+      this.fileApiService.generateFlockSaleInvoicePdf(this.salesInvoiceId).subscribe(fileResponse => {
+        this.utilsService.openTemplateInNewTab(fileResponse);
+      })
+    }
   }
 
   public ionChangeLanguage(event: any): void {

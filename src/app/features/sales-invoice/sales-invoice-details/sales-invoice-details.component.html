@@ -24,6 +24,7 @@
 </ion-header>
 
 <ion-content>
+  <ion-button (click)="generateEggSaleInvoicePdf()">Test</ion-button>
   <div class="invoice-margin" *ngIf="type === 'FLOCK'">
     <ion-card class="invoice">
       <ion-card-content>
@@ -92,7 +93,6 @@
                 {{invoiceDetail.pricePerChickenForGood * invoiceDetail.quantityForGood | number :
                 '1.2-2'}}</td>
 
-              <td data-label="No." *ngIf="invoiceDetail.quantityForSterile > 0">{{i+1}}</td>
               <td data-label="Product" *ngIf="invoiceDetail.quantityForSterile > 0">Sterile Chicken</td>
               <td data-label="Quantity" *ngIf="invoiceDetail.quantityForSterile > 0">
                 {{invoiceDetail?.quantityForSterile}}</td>
@@ -211,7 +211,8 @@
               <td data-label="Product">BIG EGGS</td>
               <td data-label="Quantity">{{invoiceDetail?.bigGoodTie}} - <strong>TIE</strong></td>
               <td data-label="Unit Price">Rp {{invoiceDetail?.bigGoodPricePerTie}}</td>
-              <td data-label="Amount">Rp {{invoiceDetail.bigGoodTie * invoiceDetail.bigGoodPricePerTie | number :'1.2-2'}}
+              <td data-label="Amount">Rp {{invoiceDetail.bigGoodTie * invoiceDetail.bigGoodPricePerTie | number
+                :'1.2-2'}}
               </td>
             </tr>
             <tr *ngIf="invoiceDetail.bigGoodTray > 0">
@@ -247,7 +248,8 @@
               <td data-label="Product">MEDIUM EGGS</td>
               <td data-label="Quantity">{{invoiceDetail?.mediumGoodPiece}} <strong>PIECE</strong></td>
               <td data-label="Unit Price">Rp {{invoiceDetail?.mediumGoodPricePerPiece | number :'1.2-2'}}</td>
-              <td data-label="Amount">Rp {{invoiceDetail.mediumGoodPiece * invoiceDetail.mediumGoodPricePerPiece | number
+              <td data-label="Amount">Rp {{invoiceDetail.mediumGoodPiece * invoiceDetail.mediumGoodPricePerPiece |
+                number
                 :'1.2-2'}}</td>
             </tr>
 
@@ -283,13 +285,15 @@
               <td data-label="Product">BAD EGGS</td>
               <td data-label="Quantity">{{invoiceDetail?.badTray}} - <strong>TRAY</strong></td>
               <td data-label="Unit Price">Rp {{invoiceDetail?.badPricePerTray | number :'1.2-2'}}</td>
-              <td data-label="Amount">Rp {{invoiceDetail.badTray * invoiceDetail.badPricePerTray | number :'1.2-2'}}</td>
+              <td data-label="Amount">Rp {{invoiceDetail.badTray * invoiceDetail.badPricePerTray | number :'1.2-2'}}
+              </td>
             </tr>
             <tr *ngIf="invoiceDetail.badPiece > 0">
               <td data-label="Product">BAD EGGS</td>
               <td data-label="Quantity">{{invoiceDetail?.badPiece}} <strong>PIECE</strong></td>
               <td data-label="Unit Price">Rp {{invoiceDetail?.badPricePerPiece | number :'1.2-2'}}</td>
-              <td data-label="Amount">Rp {{invoiceDetail.badPiece * invoiceDetail.badPricePerPiece | number :'1.2-2'}}</td>
+              <td data-label="Amount">Rp {{invoiceDetail.badPiece * invoiceDetail.badPricePerPiece | number :'1.2-2'}}
+              </td>
             </tr>
 
             <!-- <tr *ngIf="invoiceDetail.bigGoodPiece > 0 || invoiceDetail.bigGoodTray > 0 || invoiceDetail.bigGoodTie > 0">
@@ -451,7 +455,7 @@
             <tr
               *ngFor="let invoiceDetail of manureSalesInvoiceDetailsFrontDto?.salesInvoiceManureDetailsDtos let i = index">
               <td data-label="No.">Manure</td>
-              <td data-label="Quantity">{{invoiceDetail?.quantity}}</td>
+              <td data-label="Quantity">{{invoiceDetail?.quantity}} bags</td>
               <td data-label="Unit Price">Rp {{invoiceDetail?.price | number : '1.2-2'}}</td>
               <td data-label="Amount">Rp {{invoiceDetail.quantity * invoiceDetail.price | number : '1.2-2'}}</td>
             </tr>
