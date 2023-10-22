@@ -5,7 +5,7 @@ import { UtilsService } from 'src/app/shared/utils/utils.service';
 import { FlockSaleApiService } from '../../../shared/apis/flock-sale.api.service';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { SurveyApiService } from '../../../shared/apis/survey.api.service';
-import { CageCategory, CageDto, CustomerDto, PaymentType, SalesInvoiceCategory, SurveyDto, UserDto } from 'generated-src/model';
+import { CageCategory, CageDto, CustomerDto, FlockStockCountDto, PaymentType, SalesInvoiceCategory, SurveyDto, UserDto } from 'generated-src/model';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CageApiService } from '../../../shared/apis/cage.api.service';
 import { Subscription, debounceTime, distinctUntilChanged, filter, finalize, switchMap, tap } from 'rxjs';
@@ -16,6 +16,7 @@ import { OverlayEventDetail } from '@ionic/core/components';
 import * as moment from 'moment';
 import { SecurityApiService } from 'src/app/shared/apis/security.api.service';
 import { environment } from 'src/environments/environment';
+import { FlockStockApiService } from 'src/app/shared/apis/flock-stock.api.service';
 
 @Component({
   selector: 'app-flock-sale-details',
@@ -33,6 +34,7 @@ export class FlockSaleDetailsComponent implements OnInit {
   public pricePerChickenForGood: number = 0;
   private flockSaleSaveFrontDto!: FlockSaleSaveFrontDto;
   public cages: CageDto[] = [];
+  public flockStockCountDto!: FlockStockCountDto;
 
   public isNewCustomer: boolean = false;
   private searchCustomerSubscription!: Subscription;
@@ -112,6 +114,7 @@ export class FlockSaleDetailsComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private cageApiService: CageApiService,
     private customerApiService: CustomerApiService,
+    private flockStockApiService: FlockStockApiService,
     private formBuilder: FormBuilder,
     private securityApiService: SecurityApiService,
     private router: Router,
@@ -122,6 +125,7 @@ export class FlockSaleDetailsComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.findTotalFlockStockCount();
     this.initialiseFormBuilder();
     this.getAllActiveCages();
     this.initialiseSelectedCustomer();
@@ -130,8 +134,25 @@ export class FlockSaleDetailsComponent implements OnInit {
     this.salesInvoiceCategories = Object.keys(SalesInvoiceCategory);
   }
 
+  ionViewWillEnter(): void {
+    this.findTotalFlockStockCount();
+  }
+
   public ionChangeLanguage(event: any): void {
     this.translateService.use(event.detail.value);
+  }
+
+  private findTotalFlockStockCount(): void {
+    this.flockStockCountDto = {
+      alive: 0,
+      sterile: 0,
+      dead: 0,
+      good: 0
+    }
+    this.flockStockApiService.findTotalFlockStockCount().subscribe(flockStockCountDto => {
+      this.flockStockCountDto = flockStockCountDto;
+      console.log(flockStockCountDto);
+    })
   }
 
   public getAllActiveCages() {

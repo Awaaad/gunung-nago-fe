@@ -14,6 +14,7 @@ import { OverlayEventDetail } from '@ionic/core/components';
 import { EggSaleApiService } from 'src/app/shared/apis/egg-sale.api.service';
 import { EggStockApiService } from 'src/app/shared/apis/egg-stock.api.service';
 import { SecurityApiService } from 'src/app/shared/apis/security.api.service';
+import { environment } from 'src/environments/environment';
 @Component({
   selector: 'app-egg-sale-details',
   templateUrl: './egg-sale-details.component.html',
@@ -76,6 +77,7 @@ export class EggSaleDetailsComponent implements OnInit {
   public paymentForm!: FormGroup;
   public paymentTypes: string[] = [];
   public totalPrice: number = 0;
+  public totalCost: number = 0;
   public today: Date = new Date();
   public salesInvoiceCategories: string[] = [];
   public salesInvoiceCategory: SalesInvoiceCategory = SalesInvoiceCategory.IN_STORE;
@@ -83,6 +85,13 @@ export class EggSaleDetailsComponent implements OnInit {
   public drivers: UserDto[] = [];
   public selectedDriver!: UserDto | null;
   public comment!: string | null;
+
+  public company = environment.company;
+  public address = environment.address;
+  public phone = environment.phone;
+  public email = environment.email;
+  public regNo = environment.regNo;
+  public yoe = environment.yoe;
 
   public errorMessages = {
     firstName: [{ type: "required", message: "First name is required" }],
@@ -141,7 +150,7 @@ export class EggSaleDetailsComponent implements OnInit {
     this.translateService.use(event.detail.value);
   }
 
-  public getEggStock() {
+  private getEggStock(): void {
     this.eggStock = {
       totalEggs: 0,
       bigEggs: 0,
@@ -521,6 +530,7 @@ export class EggSaleDetailsComponent implements OnInit {
   }
 
   public reset(): void {
+    this.totalCost = 0;
     this.isNewCustomer = false;
     this.setCustomerNewValue(false);
     this.eggSaleForm.reset();
@@ -562,6 +572,22 @@ export class EggSaleDetailsComponent implements OnInit {
     this.badPricePerTray = 0;
     this.badTie = 0;
     this.badPricePerTie = 0;
+  }
+
+  public calculateTotalCost(): void {
+    this.totalCost =
+    (this.eggSaleForm.get('bigGoodPiece')?.value * this.eggSaleForm.get('bigGoodPricePerPiece')?.value) + 
+    (this.eggSaleForm.get('bigGoodTray')?.value * this.eggSaleForm.get('bigGoodPricePerTray')?.value) + 
+    (this.eggSaleForm.get('bigGoodTie')?.value * this.eggSaleForm.get('bigGoodPricePerTie')?.value) + 
+    (this.eggSaleForm.get('mediumGoodPiece')?.value * this.eggSaleForm.get('mediumGoodPricePerPiece')?.value) + 
+    (this.eggSaleForm.get('mediumGoodTray')?.value * this.eggSaleForm.get('mediumGoodPricePerTray')?.value) + 
+    (this.eggSaleForm.get('mediumGoodTie')?.value * this.eggSaleForm.get('mediumGoodPricePerTie')?.value) + 
+    (this.eggSaleForm.get('smallGoodPiece')?.value * this.eggSaleForm.get('smallGoodPricePerPiece')?.value) + 
+    (this.eggSaleForm.get('smallGoodTray')?.value * this.eggSaleForm.get('smallGoodPricePerTray')?.value) + 
+    (this.eggSaleForm.get('smallGoodTie')?.value * this.eggSaleForm.get('smallGoodPricePerTie')?.value) + 
+    (this.eggSaleForm.get('badPiece')?.value * this.eggSaleForm.get('badPricePerPiece')?.value) + 
+    (this.eggSaleForm.get('badTray')?.value * this.eggSaleForm.get('badPricePerTray')?.value) + 
+    (this.eggSaleForm.get('badTie')?.value * this.eggSaleForm.get('badPricePerTie')?.value);
   }
 
   private initialisePaymentFormBuilder(): void {

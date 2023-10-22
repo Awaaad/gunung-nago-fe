@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2023-10-18 16:39:44.
+// Generated using typescript-generator version 3.2.1263 on 2023-10-22 12:12:30.
 
 export class CageDto {
     id!: number;
@@ -223,6 +223,13 @@ export class FlockSearchCriteriaDto {
     farmId!: number;
 }
 
+export class FlockStockCountDto {
+    alive!: number;
+    sterile!: number;
+    good!: number;
+    dead!: number;
+}
+
 export class FlockStockDto {
     id!: number;
     surveyDate!: Date;
@@ -339,6 +346,27 @@ export class PaymentSaveDto {
     paymentDeadline!: Date;
     previousPaymentType!: PaymentType;
     paymentType!: PaymentType;
+}
+
+export class SaleDetailsDto {
+    salesInvoiceType!: SalesInvoiceType;
+    quantity!: number;
+    price!: number;
+    eggType!: EggType;
+    eggQuantityType!: EggQuantityType;
+    cageId!: number;
+    flockId!: number;
+    flockType!: FlockType;
+}
+
+export class SaleSaveDto {
+    customerDto!: CustomerDto;
+    paymentSaveDtos!: PaymentSaveDto[];
+    salesInvoiceCategory!: SalesInvoiceCategory;
+    driverId!: number;
+    comment!: string;
+    saleDetailsDtos!: SaleDetailsDto[];
+    newCustomer!: boolean;
 }
 
 export class FeedPurchaseDto {
@@ -591,7 +619,7 @@ export class FlockSalesInvoiceDetailsDto {
     salesInvoiceFlockDetailsDtos!: SalesInvoiceFlockDetailsDto[];
 }
 
-export class ManureSalesInvoiceDetailsDto {
+export class SalesInvoiceDetailsDto {
     id!: number;
     receiptId!: number;
     salesInvoiceType!: SalesInvoiceType;
@@ -609,7 +637,7 @@ export class ManureSalesInvoiceDetailsDto {
     salesInvoiceCategory!: SalesInvoiceCategory;
     salesInvoiceStatus!: SalesInvoiceStatus;
     comment!: string;
-    salesInvoiceManureDetailsDtos!: SalesInvoiceManureDetailsDto[];
+    saleDetailsDtos!: SaleDetailsDto[];
 }
 
 export class SalesInvoiceDto {
@@ -679,7 +707,6 @@ export class SalesInvoiceSearchCriteriaDto {
     driverId!: number;
     dateFrom!: Date;
     dateTo!: Date;
-    salesInvoiceType!: SalesInvoiceType;
     salesInvoiceStatus!: SalesInvoiceStatus;
     salesInvoiceCategory!: SalesInvoiceCategory;
     farmId!: number;
@@ -819,17 +846,36 @@ export enum PaymentType {
     ELECTRONIC = 'ELECTRONIC',
 }
 
-export enum PurchaseInvoiceType {
-    FLOCK = 'FLOCK',
-    FEED = 'FEED',
-    HEALTH_PRODUCT = 'HEALTH_PRODUCT',
-}
-
 export enum SalesInvoiceType {
     FLOCK = 'FLOCK',
     EGG = 'EGG',
     FEED = 'FEED',
     MANURE = 'MANURE',
+    COMMON = 'COMMON',
+}
+
+export enum EggType {
+    BIG = 'BIG',
+    MEDIUM = 'MEDIUM',
+    SMALL = 'SMALL',
+    BAD = 'BAD',
+}
+
+export enum EggQuantityType {
+    TIE = 'TIE',
+    TRAY = 'TRAY',
+    PIECE = 'PIECE',
+}
+
+export enum FlockType {
+    GOOD = 'GOOD',
+    STERILE = 'STERILE',
+}
+
+export enum PurchaseInvoiceType {
+    FLOCK = 'FLOCK',
+    FEED = 'FEED',
+    HEALTH_PRODUCT = 'HEALTH_PRODUCT',
 }
 
 export enum SalesInvoiceStatus {

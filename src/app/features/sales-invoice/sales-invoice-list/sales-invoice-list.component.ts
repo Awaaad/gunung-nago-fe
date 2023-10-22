@@ -23,7 +23,7 @@ export class SalesInvoiceListComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   public language = "en";
-  public displayedColumns: string[] = ['id', 'name', 'createdBy', 'salesInvoiceType', 'createdDate', 'category', 'driver', 'totalPrice', 'status'];
+  public displayedColumns: string[] = ['id', 'name', 'createdBy', 'createdDate', 'category', 'driver', 'totalPrice', 'status'];
   public salesInvoices = new MatTableDataSource<SalesInvoiceDto>;
   private infiniteSalesInvoices: SalesInvoiceDto[] = [];
   public salesInvoiceSearchSubscription!: Subscription;
@@ -135,13 +135,7 @@ export class SalesInvoiceListComponent {
   }
 
   public routeToSalesInvoiceDetails(salesInvoiceDto: SalesInvoiceDto): void {
-    if (salesInvoiceDto.salesInvoiceType === SalesInvoiceType.EGG) {
-      this.router.navigate([`sales-invoice/sales-invoice-details/${SalesInvoiceType.EGG}/${salesInvoiceDto.id}`]);
-    } else if (salesInvoiceDto.salesInvoiceType === SalesInvoiceType.FLOCK) {
-      this.router.navigate([`sales-invoice/sales-invoice-details/${SalesInvoiceType.FLOCK}/${salesInvoiceDto.id}`]);
-    } else if (salesInvoiceDto.salesInvoiceType === SalesInvoiceType.MANURE) {
-      this.router.navigate([`sales-invoice/sales-invoice-details/${SalesInvoiceType.MANURE}/${salesInvoiceDto.id}`]);
-    }
+    this.router.navigate([`sales-invoice/sales-invoice-details/${salesInvoiceDto.id}`]);
   }
 
   public selectDateFrom(): void {

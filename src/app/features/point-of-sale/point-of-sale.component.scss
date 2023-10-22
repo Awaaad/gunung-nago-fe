@@ -49,23 +49,23 @@
     --width: 50em;
 }
 
-.radio-class {
-    margin: 10px;
-}
-
-.flock-section {
-    color: black;
-    margin: 0px;
-    margin-bottom: 2em;
-    text-align: center;
-}
-
-.flock-img {
+.manures {
     width: 4em;
 }
 
-.flock-count {
+.manure-section {
+    text-align: center;
+    color: black;
+}
+
+.manure-count {
     font-size: 18px;
+}
+
+.manure-stock {
+    margin: 5em 0 4.12em 0;
+    display: flex;
+    justify-content: space-around;
 }
 
 .total-per {
@@ -73,18 +73,25 @@
     margin-top: 1em;
 }
 
-.flock-form-section-left {
-    margin-right: 1em;
+.manure-section {
+    color: black;
+    margin: 0px;
+    margin-bottom: 2em;
+    text-align: center;
 }
 
-.flock-form-section-middle {
-    margin-right: 0.5em;
-    margin-left: 0.5em;
+.manure-img {
+    width: 4em;
 }
 
-.flock-form-section-right {
-    margin-left: 1em;
+.manure-count {
+    font-size: 18px;
 }
+
+.radio-class {
+    margin: 10px;
+}
+
 
 
 h5 {
@@ -263,6 +270,31 @@ textarea {
     margin-bottom: 10px;
 }
 
+.quantity-section {
+    text-align: center;
+    color: black;
+}
+
+.quantity-count-section {
+    display: flex;
+    justify-content: space-around;
+}
+
+.quantities {
+    width: 3em;
+}
+
+.quantity-count {
+    font-size: 18px;
+}
+
+.quantity-qp {
+    display: flex;
+    align-items: flex-end;
+}
+
+
+//
 .flock-section {
     text-align: center;
     color: black;
@@ -272,7 +304,7 @@ textarea {
     display: flex;
     justify-content: space-around;
     margin-top: 6em;
-    margin-bottom: 3.1em;
+    margin-bottom: 5.1em;
 }
 
 .flocks {
@@ -281,4 +313,42 @@ textarea {
 
 .flock-count {
     font-size: 18px;
+}
+
+.manures {
+    width: 4em;
+}
+
+.manure-section {
+    text-align: center;
+    color: black;
+}
+
+.manure-count {
+    font-size: 18px;
+}
+
+.manure-stock {
+    margin: 5em 0 4.12em 0;
+    display: flex;
+    justify-content: space-around;
+}
+
+.eggs {
+    width: 4em;
+}
+
+.egg-section {
+    text-align: center;
+    color: black;
+}
+
+.egg-count {
+    font-size: 18px;
+}
+
+.good-bad-egg-section {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 1.93em;
 }

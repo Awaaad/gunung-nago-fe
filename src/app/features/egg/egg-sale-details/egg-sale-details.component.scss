@@ -121,3 +121,179 @@
 .radio-class {
     margin: 10px;
 }
+
+h5 {
+    font-size: 24px;
+    margin-bottom: 0;
+}
+
+ion-card-content {
+    .main {
+        color: black;
+        font-size: 24px;
+    }
+
+    .sub {
+        color: black;
+        font-size: 15px;
+    }
+}
+
+.invoice-title {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 15px;
+    border-bottom: 1px solid lightgray;
+}
+
+.invoice {
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
+.print {
+    float: right;
+    margin-right: 7px;
+}
+
+.invoice-subtitle {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.invoice-footer {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+
+.invoice-logo {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+
+    .logo-img {
+        width: 40px;
+        padding-right: 10px;
+
+        &:hover {
+            cursor: pointer;
+        }
+
+        &:focus {
+            outline: none;
+        }
+    }
+
+    .logo-text {
+        color: black;
+        text-decoration: none;
+
+        &:hover {
+            cursor: pointer;
+        }
+
+        &:focus {
+            outline: none;
+        }
+    }
+}
+
+table {
+    border-collapse: collapse;
+    margin: 0;
+    padding: 0;
+    table-layout: fixed;
+    margin-top: 2em;
+    color: black;
+}
+
+.invoice-table {
+    width: 100%;
+}
+
+.summary-table {
+    margin-top: 0;
+}
+
+table caption {
+    font-size: 1.5em;
+    margin: .5em 0 .75em;
+}
+
+table tr {
+    padding: .35em;
+}
+
+table th,
+table td {
+    padding: .625em;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+table th {
+    font-size: .85em;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+}
+
+@media screen and (max-width: 600px) {
+    table {
+        border: 0;
+    }
+
+    table caption {
+        font-size: 1.3em;
+    }
+
+    table thead {
+        border: none;
+        clip: rect(0 0 0 0);
+        height: 1px;
+        margin: -1px;
+        overflow: hidden;
+        padding: 0;
+        position: absolute;
+        width: 1px;
+    }
+
+    table tr {
+        border-bottom: 3px solid #ddd;
+        display: block;
+        margin-bottom: .625em;
+    }
+
+    table td {
+        border-bottom: 1px solid #ddd;
+        display: block;
+        font-size: .8em;
+        text-align: right;
+    }
+
+    table td::before {
+        content: attr(data-label);
+        float: left;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    table td:last-child {
+        border-bottom: 0;
+    }
+}
+
+textarea {
+    width: 100%;
+    margin-top: 1.5em;
+    background-color: white;
+    border-color: #ddd;
+    color: black;
+}
+
+.salesperson {
+    margin-bottom: 10px;
+}

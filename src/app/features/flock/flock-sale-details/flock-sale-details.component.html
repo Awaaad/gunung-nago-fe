@@ -119,7 +119,49 @@
         </ion-card>
       </ion-col>
       <ion-col col-md-6 size="6" size-sm>
+        <div class="subtitle">
+          <img class="cart-logo" src='./assets/flaticon/flock.png'>
+          <div class="form-section-cart">Flocks</div>
+        </div>
+        <ion-card>
+          <ion-card-content>
+            <ion-item-divider>
+              <ion-label>Flock Stock</ion-label>
+            </ion-item-divider>
+            <div class="flock-count-section">
+              <div class="flock-section">
+                <div>
+                  <strong>Total</strong>
+                </div>
+                <img class="flocks" src='./assets/flaticon/flock.png'>
+                <div class="flock-count">
+                  <strong>{{flockStockCountDto.alive}}</strong>
+                </div>
+              </div>
 
+              <div class="flock-section">
+                <div>
+                  <strong>Good</strong>
+                </div>
+                <img class="flocks" src='./assets/flaticon/good-chicken.png'>
+                <div class="flock-count">
+                  <strong>{{flockStockCountDto.good}}</strong>
+                </div>
+              </div>
+
+              <div class="flock-section">
+                <div>
+                  <strong>Sterile</strong>
+                </div>
+                <img class="flocks" src='./assets/flaticon/sterile-chicken.png'>
+                <div class="flock-count">
+                  <strong>{{flockStockCountDto.sterile}}</strong>
+                </div>
+              </div>
+            </div>
+
+          </ion-card-content>
+        </ion-card>
       </ion-col>
     </ion-row>
 
@@ -162,7 +204,6 @@
                 </div>
               </ion-col>
             </ion-row>
-
 
             <ion-row>
               <ion-col size-xs="12" size-md="4">
@@ -347,7 +388,7 @@
             </thead>
             <tbody>
               <tr *ngFor="let invoiceDetail of flockSaleForm.get('flockSaleDetails')?.value let i = index">
-                <td data-label="Product" *ngIf="invoiceDetail.quantitySoldForGood > 0">Good Chicken</td>
+                <td data-label="Product" *ngIf="invoiceDetail.quantitySoldForGood > 0">CHICKEN - <strong>GOOD</strong></td>
                 <td data-label="Quantity" *ngIf="invoiceDetail.quantitySoldForGood > 0">
                   {{invoiceDetail?.quantitySoldForGood}}
                 </td>
@@ -357,8 +398,7 @@
                   {{invoiceDetail.pricePerChickenForGood * invoiceDetail.quantitySoldForGood | number :
                   '1.2-2'}}</td>
 
-                <td data-label="No." *ngIf="invoiceDetail.quantitySoldForSterile > 0">{{i+1}}</td>
-                <td data-label="Product" *ngIf="invoiceDetail.quantitySoldForSterile > 0">Sterile Chicken</td>
+                <td data-label="Product" *ngIf="invoiceDetail.quantitySoldForSterile > 0">CHICKEN - <strong>STERILE</strong></td>
                 <td data-label="Quantity" *ngIf="invoiceDetail.quantitySoldForSterile > 0">
                   {{invoiceDetail?.quantitySoldForSterile}}</td>
                 <td data-label="Unit Price" *ngIf="invoiceDetail.quantitySoldForSterile > 0">Rp

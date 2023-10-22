@@ -55,6 +55,10 @@ const routes: Routes = [
     loadChildren: () => import('./features/purchase-invoice/purchase-invoice.module').then(m => m.PurchaseInvoiceModule)
   },
   {
+    path: 'point-of-sale',
+    loadChildren: () => import('./features/point-of-sale/point-of-sale.module').then(m => m.PointOfSaleModule)
+  },
+  {
     path: 'security',
     loadChildren: () => import('./features/security/security.module').then(m => m.SecurityModule)
   },

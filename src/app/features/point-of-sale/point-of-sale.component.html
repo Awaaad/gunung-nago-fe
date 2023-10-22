@@ -1,0 +1,787 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      <div class="router-links">
+        <div class="title">
+          <img class="header-logo" src='./assets/flaticon/point-of-sale.png'>
+          <h3 class="header-nav-products">Point of Sale</h3>
+        </div>
+        <div>
+          <ion-item class="language-selection">
+            <ion-select aria-label="language" interface="popover" placeholder="Select language" [(ngModel)]="language"
+              (ionChange)="ionChangeLanguage($event)">
+              <ion-select-option value="en">English</ion-select-option>
+              <ion-select-option value="id">Indonesian</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </div>
+      </div>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="false" class="ion-padding">
+  <ion-row>
+    <ion-col col-md-6 size="6" size-sm>
+      <form [formGroup]="saleForm">
+        <div class="subtitle">
+          <img class="cart-logo" src='./assets/flaticon/customer.png'>
+          <div class="form-section-cart">Customer</div>
+        </div>
+        <ion-card>
+          <ion-card-content>
+            <ion-item-divider>
+              <ion-label>Customer Details</ion-label>
+            </ion-item-divider>
+            <div>
+              <ion-row>
+                <ion-col>
+                  <ion-toggle labelPlacement="start" class="toggle" formControlName="newCustomer"
+                    (ionChange)="newCustomerChange($event)" color="gunung-nago-report">New
+                    Customer*</ion-toggle>
+                </ion-col>
+              </ion-row>
+              <ion-row *ngIf="!isNewCustomer">
+                <ion-col size="12">
+                  <mat-form-field class="autocomplete-full-width" appearance="outline">
+                    <input matInput placeholder="Search customer..." [(ngModel)]="selectedCustomer"
+                      [matAutocomplete]="auto" [formControl]="searchCustomerCtrl" placeholder="Seach customer...">
+                    <button *ngIf="selectedCustomer" matSuffix mat-icon-button aria-label="Clear"
+                      (click)="clearCustomer(searchCustomerCtrl)">
+                      <ion-icon name="close-outline"></ion-icon>
+                    </button>
+                    <mat-autocomplete [panelWidth]="400" #auto="matAutocomplete"
+                      (optionSelected)="setSelectedCustomer($event)" [displayWith]="displayWith">
+                      <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                      <ng-container *ngIf="!isLoading">
+                        <mat-option *ngFor="let customer of filteredCustomers" [value]="customer">
+                          <span>{{customer.lastName}} {{customer.firstName}}</span>
+                        </mat-option>
+                      </ng-container>
+                    </mat-autocomplete>
+                  </mat-form-field>
+                </ion-col>
+              </ion-row>
+
+              <ion-row formGroupName="customer">
+                <ion-col col-md-6 size="6" size-sm>
+                  <ion-input formControlName="firstName" label="First Name*" label-placement="floating" fill="outline"
+                    type="text" clear-input="true" required="true">
+                  </ion-input>
+                  <div class="error-messages">
+                    <ng-container *ngFor="let error of errorMessages.firstName">
+                      <div class="error-message"
+                        *ngIf="saleForm.get('customer.firstName')?.hasError(error.type) && (saleForm.get('customer.firstName')?.dirty || saleForm.get('customer.firstName')?.touched)">
+                        {{ error.message }}
+                      </div>
+                    </ng-container>
+                  </div>
+                </ion-col>
+                <ion-col col-md-6 size="6" size-sm>
+                  <ion-input formControlName="lastName" label="Last Name*" label-placement="floating" fill="outline"
+                    type="text" clear-input="true" required="true">
+                  </ion-input>
+                  <div class="error-messages">
+                    <ng-container *ngFor="let error of errorMessages.lastName">
+                      <div class="error-message"
+                        *ngIf="saleForm.get('customer.lastName')?.hasError(error.type) && (saleForm.get('customer.lastName')?.dirty || saleForm.get('customer.lastName')?.touched)">
+                        {{ error.message }}
+                      </div>
+                    </ng-container>
+                  </div>
+                </ion-col>
+              </ion-row>
+              <ion-row formGroupName="customer">
+                <ion-col col-md-6 size="6" size-sm>
+                  <ion-input formControlName="address" label="Address" label-placement="floating" fill="outline"
+                    type="text" clear-input="true">
+                  </ion-input>
+                </ion-col>
+                <ion-col col-md-6 size="6" size-sm>
+                  <ion-input formControlName="telephoneNumber" label="Telephone*" label-placement="floating"
+                    fill="outline" type="text" clear-input="true" required="true">
+                  </ion-input>
+                  <div class="error-messages">
+                    <ng-container *ngFor="let error of errorMessages.telephoneNumber">
+                      <div class="error-message"
+                        *ngIf="saleForm.get('customer.telephoneNumber')?.hasError(error.type) && (saleForm.get('customer.telephoneNumber')?.dirty || saleForm.get('customer.telephoneNumber')?.touched)">
+                        {{ error.message }}
+                      </div>
+                    </ng-container>
+                  </div>
+                </ion-col>
+              </ion-row>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </form>
+    </ion-col>
+    <ion-col col-md-6 size="6" size-sm>
+      <div *ngIf="showFlock">
+        <div class="subtitle">
+          <img class="cart-logo" src='./assets/flaticon/flock.png'>
+          <div class="form-section-cart">Flocks</div>
+        </div>
+        <ion-card>
+          <ion-card-content>
+            <ion-item-divider>
+              <ion-label>Flock Stock</ion-label>
+            </ion-item-divider>
+            <div class="flock-count-section">
+              <div class="flock-section">
+                <div>
+                  <strong>Total</strong>
+                </div>
+                <img class="flocks" src='./assets/flaticon/flock.png'>
+                <div class="flock-count">
+                  <strong>{{flockStockCountDto.alive}}</strong>
+                </div>
+              </div>
+
+              <div class="flock-section">
+                <div>
+                  <strong>Good</strong>
+                </div>
+                <img class="flocks" src='./assets/flaticon/good-chicken.png'>
+                <div class="flock-count">
+                  <strong>{{flockStockCountDto.good}}</strong>
+                </div>
+              </div>
+
+              <div class="flock-section">
+                <div>
+                  <strong>Sterile</strong>
+                </div>
+                <img class="flocks" src='./assets/flaticon/sterile-chicken.png'>
+                <div class="flock-count">
+                  <strong>{{flockStockCountDto.sterile}}</strong>
+                </div>
+              </div>
+            </div>
+
+          </ion-card-content>
+        </ion-card>
+      </div>
+
+      <div *ngIf="showManure">
+        <div class="subtitle">
+          <img class="cart-logo" src='./assets/flaticon/manure.png'>
+          <div class="form-section-cart">Manure</div>
+        </div>
+        <ion-card>
+          <ion-card-content>
+            <ion-item-divider>
+              <ion-label>Manure Stock</ion-label>
+            </ion-item-divider>
+            <div class="manure-stock">
+              <div class="manure-section">
+                <div>
+                  <strong>Bags</strong>
+                </div>
+                <img class="manures" src='./assets/flaticon/manure-bag.png'>
+                <div class="manure-count">
+                  <strong>{{manureStock.bags}}</strong>
+                </div>
+              </div>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </div>
+
+
+      <div *ngIf="showEgg">
+        <div class="subtitle">
+          <img class="cart-logo" src='./assets/flaticon/eggs.png'>
+          <div class="form-section-cart">Eggs</div>
+        </div>
+        <ion-card>
+          <ion-card-content>
+            <ion-item-divider>
+              <ion-label>Egg Stock</ion-label>
+            </ion-item-divider>
+            <div class="good-bad-egg-section">
+              <div class="egg-section">
+                <div>
+                  <strong>Total</strong>
+                </div>
+                <img class="eggs" src='./assets/flaticon/eggs.png'>
+                <div class="egg-count">
+                  <strong>{{eggStock.totalEggs}}</strong>
+                </div>
+              </div>
+
+              <div class="egg-section">
+                <div>
+                  <strong>Good</strong>
+                </div>
+                <img class="eggs" src='./assets/flaticon/good-eggs.png'>
+                <div class="egg-count">
+                  <strong>{{eggStock.goodEggs}}</strong>
+                </div>
+              </div>
+
+              <div class="egg-section">
+                <div>
+                  <strong>Bad</strong>
+                </div>
+                <img class="eggs" src='./assets/flaticon/bad-eggs.png'>
+                <div class="egg-count">
+                  <strong>{{eggStock.badEggs}}</strong>
+                </div>
+              </div>
+            </div>
+
+            <div class="good-bad-egg-section">
+              <div class="egg-section">
+                <div>
+                  <strong>Big</strong>
+                </div>
+                <img class="eggs" src='./assets/flaticon/category-big.png'>
+                <div class="egg-count">
+                  <strong>{{eggStock.bigEggs}}</strong>
+                </div>
+              </div>
+              <div class="egg-section">
+                <div>
+                  <strong>Medium</strong>
+                </div>
+                <img class="eggs medium-category" src='./assets/flaticon/category-medium.png'>
+                <div class="egg-count">
+                  <strong>{{eggStock.mediumEggs}}</strong>
+                </div>
+              </div>
+              <div class="egg-section">
+                <div>
+                  <strong>Small</strong>
+                </div>
+                <img class="eggs small-category" src='./assets/flaticon/category-small.png'>
+                <div class="egg-count">
+                  <strong>{{eggStock.smallEggs}}</strong>
+                </div>
+              </div>
+            </div>
+
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </ion-col>
+
+  </ion-row>
+
+  <div class="subtitle">
+    <img class="cart-logo" src='./assets/flaticon/manure-bag.png'>
+    <div class="form-section-cart">Quantity and Price</div>
+  </div>
+
+  <ion-card>
+    <ion-card-content>
+      <div *ngFor="let saleDetail of saleDetailsDto; let i = index">
+        <!-- Type -->
+        <ion-item-divider>
+          <ion-label>{{i}}</ion-label>
+        </ion-item-divider>
+        <ion-row>
+          <ion-col size-lg="2" size-md="3" size-xs="12">
+            <ion-select color="gunung-nago-primary" label="Type" label-placement="floating" fill="outline"
+              interface="popover" clear-input="true" placeholder="Type" [(ngModel)]="saleDetail.salesInvoiceType"
+              (ionChange)="ionSelectType($event)">
+              <ion-select-option *ngFor="let salesInvoiceType of salesInvoiceTypes" [value]="salesInvoiceType">{{
+                salesInvoiceType | titlecase
+                }}</ion-select-option>
+            </ion-select>
+          </ion-col>
+
+          <!-- Flock -->
+          <ion-col size-lg="2" size-md="3" size-xs="12" *ngIf="saleDetail.salesInvoiceType === 'FLOCK'">
+            <ion-select color="gunung-nago-primary" label="Cage" label-placement="floating" fill="outline"
+              interface="popover" required="true" placeholder=Cage [(ngModel)]="saleDetail.cageId"
+              (ionChange)="ionSelectCage($event, i)">
+              <ion-select-option *ngFor="let cage of cages" [value]="cage.id">{{ cage.name
+                }}</ion-select-option>
+            </ion-select>
+          </ion-col>
+
+          <ion-col size-lg="2" size-md="3" size-xs="12"
+            *ngIf="saleDetail.salesInvoiceType === 'FLOCK' && saleDetail.cageId != null">
+            <ion-select color="gunung-nago-primary" label="Flock Type" label-placement="floating" fill="outline"
+              interface="popover" clear-input="true" placeholder="Type" [(ngModel)]="saleDetail.flockType">
+              <ion-select-option *ngFor="let flockType of flockTypes" [value]="flockType">{{
+                flockType | titlecase
+                }}</ion-select-option>
+            </ion-select>
+          </ion-col>
+
+          <!-- Egg -->
+          <ion-col size-lg="2" size-md="3" size-xs="12" *ngIf="saleDetail.salesInvoiceType === 'EGG'">
+            <ion-select color="gunung-nago-primary" label="Egg Type" label-placement="floating" fill="outline"
+              interface="popover" clear-input="true" placeholder="Egg Type" [(ngModel)]="saleDetail.eggType">
+              <ion-select-option *ngFor="let eggType of eggTypes" [value]="eggType">{{
+                eggType | titlecase
+                }}</ion-select-option>
+            </ion-select>
+          </ion-col>
+
+          <ion-col size-lg="2" size-md="3" size-xs="12"
+            *ngIf="saleDetail.salesInvoiceType === 'EGG' && saleDetail.eggType != null">
+            <ion-select color="gunung-nago-primary" label="Quantity Type" label-placement="floating" fill="outline"
+              interface="popover" clear-input="true" placeholder="Quantity Type"
+              [(ngModel)]="saleDetail.eggQuantityType">
+              <ion-select-option *ngFor="let eggQuantityType of eggQuantityTypes" [value]="eggQuantityType">{{
+                eggQuantityType | titlecase
+                }}</ion-select-option>
+            </ion-select>
+          </ion-col>
+        </ion-row>
+
+        <!-- Flock -->
+        <div *ngIf="saleDetail.salesInvoiceType === 'FLOCK'">
+          <ion-row class="quantity-qp">
+            <ion-col size-lg="2" size-md="3" size-xs="12" *ngIf="saleDetail.flockType === 'STERILE'">
+              <div class="quantity-count-section">
+                <div class="quantity-section">
+                  <div>
+                    <strong>Quantity In Stock</strong>
+                  </div>
+                  <img class="quantities" src='./assets/flaticon/sterile-chicken.png'>
+                  <div class="quantity-count">
+                    <strong>{{saleDetail.sterileChicken}}</strong>
+                  </div>
+                </div>
+              </div>
+            </ion-col>
+            <ion-col size-lg="2" size-md="3" size-xs="12" *ngIf="saleDetail.flockType === 'GOOD'">
+              <div class="quantity-count-section">
+                <div class="quantity-section">
+                  <div>
+                    <strong>Quantity In Stock</strong>
+                  </div>
+                  <img class="quantities" src='./assets/flaticon/good-chicken.png'>
+                  <div class="quantity-count">
+                    <strong>{{saleDetail.goodChicken - saleDetail.quantity}}</strong>
+                  </div>
+                </div>
+              </div>
+            </ion-col>
+
+            <ion-col size-lg="2" size-md="3" size-xs="12"
+              *ngIf="(saleDetail.salesInvoiceType === 'FLOCK' && saleDetail.flockType != null)">
+              <ion-input color="gunung-nago-survey" label="Quantity" label-placement="floating" fill="outline"
+                type="number" min="0" clear-input="true" [(ngModel)]="saleDetail.quantity"
+                (change)="calculateTotalPrice()"></ion-input>
+            </ion-col>
+            <ion-col size-lg="2" size-md="3" size-xs="12" *ngIf="saleDetail.quantity > 0">
+              <ion-input color="gunung-nago-survey" label="Price" label-placement="floating" fill="outline"
+                type="number" min="0" clear-input="true" [(ngModel)]="saleDetail.price"
+                (change)="calculateTotalPrice()"></ion-input>
+            </ion-col>
+            <ion-col size-lg="2" size-md="3" size-xs="12" *ngIf="saleDetail.quantity > 0 && saleDetail.price > 0">
+              <div class="total-per ml-05">
+                <strong>Amount: {{saleDetail.price * saleDetail.quantity}}</strong>
+              </div>
+            </ion-col>
+          </ion-row>
+        </div>
+
+        <!-- Egg -->
+        <div *ngIf="saleDetail.salesInvoiceType === 'EGG'">
+          <ion-row class="quantity-qp">
+            <ion-col size-lg="2" size-md="3" size-xs="12"
+              *ngIf="saleDetail.eggType === 'BIG' && saleDetail.eggQuantityType != null">
+              <div class="quantity-count-section">
+                <div class="quantity-section">
+                  <div>
+                    <strong>Quantity In Stock</strong>
+                  </div>
+                  <img class="quantities" src='./assets/flaticon/eggs.png'>
+                  <div class="quantity-count">
+                    <strong *ngIf="saleDetail.eggQuantityType === 'TIE'">{{eggStock.bigEggs - (saleDetail.quantity *
+                      300)}}</strong>
+                    <strong *ngIf="saleDetail.eggQuantityType === 'TRAY'">{{eggStock.bigEggs - (saleDetail.quantity *
+                      30)}}</strong>
+                    <strong *ngIf="saleDetail.eggQuantityType === 'PIECE'">{{eggStock.bigEggs -
+                      saleDetail.quantity}}</strong>
+                  </div>
+                </div>
+              </div>
+            </ion-col>
+            <ion-col size-lg="2" size-md="3" size-xs="12"
+              *ngIf="saleDetail.eggType === 'MEDIUM' && saleDetail.eggQuantityType != null">
+              <div class="quantity-count-section">
+                <div class="quantity-section">
+                  <div>
+                    <strong>Quantity In Stock</strong>
+                  </div>
+                  <img class="quantities" src='./assets/flaticon/eggs.png'>
+                  <div class="quantity-count">
+                    <strong *ngIf="saleDetail.eggQuantityType === 'TIE'">{{eggStock.mediumEggs - (saleDetail.quantity *
+                      300)}}</strong>
+                    <strong *ngIf="saleDetail.eggQuantityType === 'TRAY'">{{eggStock.mediumEggs - (saleDetail.quantity *
+                      30)}}</strong>
+                    <strong *ngIf="saleDetail.eggQuantityType === 'PIECE'">{{eggStock.mediumEggs -
+                      saleDetail.quantity}}</strong>
+                  </div>
+                </div>
+              </div>
+            </ion-col>
+            <ion-col size-lg="2" size-md="3" size-xs="12"
+              *ngIf="saleDetail.eggType === 'SMALL' && saleDetail.eggQuantityType != null">
+              <div class="quantity-count-section">
+                <div class="quantity-section">
+                  <div>
+                    <strong>Quantity In Stock</strong>
+                  </div>
+                  <img class="quantities" src='./assets/flaticon/eggs.png'>
+                  <div class="quantity-count">
+                    <strong *ngIf="saleDetail.eggQuantityType === 'TIE'">{{eggStock.smallEggs - (saleDetail.quantity *
+                      300)}}</strong>
+                    <strong *ngIf="saleDetail.eggQuantityType === 'TRAY'">{{eggStock.smallEggs - (saleDetail.quantity *
+                      30)}}</strong>
+                    <strong *ngIf="saleDetail.eggQuantityType === 'PIECE'">{{eggStock.smallEggs -
+                      saleDetail.quantity}}</strong>
+                  </div>
+                </div>
+              </div>
+            </ion-col>
+            <ion-col size-lg="2" size-md="3" size-xs="12"
+              *ngIf="saleDetail.eggType === 'BAD' && saleDetail.eggQuantityType != null">
+              <div class="quantity-count-section">
+                <div class="quantity-section">
+                  <div>
+                    <strong>Quantity In Stock</strong>
+                  </div>
+                  <img class="quantities" src='./assets/flaticon/eggs.png'>
+                  <div class="quantity-count">
+                    <strong *ngIf="saleDetail.eggQuantityType === 'TIE'">{{eggStock.badEggs - (saleDetail.quantity *
+                      300)}}</strong>
+                    <strong *ngIf="saleDetail.eggQuantityType === 'TRAY'">{{eggStock.badEggs - (saleDetail.quantity *
+                      30)}}</strong>
+                    <strong *ngIf="saleDetail.eggQuantityType === 'PIECE'">{{eggStock.badEggs -
+                      saleDetail.quantity}}</strong>
+                  </div>
+                </div>
+              </div>
+            </ion-col>
+            <ion-col size-lg="2" size-md="3" size-xs="12"
+              *ngIf="(saleDetail.salesInvoiceType === 'EGG' && saleDetail.eggQuantityType != null)">
+              <ion-input color="gunung-nago-survey" label="Quantity" label-placement="floating" fill="outline"
+                type="number" min="0" clear-input="true" [(ngModel)]="saleDetail.quantity"
+                (change)="calculateTotalPrice()"></ion-input>
+            </ion-col>
+            <ion-col size-lg="2" size-md="3" size-xs="12" *ngIf="saleDetail.quantity > 0">
+              <ion-input color="gunung-nago-survey" label="Price" label-placement="floating" fill="outline"
+                type="number" min="0" clear-input="true" [(ngModel)]="saleDetail.price"
+                (change)="calculateTotalPrice()"></ion-input>
+            </ion-col>
+            <ion-col size-lg="2" size-md="3" size-xs="12" *ngIf="saleDetail.quantity > 0 && saleDetail.price > 0">
+              <div class="total-per ml-05">
+                <strong>Amount: {{saleDetail.price * saleDetail.quantity}}</strong>
+              </div>
+            </ion-col>
+          </ion-row>
+        </div>
+
+        <!-- Manure -->
+        <div *ngIf="saleDetail.salesInvoiceType === 'MANURE'">
+          <ion-row class="quantity-qp">
+            <ion-col size-lg="2" size-md="3" size-xs="12">
+              <div class="quantity-count-section">
+                <div class="quantity-section">
+                  <div>
+                    <strong>Quantity In Stock</strong>
+                  </div>
+                  <img class="quantities" src='./assets/flaticon/manure-bag.png'>
+                  <div class="quantity-count">
+                    <strong>{{manureStock.bags - saleDetail.quantity}}</strong>
+                  </div>
+                </div>
+              </div>
+            </ion-col>
+
+            <ion-col size-lg="2" size-md="3" size-xs="12">
+              <ion-input color="gunung-nago-survey" label="Quantity" label-placement="floating" fill="outline"
+                type="number" min="0" clear-input="true" [(ngModel)]="saleDetail.quantity"
+                (change)="calculateTotalPrice()"></ion-input>
+            </ion-col>
+            <ion-col size-lg="2" size-md="3" size-xs="12" *ngIf="saleDetail.quantity > 0">
+              <ion-input color="gunung-nago-survey" label="Price" label-placement="floating" fill="outline"
+                type="number" min="0" clear-input="true" [(ngModel)]="saleDetail.price"
+                (change)="calculateTotalPrice()"></ion-input>
+            </ion-col>
+            <ion-col size-lg="2" size-md="3" size-xs="12" *ngIf="saleDetail.quantity > 0 && saleDetail.price > 0">
+              <div class="total-per ml-05">
+                <strong>Amount: {{saleDetail.price * saleDetail.quantity}}</strong>
+              </div>
+            </ion-col>
+          </ion-row>
+        </div>
+
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <div class="btn-container">
+    <ion-button color="neutral-btn mr-05" (click)="addSaleDetailsToStock()">Add Product</ion-button>
+    <ion-button class="cancel-btn" (click)="reset()">Cancel</ion-button>
+    <ion-button color="positive-btn" [disabled]="totalPrice < 0" (click)="openModal()">Save</ion-button>
+  </div>
+
+
+  <ion-row>
+    <ion-col size-lg="8" size-md="6" size-xs="12">
+      <ion-card class="invoice" *ngIf="totalPrice > 0">
+        <ion-card-content>
+          <div class="subtitle">
+            <img class="cart-logo" src='./assets/flaticon/official-documents.png'>
+            <div class="form-section-cart">Preview Sales Invoice</div>
+          </div>
+          <div class="invoice-title">
+            <div>
+              <div class="invoice-logo">
+                <img class="logo-img" src='./assets/icon/chicken/icons8-chicken-64.png'>
+                <h5 class="logo-text"><strong>{{company}}</strong></h5>
+              </div>
+              <div>
+                <div class="sub"><strong>Address:</strong> {{address}} </div>
+                <div class="sub"><strong>Telephone Number(s):</strong> {{phone}}</div>
+                <div class="sub"><strong>Email:</strong> {{email}}</div>
+                <!-- <div class="sub"><strong>Registration Number (SIUP):</strong> {{regNo}}</div> -->
+                <div class="sub"><strong>Year of Establishment:</strong> {{yoe}}</div>
+              </div>
+            </div>
+
+            <div>
+              <span class="main"><strong>Invoice No: ...</strong></span>
+              <div class="sub"><strong>Date Issued:</strong> </div>
+              <div class="sub">{{today | date:'EEEE, MMMM d, y HH:mm'}}
+              </div>
+            </div>
+          </div>
+          <div class="invoice-subtitle">
+            <div
+              *ngIf="saleForm.get('customer.firstName')?.value != 'anonymous' && saleForm.get('customer.firstName')?.value != null && saleForm.get('customer.firstName')?.value != ''">
+              <div class="sub"><strong>Invoice To:</strong></div>
+              <span class="sub"><strong>Name:
+                </strong> {{saleForm.get('customer.firstName')?.value}}
+                {{saleForm.get('customer.lastName')?.value}}</span>
+              <div class="sub">
+                <strong>Address:</strong> {{saleForm.get('customer.address')?.value}}
+              </div>
+              <div class="sub"><strong>Telephone
+                  Number:</strong> {{saleForm.get('customer.telephoneNumber')?.value}}</div>
+            </div>
+            <div>
+              <!-- <div *ngIf="manureSalesInvoiceDetailsFrontDto.salesPerson != null" class="salesperson">
+                <div class="sub"><strong>Salesperson:</strong> {{manureSalesInvoiceDetailsFrontDto.salesPerson}}</div>
+              </div>
+              <div *ngIf="manureSalesInvoiceDetailsFrontDto.driverFirstName != null">
+                <div class="sub"><strong>Driver:</strong> {{manureSalesInvoiceDetailsFrontDto.driverFirstName}}
+                  {{manureSalesInvoiceDetailsFrontDto.driverLastName}}</div>
+              </div> -->
+            </div>
+          </div>
+
+          <table class="invoice-table">
+            <thead>
+              <tr>
+                <th scope="col">No.</th>
+                <th scope="col">Product</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Unit Price</th>
+                <th scope="col">Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let saleDetail of saleDetailsDto; let i = index">
+                <td data-label="No.">{{i + 1}}</td>
+                <td data-label="Product" *ngIf="saleDetail.salesInvoiceType === 'MANURE'">MANURE</td>
+                <td data-label="Product"
+                  *ngIf="saleDetail.salesInvoiceType === 'FLOCK' && saleDetail.flockType === 'STERILE'">CHICKEN -
+                  <strong>STERILE</strong>
+                </td>
+                <td data-label="Product"
+                  *ngIf="saleDetail.salesInvoiceType === 'FLOCK' && saleDetail.flockType === 'GOOD'">CHICKEN -
+                  <strong>GOOD</strong>
+                </td>
+                <td data-label="Product" *ngIf="saleDetail.salesInvoiceType === 'FEED'">Feed</td>
+                <td data-label="Product" *ngIf="saleDetail.salesInvoiceType === 'EGG' && saleDetail.eggType === 'BIG'">
+                  EGG - <strong>BIG</strong></td>
+                <td data-label="Product"
+                  *ngIf="saleDetail.salesInvoiceType === 'EGG' && saleDetail.eggType === 'MEDIUM'">EGGS -
+                  <strong>MEDIUM</strong>
+                </td>
+                <td data-label="Product"
+                  *ngIf="saleDetail.salesInvoiceType === 'EGG' && saleDetail.eggType === 'SMALL'">SMALL EGGS</td>
+                <td data-label="Product" *ngIf="saleDetail.salesInvoiceType === 'EGG' && saleDetail.eggType === 'BAD'">
+                  EGG - <strong>BAD</strong></td>
+                <td data-label="Quantity" *ngIf="saleDetail.salesInvoiceType === 'FLOCK'">{{saleDetail.quantity}}</td>
+                <td data-label="Quantity"
+                  *ngIf="saleDetail.salesInvoiceType === 'EGG' && saleDetail.eggQuantityType === 'TIE'">
+                  {{saleDetail.quantity}} - <strong>TIE</strong></td>
+                <td data-label="Quantity"
+                  *ngIf="saleDetail.salesInvoiceType === 'EGG' && saleDetail.eggQuantityType === 'TRAY'">
+                  {{saleDetail.quantity}} - <strong>TRAY</strong></td>
+                <td data-label="Quantity"
+                  *ngIf="saleDetail.salesInvoiceType === 'EGG' && saleDetail.eggQuantityType === 'PIECE'">
+                  {{saleDetail.quantity}} - <strong>PIECE</strong></td>
+
+                <td data-label="Quantity" *ngIf="saleDetail.salesInvoiceType === 'MANURE'">
+                  {{saleDetail.quantity}} - <strong>BAG(S)</strong></td>
+
+                <td data-label="Unit Price">Rp {{saleDetail.price | number : '1.2-2'}}</td>
+                <td data-label="Amount">Rp {{saleDetail.quantity * saleDetail.price | number : '1.2-2'}}</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="invoice-footer">
+            <div>
+            </div>
+            <div>
+              <div class="invoice-date-title">
+                <table class="summary-table">
+                  <tbody>
+                    <tr>
+                      <th id="total" colspan="1">SubTotal :</th>
+                      <td>Rp {{totalPrice | number :'1.2-2'}}</td>
+                    </tr>
+                    <tr>
+                      <th id="total" colspan="1">Total :</th>
+                      <td>Rp {{totalPrice | number :'1.2-2'}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </ion-col>
+
+    <ion-col size-lg="4" size-md="6" size-xs="12">
+
+    </ion-col>
+  </ion-row>
+
+  <ion-modal (willDismiss)="onWillDismiss($event)" [isOpen]="isModalOpen" cssClass="flock-modal"
+    backdropDismiss="false">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <div class="title">
+            <img class="header-logo ml-15" src='./assets/flaticon/confirmation.png'>
+            <h3 class="modal-header-text">Payment Confirmation</h3>
+          </div>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content [fullscreen]="false" class="ion-padding">
+        <form [formGroup]="paymentForm">
+          <ion-row>
+            <ion-col size-xs="6" size-md="3">
+              <ion-input color="gunung-nago-primary" label="Total Price" label-placement="floating" fill="outline"
+                type="number" formControlName="totalPrice"></ion-input>
+            </ion-col>
+          </ion-row>
+
+          <div class="add-payment-area">
+            <div>
+
+            </div>
+            <div>
+              <ion-button color="neutral-btn" class="add-payment-btn" (click)="addPayment()">Add Payment</ion-button>
+            </div>
+          </div>
+
+          <div formArrayName="payments" *ngFor="let payment of paymentsFields?.controls; let i = index">
+            <ion-item-divider>
+              <ion-label>Payment</ion-label>
+            </ion-item-divider>
+            <span [formGroupName]="i">
+              <ion-button *ngIf="paymentsFields != null && paymentsFields.length > 1" (click)="removePayment(i)"
+                class="remove-payment-btn" color="danger"><span class="material-icons">delete</span></ion-button>
+              <ion-row>
+                <ion-col size="6" size-sm>
+                  <ion-input color="gunung-nago-primary" label="Amount Paid" label-placement="floating" fill="outline"
+                    type="number" formControlName="amountPaid"></ion-input>
+                  <div class="error-messages">
+                    <ng-container *ngFor="let error of errorMessages.amountPaid">
+                      <div class="error-message"
+                        *ngIf="payment.get('amountPaid')?.hasError(error.type) && (payment.get('amountPaid')?.dirty || payment.get('amountPaid')?.touched)">
+                        {{ error.message }}
+                      </div>
+                    </ng-container>
+                  </div>
+                </ion-col>
+
+                <ion-col size="6">
+                  <ion-select color="gunung-nago-primary" label="Payment Mode" label-placement="floating" fill="outline"
+                    interface="popover" placeholder="Payment Mode" formControlName="paymentType">
+                    <ion-select-option *ngFor="let paymentType of paymentTypes" [value]="paymentType">{{
+                      paymentType}}</ion-select-option>
+                  </ion-select>
+                  <div class="error-messages">
+                    <ng-container *ngFor="let error of errorMessages.paymentType">
+                      <div class="error-message"
+                        *ngIf="payment.get('paymentType')?.hasError(error.type) && (payment.get('paymentType')?.dirty || payment.get('paymentType')?.touched)">
+                        {{ error.message }}
+                      </div>
+                    </ng-container>
+                  </div>
+                </ion-col>
+              </ion-row>
+
+              <ion-row *ngIf="payment.get('paymentType')?.value === 'CREDIT'">
+                <ion-col size="6">
+                  <mat-form-field class="date-full-width" appearance="outline">
+                    <mat-label>Payment Deadline</mat-label>
+                    <input matInput [matDatepicker]="picker" [min]="today" formControlName="paymentDeadline">
+                    <mat-hint>DD/MM/YYYY</mat-hint>
+                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                  </mat-form-field>
+                </ion-col>
+              </ion-row>
+            </span>
+          </div>
+        </form>
+        <ion-row>
+          <ion-col size="3">
+            <ion-item-divider>
+              <ion-label>Option</ion-label>
+            </ion-item-divider>
+            <ion-radio-group [(ngModel)]="salesInvoiceCategory" (ionChange)="selectSalesInvoiceCategory($event)">
+              <div *ngFor="let salesInvoiceCategory of salesInvoiceCategories" class="radio-class">
+                <ion-radio color="positive-btn"
+                  [value]="salesInvoiceCategory">{{salesInvoiceCategory}}</ion-radio><br />
+              </div>
+            </ion-radio-group>
+          </ion-col>
+          <ion-col size="9" *ngIf="showDriver">
+            <ion-item-divider>
+              <ion-label>Driver</ion-label>
+            </ion-item-divider>
+            <ion-select color="gunung-nago-primary" label="Driver" label-placement="floating" fill="outline"
+              interface="popover" placeholder="Driver" [(ngModel)]="selectedDriver">
+              <ion-select-option *ngFor="let driver of drivers" [value]="driver">{{driver.firstName}}
+                {{driver.lastName}}</ion-select-option>
+            </ion-select>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="12" size-sm>
+            <ion-textarea class="comment" color="gunung-nago-primary" label="Comments" label-placement="floating"
+              fill="outline" type="text" clear-input="true" [(ngModel)]="comment" [autoGrow]="true"></ion-textarea>
+          </ion-col>
+        </ion-row>
+        <div class="modal-btn-container ion-text-right">
+          <ion-button class="cancel-btn" (click)="cancel()">Cancel</ion-button>
+          <ion-button color="positive-btn"
+            [disabled]="!checkPaymentLessThanSoldAt() || paymentForm.invalid || totalPrice < 1 || !checkPaymentCompleted()"
+            (click)="confirm()">Save</ion-button>
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+</ion-content>

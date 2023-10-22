@@ -98,17 +98,6 @@
 
       <ion-row>
         <ion-col size-xs="12" size-md="3">
-          <ion-select color="gunung-nago-primary" label="Type" label-placement="floating" fill="outline"
-            interface="popover" clear-input="true" placeholder="Type" [(ngModel)]="salesInvoiceType"
-            (ionChange)="ionChangeType($event)">
-            <ion-select-option value='' selected="true">All</ion-select-option>
-            <ion-select-option *ngFor="let salesInvoiceType of salesInvoiceTypes" [value]="salesInvoiceType">{{
-              salesInvoiceType | titlecase
-              }}</ion-select-option>
-          </ion-select>
-        </ion-col>
-
-        <ion-col size-xs="12" size-md="3">
           <ion-select color="gunung-nago-primary" label="Status" label-placement="floating" fill="outline"
             interface="popover" clear-input="true" placeholder="Status" [(ngModel)]="salesInvoiceStatus"
             (ionChange)="ionChangeStatus($event)">
@@ -157,7 +146,7 @@
           <td mat-cell *matCellDef="let element"> {{element.createdBy | titlecase}} </td>
         </ng-container>
 
-        <ng-container matColumnDef="salesInvoiceType">
+        <!-- <ng-container matColumnDef="salesInvoiceType">
           <th mat-header-cell *matHeaderCellDef mat-sort-header="salesInvoiceType"> Type </th>
           <td mat-cell *matCellDef="let element">
             <div *ngIf="element.salesInvoiceType === 'FLOCK'" class="table-content-wrapper">
@@ -173,7 +162,7 @@
               <div class="table-content-text">Manure</div>
             </div>
           </td>
-        </ng-container>
+        </ng-container> -->
 
         <ng-container matColumnDef="createdDate">
           <th mat-header-cell *matHeaderCellDef mat-sort-header="createdDate"> Date Issued </th>

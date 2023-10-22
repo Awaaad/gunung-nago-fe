@@ -1,4 +1,4 @@
-import { AquisitionType, CageCategory, CustomerDto, FarmDto, FeedSurveyDto, FlockCategory, FlockSaleDetailsDto, HealthSurveyDto, PaymentDto, PaymentSaveDto, PaymentType, PurchaseInvoiceFeedDetailsDto, PurchaseInvoiceFlockDetailsDto, PurchaseInvoiceHealthProductDetailsDto, PurchaseInvoiceType, RoleDto, SalesInvoiceCategory, SalesInvoiceEggDetailsDto, SalesInvoiceFlockDetailsDto, SalesInvoiceManureDetailsDto, SalesInvoiceStatus, SalesInvoiceType } from "./model";
+import { AquisitionType, CageCategory, CustomerDto, EggQuantityType, EggType, FarmDto, FeedSurveyDto, FlockCategory, FlockSaleDetailsDto, FlockType, HealthSurveyDto, PaymentDto, PaymentSaveDto, PaymentType, PurchaseInvoiceFeedDetailsDto, PurchaseInvoiceFlockDetailsDto, PurchaseInvoiceHealthProductDetailsDto, PurchaseInvoiceType, RoleDto, SaleDetailsDto, SalesInvoiceCategory, SalesInvoiceEggDetailsDto, SalesInvoiceFlockDetailsDto, SalesInvoiceManureDetailsDto, SalesInvoiceStatus, SalesInvoiceType } from "./model";
 
 export class PageResult<T> {
     public content!: Array<T>;
@@ -255,4 +255,49 @@ export class ManureSalesInvoiceDetailsFrontDto {
     salesInvoiceStatus!: SalesInvoiceStatus | null | undefined | any;
     comment!: string | null | undefined | any;
     salesInvoiceManureDetailsDtos!: SalesInvoiceManureDetailsDto[] | [] | null | undefined;
+}
+
+export class SaleSaveFrontDto {
+    customerDto!: CustomerFrontDto | null | undefined;
+    paymentSaveDtos!: PaymentSaveFrontDto[] | [] | null | undefined;
+    salesInvoiceCategory!: SalesInvoiceCategory | null | undefined;
+    driverId!: number | null | undefined;
+    comment!: string | null | undefined;
+    saleDetailsDtos!: SaleDetailsDto[] | [] | null | undefined;
+    newCustomer!: boolean | null | undefined;
+}
+
+export class SaleDetailsFrontDto {
+    salesInvoiceType!: SalesInvoiceType | null | undefined | any;
+    quantity!: number | null | undefined | any;
+    price!: number | null | undefined | any;
+    eggType!: EggType | null | undefined | any;
+    eggQuantityType!: EggQuantityType | null | undefined | any;
+    cageId!: number | null | undefined | any;
+    flockType!: FlockType | null | undefined | any;
+    amount!: number | null | undefined | any;
+    sterileChicken!: number | null | undefined | any;
+    goodChicken!: number | null | undefined | any;
+    flockId!: number | null | undefined | any;
+}
+
+export class SalesInvoiceDetailsFrontDto {
+    id!: number | null | undefined | any;
+    receiptId!: number | null | undefined | any;
+    salesInvoiceType!: SalesInvoiceType | null | undefined | any;
+    totalPrice!: number | null | undefined | any;
+    soldAt!: number | null | undefined | any;
+    createdBy!: string | null | undefined | any;
+    createdDate!: Date | null | undefined | any;
+    customerFirstName!: string | null | undefined | any;
+    customerLastName!: string | null | undefined | any;
+    customerAddress!: string | null | undefined | any;
+    customerTelephoneNumber!: number | null | undefined | any;
+    driverFirstName!: string | null | undefined | any;
+    driverLastName!: string | null | undefined | any;
+    salesPerson!: string | null | undefined | any;
+    salesInvoiceCategory!: SalesInvoiceCategory | null | undefined | any;
+    salesInvoiceStatus!: SalesInvoiceStatus | null | undefined | any;
+    comment: string | null | undefined | any;
+    saleDetailsDtos!: SaleDetailsDto[] | [] | null | undefined;
 }
