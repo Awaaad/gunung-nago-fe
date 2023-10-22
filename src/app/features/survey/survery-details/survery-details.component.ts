@@ -91,6 +91,10 @@ export class SurveryDetailsComponent implements OnInit {
     this.searchHealthProduct();
   }
 
+  ionViewWillEnter(): void {
+    this.initialiseFormGroup();
+  }
+
   public ionChangeLanguage(event: any): void {
     this.translateService.use(event.detail.value);
   }
@@ -105,13 +109,13 @@ export class SurveryDetailsComponent implements OnInit {
       dead: new FormControl({ value: this.dead, disabled: false }, Validators.compose([])),
       sterile: new FormControl({ value: this.sterile, disabled: false }, Validators.compose([])),
       bigEggsTie: new FormControl({ value: this.bigEggsTie, disabled: false }, Validators.compose([])),
-      bigEggsTray: new FormControl({ value: this.bigEggsTie, disabled: false }, Validators.compose([Validators.max(9)])),
+      bigEggsTray: new FormControl({ value: this.bigEggsTray, disabled: false }, Validators.compose([Validators.max(9)])),
       bigEggsItem: new FormControl({ value: this.bigEggsItem, disabled: false }, Validators.compose([Validators.max(29)])),
       mediumEggsTie: new FormControl({ value: this.mediumEggsTie, disabled: false }, Validators.compose([])),
-      mediumEggsTray: new FormControl({ value: this.mediumEggsTie, disabled: false }, Validators.compose([Validators.max(9)])),
+      mediumEggsTray: new FormControl({ value: this.mediumEggsTray, disabled: false }, Validators.compose([Validators.max(9)])),
       mediumEggsItem: new FormControl({ value: this.mediumEggsItem, disabled: false }, Validators.compose([Validators.max(29)])),
       smallEggsTie: new FormControl({ value: this.smallEggsTie, disabled: false }, Validators.compose([])),
-      smallEggsTray: new FormControl({ value: this.smallEggsTie, disabled: false }, Validators.compose([Validators.max(9)])),
+      smallEggsTray: new FormControl({ value: this.smallEggsTray, disabled: false }, Validators.compose([Validators.max(9)])),
       smallEggsItem: new FormControl({ value: this.smallEggsItem, disabled: false }, Validators.compose([Validators.max(29)])),
       broken: new FormControl({ value: this.broken, disabled: false }, Validators.compose([])),
       upDownProduction: new FormControl({ value: '', disabled: false }, Validators.compose([])),
@@ -239,10 +243,13 @@ export class SurveryDetailsComponent implements OnInit {
           dead: this.dead,
           sterile: this.sterile,
           bigEggsTie: this.bigEggsTie,
+          bigEggsTray: this.bigEggsTray,
           bigEggsItem: this.bigEggsItem,
           mediumEggsTie: this.mediumEggsTie,
+          mediumEggsTray: this.mediumEggsTray,
           mediumEggsItem: this.mediumEggsItem,
           smallEggsTie: this.smallEggsTie,
+          smallEggsTray: this.smallEggsTray,
           smallEggsItem: this.smallEggsItem,
           broken: this.broken,
           upDownProduction: '',

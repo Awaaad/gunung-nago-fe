@@ -4,8 +4,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { IonModal } from '@ionic/angular';
 import { MaskitoElementPredicateAsync, MaskitoOptions } from '@maskito/core';
 import { TranslateService } from '@ngx-translate/core';
-import { AquisitionType, FlockSaveDto, SupplierDto } from 'generated-src/model';
-import { FlockSaveFrontDto } from 'generated-src/model-front';
+import { AquisitionType, PurchaseInvoiceType, SupplierDto } from 'generated-src/model';
+import { FlockSaveFrontDto, PurchaseDetailsFrontDto } from 'generated-src/model-front';
 import { filter, distinctUntilChanged, debounceTime, tap, switchMap, finalize, Subscription } from 'rxjs';
 import { SupplierApiService } from 'src/app/shared/apis/supplier.api.service';
 import { UtilsService } from 'src/app/shared/utils/utils.service';
@@ -20,6 +20,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 })
 export class FlockStockComponent implements OnInit {
   @ViewChild(IonModal) modal!: IonModal;
+  public stockColor = '#4e342e';
   public isModalOpen: boolean = false;
   public language = "en";
   public confirmInvoiceForm!: FormGroup;
@@ -41,9 +42,9 @@ export class FlockStockComponent implements OnInit {
   readonly maskitoOptions: MaskitoOptions = { mask: [/\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, '-', /\d/, /\d/] };
 
   public subTotal = 0;
-  public flockStock!: FlockSaveFrontDto;
-  public flocksInStock: FlockSaveFrontDto[] = [];
-  public flocksInStockTable = new MatTableDataSource<FlockSaveDto>;
+  public flockStock!: PurchaseDetailsFrontDto;
+  public flocksInStock: PurchaseDetailsFrontDto[] = [];
+  public flocksInStockTable = new MatTableDataSource<PurchaseDetailsFrontDto>;
   public displayedColumnsStock: string[] = ['name', 'age', 'quantity', 'bonus', 'wholesalePrice', 'price', 'discount', 'tax', 'remove'];
 
   public errorMessages = {
@@ -122,47 +123,44 @@ export class FlockStockComponent implements OnInit {
     this.reset();
   }
 
-  private initialiseFlockSaveDto(): void {
+  private initialisePurchaseDetailsFrontDto(): void {
     this.flockStock = {
-      id: 0,
+      purchaseInvoiceType: PurchaseInvoiceType.FLOCK,
+      healthProductId: null,
+      feedId: null,
       name: null,
-      cageId: null,
-      active: true,
-      initialAge: 0,
-      initialQuantity: 0,
-      bonusQuantity: 0,
-      aquisitionDate: new Date(),
-      aquisitionType: AquisitionType.PURCHASE,
-      death: 0,
-      sterile: 0,
-      badEggs: 0,
-      goodEggs: 0,
-      wholesalePrice: 0,
-      pricePerChicken: 0,
-      discount: 0,
-      tax: 0,
-      createdDate: null
+      age: null,
+      description: null,
+      healthType: null,
+      weight: null,
+      feedCategory: null,
+      unitsPerBox: null,
+      wholesalePrice: null,
+      expiryDate: null,
+      discount: null,
+      tax: null,
+      quantity: null,
+      bonus: null,
+      price: null
     }
   }
 
   public addFlockToStock(): void {
-    this.initialiseFlockSaveDto();
+    this.initialisePurchaseDetailsFrontDto();
     this.flocksInStock.push(this.flockStock);
-    this.flocksInStockTable = new MatTableDataSource<FlockSaveDto>(this.flocksInStock);
+    this.flocksInStockTable = new MatTableDataSource<PurchaseDetailsFrontDto>(this.flocksInStock);
   }
 
   public removeFlockInStock(element: any, index: number): void {
-    console.log(element);
-    console.log(index);
     this.flocksInStock.splice(index, 1);
-    this.flocksInStockTable = new MatTableDataSource<FlockSaveDto>(this.flocksInStock);
+    this.flocksInStockTable = new MatTableDataSource<PurchaseDetailsFrontDto>(this.flocksInStock);
     this.calculateInvoice();
   }
 
   public reset(): void {
     this.showStock = false;
     this.flocksInStock = [];
-    this.flocksInStockTable = new MatTableDataSource<FlockSaveDto>(this.flocksInStock);
+    this.flocksInStockTable = new MatTableDataSource<PurchaseDetailsFrontDto>(this.flocksInStock);
   }
 
   public save(): void {
@@ -171,7 +169,7 @@ export class FlockStockComponent implements OnInit {
       supplierId: this.selectedSupplier.id,
       discount: null,
       comment: this.confirmInvoiceForm.value.comment,
-      flockDtos: this.flocksInStockTable.data
+      purchaseDetailsDtos: this.flocksInStockTable.data
     }
     this.utilsService.presentLoading();
     this.flockApiService.updateFlockStock(flockPurchaseDto).subscribe({
@@ -191,45 +189,45 @@ export class FlockStockComponent implements OnInit {
   public calculateInvoice() {
     this.subTotal = 0;
     this.flocksInStockTable.data.forEach((product, index) => {
-      if (this.flocksInStockTable.data[index].bonusQuantity && this.flocksInStockTable.data[index].tax && this.flocksInStockTable.data[index].discount) {
+      if (this.flocksInStockTable.data[index].bonus && this.flocksInStockTable.data[index].tax && this.flocksInStockTable.data[index].discount) {
         this.subTotal =
           this.subTotal +
-          (((this.flocksInStockTable.data[index].initialQuantity - this.flocksInStockTable.data[index].bonusQuantity) * (this.flocksInStockTable.data[index].wholesalePrice * ((this.flocksInStockTable.data[index].tax + 100) / 100))) -
+          (((this.flocksInStockTable.data[index].quantity - this.flocksInStockTable.data[index].bonus) * (this.flocksInStockTable.data[index].wholesalePrice * ((this.flocksInStockTable.data[index].tax + 100) / 100))) -
             ((this.flocksInStockTable.data[index].wholesalePrice * ((this.flocksInStockTable.data[index].tax + 100) / 100)) * (this.flocksInStockTable.data[index].discount / 100)));
-      } else if (this.flocksInStockTable.data[index].bonusQuantity && this.flocksInStockTable.data[index].tax) {
+      } else if (this.flocksInStockTable.data[index].bonus && this.flocksInStockTable.data[index].tax) {
         this.subTotal = this.subTotal +
-          (this.flocksInStockTable.data[index].initialQuantity -
-            this.flocksInStockTable.data[index].bonusQuantity) *
+          (this.flocksInStockTable.data[index].quantity -
+            this.flocksInStockTable.data[index].bonus) *
           (this.flocksInStockTable.data[index].wholesalePrice * ((this.flocksInStockTable.data[index].tax + 100) / 100));
       } else if (this.flocksInStockTable.data[index].tax && this.flocksInStockTable.data[index].discount) {
         this.subTotal =
           this.subTotal +
-          (((this.flocksInStockTable.data[index].initialQuantity) * (this.flocksInStockTable.data[index].wholesalePrice * ((this.flocksInStockTable.data[index].tax + 100) / 100))) -
+          (((this.flocksInStockTable.data[index].quantity) * (this.flocksInStockTable.data[index].wholesalePrice * ((this.flocksInStockTable.data[index].tax + 100) / 100))) -
             ((this.flocksInStockTable.data[index].wholesalePrice * ((this.flocksInStockTable.data[index].tax + 100) / 100)) * (this.flocksInStockTable.data[index].discount / 100)));
-      } else if (this.flocksInStockTable.data[index].bonusQuantity && this.flocksInStockTable.data[index].discount) {
+      } else if (this.flocksInStockTable.data[index].bonus && this.flocksInStockTable.data[index].discount) {
         this.subTotal =
           this.subTotal +
-          (this.flocksInStockTable.data[index].initialQuantity - this.flocksInStockTable.data[index].bonusQuantity) *
+          (this.flocksInStockTable.data[index].quantity - this.flocksInStockTable.data[index].bonus) *
           (this.flocksInStockTable.data[index].wholesalePrice * ((100 - this.flocksInStockTable.data[index].discount) / 100));
-      } else if (this.flocksInStockTable.data[index].bonusQuantity) {
+      } else if (this.flocksInStockTable.data[index].bonus) {
         this.subTotal =
           this.subTotal +
-          (this.flocksInStockTable.data[index].initialQuantity - this.flocksInStockTable.data[index].bonusQuantity) *
+          (this.flocksInStockTable.data[index].quantity - this.flocksInStockTable.data[index].bonus) *
           this.flocksInStockTable.data[index].wholesalePrice;
       } else if (this.flocksInStockTable.data[index].tax) {
         this.subTotal =
           this.subTotal +
-          (this.flocksInStockTable.data[index].initialQuantity) *
+          (this.flocksInStockTable.data[index].quantity) *
           (this.flocksInStockTable.data[index].wholesalePrice * ((this.flocksInStockTable.data[index].tax + 100) / 100));
       } else if (this.flocksInStockTable.data[index].discount) {
         this.subTotal =
           this.subTotal +
-          (this.flocksInStockTable.data[index].initialQuantity) *
+          (this.flocksInStockTable.data[index].quantity) *
           (this.flocksInStockTable.data[index].wholesalePrice * ((100 - this.flocksInStockTable.data[index].discount) / 100));
       } else {
         this.subTotal =
           this.subTotal +
-          (this.flocksInStockTable.data[index].initialQuantity) *
+          (this.flocksInStockTable.data[index].quantity) *
           this.flocksInStockTable.data[index].wholesalePrice;
       }
     });

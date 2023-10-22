@@ -62,7 +62,7 @@
       <img class="divider-feed-img" src='./assets/flaticon/feed.png'>
     </div>
     <div class="divider-text">
-      <ion-item-divider class="stock-divider">
+      <ion-item-divider class="feed-divider">
         <ion-label>Feed</ion-label>
       </ion-item-divider>
     </div>
@@ -110,26 +110,26 @@
       <table mat-table [dataSource]="feedsInStockTable">
 
         <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef> Name </th>
+          <th mat-header-cell *matHeaderCellDef [style.background-color]="stockColor"> Name </th>
           <td mat-cell *matCellDef="let element"> {{element.name}} </td>
         </ng-container>
 
 
         <ng-container matColumnDef="feedCategory">
-          <th mat-header-cell *matHeaderCellDef> Category </th>
+          <th mat-header-cell *matHeaderCellDef [style.background-color]="stockColor"> Category </th>
           <td mat-cell *matCellDef="let element"> {{element.feedCategory}} </td>
         </ng-container>
 
         <ng-container matColumnDef="bags">
-          <th mat-header-cell *matHeaderCellDef> Bags</th>
+          <th mat-header-cell *matHeaderCellDef [style.background-color]="stockColor"> Bags</th>
           <td mat-cell *matCellDef="let element">
             <ion-input color="gunung-nago-primary" type="number" clear-input="true" required="true"
-              [(ngModel)]="element.bagsReceived" (ngModelChange)="calculateInvoice()"></ion-input>
+              [(ngModel)]="element.quantity" (ngModelChange)="calculateInvoice()"></ion-input>
           </td>
         </ng-container>
 
         <ng-container matColumnDef="weight">
-          <th mat-header-cell *matHeaderCellDef> Weight </th>
+          <th mat-header-cell *matHeaderCellDef [style.background-color]="stockColor"> Weight (KG) </th>
           <td mat-cell *matCellDef="let element">
             <ion-input color="gunung-nago-primary" type="number" clear-input="true"
               [(ngModel)]="element.weight"></ion-input>
@@ -137,15 +137,15 @@
         </ng-container>
 
         <ng-container matColumnDef="bonus">
-          <th mat-header-cell *matHeaderCellDef> Bonus Bags</th>
+          <th mat-header-cell *matHeaderCellDef [style.background-color]="stockColor"> Bonus Bags</th>
           <td mat-cell *matCellDef="let element">
             <ion-input color="gunung-nago-primary" type="number" clear-input="true" required="true"
-              [(ngModel)]="element.bonusBagsReceived" (ngModelChange)="calculateInvoice()"></ion-input>
+              [(ngModel)]="element.bonus" (ngModelChange)="calculateInvoice()"></ion-input>
           </td>
         </ng-container>
 
         <ng-container matColumnDef="wholesalePrice">
-          <th mat-header-cell *matHeaderCellDef> Wholesale / Buying Price </th>
+          <th mat-header-cell *matHeaderCellDef [style.background-color]="stockColor"> Wholesale / Buying Price </th>
           <td mat-cell *matCellDef="let element">
             <ion-input color="gunung-nago-primary" type="number" clear-input="true" required="true"
               [(ngModel)]="element.wholesalePrice" (ngModelChange)="calculateInvoice()"></ion-input>
@@ -153,15 +153,15 @@
         </ng-container>
 
         <ng-container matColumnDef="price">
-          <th mat-header-cell *matHeaderCellDef> Retail Price </th>
+          <th mat-header-cell *matHeaderCellDef [style.background-color]="stockColor"> Retail Price </th>
           <td mat-cell *matCellDef="let element">
             <ion-input color="gunung-nago-primary" type="number" clear-input="true" required="true"
-              [(ngModel)]="element.pricePerBag" (ngModelChange)="calculateInvoice()"></ion-input>
+              [(ngModel)]="element.price" (ngModelChange)="calculateInvoice()"></ion-input>
           </td>
         </ng-container>
 
         <ng-container matColumnDef="discount">
-          <th mat-header-cell *matHeaderCellDef> Discount (%) </th>
+          <th mat-header-cell *matHeaderCellDef [style.background-color]="stockColor"> Discount (%) </th>
           <td mat-cell *matCellDef="let element">
             <ion-input color="gunung-nago-primary" type="number" clear-input="true" required="true"
               [(ngModel)]="element.discount" (ngModelChange)="calculateInvoice()"></ion-input>
@@ -169,7 +169,7 @@
         </ng-container>
 
         <ng-container matColumnDef="expiryDate">
-          <th mat-header-cell *matHeaderCellDef> Expiry date </th>
+          <th mat-header-cell *matHeaderCellDef [style.background-color]="stockColor"> Expiry date </th>
           <td mat-cell *matCellDef="let element">
             <ion-input color="gunung-nago-primary" type="text" clear-input="true" [(ngModel)]="element.expiryDate"
               placeholder="YYYY-MM-DD" type="text" [maskito]="maskitoOptions" [maskitoElement]="predicate"
@@ -178,7 +178,7 @@
         </ng-container>
 
         <ng-container matColumnDef="tax">
-          <th mat-header-cell *matHeaderCellDef> Tax (%) </th>
+          <th mat-header-cell *matHeaderCellDef [style.background-color]="stockColor"> Tax (%) </th>
           <td mat-cell *matCellDef="let element">
             <ion-input color="gunung-nago-primary" type="number" clear-input="true" required="true"
               [(ngModel)]="element.tax" (ngModelChange)="calculateInvoice()"></ion-input>
@@ -186,11 +186,11 @@
         </ng-container>
 
         <ng-container matColumnDef="remove">
-          <th mat-header-cell *matHeaderCellDef> </th>
+          <th mat-header-cell *matHeaderCellDef [style.background-color]="stockColor"> </th>
           <td mat-cell *matCellDef="let element">
             <div class="table-btn">
-              <ion-button color="gunung-nago-warehouse" class="mr-05"
-                (click)="removeHealthProductInStock(element)"><ion-icon name="trash"></ion-icon></ion-button>
+              <ion-button color="gunung-nago-warehouse" class="mr-05" (click)="removeFeedInStock(element)"><ion-icon
+                  name="trash"></ion-icon></ion-button>
             </div>
           </td>
         </ng-container>
@@ -247,10 +247,11 @@
             <thead>
               <tr>
                 <th scope="col">No.</th>
-                <th scope="col">Product Name</th>
-                <th scope="col">Weight</th>
-                <th scope="col">Bags</th>
+                <th scope="col">Product</th>
+                <th scope="col">Name</th>
+                <th scope="col">Quantity</th>
                 <th scope="col">Bonus</th>
+                <th scope="col">Expiry Date</th>
                 <th scope="col">Wholesale Price</th>
                 <th scope="col">Retail Price</th>
                 <th scope="col">Discount</th>
@@ -260,12 +261,14 @@
             <tbody>
               <tr *ngFor="let invoiceDetail of feedsInStockTable?.data let i = index">
                 <td data-label="No.">{{i+1}}</td>
-                <td data-label="Product Name">{{invoiceDetail?.name | titlecase}}</td>
-                <td data-label="Weight">{{invoiceDetail?.weight}}</td>
-                <td data-label="Bags">{{invoiceDetail?.bagsReceived}}</td>
-                <td data-label="Bonus">{{invoiceDetail?.bonusBagsReceived? invoiceDetail?.bonusBagsReceived: 0}}</td>
+                <td data-label="Product">FEED</td>
+                <td data-label="Name">{{invoiceDetail?.name}}</td>
+                <td data-label="Quantity">{{invoiceDetail?.quantity}} <strong>BAGS</strong> of
+                  {{invoiceDetail?.weight}}KG</td>
+                <td data-label="Bonus">{{invoiceDetail?.bonus? invoiceDetail?.bonus: 0}}</td>
+                <td data-label="Expiry Date">{{invoiceDetail?.expiryDate}}</td>
                 <td data-label="Wholesale Price">Rp {{invoiceDetail?.wholesalePrice | number : '1.2-2'}}</td>
-                <td data-label="Retail Price">Rp {{invoiceDetail?.pricePerBag | number : '1.2-2'}}</td>
+                <td data-label="Retail Price">Rp {{invoiceDetail?.price | number : '1.2-2'}}</td>
                 <td data-label="Discount">{{invoiceDetail?.discount | number :'1.2-2'}}<span
                     *ngIf="invoiceDetail?.discount">%</span></td>
                 <td data-label="Tax">{{invoiceDetail?.tax | number :'1.2-2'}}<span *ngIf="invoiceDetail?.tax">%</span>

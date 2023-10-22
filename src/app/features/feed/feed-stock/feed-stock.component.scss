@@ -67,9 +67,14 @@ tbody {
     color: white;
 }
 
-.stock-divider {
+.feed-divider {
     border-color: var(--ion-color-gunung-nago-feed);
     color: var(--ion-color-gunung-nago-feed);
+}
+
+.stock-divider {
+    border-color: var(--ion-color-gunung-nago-supplier);
+    color: var(--ion-color-gunung-nago-supplier);
 }
 
 .mdc-data-table__header-cell {
@@ -336,7 +341,7 @@ ion-card-content {
 }
 
 .invoice-title {
-    border-bottom: 1px solid lightgray;
+    border-bottom: 1px solid #d3d3d3;
 }
 
 .subtitle {

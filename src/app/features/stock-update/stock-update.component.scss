@@ -63,7 +63,7 @@ tbody {
 }
 
 .mat-mdc-table .mdc-data-table__header-row {
-    background: var(--ion-color-gunung-nago-report);
+    background: var(--ion-color-gunung-nago-supplier);
     color: white;
 }
 
@@ -80,14 +80,19 @@ ion-input {
     border-bottom: 1px solid gray;
 }
 
+.stock-divider {
+    border-color: var(--ion-color-gunung-nago-supplier);
+    color: var(--ion-color-gunung-nago-supplier);
+}
+
 .health-divider {
     border-color: var(--ion-color-gunung-nago-report);
     color: var(--ion-color-gunung-nago-report);
 }
 
-.stock-divider {
-    border-color: var(--ion-color-gunung-nago-supplier);
-    color: var(--ion-color-gunung-nago-supplier);
+.feed-divider {
+    border-color: var(--ion-color-gunung-nago-feed);
+    color: var(--ion-color-gunung-nago-feed);
 }
 
 .divider-health-product-img {
@@ -378,4 +383,42 @@ ion-modal {
     .comment {
         padding-left: 10px;
     }
+}
+
+.divider-feed-img {
+    margin: 4px 0px 0 10px;
+    width: 2.5em;
+}
+
+.divider-stock-img {
+    margin: 4px 0px 0 10px;
+    width: 2.5em;
+}
+
+.product-wrapper {
+    display: flex;
+}
+
+.product-health-img {
+    width: 3em;
+}
+
+.product-health {
+    margin-top: 11px;
+}
+
+.product-feed-img {
+    width: 3em;
+}
+
+.product-feed {
+    margin-top: 11px;
+}
+
+.search-bar {
+    width: 100%;
+}
+
+.add-flock-btn {
+    margin-left: 10px;
 }

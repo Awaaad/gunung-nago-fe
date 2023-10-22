@@ -26,7 +26,7 @@ export class PurchaseInvoiceListComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   public language = "en";
-  public displayedColumns: string[] = ['number', 'purchaseInvoiceType', 'supplier', 'createdBy', 'createdDate', 'totalPrice'];
+  public displayedColumns: string[] = ['number', 'supplier', 'createdBy', 'createdDate', 'totalPrice'];
   public purchaseInvoices = new MatTableDataSource<PurchaseInvoiceDto>;
   private infinitePurchaseInvoices: PurchaseInvoiceDto[] = [];
   public purchaseInvoiceSearchSubscription!: Subscription;
@@ -190,13 +190,7 @@ export class PurchaseInvoiceListComponent {
   }
 
   public routeToPurchaseInvoiceDetails(purchaseInvoiceDto: PurchaseInvoiceDto): void {
-    if (purchaseInvoiceDto.purchaseInvoiceType === PurchaseInvoiceType.HEALTH_PRODUCT) {
-      this.router.navigate([`purchase-invoice/purchase-invoice-details/${PurchaseInvoiceType.HEALTH_PRODUCT}/${purchaseInvoiceDto.id}`]);
-    } else if (purchaseInvoiceDto.purchaseInvoiceType === PurchaseInvoiceType.FEED) {
-      this.router.navigate([`purchase-invoice/purchase-invoice-details/${PurchaseInvoiceType.FEED}/${purchaseInvoiceDto.id}`]);
-    } else if (purchaseInvoiceDto.purchaseInvoiceType === PurchaseInvoiceType.FLOCK) {
-      this.router.navigate([`purchase-invoice/purchase-invoice-details/${PurchaseInvoiceType.FLOCK}/${purchaseInvoiceDto.id}`]);
-    }
+    this.router.navigate([`purchase-invoice/purchase-invoice-details/${purchaseInvoiceDto.id}`]);
   }
 
   public search(event?: any, isLoadevent?: any) {

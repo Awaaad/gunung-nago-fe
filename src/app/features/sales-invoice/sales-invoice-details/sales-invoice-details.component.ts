@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { FlockSalesInvoiceDetailsDto, SalesInvoiceEggDetailsDto, SalesInvoiceType } from 'generated-src/model';
-import { EggSalesInvoiceDetailsFrontDto, FlockSalesInvoiceDetailsFrontDto, ManureSalesInvoiceDetailsFrontDto, SalesInvoiceDetailsFrontDto } from 'generated-src/model-front';
+import { SalesInvoiceType } from 'generated-src/model';
+import { SalesInvoiceDetailsFrontDto } from 'generated-src/model-front';
 import { FileApiService } from 'src/app/shared/apis/file.api.service';
 import { ReceiptApiService } from 'src/app/shared/apis/receipt.api.service';
 import { SalesInvoiceApiService } from 'src/app/shared/apis/sales-invoice.api.service';

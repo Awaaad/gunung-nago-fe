@@ -59,6 +59,10 @@ const routes: Routes = [
     loadChildren: () => import('./features/point-of-sale/point-of-sale.module').then(m => m.PointOfSaleModule)
   },
   {
+    path: 'stock-update',
+    loadChildren: () => import('./features/stock-update/stock-update.module').then(m => m.StockUpdateModule)
+  },
+  {
     path: 'security',
     loadChildren: () => import('./features/security/security.module').then(m => m.SecurityModule)
   },

@@ -80,9 +80,14 @@ ion-input {
     border-bottom: 1px solid gray;
 }
 
-.stock-divider {
+.flock-divider {
     border-color: var(--ion-color-gunung-nago-flock);
     color: var(--ion-color-gunung-nago-flock);
+}
+
+.stock-divider {
+    border-color: var(--ion-color-gunung-nago-supplier);
+    color: var(--ion-color-gunung-nago-supplier);
 }
 
 .divider-health-product-img {

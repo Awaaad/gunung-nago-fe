@@ -1,4 +1,4 @@
-import { AquisitionType, CageCategory, CustomerDto, EggQuantityType, EggType, FarmDto, FeedSurveyDto, FlockCategory, FlockSaleDetailsDto, FlockType, HealthSurveyDto, PaymentDto, PaymentSaveDto, PaymentType, PurchaseInvoiceFeedDetailsDto, PurchaseInvoiceFlockDetailsDto, PurchaseInvoiceHealthProductDetailsDto, PurchaseInvoiceType, RoleDto, SaleDetailsDto, SalesInvoiceCategory, SalesInvoiceEggDetailsDto, SalesInvoiceFlockDetailsDto, SalesInvoiceManureDetailsDto, SalesInvoiceStatus, SalesInvoiceType } from "./model";
+import { AquisitionType, CageCategory, CustomerDto, EggQuantityType, EggType, FarmDto, FeedCategory, FeedSurveyDto, FlockCategory, FlockSaleDetailsDto, FlockType, HealthSurveyDto, HealthType, PaymentDto, PaymentSaveDto, PaymentType, PurchaseDetailsDto, PurchaseInvoiceFeedDetailsDto, PurchaseInvoiceFlockDetailsDto, PurchaseInvoiceHealthProductDetailsDto, PurchaseInvoiceType, RoleDto, SaleDetailsDto, SalesInvoiceCategory, SalesInvoiceEggDetailsDto, SalesInvoiceFlockDetailsDto, SalesInvoiceManureDetailsDto, SalesInvoiceStatus, SalesInvoiceType } from "./model";
 
 export class PageResult<T> {
     public content!: Array<T>;
@@ -300,4 +300,65 @@ export class SalesInvoiceDetailsFrontDto {
     salesInvoiceStatus!: SalesInvoiceStatus | null | undefined | any;
     comment: string | null | undefined | any;
     saleDetailsDtos!: SaleDetailsDto[] | [] | null | undefined;
+}
+
+export class ProductStockSaveFrontDto {
+    type!: PurchaseInvoiceType | null | undefined | any;
+
+    healthProductId!: number | null | undefined | any;
+    feedId!: number | null | undefined | any;
+
+    name!: string | null | undefined | any;
+    age!: string | null | undefined | any;
+    description!: string | null | undefined | any;
+    healthType!: HealthType | null | undefined | any;
+    weight!: number | null | undefined | any;
+    feedCategory!: FeedCategory | null | undefined | any;
+
+    unitsPerBox!: number | null | undefined | any;
+    wholesalePrice!: number | null | undefined | any;
+
+    expiryDate!: Date | null | undefined | any;
+    discount!: number | null | undefined | any;
+    tax!: number | null | undefined | any;
+    createdDate!: Date | null | undefined | any;
+    quantity!: number | null | undefined | any;
+    bonus!: number | null | undefined | any;
+    price!: number | null | undefined | any;
+}
+
+export class PurchaseDetailsFrontDto {
+    purchaseInvoiceType!: PurchaseInvoiceType | null | undefined | any;
+    healthProductId!: number | null | undefined | any;
+    feedId!: number | null | undefined | any;
+    name!: string | null | undefined | any;
+    age!: number | null | undefined | any;
+    description!: string | null | undefined | any;
+    healthType!: HealthType | null | undefined | any;
+    weight!: number | null | undefined | any;
+    feedCategory!: FeedCategory | null | undefined | any;
+    unitsPerBox!: number | null | undefined | any;
+    wholesalePrice!: number | null | undefined | any;
+    expiryDate!: Date | null | undefined | any;
+    discount!: number | null | undefined | any;
+    tax!: number | null | undefined | any;
+    quantity!: number | null | undefined | any;
+    bonus!: number | null | undefined | any;
+    price!: number | null | undefined | any;
+}
+
+export class PurchaseInvoiceDetailsFrontDto {
+    id!: number | null | undefined | any;
+    number!: string | null | undefined | any;
+    supplierName!: string | null | undefined | any;
+    supplierAddress!: string | null | undefined | any;
+    supplierTelephoneNumber!: number | null | undefined | any;
+    supplierTelephoneNumberTwo!: number | null | undefined | any;
+    supplierTelephoneNumberThree!: number | null | undefined | any;
+    createdBy!: string | null | undefined | any;
+    createdDate!: Date | null | undefined | any;
+    discount!: number | null | undefined | any;
+    totalPrice!: number | null | undefined | any;
+    comment!: string | null | undefined | any;
+    purchaseDetailsDtos!: PurchaseDetailsDto[] | [] | null | undefined;
 }

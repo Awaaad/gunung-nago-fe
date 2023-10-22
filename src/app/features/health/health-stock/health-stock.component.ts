@@ -5,13 +5,14 @@ import { MatTableDataSource } from '@angular/material/table';
 import { IonModal } from '@ionic/angular';
 import { MaskitoElementPredicateAsync, MaskitoOptions } from '@maskito/core';
 import { TranslateService } from '@ngx-translate/core';
-import { HealthProductDto, HealthProductStockSaveDto, HealthType, SupplierDto } from 'generated-src/model';
+import { HealthProductDto, HealthType, PurchaseInvoiceType, SupplierDto } from 'generated-src/model';
 import { Subscription, debounceTime, distinctUntilChanged, filter, finalize, switchMap, tap } from 'rxjs';
 import { HealthProductStockApiService } from 'src/app/shared/apis/health-product-stock.api.service';
 import { HealthProductApiService } from 'src/app/shared/apis/health-product.api.service';
 import { SupplierApiService } from 'src/app/shared/apis/supplier.api.service';
 import { UtilsService } from 'src/app/shared/utils/utils.service';
 import { OverlayEventDetail } from '@ionic/core/components';
+import { PurchaseDetailsFrontDto } from 'generated-src/model-front';
 
 @Component({
   selector: 'app-health-stock',
@@ -20,16 +21,17 @@ import { OverlayEventDetail } from '@ionic/core/components';
 })
 export class HealthStockComponent implements OnInit {
   @ViewChild(IonModal) modal!: IonModal;
+  public stockColor = '#4e342e';
   public isModalOpen: boolean = false;
   public language = "en";
   public confirmInvoiceForm!: FormGroup;
   public displayedColumns: string[] = ['name', 'description', 'healthType', 'active'];
-  public displayedColumnsStock: string[] = ['name', 'healthType', 'boxesReceived', 'bonus', 'wholesalePrice', 'price', 'discount', 'expiryDate', 'tax', 'remove'];
+  public displayedColumnsStock: string[] = ['name', 'healthType', 'quantity', 'bonus', 'wholesalePrice', 'price', 'discount', 'expiryDate', 'tax', 'remove'];
   public healthProducts = new MatTableDataSource<HealthProductDto>;
-  public healthProductsInStockTable = new MatTableDataSource<HealthProductStockSaveDto>;
+  public healthProductsInStockTable = new MatTableDataSource<PurchaseDetailsFrontDto>;
   private infiniteHealthProducts: HealthProductDto[] = [];
   public healthProductSearchSubscription!: Subscription;
-  public healthProductsInStock: HealthProductStockSaveDto[] = [];
+  public healthProductsInStock: PurchaseDetailsFrontDto[] = [];
   private page: number = 0;
   private size: number = 20;
   public sortOrder: string = 'asc';
@@ -174,8 +176,27 @@ export class HealthStockComponent implements OnInit {
     await this.resolveAddProductToStock(row).then(exist => {
       if (!exist) {
         this.healthProductApiService.findHealthProductStockByHealthProductId(row.id).subscribe(healthProduct => {
-          this.healthProductsInStock.push(healthProduct);
-          this.healthProductsInStockTable = new MatTableDataSource<HealthProductStockSaveDto>(this.healthProductsInStock);
+          const purchase: PurchaseDetailsFrontDto = {
+            purchaseInvoiceType: PurchaseInvoiceType.HEALTH_PRODUCT,
+            healthProductId: healthProduct.healthProductId,
+            feedId: null,
+            name: healthProduct.name,
+            age: null,
+            description: healthProduct.description,
+            healthType: healthProduct.healthType,
+            weight: null,
+            feedCategory: null,
+            unitsPerBox: null,
+            wholesalePrice: healthProduct.wholesalePrice,
+            expiryDate: null,
+            discount: null,
+            tax: null,
+            quantity: null,
+            bonus: null,
+            price: healthProduct.pricePerBox
+          }
+          this.healthProductsInStock.push(purchase);
+          this.healthProductsInStockTable = new MatTableDataSource<PurchaseDetailsFrontDto>(this.healthProductsInStock);
         })
       }
     });
@@ -202,7 +223,7 @@ export class HealthStockComponent implements OnInit {
         this.healthProductsInStock.splice(i, 1);
       }
     }
-    this.healthProductsInStockTable = new MatTableDataSource<HealthProductStockSaveDto>(this.healthProductsInStock);
+    this.healthProductsInStockTable = new MatTableDataSource<PurchaseDetailsFrontDto>(this.healthProductsInStock);
     this.calculateInvoice();
   }
 
@@ -212,7 +233,7 @@ export class HealthStockComponent implements OnInit {
       supplierId: this.selectedSupplier.id,
       discount: null,
       comment: this.confirmInvoiceForm.value.comment,
-      healthProductStockDtos: this.healthProductsInStockTable.data
+      purchaseDetailsDtos: this.healthProductsInStockTable.data
     }
     this.utilsService.presentLoading();
     this.healthProductStockApiService.save(healthProductPurchaseDto).subscribe({
@@ -232,7 +253,7 @@ export class HealthStockComponent implements OnInit {
   public reset(): void {
     this.showHealthProductTable = false;
     this.healthProductsInStock = [];
-    this.healthProductsInStockTable = new MatTableDataSource<HealthProductStockSaveDto>(this.healthProductsInStock);
+    this.healthProductsInStockTable = new MatTableDataSource<PurchaseDetailsFrontDto>(this.healthProductsInStock);
     this.infiniteHealthProducts = [];
     this.healthProducts = new MatTableDataSource<HealthProductDto>(this.infiniteHealthProducts);
   }
@@ -240,45 +261,45 @@ export class HealthStockComponent implements OnInit {
   public calculateInvoice() {
     this.subTotal = 0;
     this.healthProductsInStockTable.data.forEach((product, index) => {
-      if (this.healthProductsInStockTable.data[index].bonusBoxesReceived && this.healthProductsInStockTable.data[index].tax && this.healthProductsInStockTable.data[index].discount) {
+      if (this.healthProductsInStockTable.data[index].bonus && this.healthProductsInStockTable.data[index].tax && this.healthProductsInStockTable.data[index].discount) {
         this.subTotal =
           this.subTotal +
-          (((this.healthProductsInStockTable.data[index].boxesReceived - this.healthProductsInStockTable.data[index].bonusBoxesReceived) * (this.healthProductsInStockTable.data[index].wholesalePrice * ((this.healthProductsInStockTable.data[index].tax + 100) / 100))) -
+          (((this.healthProductsInStockTable.data[index].quantity - this.healthProductsInStockTable.data[index].bonus) * (this.healthProductsInStockTable.data[index].wholesalePrice * ((this.healthProductsInStockTable.data[index].tax + 100) / 100))) -
             ((this.healthProductsInStockTable.data[index].wholesalePrice * ((this.healthProductsInStockTable.data[index].tax + 100) / 100)) * (this.healthProductsInStockTable.data[index].discount / 100)));
-      } else if (this.healthProductsInStockTable.data[index].bonusBoxesReceived && this.healthProductsInStockTable.data[index].tax) {
+      } else if (this.healthProductsInStockTable.data[index].bonus && this.healthProductsInStockTable.data[index].tax) {
         this.subTotal = this.subTotal +
-          (this.healthProductsInStockTable.data[index].boxesReceived -
-            this.healthProductsInStockTable.data[index].bonusBoxesReceived) *
+          (this.healthProductsInStockTable.data[index].quantity -
+            this.healthProductsInStockTable.data[index].bonus) *
           (this.healthProductsInStockTable.data[index].wholesalePrice * ((this.healthProductsInStockTable.data[index].tax + 100) / 100));
       } else if (this.healthProductsInStockTable.data[index].tax && this.healthProductsInStockTable.data[index].discount) {
         this.subTotal =
           this.subTotal +
-          (((this.healthProductsInStockTable.data[index].boxesReceived) * (this.healthProductsInStockTable.data[index].wholesalePrice * ((this.healthProductsInStockTable.data[index].tax + 100) / 100))) -
+          (((this.healthProductsInStockTable.data[index].quantity) * (this.healthProductsInStockTable.data[index].wholesalePrice * ((this.healthProductsInStockTable.data[index].tax + 100) / 100))) -
             ((this.healthProductsInStockTable.data[index].wholesalePrice * ((this.healthProductsInStockTable.data[index].tax + 100) / 100)) * (this.healthProductsInStockTable.data[index].discount / 100)));
-      } else if (this.healthProductsInStockTable.data[index].bonusBoxesReceived && this.healthProductsInStockTable.data[index].discount) {
+      } else if (this.healthProductsInStockTable.data[index].bonus && this.healthProductsInStockTable.data[index].discount) {
         this.subTotal =
           this.subTotal +
-          (this.healthProductsInStockTable.data[index].boxesReceived - this.healthProductsInStockTable.data[index].bonusBoxesReceived) *
+          (this.healthProductsInStockTable.data[index].quantity - this.healthProductsInStockTable.data[index].bonus) *
           (this.healthProductsInStockTable.data[index].wholesalePrice * ((100 - this.healthProductsInStockTable.data[index].discount) / 100));
-      } else if (this.healthProductsInStockTable.data[index].bonusBoxesReceived) {
+      } else if (this.healthProductsInStockTable.data[index].bonus) {
         this.subTotal =
           this.subTotal +
-          (this.healthProductsInStockTable.data[index].boxesReceived - this.healthProductsInStockTable.data[index].bonusBoxesReceived) *
+          (this.healthProductsInStockTable.data[index].quantity - this.healthProductsInStockTable.data[index].bonus) *
           this.healthProductsInStockTable.data[index].wholesalePrice;
       } else if (this.healthProductsInStockTable.data[index].tax) {
         this.subTotal =
           this.subTotal +
-          (this.healthProductsInStockTable.data[index].boxesReceived) *
+          (this.healthProductsInStockTable.data[index].quantity) *
           (this.healthProductsInStockTable.data[index].wholesalePrice * ((this.healthProductsInStockTable.data[index].tax + 100) / 100));
       } else if (this.healthProductsInStockTable.data[index].discount) {
         this.subTotal =
           this.subTotal +
-          (this.healthProductsInStockTable.data[index].boxesReceived) *
+          (this.healthProductsInStockTable.data[index].quantity) *
           (this.healthProductsInStockTable.data[index].wholesalePrice * ((100 - this.healthProductsInStockTable.data[index].discount) / 100));
       } else {
         this.subTotal =
           this.subTotal +
-          (this.healthProductsInStockTable.data[index].boxesReceived) *
+          (this.healthProductsInStockTable.data[index].quantity) *
           this.healthProductsInStockTable.data[index].wholesalePrice;
       }
     });

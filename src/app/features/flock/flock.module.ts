@@ -11,7 +11,6 @@ import { MatSortModule } from '@angular/material/sort';
 import { FlockApiService } from '../../shared/apis/flock.api.service';
 import { FlockSaleApiService } from '../../shared/apis/flock-sale.api.service';
 import { FlockSaleDetailsComponent } from './flock-sale-details/flock-sale-details.component';
-import { FlockSaleListComponent } from './flock-sale-list/flock-sale-list.component';
 import { SurveyApiService } from '../../shared/apis/survey.api.service';
 import { CageApiService } from '../../shared/apis/cage.api.service';
 import { CustomerApiService } from 'src/app/shared/apis/customer.api.service';
@@ -29,7 +28,7 @@ import { FlockStockApiService } from 'src/app/shared/apis/flock-stock.api.servic
 export const MY_FORMATS = ConstantHelper.dateFormat;
 
 @NgModule({
-  declarations: [FlockListComponent, FlockDetailsComponent, FlockSaleDetailsComponent, FlockSaleListComponent, FlockStockComponent],
+  declarations: [FlockListComponent, FlockDetailsComponent, FlockSaleDetailsComponent, FlockStockComponent],
   imports: [
     CommonModule,
     FlockRoutingModule,

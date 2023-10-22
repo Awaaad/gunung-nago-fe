@@ -1126,8 +1126,8 @@
             </ion-item-divider>
             <ion-radio-group [(ngModel)]="salesInvoiceCategory" (ionChange)="selectSalesInvoiceCategory($event)">
               <div *ngFor="let salesInvoiceCategory of salesInvoiceCategories" class="radio-class">
-                <ion-radio color="positive-btn"
-                  [value]="salesInvoiceCategory">{{salesInvoiceCategory}}</ion-radio><br />
+                <ion-radio color="positive-btn" [value]="salesInvoiceCategory">{{salesInvoiceCategory === 'IN_STORE'?
+                  'In Store' : 'Delivery'}}</ion-radio><br />
               </div>
             </ion-radio-group>
           </ion-col>
