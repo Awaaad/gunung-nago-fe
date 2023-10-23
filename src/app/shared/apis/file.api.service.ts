@@ -25,8 +25,8 @@ export class FileApiService {
         return this.http.get<any>(`${this.baseUrl}egg-sale-invoice/${salesInvoiceId}`);
     }
 
-    public generateFlockSaleInvoicePdf(salesInvoiceId: number): Observable<any> {
+    public generateSaleInvoicePdf(salesInvoiceId: number): Observable<any> {
         const headers = this.setHeaders();
-        return this.http.get<any>(`${this.baseUrl}flock-sale-invoice/${salesInvoiceId}`, { headers, responseType: 'blob' as 'json' });
+        return this.http.get<any>(`${this.baseUrl}sale-invoice/${salesInvoiceId}`, { headers, responseType: 'blob' as 'json' });
     }
 }

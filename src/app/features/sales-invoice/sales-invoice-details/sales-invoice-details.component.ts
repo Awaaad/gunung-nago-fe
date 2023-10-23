@@ -58,16 +58,11 @@ export class SalesInvoiceDetailsComponent implements OnInit {
     // })
   }
 
-  public generateEggSaleInvoicePdf(): void {
-    if (this.type === SalesInvoiceType.EGG) {
-      this.fileApiService.generateEggSaleInvoicePdf(this.salesInvoiceId).subscribe(data => {
-        console.log(data);
-      })
-    } else if (this.type === SalesInvoiceType.FLOCK) {
-      this.fileApiService.generateFlockSaleInvoicePdf(this.salesInvoiceId).subscribe(fileResponse => {
-        this.utilsService.openTemplateInNewTab(fileResponse);
-      })
-    }
+  public generateSaleInvoicePdf(): void {
+    this.fileApiService.generateSaleInvoicePdf(this.salesInvoiceId).subscribe(fileResponse => {
+      this.utilsService.openTemplateInNewTab(fileResponse);
+    })
+    
   }
 
   public ionChangeLanguage(event: any): void {

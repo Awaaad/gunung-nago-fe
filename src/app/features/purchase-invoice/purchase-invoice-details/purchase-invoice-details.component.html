@@ -24,7 +24,6 @@
 </ion-header>
 
 <ion-content>
-  <ion-button (click)="generatePurchaseInvoicePdf()">Test</ion-button>
   <div class="invoice-margin">
     <ion-card class="invoice">
       <ion-card-content>
@@ -144,6 +143,6 @@
 
       </ion-card-content>
     </ion-card>
+    <ion-button color="primary" class="print" (click)="generatePurchaseInvoicePdf()">Print</ion-button>
   </div>
-
 </ion-content>
