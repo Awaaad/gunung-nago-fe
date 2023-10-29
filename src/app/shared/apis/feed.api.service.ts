@@ -31,7 +31,11 @@ export class FeedApiService {
     return this.http.get<FeedStockDto>(`${this.baseUrl}allocation?feedCategory=${category}`);
   }
 
-  public findFeedFormAllocation(): Observable<FeedStockAllocationDto[]> {
-    return this.http.get<FeedStockAllocationDto[]>(`${this.baseUrl}allocation/form`);
+  public findAllFeedStockForAllocation(): Observable<FeedStockDto[]> {
+    return this.http.get<FeedStockDto[]>(`${this.baseUrl}allocation`);
+  }
+
+  public findFeedFormAllocation(feedStockId: number, cageCategory: string): Observable<FeedStockAllocationDto[]> {
+    return this.http.get<FeedStockAllocationDto[]>(`${this.baseUrl}allocation/form/${feedStockId}/${cageCategory}`);
   }
 }

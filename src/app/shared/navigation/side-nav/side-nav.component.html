@@ -113,13 +113,39 @@
         </ion-accordion>
       </ion-accordion-group>
 
-      <ion-item routerLink="/egg/egg-sale-details" routerDirection="forward">
-        <ion-icon [src]="egg" class="font-size-60"></ion-icon><span>Egg Sale</span>
-      </ion-item>
 
-      <ion-item routerLink="/manure/manure-sale-details" routerDirection="forward">
-        <ion-icon [src]="manure" class="font-size-60"></ion-icon><span>Manure Sale</span>
-      </ion-item>
+
+      <ion-accordion-group>
+        <ion-accordion value="first">
+          <ion-item slot="header" color="light">
+            <ion-icon [src]="egg" class="font-size-60"></ion-icon>Egg
+          </ion-item>
+          <div class="accordion-sub" slot="content">
+            <ion-item routerLink="/egg/egg-sale-details" routerDirection="forward">
+              <ion-icon name="pricetag" color="dark"></ion-icon><span>Egg Sale</span>
+            </ion-item>
+            <ion-item routerLink="/egg/egg-transfer">
+              <ion-icon [src]="stock" class="font-size-60"></ion-icon>Egg Transfer
+            </ion-item>
+          </div>
+        </ion-accordion>
+      </ion-accordion-group>
+
+      <ion-accordion-group>
+        <ion-accordion value="first">
+          <ion-item slot="header" color="light">
+            <ion-icon [src]="manure" class="font-size-60"></ion-icon>Manure
+          </ion-item>
+          <div class="accordion-sub" slot="content">
+            <ion-item routerLink="/manure/manure-sale-details" routerDirection="forward">
+              <ion-icon name="pricetag" color="dark"></ion-icon><span>Manure Sale</span>
+            </ion-item>
+            <ion-item routerLink="/manure/manure-stock">
+              <ion-icon [src]="stock" class="font-size-60"></ion-icon>Update Manure Stock
+            </ion-item>
+          </div>
+        </ion-accordion>
+      </ion-accordion-group>
 
       <ion-accordion-group>
         <ion-accordion value="first">

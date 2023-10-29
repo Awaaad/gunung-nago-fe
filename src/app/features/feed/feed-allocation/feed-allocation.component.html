@@ -25,26 +25,31 @@
 
 <ion-content [fullscreen]="false" class="ion-padding">
   <div class="container">
-    <ion-item-divider class="norm">
-      <ion-label color="norm">NORMAL</ion-label>
-    </ion-item-divider>
-    <ion-row *ngIf="showFeedStockNorm">
-      <ion-col size-xs="6" size-md="3" class="mt-1e">
-        <ion-ripple-effect class="custom-ripple"></ion-ripple-effect>
-        <ion-card>
-          <ion-card-header color="gunung-nago-feed">
-            {{feedStockNorm.feedCategory}}
-          </ion-card-header>
-          <ion-card-content class="home-card-content">
-            <ion-input class="mt-1" color="gunung-nago-survey" label="Bags left" label-placement="floating"
-              fill="outline" type="number" [(ngModel)]="feedStockNorm.bags" [readonly]="true"></ion-input>
-            <ion-input class="mt-1" color="gunung-nago-survey" label="Bags allocated" label-placement="floating"
-              fill="outline" type="number" [(ngModel)]="totalBagsAllocatedNorm" [readonly]="true"></ion-input>
+    <ion-row>
+      <ion-col size-xs="12" size-md="3" *ngFor="let feed of feedsToBeAllocated">
+        <ion-card (click)="changedSelectedFeedStock(feed)"
+          [ngClass]="selectedFeedStock.id === feed.id? 'selected' : null">
+          <ion-card-content>
+            <div class="feed-section">
+              <div>
+                <strong>{{feed.feedCategory}}</strong><br>
+                <strong>{{feed.name}}</strong>
+              </div>
+              <img class="feed-img" src='./assets/flaticon/feed.png'>
+              <div class="feed-count">
+                <strong>{{feed.bags}}</strong>
+              </div>
+            </div>
           </ion-card-content>
         </ion-card>
       </ion-col>
     </ion-row>
-    <ion-row>
+  </div>
+  <div class="container">
+    <ion-item-divider class="norm" *ngIf="cagesNorm.length > 0">
+      <ion-label color="norm">NORMAL</ion-label>
+    </ion-item-divider>
+    <ion-row *ngIf="cagesNorm.length > 0">
       <ion-col size-xs="6" size-md="3" class="mt-1e" *ngFor="let cage of cagesNorm">
         <ion-ripple-effect class="custom-ripple"></ion-ripple-effect>
         <ion-card>
@@ -62,26 +67,10 @@
       </ion-col>
     </ion-row>
 
-    <ion-item-divider class="dara">
+    <ion-item-divider class="dara" *ngIf="cagesDara.length > 0">
       <ion-label color="dara">DARA</ion-label>
     </ion-item-divider>
-    <ion-row *ngIf="showFeedStockDara">
-      <ion-col size-xs="6" size-md="3" class="mt-1e">
-        <ion-ripple-effect class="custom-ripple"></ion-ripple-effect>
-        <ion-card>
-          <ion-card-header color="gunung-nago-feed">
-            {{feedStockDara.feedCategory}}
-          </ion-card-header>
-          <ion-card-content class="home-card-content">
-            <ion-input class="mt-1" color="gunung-nago-survey" label="Bags left" label-placement="floating"
-              fill="outline" type="number" [(ngModel)]="feedStockDara.bags" [readonly]="true"></ion-input>
-            <ion-input class="mt-1" color="gunung-nago-survey" label="Bags allocated" label-placement="floating"
-              fill="outline" type="number" [(ngModel)]="totalBagsAllocatedDara" [readonly]="true"></ion-input>
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
-    </ion-row>
-    <ion-row>
+    <ion-row *ngIf="cagesDara.length > 0">
       <ion-col size-xs="6" size-md="3" class="mt-1e" *ngFor="let cage of cagesDara">
         <ion-card>
           <ion-card-header color="dara">
@@ -98,26 +87,10 @@
       </ion-col>
     </ion-row>
 
-    <ion-item-divider class="doc">
+    <ion-item-divider class="doc" *ngIf="cagesDoc.length > 0">
       <ion-label color="doc">DOC</ion-label>
     </ion-item-divider>
-    <ion-row *ngIf="showFeedStockDoc">
-      <ion-col size-xs="6" size-md="3" class="mt-1e">
-        <ion-ripple-effect class="custom-ripple"></ion-ripple-effect>
-        <ion-card>
-          <ion-card-header color="gunung-nago-feed">
-            {{feedStockDoc.feedCategory}}
-          </ion-card-header>
-          <ion-card-content class="home-card-content">
-            <ion-input class="mt-1" color="gunung-nago-survey" label="Bags left" label-placement="floating"
-              fill="outline" type="number" [(ngModel)]="feedStockDoc.bags" [readonly]="true"></ion-input>
-            <ion-input class="mt-1" color="gunung-nago-survey" label="Bags allocated" label-placement="floating"
-              fill="outline" type="number" [(ngModel)]="totalBagsAllocatedDoc" [readonly]="true"></ion-input>
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
-    </ion-row>
-    <ion-row>
+    <ion-row *ngIf="cagesDoc.length > 0">
       <ion-col size-xs="6" size-md="3" class="mt-1e" *ngFor="let cage of cagesDoc">
         <ion-card>
           <ion-card-header color="doc">
@@ -137,6 +110,14 @@
 
   <div class="btn-container">
     <ion-button class="cancel-btn" (click)="cancel()">Cancel</ion-button>
-    <ion-button color="positive-btn" (click)="save()">Save</ion-button>
+    <ion-button *ngIf="selectedFeedStock?.feedCategory === 'NORM'" color="positive-btn"
+      [disabled]="selectedFeedStock.bags - totalBagsAllocatedNorm < 0" (click)="save()">Save</ion-button>
+    <ion-button *ngIf="selectedFeedStock?.feedCategory === 'DARA'" color="positive-btn"
+      [disabled]="selectedFeedStock.bags - totalBagsAllocatedDara < 0" (click)="save()">Save</ion-button>
+    <ion-button *ngIf="selectedFeedStock?.feedCategory === 'DOC'" color="positive-btn"
+      [disabled]="selectedFeedStock.bags - totalBagsAllocatedDoc < 0" (click)="save()">Save</ion-button>
   </div>
+
+  <ion-alert [isOpen]="isChangeInFeedStock" header="Warning!" subHeader={{warningMessage}}
+    [buttons]="alertButtons" (didDismiss)="setAlertResult($event)"></ion-alert>
 </ion-content>

@@ -23,3 +23,21 @@ ion-card-header {
         --height: 50em;
     }
 }
+
+.feed-section {
+    color: black;
+    margin: 0px;
+    text-align: center;
+}
+
+.feed-img {
+    width: 4em;
+}
+
+.feed-count {
+    font-size: 18px;
+}
+
+.selected {
+    background-color: lightgray;
+}

@@ -18,10 +18,11 @@ import { EggSaleApiService } from 'src/app/shared/apis/egg-sale.api.service';
 import { EggStockApiService } from 'src/app/shared/apis/egg-stock.api.service';
 import { CustomerApiService } from 'src/app/shared/apis/customer.api.service';
 import { SecurityApiService } from 'src/app/shared/apis/security.api.service';
+import { EggTransferComponent } from './egg-transfer/egg-transfer.component';
 
 
 @NgModule({
-  declarations: [EggSaleDetailsComponent],
+  declarations: [EggSaleDetailsComponent, EggTransferComponent],
   imports: [
     CommonModule,
     EggRoutingModule,

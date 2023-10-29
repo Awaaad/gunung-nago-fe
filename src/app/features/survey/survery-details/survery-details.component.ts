@@ -31,6 +31,11 @@ export class SurveryDetailsComponent implements OnInit {
   public smallEggsItem: number = 0;
   public smallEggsTie: number = 0;
   public smallEggsTray: number = 0;
+  public manureBags: number = 0;
+  public manureWeight: number = 0;
+  public amountOfChickenWeighted: number = 0;
+  public totalWeight: number = 0;
+  public averageWeight: number = 0;
   public broken: number = 0;
   public totalItem: number = 0;
   public flockStockId!: number;
@@ -38,6 +43,7 @@ export class SurveryDetailsComponent implements OnInit {
   public today: string = formatDate(new Date(), 'dd-MM-yyyy HH:mm', 'en');
   public language = "en";
   public cageId: any = this.activatedRoute.snapshot.paramMap.get('cageId');
+  public flockId: any = 0;
   public edit: any = this.activatedRoute.snapshot.paramMap.get('edit');
   public cageName: string = '';
   public flockCategory!: FlockCategory;
@@ -123,11 +129,16 @@ export class SurveryDetailsComponent implements OnInit {
       standardFeed: new FormControl({ value: '', disabled: false }, Validators.compose([])),
       givenFeed: new FormControl({ value: '', disabled: false }, Validators.compose([])),
       comments: new FormControl({ value: '', disabled: false }, Validators.compose([])),
-      cageId: new FormControl({ value: 0, disabled: false }, Validators.compose([])),
-      flockId: new FormControl({ value: 0, disabled: false }, Validators.compose([])),
+      cageId: new FormControl({ value: this.cageId, disabled: false }, Validators.compose([])),
+      flockId: new FormControl({ value: this.flockId, disabled: false }, Validators.compose([])),
       flockStockId: new FormControl({ value: this.flockStockId, disabled: false }, Validators.compose([])),
       eggStockId: new FormControl({ value: this.eggStockId, disabled: false }, Validators.compose([])),
-      comment: new FormControl({ value: '', disabled: false }, Validators.compose([]))
+      comment: new FormControl({ value: '', disabled: false }, Validators.compose([])),
+      manureBags: new FormControl({ value: this.manureBags, disabled: false }, Validators.compose([])),
+      manureWeight: new FormControl({ value: this.manureWeight, disabled: false }, Validators.compose([])),
+      amountOfChickenWeighted: new FormControl({ value: this.amountOfChickenWeighted, disabled: false }, Validators.compose([])),
+      totalWeight: new FormControl({ value: this.totalWeight, disabled: false }, Validators.compose([])),
+      averageWeight: new FormControl({ value: this.averageWeight, disabled: false }, Validators.compose([]))
     });
   }
 
@@ -235,6 +246,8 @@ export class SurveryDetailsComponent implements OnInit {
         this.flockCategory = surveyDetails.flockCategory;
         this.flockAge = surveyDetails.age;
         this.population = surveyDetails.good;
+        this.cageId = surveyDetails.cageId;
+        this.flockId = surveyDetails.flockId;
         this.dead = 0;
         this.sterile = 0;
         this.broken = 0;
@@ -257,13 +270,17 @@ export class SurveryDetailsComponent implements OnInit {
           standardFeed: '',
           givenFeed: '',
           comments: '',
-          cageId: surveyDetails.cageId,
-          flockId: surveyDetails.flockId,
+          cageId: this.cageId,
+          flockId: this.flockId,
           flockStockId: null,
           eggStockId: null,
-          comment: null
+          comment: null,
+          manureBags: this.manureBags,
+          manureWeight: this.manureWeight,
+          amountOfChickenWeighted: this.amountOfChickenWeighted,
+          totalWeight: this.totalWeight,
+          averageWeight: this.averageWeight
         })
-
         this.findAllActiveFlockLinesByFlockId(surveyDetails.flockId);
       });
     } else {
@@ -283,6 +300,8 @@ export class SurveryDetailsComponent implements OnInit {
         this.smallEggsTie = Math.floor(surveyDetails.smallEggs / 300);
         this.smallEggsItem = surveyDetails.smallEggs % 300;
         this.broken = surveyDetails.badEggs;
+        this.cageId = surveyDetails.cageId;
+        this.flockId = surveyDetails.flockId;
 
         this.surveyForm.setValue({
           population: surveyDetails.good + surveyDetails.death + surveyDetails.sterile,
@@ -300,20 +319,29 @@ export class SurveryDetailsComponent implements OnInit {
           standardFeed: '',
           givenFeed: '',
           comments: '',
-          cageId: surveyDetails.cageId,
-          flockId: surveyDetails.flockId,
+          cageId: this.cageId,
+          flockId: this.flockId,
           flockStockId: surveyDetails.flockStockId,
           eggStockId: surveyDetails.eggStockId,
-          comment: surveyDetails.comment
+          comment: surveyDetails.comment,
+          manureBags: this.manureBags,
+          manureWeight: this.manureWeight,
+          amountOfChickenWeighted: this.amountOfChickenWeighted,
+          totalWeight: this.totalWeight,
+          averageWeight: this.averageWeight
         })
       });
     }
   }
 
   public save(): void {
+    console.log(this.surveyForm)
+
     this.utilsService.presentLoading();
     this.initialiseSurveyDto();
     this.setFeedSurvey();
+    console.log(this.surveyForm)
+
     this.populateSurveyDtoWithFormValues();
     if (!JSON.parse(this.edit)) {
       this.surveyApiService.save(this.surveyDto).subscribe({
@@ -366,7 +394,12 @@ export class SurveryDetailsComponent implements OnInit {
       smallEggs: null,
       healthSurveyDtos: [],
       feedSurveyDtos: [],
-      comment: null
+      comment: null,
+      manureBags: null,
+      manureWeight: null,
+      amountOfChickenWeighted: null,
+      totalWeight: null,
+      averageWeight: null
     }
   }
 
@@ -390,7 +423,12 @@ export class SurveryDetailsComponent implements OnInit {
       smallEggs: (this.smallEggsTie * 300) + this.surveyForm.value.smallEggsItem,
       healthSurveyDtos: this.selectedHealthProducts,
       feedSurveyDtos: this.feedSurvey,
-      comment: this.surveyForm.value.comment
+      comment: this.surveyForm.value.comment,
+      manureBags: this.surveyForm.value.manureBags,
+      manureWeight: this.surveyForm.value.manureWeight,
+      amountOfChickenWeighted: this.surveyForm.value.amountOfChickenWeighted,
+      totalWeight: this.surveyForm.value.totalWeight,
+      averageWeight: this.surveyForm.value.averageWeight
     };
   }
 

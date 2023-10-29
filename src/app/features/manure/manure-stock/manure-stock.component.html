@@ -1,0 +1,78 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      <div class="router-links">
+        <div class="title">
+          <img class="header-logo" src='./assets/flaticon/stock.png'>
+          <h3 class="header-nav-products">Manure Stock</h3>
+        </div>
+        <div>
+          <ion-item class="language-selection">
+            <ion-select aria-label="language" interface="popover" placeholder="Select language" [(ngModel)]="language"
+              (ionChange)="ionChangeLanguage($event)">
+              <ion-select-option value="en">English</ion-select-option>
+              <ion-select-option value="id">Indonesian</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </div>
+      </div>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="false" class="ion-padding">
+  <form [formGroup]="manureStockUpdateForm">
+    <div formArrayName="manureDetails" *ngFor="let manureDetails of manureDetailsFields?.controls; let i = index">
+      <div [formGroupName]="i">
+        <ion-card>
+          <ion-card-content>
+            <div class="form-array-index">
+              <h6>Manure {{i + 1}}</h6>
+              <ion-button *ngIf="manureDetailsFields != null && manureDetailsFields.length > 1"
+                (click)="removeManureDetails(i)" class="delete-product-btn" color="gunung-nago-warehouse"><ion-icon
+                  name="trash"></ion-icon></ion-button>
+            </div>
+            <ion-row>
+              <ion-col size-xs="12" size-md="6">
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size-xs="12" size-md="6">
+                <ion-input color="gunung-nago-primary" label="Bags collected*" label-placement="floating" fill="outline"
+                  type="text" clear-input="true" formControlName="bags" required="true"></ion-input>
+                <div class="error-messages">
+                  <ng-container *ngFor="let error of errorMessages.bags">
+                    <div class="error-message"
+                      *ngIf="manureDetails.get('bags')?.hasError(error.type) && (manureDetails.get('bags')?.dirty || manureDetails.get('bags')?.touched)">
+                      {{ error.message }}
+                    </div>
+                  </ng-container>
+                </div>
+              </ion-col>
+              <ion-col size-xs="12" size-md="6">
+                <ion-input color="gunung-nago-primary" label="Weight*" label-placement="floating" fill="outline"
+                  type="text" clear-input="true" formControlName="weight" required="true"></ion-input>
+                <div class="error-messages">
+                  <ng-container *ngFor="let error of errorMessages.weight">
+                    <div class="error-message"
+                      *ngIf="manureDetails.get('weight')?.hasError(error.type) && (manureDetails.get('weight')?.dirty || manureDetails.get('weight')?.touched)">
+                      {{ error.message }}
+                    </div>
+                  </ng-container>
+                </div>
+              </ion-col>
+            </ion-row>
+
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </div>
+    <div class="btn-container">
+      <ion-button color="neutral-btn mr-05" (click)="addManureDetails()">Add Manure Stock</ion-button>
+      <ion-button color="positive-btn" [disabled]="manureStockUpdateForm.invalid" (click)="save()">Save</ion-button>
+    </div>
+  </form>
+</ion-content>

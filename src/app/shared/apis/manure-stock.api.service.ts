@@ -13,4 +13,8 @@ export class ManureStockApiService {
     public findManureStockForSale(): Observable<ManureStockDto> {
         return this.http.get<ManureStockDto>(`${this.baseUrl}`);
     }
+
+    public saveManureStockTrace(manureStockDtos: ManureStockDto[]): Observable<any> {
+        return this.http.post(`${this.baseUrl}`, manureStockDtos, { responseType: 'text' });
+    }
 }

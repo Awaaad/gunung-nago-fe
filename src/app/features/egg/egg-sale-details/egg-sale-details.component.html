@@ -339,39 +339,39 @@
         </div>
         <ion-row *ngIf="big">
           <ion-col size-xs="12" size-md="4">
-            <div class="egg-form-section-left">
+            <div class="egg-form-section-right">
               <ion-item-divider>
-                <ion-label>Piece</ion-label>
+                <ion-label>Tie</ion-label>
               </ion-item-divider>
               <div>
-                <ion-input color="gunung-nago-survey" label="Piece" label-placement="floating" fill="outline"
-                  type="number" min="0" clear-input="true" formControlName="bigGoodPiece" [(ngModel)]="bigGoodPiece"
+                <ion-input color="gunung-nago-survey" label="Tie" label-placement="floating" fill="outline"
+                  type="number" min="0" clear-input="true" formControlName="bigGoodTie" [(ngModel)]="bigGoodTie"
                   (change)="calculateTotalCost()"></ion-input>
                 <div class="error-messages">
                   <ng-container *ngFor="let error of errorMessages.minValue">
                     <div class="error-message"
-                      *ngIf="eggSaleForm.get('bigGoodPiece')?.hasError(error.type) && (eggSaleForm.get('bigGoodPiece')?.dirty || eggSaleForm.get('bigGoodPiece')?.touched)">
+                      *ngIf="eggSaleForm.get('bigGoodTie')?.hasError(error.type) && (eggSaleForm.get('bigGoodTie')?.dirty || eggSaleForm.get('bigGoodTie')?.touched)">
                       {{ error.message }}
                     </div>
                   </ng-container>
                 </div>
               </div>
               <div class="mt-1">
-                <ion-input color="gunung-nago-survey" label="Price per piece" label-placement="floating" fill="outline"
-                  type="number" min="0" clear-input="true" formControlName="bigGoodPricePerPiece"
-                  [(ngModel)]="bigGoodPricePerPiece" (change)="calculateTotalCost()"></ion-input>
+                <ion-input color="gunung-nago-survey" label="Price per Tie" label-placement="floating" fill="outline"
+                  type="number" min="0" clear-input="true" formControlName="bigGoodPricePerTie"
+                  [(ngModel)]="bigGoodPricePerTie" (change)="calculateTotalCost()"></ion-input>
                 <div class="error-messages">
                   <ng-container *ngFor="let error of errorMessages.minValue">
                     <div class="error-message"
-                      *ngIf="eggSaleForm.get('bigGoodPricePerPiece')?.hasError(error.type) && (eggSaleForm.get('bigGoodPricePerPiece')?.dirty || eggSaleForm.get('bigGoodPricePerPiece')?.touched)">
+                      *ngIf="eggSaleForm.get('bigGoodPricePerTie')?.hasError(error.type) && (eggSaleForm.get('bigGoodPricePerTie')?.dirty || eggSaleForm.get('bigGoodPricePerTie')?.touched)">
                       {{ error.message }}
                     </div>
                   </ng-container>
                 </div>
               </div>
             </div>
-            <div class="total-per">
-              <strong>Total Price: {{bigGoodPiece * bigGoodPricePerPiece}}</strong>
+            <div class="total-per ml-1">
+              <strong>Total Price: {{bigGoodTie * bigGoodPricePerTie}}</strong>
             </div>
           </ion-col>
           <ion-col size-xs="12" size-md="4">
@@ -411,39 +411,39 @@
             </div>
           </ion-col>
           <ion-col size-xs="12" size-md="4">
-            <div class="egg-form-section-right">
+            <div class="egg-form-section-left">
               <ion-item-divider>
-                <ion-label>Tie</ion-label>
+                <ion-label>Piece</ion-label>
               </ion-item-divider>
               <div>
-                <ion-input color="gunung-nago-survey" label="Tie" label-placement="floating" fill="outline"
-                  type="number" min="0" clear-input="true" formControlName="bigGoodTie" [(ngModel)]="bigGoodTie"
+                <ion-input color="gunung-nago-survey" label="Piece" label-placement="floating" fill="outline"
+                  type="number" min="0" clear-input="true" formControlName="bigGoodPiece" [(ngModel)]="bigGoodPiece"
                   (change)="calculateTotalCost()"></ion-input>
                 <div class="error-messages">
                   <ng-container *ngFor="let error of errorMessages.minValue">
                     <div class="error-message"
-                      *ngIf="eggSaleForm.get('bigGoodTie')?.hasError(error.type) && (eggSaleForm.get('bigGoodTie')?.dirty || eggSaleForm.get('bigGoodTie')?.touched)">
+                      *ngIf="eggSaleForm.get('bigGoodPiece')?.hasError(error.type) && (eggSaleForm.get('bigGoodPiece')?.dirty || eggSaleForm.get('bigGoodPiece')?.touched)">
                       {{ error.message }}
                     </div>
                   </ng-container>
                 </div>
               </div>
               <div class="mt-1">
-                <ion-input color="gunung-nago-survey" label="Price per Tie" label-placement="floating" fill="outline"
-                  type="number" min="0" clear-input="true" formControlName="bigGoodPricePerTie"
-                  [(ngModel)]="bigGoodPricePerTie" (change)="calculateTotalCost()"></ion-input>
+                <ion-input color="gunung-nago-survey" label="Price per piece" label-placement="floating" fill="outline"
+                  type="number" min="0" clear-input="true" formControlName="bigGoodPricePerPiece"
+                  [(ngModel)]="bigGoodPricePerPiece" (change)="calculateTotalCost()"></ion-input>
                 <div class="error-messages">
                   <ng-container *ngFor="let error of errorMessages.minValue">
                     <div class="error-message"
-                      *ngIf="eggSaleForm.get('bigGoodPricePerTie')?.hasError(error.type) && (eggSaleForm.get('bigGoodPricePerTie')?.dirty || eggSaleForm.get('bigGoodPricePerTie')?.touched)">
+                      *ngIf="eggSaleForm.get('bigGoodPricePerPiece')?.hasError(error.type) && (eggSaleForm.get('bigGoodPricePerPiece')?.dirty || eggSaleForm.get('bigGoodPricePerPiece')?.touched)">
                       {{ error.message }}
                     </div>
                   </ng-container>
                 </div>
               </div>
             </div>
-            <div class="total-per ml-1">
-              <strong>Total Price: {{bigGoodTie * bigGoodPricePerTie}}</strong>
+            <div class="total-per">
+              <strong>Total Price: {{bigGoodPiece * bigGoodPricePerPiece}}</strong>
             </div>
           </ion-col>
         </ion-row>
@@ -460,39 +460,39 @@
         </div>
         <ion-row *ngIf="medium">
           <ion-col size-xs="12" size-md="4">
-            <div class="egg-form-section-left">
+            <div class="egg-form-section-right">
               <ion-item-divider>
-                <ion-label>Piece</ion-label>
+                <ion-label>Tie</ion-label>
               </ion-item-divider>
               <div>
-                <ion-input color="gunung-nago-survey" label="Piece" label-placement="floating" fill="outline"
-                  type="number" min="0" clear-input="true" formControlName="mediumGoodPiece"
-                  [(ngModel)]="mediumGoodPiece" (change)="calculateTotalCost()"></ion-input>
+                <ion-input color="gunung-nago-survey" label="Tie" label-placement="floating" fill="outline"
+                  type="number" min="0" clear-input="true" formControlName="mediumGoodTie" [(ngModel)]="mediumGoodTie"
+                  (change)="calculateTotalCost()"></ion-input>
                 <div class="error-messages">
                   <ng-container *ngFor="let error of errorMessages.minValue">
                     <div class="error-message"
-                      *ngIf="eggSaleForm.get('mediumGoodPiece')?.hasError(error.type) && (eggSaleForm.get('mediumGoodPiece')?.dirty || eggSaleForm.get('mediumGoodPiece')?.touched)">
+                      *ngIf="eggSaleForm.get('mediumGoodTie')?.hasError(error.type) && (eggSaleForm.get('mediumGoodTie')?.dirty || eggSaleForm.get('mediumGoodTie')?.touched)">
                       {{ error.message }}
                     </div>
                   </ng-container>
                 </div>
               </div>
               <div class="mt-1">
-                <ion-input color="gunung-nago-survey" label="Price per piece" label-placement="floating" fill="outline"
-                  type="number" min="0" clear-input="true" formControlName="mediumGoodPricePerPiece"
-                  [(ngModel)]="mediumGoodPricePerPiece" (change)="calculateTotalCost()"></ion-input>
+                <ion-input color="gunung-nago-survey" label="Price per Tie" label-placement="floating" fill="outline"
+                  type="number" min="0" clear-input="true" formControlName="mediumGoodPricePerTie"
+                  [(ngModel)]="mediumGoodPricePerTie" (change)="calculateTotalCost()"></ion-input>
                 <div class="error-messages">
                   <ng-container *ngFor="let error of errorMessages.minValue">
                     <div class="error-message"
-                      *ngIf="eggSaleForm.get('mediumGoodPricePerPiece')?.hasError(error.type) && (eggSaleForm.get('mediumGoodPricePerPiece')?.dirty || eggSaleForm.get('mediumGoodPricePerPiece')?.touched)">
+                      *ngIf="eggSaleForm.get('mediumGoodPricePerTie')?.hasError(error.type) && (eggSaleForm.get('mediumGoodPricePerTie')?.dirty || eggSaleForm.get('mediumGoodPricePerTie')?.touched)">
                       {{ error.message }}
                     </div>
                   </ng-container>
                 </div>
               </div>
             </div>
-            <div class="total-per">
-              <strong>Total Price: {{mediumGoodPiece * mediumGoodPricePerPiece}}</strong>
+            <div class="total-per ml-1">
+              <strong>Total Price: {{mediumGoodTie * mediumGoodPricePerTie}}</strong>
             </div>
           </ion-col>
           <ion-col size-xs="12" size-md="4">
@@ -532,39 +532,39 @@
             </div>
           </ion-col>
           <ion-col size-xs="12" size-md="4">
-            <div class="egg-form-section-right">
+            <div class="egg-form-section-left">
               <ion-item-divider>
-                <ion-label>Tie</ion-label>
+                <ion-label>Piece</ion-label>
               </ion-item-divider>
               <div>
-                <ion-input color="gunung-nago-survey" label="Tie" label-placement="floating" fill="outline"
-                  type="number" min="0" clear-input="true" formControlName="mediumGoodTie" [(ngModel)]="mediumGoodTie"
-                  (change)="calculateTotalCost()"></ion-input>
+                <ion-input color="gunung-nago-survey" label="Piece" label-placement="floating" fill="outline"
+                  type="number" min="0" clear-input="true" formControlName="mediumGoodPiece"
+                  [(ngModel)]="mediumGoodPiece" (change)="calculateTotalCost()"></ion-input>
                 <div class="error-messages">
                   <ng-container *ngFor="let error of errorMessages.minValue">
                     <div class="error-message"
-                      *ngIf="eggSaleForm.get('mediumGoodTie')?.hasError(error.type) && (eggSaleForm.get('mediumGoodTie')?.dirty || eggSaleForm.get('mediumGoodTie')?.touched)">
+                      *ngIf="eggSaleForm.get('mediumGoodPiece')?.hasError(error.type) && (eggSaleForm.get('mediumGoodPiece')?.dirty || eggSaleForm.get('mediumGoodPiece')?.touched)">
                       {{ error.message }}
                     </div>
                   </ng-container>
                 </div>
               </div>
               <div class="mt-1">
-                <ion-input color="gunung-nago-survey" label="Price per Tie" label-placement="floating" fill="outline"
-                  type="number" min="0" clear-input="true" formControlName="mediumGoodPricePerTie"
-                  [(ngModel)]="mediumGoodPricePerTie" (change)="calculateTotalCost()"></ion-input>
+                <ion-input color="gunung-nago-survey" label="Price per piece" label-placement="floating" fill="outline"
+                  type="number" min="0" clear-input="true" formControlName="mediumGoodPricePerPiece"
+                  [(ngModel)]="mediumGoodPricePerPiece" (change)="calculateTotalCost()"></ion-input>
                 <div class="error-messages">
                   <ng-container *ngFor="let error of errorMessages.minValue">
                     <div class="error-message"
-                      *ngIf="eggSaleForm.get('mediumGoodPricePerTie')?.hasError(error.type) && (eggSaleForm.get('mediumGoodPricePerTie')?.dirty || eggSaleForm.get('mediumGoodPricePerTie')?.touched)">
+                      *ngIf="eggSaleForm.get('mediumGoodPricePerPiece')?.hasError(error.type) && (eggSaleForm.get('mediumGoodPricePerPiece')?.dirty || eggSaleForm.get('mediumGoodPricePerPiece')?.touched)">
                       {{ error.message }}
                     </div>
                   </ng-container>
                 </div>
               </div>
             </div>
-            <div class="total-per ml-1">
-              <strong>Total Price: {{mediumGoodTie * mediumGoodPricePerTie}}</strong>
+            <div class="total-per">
+              <strong>Total Price: {{mediumGoodPiece * mediumGoodPricePerPiece}}</strong>
             </div>
           </ion-col>
         </ion-row>
@@ -581,39 +581,39 @@
         </div>
         <ion-row *ngIf="small">
           <ion-col size-xs="12" size-md="4">
-            <div class="egg-form-section-left">
+            <div class="egg-form-section-right">
               <ion-item-divider>
-                <ion-label>Piece</ion-label>
+                <ion-label>Tie</ion-label>
               </ion-item-divider>
               <div>
-                <ion-input color="gunung-nago-survey" label="Piece" label-placement="floating" fill="outline"
-                  type="number" min="0" clear-input="true" formControlName="smallGoodPiece" [(ngModel)]="smallGoodPiece"
+                <ion-input color="gunung-nago-survey" label="Tie" label-placement="floating" fill="outline"
+                  type="number" min="0" clear-input="true" formControlName="smallGoodTie" [(ngModel)]="smallGoodTie"
                   (change)="calculateTotalCost()"></ion-input>
                 <div class="error-messages">
                   <ng-container *ngFor="let error of errorMessages.minValue">
                     <div class="error-message"
-                      *ngIf="eggSaleForm.get('smallGoodPiece')?.hasError(error.type) && (eggSaleForm.get('smallGoodPiece')?.dirty || eggSaleForm.get('smallGoodPiece')?.touched)">
+                      *ngIf="eggSaleForm.get('smallGoodTie')?.hasError(error.type) && (eggSaleForm.get('smallGoodTie')?.dirty || eggSaleForm.get('smallGoodTie')?.touched)">
                       {{ error.message }}
                     </div>
                   </ng-container>
                 </div>
               </div>
               <div class="mt-1">
-                <ion-input color="gunung-nago-survey" label="Price per piece" label-placement="floating" fill="outline"
-                  type="number" min="0" clear-input="true" formControlName="smallGoodPricePerPiece"
-                  [(ngModel)]="smallGoodPricePerPiece" (change)="calculateTotalCost()"></ion-input>
+                <ion-input color="gunung-nago-survey" label="Price per Tie" label-placement="floating" fill="outline"
+                  type="number" min="0" clear-input="true" formControlName="smallGoodPricePerTie"
+                  [(ngModel)]="smallGoodPricePerTie" (change)="calculateTotalCost()"></ion-input>
                 <div class="error-messages">
                   <ng-container *ngFor="let error of errorMessages.minValue">
                     <div class="error-message"
-                      *ngIf="eggSaleForm.get('smallGoodPricePerPiece')?.hasError(error.type) && (eggSaleForm.get('smallGoodPricePerPiece')?.dirty || eggSaleForm.get('smallGoodPricePerPiece')?.touched)">
+                      *ngIf="eggSaleForm.get('smallGoodPricePerTie')?.hasError(error.type) && (eggSaleForm.get('smallGoodPricePerTie')?.dirty || eggSaleForm.get('smallGoodPricePerTie')?.touched)">
                       {{ error.message }}
                     </div>
                   </ng-container>
                 </div>
               </div>
             </div>
-            <div class="total-per">
-              <strong>Total Price: {{smallGoodPiece * smallGoodPricePerPiece}}</strong>
+            <div class="total-per ml-1">
+              <strong>Total Price: {{smallGoodTie * smallGoodPricePerTie}}</strong>
             </div>
           </ion-col>
           <ion-col size-xs="12" size-md="4">
@@ -653,39 +653,39 @@
             </div>
           </ion-col>
           <ion-col size-xs="12" size-md="4">
-            <div class="egg-form-section-right">
+            <div class="egg-form-section-left">
               <ion-item-divider>
-                <ion-label>Tie</ion-label>
+                <ion-label>Piece</ion-label>
               </ion-item-divider>
               <div>
-                <ion-input color="gunung-nago-survey" label="Tie" label-placement="floating" fill="outline"
-                  type="number" min="0" clear-input="true" formControlName="smallGoodTie" [(ngModel)]="smallGoodTie"
+                <ion-input color="gunung-nago-survey" label="Piece" label-placement="floating" fill="outline"
+                  type="number" min="0" clear-input="true" formControlName="smallGoodPiece" [(ngModel)]="smallGoodPiece"
                   (change)="calculateTotalCost()"></ion-input>
                 <div class="error-messages">
                   <ng-container *ngFor="let error of errorMessages.minValue">
                     <div class="error-message"
-                      *ngIf="eggSaleForm.get('smallGoodTie')?.hasError(error.type) && (eggSaleForm.get('smallGoodTie')?.dirty || eggSaleForm.get('smallGoodTie')?.touched)">
+                      *ngIf="eggSaleForm.get('smallGoodPiece')?.hasError(error.type) && (eggSaleForm.get('smallGoodPiece')?.dirty || eggSaleForm.get('smallGoodPiece')?.touched)">
                       {{ error.message }}
                     </div>
                   </ng-container>
                 </div>
               </div>
               <div class="mt-1">
-                <ion-input color="gunung-nago-survey" label="Price per Tie" label-placement="floating" fill="outline"
-                  type="number" min="0" clear-input="true" formControlName="smallGoodPricePerTie"
-                  [(ngModel)]="smallGoodPricePerTie" (change)="calculateTotalCost()"></ion-input>
+                <ion-input color="gunung-nago-survey" label="Price per piece" label-placement="floating" fill="outline"
+                  type="number" min="0" clear-input="true" formControlName="smallGoodPricePerPiece"
+                  [(ngModel)]="smallGoodPricePerPiece" (change)="calculateTotalCost()"></ion-input>
                 <div class="error-messages">
                   <ng-container *ngFor="let error of errorMessages.minValue">
                     <div class="error-message"
-                      *ngIf="eggSaleForm.get('smallGoodPricePerTie')?.hasError(error.type) && (eggSaleForm.get('smallGoodPricePerTie')?.dirty || eggSaleForm.get('smallGoodPricePerTie')?.touched)">
+                      *ngIf="eggSaleForm.get('smallGoodPricePerPiece')?.hasError(error.type) && (eggSaleForm.get('smallGoodPricePerPiece')?.dirty || eggSaleForm.get('smallGoodPricePerPiece')?.touched)">
                       {{ error.message }}
                     </div>
                   </ng-container>
                 </div>
               </div>
             </div>
-            <div class="total-per ml-1">
-              <strong>Total Price: {{smallGoodTie * smallGoodPricePerTie}}</strong>
+            <div class="total-per">
+              <strong>Total Price: {{smallGoodPiece * smallGoodPricePerPiece}}</strong>
             </div>
           </ion-col>
         </ion-row>
@@ -706,39 +706,39 @@
       <ion-card-content>
         <ion-row>
           <ion-col size-xs="12" size-md="4">
-            <div class="egg-form-section-left">
+            <div class="egg-form-section-right">
               <ion-item-divider>
-                <ion-label>Piece</ion-label>
+                <ion-label>Tie</ion-label>
               </ion-item-divider>
               <div>
-                <ion-input color="gunung-nago-survey" label="Piece" label-placement="floating" fill="outline"
-                  type="number" min="0" clear-input="true" formControlName="badPiece" [(ngModel)]="badPiece"
-                  (ngModelChange)="validatePiece($event);" (change)="calculateTotalCost()"></ion-input>
+                <ion-input color="gunung-nago-survey" label="Tie" label-placement="floating" fill="outline"
+                  type="number" min="0" clear-input="true" formControlName="badTie" [(ngModel)]="badTie"
+                  (change)="calculateTotalCost()"></ion-input>
                 <div class="error-messages">
                   <ng-container *ngFor="let error of errorMessages.minValue">
                     <div class="error-message"
-                      *ngIf="eggSaleForm.get('badPiece')?.hasError(error.type) && (eggSaleForm.get('badPiece')?.dirty || eggSaleForm.get('badPiece')?.touched)">
+                      *ngIf="eggSaleForm.get('badTie')?.hasError(error.type) && (eggSaleForm.get('badTie')?.dirty || eggSaleForm.get('badTie')?.touched)">
                       {{ error.message }}
                     </div>
                   </ng-container>
                 </div>
               </div>
               <div class="mt-1">
-                <ion-input color="gunung-nago-survey" label="Price per piece" label-placement="floating" fill="outline"
-                  type="number" min="0" clear-input="true" formControlName="badPricePerPiece"
-                  [(ngModel)]="badPricePerPiece" (change)="calculateTotalCost()"></ion-input>
+                <ion-input color="gunung-nago-survey" label="Price per Tie" label-placement="floating" fill="outline"
+                  type="number" min="0" clear-input="true" formControlName="badPricePerTie" [(ngModel)]="badPricePerTie"
+                  (change)="calculateTotalCost()"></ion-input>
                 <div class="error-messages">
                   <ng-container *ngFor="let error of errorMessages.minValue">
                     <div class="error-message"
-                      *ngIf="eggSaleForm.get('badPricePerPiece')?.hasError(error.type) && (eggSaleForm.get('badPricePerPiece')?.dirty || eggSaleForm.get('badPricePerPiece')?.touched)">
+                      *ngIf="eggSaleForm.get('badPricePerTie')?.hasError(error.type) && (eggSaleForm.get('badPricePerTie')?.dirty || eggSaleForm.get('badPricePerTie')?.touched)">
                       {{ error.message }}
                     </div>
                   </ng-container>
                 </div>
               </div>
             </div>
-            <div class="total-per">
-              <strong>Total Price: {{badPiece * badPricePerPiece}}</strong>
+            <div class="total-per ml-1">
+              <strong>Total Price: {{badTie * badPricePerTie}}</strong>
             </div>
           </ion-col>
           <ion-col size-xs="12" size-md="4">
@@ -778,39 +778,39 @@
             </div>
           </ion-col>
           <ion-col size-xs="12" size-md="4">
-            <div class="egg-form-section-right">
+            <div class="egg-form-section-left">
               <ion-item-divider>
-                <ion-label>Tie</ion-label>
+                <ion-label>Piece</ion-label>
               </ion-item-divider>
               <div>
-                <ion-input color="gunung-nago-survey" label="Tie" label-placement="floating" fill="outline"
-                  type="number" min="0" clear-input="true" formControlName="badTie" [(ngModel)]="badTie"
-                  (change)="calculateTotalCost()"></ion-input>
+                <ion-input color="gunung-nago-survey" label="Piece" label-placement="floating" fill="outline"
+                  type="number" min="0" clear-input="true" formControlName="badPiece" [(ngModel)]="badPiece"
+                  (ngModelChange)="validatePiece($event);" (change)="calculateTotalCost()"></ion-input>
                 <div class="error-messages">
                   <ng-container *ngFor="let error of errorMessages.minValue">
                     <div class="error-message"
-                      *ngIf="eggSaleForm.get('badTie')?.hasError(error.type) && (eggSaleForm.get('badTie')?.dirty || eggSaleForm.get('badTie')?.touched)">
+                      *ngIf="eggSaleForm.get('badPiece')?.hasError(error.type) && (eggSaleForm.get('badPiece')?.dirty || eggSaleForm.get('badPiece')?.touched)">
                       {{ error.message }}
                     </div>
                   </ng-container>
                 </div>
               </div>
               <div class="mt-1">
-                <ion-input color="gunung-nago-survey" label="Price per Tie" label-placement="floating" fill="outline"
-                  type="number" min="0" clear-input="true" formControlName="badPricePerTie" [(ngModel)]="badPricePerTie"
-                  (change)="calculateTotalCost()"></ion-input>
+                <ion-input color="gunung-nago-survey" label="Price per piece" label-placement="floating" fill="outline"
+                  type="number" min="0" clear-input="true" formControlName="badPricePerPiece"
+                  [(ngModel)]="badPricePerPiece" (change)="calculateTotalCost()"></ion-input>
                 <div class="error-messages">
                   <ng-container *ngFor="let error of errorMessages.minValue">
                     <div class="error-message"
-                      *ngIf="eggSaleForm.get('badPricePerTie')?.hasError(error.type) && (eggSaleForm.get('badPricePerTie')?.dirty || eggSaleForm.get('badPricePerTie')?.touched)">
+                      *ngIf="eggSaleForm.get('badPricePerPiece')?.hasError(error.type) && (eggSaleForm.get('badPricePerPiece')?.dirty || eggSaleForm.get('badPricePerPiece')?.touched)">
                       {{ error.message }}
                     </div>
                   </ng-container>
                 </div>
               </div>
             </div>
-            <div class="total-per ml-1">
-              <strong>Total Price: {{badTie * badPricePerTie}}</strong>
+            <div class="total-per">
+              <strong>Total Price: {{badPiece * badPricePerPiece}}</strong>
             </div>
           </ion-col>
         </ion-row>

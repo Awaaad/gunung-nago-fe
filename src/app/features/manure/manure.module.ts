@@ -17,11 +17,12 @@ import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/mat
 import { MatNativeDateModule, DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MY_FORMATS } from '../report/report.module';
+import { ManureStockComponent } from './manure-stock/manure-stock.component';
 
 
 @NgModule({
   declarations: [
-    ManureSaleDetailsComponent
+    ManureSaleDetailsComponent, ManureStockComponent
   ],
   imports: [
     CommonModule,

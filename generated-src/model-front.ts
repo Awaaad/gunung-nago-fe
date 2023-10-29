@@ -1,4 +1,4 @@
-import { AquisitionType, CageCategory, CustomerDto, EggQuantityType, EggType, FarmDto, FeedCategory, FeedSurveyDto, FlockCategory, FlockSaleDetailsDto, FlockType, HealthSurveyDto, HealthType, PaymentDto, PaymentSaveDto, PaymentType, PurchaseDetailsDto, PurchaseInvoiceFeedDetailsDto, PurchaseInvoiceFlockDetailsDto, PurchaseInvoiceHealthProductDetailsDto, PurchaseInvoiceType, RoleDto, SaleDetailsDto, SalesInvoiceCategory, SalesInvoiceEggDetailsDto, SalesInvoiceFlockDetailsDto, SalesInvoiceManureDetailsDto, SalesInvoiceStatus, SalesInvoiceType } from "./model";
+import { AquisitionType, CageCategory, EggQuantityType, EggType, FarmDto, FeedCategory, FeedSurveyDto, FlockCategory, FlockSaleDetailsDto, FlockType, HealthSurveyDto, HealthType, PaymentType, PurchaseDetailsDto, PurchaseInvoiceType, RoleDto, SaleDetailsDto, SalesInvoiceCategory, SalesInvoiceStatus, SalesInvoiceType } from "./model";
 
 export class PageResult<T> {
     public content!: Array<T>;
@@ -32,6 +32,11 @@ export class SurveyFrontDto {
     healthSurveyDtos: HealthSurveyDto[] | null | undefined;
     feedSurveyDtos: FeedSurveyDto[] | null | undefined;
     comment: string | null | undefined;
+    manureBags!: number | null | undefined;
+    manureWeight!: number | null | undefined;
+    amountOfChickenWeighted!: number | null | undefined;
+    totalWeight!: number | null | undefined;
+    averageWeight!: number | null | undefined;
 }
 
 export class FlockSaleSaveFrontDto {
@@ -98,82 +103,6 @@ export class CustomerFrontDto {
     totalAmountDue!: number | null | undefined | any;
 }
 
-export class FeedPurchaseInvoiceDetailsFrontDto {
-    id!: number | null | undefined | any;
-    number!: string | null | undefined | any;
-    supplierName!: string | null | undefined | any;
-    supplierAddress!: string | null | undefined | any;
-    supplierTelephoneNumber!: number | null | undefined | any;
-    supplierTelephoneNumberTwo!: number | null | undefined | any;
-    supplierTelephoneNumberThree!: number | null | undefined | any;
-    createdBy!: string | null | undefined | any;
-    createdDate!: Date | null | undefined | any;
-    purchaseInvoiceType!: PurchaseInvoiceType | null | undefined | any;
-    discount!: number | null | undefined | any;
-    totalPrice!: number | null | undefined | any;
-    comment: number | null | undefined | any;
-    purchaseInvoiceFeedDetailsDtos!: PurchaseInvoiceFeedDetailsDto[] | [] | null | undefined;
-}
-
-export class HealthPurchaseInvoiceDetailsFrontDto {
-    id!: number | null | undefined | any;
-    number!: string | null | undefined | any;
-    supplierName!: string | null | undefined | any;
-    supplierAddress!: string | null | undefined | any;
-    supplierTelephoneNumber!: number | null | undefined | any;
-    supplierTelephoneNumberTwo!: number | null | undefined | any;
-    supplierTelephoneNumberThree!: number | null | undefined | any;
-    createdBy!: string | null | undefined | any;
-    createdDate!: Date | null | undefined | any;
-    purchaseInvoiceType!: PurchaseInvoiceType | null | undefined | any;
-    discount!: number | null | undefined | any;
-    totalPrice!: number | null | undefined | any;
-    comment: number | null | undefined | any;
-    purchaseInvoiceHealthProductDetailsDtos!: PurchaseInvoiceHealthProductDetailsDto[] | [] | null | undefined;
-}
-
-export class EggSalesInvoiceDetailsFrontDto {
-    id!: number | null | undefined | any;
-    receiptId!: number | null | undefined | any;
-    salesInvoiceType!: SalesInvoiceType | null | undefined | any;
-    totalPrice!: number | null | undefined | any;
-    soldAt!: number | null | undefined | any;
-    createdBy!: string | null | undefined | any;
-    createdDate!: Date | null | undefined | any;
-    customerFirstName!: string | null | undefined | any;
-    customerLastName!: string | null | undefined | any;
-    customerAddress!: string | null | undefined | any;
-    customerTelephoneNumber!: number | null | undefined | any;
-    driverFirstName!: string | null | undefined | any;
-    driverLastName!: string | null | undefined | any;
-    salesPerson!: string | null | undefined | any;
-    salesInvoiceCategory!: SalesInvoiceCategory | null | undefined | any;
-    salesInvoiceStatus!: SalesInvoiceStatus | null | undefined | any;
-    comment: string | null | undefined | any;
-    salesInvoiceEggDetailsDtos!: SalesInvoiceEggDetailsDto[] | [] | null | undefined;
-}
-
-export class FlockSalesInvoiceDetailsFrontDto {
-    id!: number | null | undefined | any;
-    receiptId!: number | null | undefined | any;
-    salesInvoiceType!: SalesInvoiceType | null | undefined | any;
-    totalPrice!: number | null | undefined | any;
-    soldAt!: number | null | undefined | any;
-    createdBy!: string | null | undefined | any;
-    createdDate!: Date | null | undefined | any;
-    customerFirstName!: string | null | undefined | any;
-    customerLastName!: string | null | undefined | any;
-    customerAddress!: string | null | undefined | any;
-    customerTelephoneNumber!: number | null | undefined | any;
-    driverFirstName!: string | null | undefined | any;
-    driverLastName!: string | null | undefined | any;
-    salesPerson!: string | null | undefined | any;
-    salesInvoiceCategory!: SalesInvoiceCategory | null | undefined | any;
-    salesInvoiceStatus!: SalesInvoiceStatus | null | undefined | any;
-    comment: string | null | undefined | any;
-    salesInvoiceFlockDetailsDtos!: SalesInvoiceFlockDetailsDto[] | [] | null | undefined;
-}
-
 export class UserFrontDto {
     id!: number | null | undefined | any;
     username!: string | null | undefined | any;
@@ -208,23 +137,6 @@ export class FlockSaveFrontDto {
     createdDate!: Date | null | undefined | any;
 }
 
-export class FlockPurchaseInvoiceDetailsFrontDto {
-    id: number | null | undefined | any;
-    number: string | null | undefined | any;
-    supplierName: string | null | undefined | any;
-    supplierAddress: string | null | undefined | any;
-    supplierTelephoneNumber: number | null | undefined | any;
-    supplierTelephoneNumberTwo: number | null | undefined | any;
-    supplierTelephoneNumberThree: number | null | undefined | any;
-    createdBy: string | null | undefined | any;
-    createdDate: Date | null | undefined | any;
-    purchaseInvoiceType: PurchaseInvoiceType | null | undefined | any;
-    discount: number | null | undefined | any;
-    totalPrice: number | null | undefined | any;
-    comment: string | null | undefined | any;
-    purchaseInvoiceFlockDetailsDtos: PurchaseInvoiceFlockDetailsDto[] | [] | null | undefined;
-}
-
 export class ManureSaleSaveFrontDto {
     customerDto!: CustomerFrontDto | null | undefined | any;
     paymentSaveDtos!: PaymentSaveFrontDto[] | [] | null | undefined;
@@ -234,27 +146,6 @@ export class ManureSaleSaveFrontDto {
     driverId!: number | null | undefined | any;
     comment!: string | null | undefined | any;
     newCustomer!: boolean | null | undefined | any;
-}
-
-export class ManureSalesInvoiceDetailsFrontDto {
-    id!: number | null | undefined | any;
-    receiptId!: number | null | undefined | any;
-    salesInvoiceType!: SalesInvoiceType | null | undefined | any;
-    totalPrice!: number | null | undefined | any;
-    soldAt!: number | null | undefined | any;
-    createdBy!: string | null | undefined | any;
-    createdDate!: Date | null | undefined | any;
-    customerFirstName!: string | null | undefined | any;
-    customerLastName!: string | null | undefined | any;
-    customerAddress!: string | null | undefined | any;
-    customerTelephoneNumber!: number | null | undefined | any;
-    driverFirstName!: string | null | undefined | any;
-    driverLastName!: string | null | undefined | any;
-    salesPerson!: string | null | undefined | any;
-    salesInvoiceCategory!: SalesInvoiceCategory | null | undefined | any;
-    salesInvoiceStatus!: SalesInvoiceStatus | null | undefined | any;
-    comment!: string | null | undefined | any;
-    salesInvoiceManureDetailsDtos!: SalesInvoiceManureDetailsDto[] | [] | null | undefined;
 }
 
 export class SaleSaveFrontDto {
@@ -361,4 +252,14 @@ export class PurchaseInvoiceDetailsFrontDto {
     totalPrice!: number | null | undefined | any;
     comment!: string | null | undefined | any;
     purchaseDetailsDtos!: PurchaseDetailsDto[] | [] | null | undefined;
+}
+
+export class EggTransferFrontDto {
+    bigGoodToBadEggs: number | null | undefined | any;
+    bigGoodBrokenEggs: number | null | undefined | any;
+    mediumGoodToBadEggs: number | null | undefined | any;
+    mediumGoodBrokenEggs: number | null | undefined | any;
+    smallGoodToBadEggs: number | null | undefined | any;
+    smallGoodBrokenEggs: number | null | undefined | any;
+    badBrokenEggs: number | null | undefined | any;
 }

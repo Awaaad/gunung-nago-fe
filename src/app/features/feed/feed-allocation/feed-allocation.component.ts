@@ -17,16 +17,19 @@ export class FeedAllocationComponent implements OnInit {
   public cagesDara: FeedStockAllocationDto[] = [];
   public cagesDoc: FeedStockAllocationDto[] = [];
   public cages: FeedStockAllocationDto[] = [];
-  public feedStockNorm: FeedStockDto = new FeedStockDto();
-  public feedStockDara: FeedStockDto = new FeedStockDto();
-  public feedStockDoc: FeedStockDto = new FeedStockDto();
+  public feedsToBeAllocated: FeedStockDto[] = [];
+  public selectedFeedStock!: FeedStockDto;
+  public toBeSelectedFeedStock!: FeedStockDto;
   public language = "en";
-  public showFeedStockNorm: boolean = true;
-  public showFeedStockDara: boolean = true;
-  public showFeedStockDoc: boolean = true;
   public totalBagsAllocatedNorm: number = 0;
   public totalBagsAllocatedDara: number = 0;
   public totalBagsAllocatedDoc: number = 0;
+  public disableSave: boolean = false;
+
+  public isChangeInFeedStock: boolean = false;
+  public warningMessage: string = '';
+  public alertButtons: any[] = [];
+  public isResponsePositive: boolean = false;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -37,36 +40,55 @@ export class FeedAllocationComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.findFeedStockForAllocationByFeedCategoryNorm(FeedCategory.NORM);
-    this.findFeedStockForAllocationByFeedCategoryNorm(FeedCategory.DARA);
-    this.findFeedStockForAllocationByFeedCategoryNorm(FeedCategory.DOC);
-    this.getFeedStock();
+    this.warningMessage = "Unsaved changes will be discarded. Are you sure you want to proceed?"
+    this.initialiseSelectedFeedStock();
+    this.findAllFeedStockForAllocation();
+    this.initialiseAlertButtons();
   }
 
   public ionChangeLanguage(event: any): void {
     this.translateService.use(event.detail.value);
   }
 
-  public getFeedStock(): void {
-    this.feedApiService.findFeedFormAllocation().subscribe(cages => {
+  private initialiseSelectedFeedStock(): void {
+    this.selectedFeedStock = {
+      id: 0,
+      bags: 0,
+      createdDate: new Date(),
+      price: 0,
+      weight: 0,
+      name: '',
+      feedCategory: FeedCategory.NORM,
+      feedId: 0
+    }
+  }
+
+  public changedSelectedFeedStock(feedStock: FeedStockDto): void {
+    this.toBeSelectedFeedStock = feedStock;
+    console.log(this.selectedFeedStock.id != 0 && this.selectedFeedStock.id != feedStock.id)
+    if (this.selectedFeedStock.id != 0 && this.selectedFeedStock.id != feedStock.id) {
+      this.isChangeInFeedStock = true;
+    } else {
+      this.selectedFeedStock = feedStock;
+      this.cages = [];
+      this.cagesNorm = [];
+      this.cagesDara = [];
+      this.cagesDoc = [];
+      this.getFeedStock(this.selectedFeedStock.id, feedStock.feedCategory);
+    }
+  }
+
+  public getFeedStock(feedStockId: number, category: string): void {
+    this.feedApiService.findFeedFormAllocation(feedStockId, category).subscribe(cages => {
       this.cagesDoc = cages.filter((cage: { cageCategory: string; }) => cage.cageCategory === CageCategory.DOC);
       this.cagesDara = cages.filter((cage: { cageCategory: string; }) => cage.cageCategory === CageCategory.DARA);
       this.cagesNorm = cages.filter((cage: { cageCategory: string; }) => cage.cageCategory === CageCategory.NORM);
     })
   }
 
-  public findFeedStockForAllocationByFeedCategoryNorm(feedCategory: FeedCategory): void {
-    this.feedApiService.findFeedStockForAllocationByFeedCategory(feedCategory).subscribe(feed => {
-      if (feedCategory === FeedCategory.NORM) {
-        this.showFeedStockNorm = !(feedCategory === FeedCategory.NORM && !feed);
-        this.feedStockNorm = feed;
-      } else if (feedCategory === FeedCategory.DARA) {
-        this.showFeedStockDara = !(feedCategory === FeedCategory.DARA && !feed);
-        this.feedStockDara = feed;
-      } else if (feedCategory === FeedCategory.DOC) {
-        this.showFeedStockDoc = !(feedCategory === FeedCategory.DOC && !feed);
-        this.feedStockDoc = feed;
-      }
+  public findAllFeedStockForAllocation(): void {
+    this.feedApiService.findAllFeedStockForAllocation().subscribe(feeds => {
+      this.feedsToBeAllocated = feeds;
     })
   }
 
@@ -82,12 +104,53 @@ export class FeedAllocationComponent implements OnInit {
     this.totalBagsAllocatedDoc = this.cagesDoc.map(cage => cage.bagsAllocated).reduce((acc, value) => acc + value, 0);
   }
 
+  public initialiseAlertButtons(): void {
+    this.alertButtons = [
+      {
+        text: 'No',
+        role: false,
+        cssClass: 'alert-negative-btn',
+        handler: () => {
+          this.isResponsePositive = false;
+        },
+      },
+      {
+        text: 'Yes',
+        role: true,
+        cssClass: 'alert-positive-btn',
+        handler: () => {
+          this.isResponsePositive = true;
+        },
+      },
+    ]
+  }
+
+  public setAlertResult(event: any): void {
+    this.isResponsePositive = event.detail.role;
+    if (this.isChangeInFeedStock && this.isResponsePositive === true) {
+      this.selectedFeedStock = this.toBeSelectedFeedStock;
+      this.cages = [];
+      this.cagesNorm = [];
+      this.cagesDara = [];
+      this.cagesDoc = [];
+      this.getFeedStock(this.selectedFeedStock.id, this.toBeSelectedFeedStock.feedCategory);
+      this.isChangeInFeedStock = false;
+    } else {
+      this.isChangeInFeedStock = false;
+    }
+  }
+
   public save(): void {
     this.cages = [];
     this.cages = [...this.cagesNorm, ...this.cagesDara, ...this.cagesDoc];
     this.utilsService.presentLoading();
     this.flockFeedLineApiService.allocateFeedStockToFlock(this.cages).subscribe({
       next: (data: string) => {
+        this.cages = [];
+        this.cagesNorm = [];
+        this.cagesDara = [];
+        this.cagesDoc = [];
+        this.findAllFeedStockForAllocation();
         this.utilsService.dismissLoading();
         this.utilsService.successMsg('Feeds allocated successfully');
       },

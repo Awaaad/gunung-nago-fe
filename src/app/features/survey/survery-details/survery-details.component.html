@@ -33,27 +33,47 @@
         </ion-item-divider>
         <ion-row>
           <ion-col size-xs="12" size-md="3">
-            <div class="survey-general-header">
-              <ion-icon name="grid-outline"></ion-icon>
-              <div>{{ 'survey.survey-details.cage' | translate }}: {{cageName}}</div>
+            <div class="headers-section">
+              <div>
+                <strong>{{ 'survey.survey-details.cage' | translate }}</strong>
+              </div>
+              <img class="headers" src='./assets/flaticon/cage.png'>
+              <div class="headers-count">
+                <strong>{{cageName}}</strong>
+              </div>
             </div>
           </ion-col>
           <ion-col size-xs="12" size-md="3">
-            <div class="survey-general-header">
-              <ion-icon name="time-outline"></ion-icon>
-              <div>{{ 'survey.survey-details.date' | translate }}: {{today}}</div>
+            <div class="headers-section">
+              <div>
+                <strong>{{ 'survey.survey-details.date' | translate }}</strong>
+              </div>
+              <img class="headers" src='./assets/flaticon/clock.png'>
+              <div class="headers-count">
+                <strong>{{today}}</strong>
+              </div>
             </div>
           </ion-col>
           <ion-col size-xs="12" size-md="3">
-            <div class="survey-general-header">
-              <ion-icon name="pulse-outline"></ion-icon>
-              <div>{{ 'survey.survey-details.chicken-age' | translate }}: {{flockAge}}</div>
+            <div class="headers-section">
+              <div>
+                <strong>{{ 'survey.survey-details.chicken-age' | translate }}</strong>
+              </div>
+              <img class="headers" src='./assets/flaticon/age.png'>
+              <div class="headers-count">
+                <strong>{{flockAge}}</strong>
+              </div>
             </div>
           </ion-col>
           <ion-col size-xs="12" size-md="3">
-            <div class="survey-general-header">
-              <ion-icon name="albums-outline"></ion-icon>
-              <div>{{ 'survey.survey-details.chicken-category' | translate }}: {{flockCategory}}</div>
+            <div class="headers-section">
+              <div>
+                <strong>{{ 'survey.survey-details.chicken-category' | translate }}</strong>
+              </div>
+              <img class="headers" src='./assets/flaticon/category.png'>
+              <div class="headers-count">
+                <strong>{{flockCategory}}</strong>
+              </div>
             </div>
           </ion-col>
         </ion-row>
@@ -69,9 +89,17 @@
           </ion-col>
         </ion-row>
 
-        <ion-item-divider>
-          <ion-label>{{ 'survey.survey-details.morality' | translate }}</ion-label>
-        </ion-item-divider>
+        <div class="divider-wrapper mt-1">
+          <div class="flock-section">
+            <img class="survey-divider-img" src='./assets/flaticon/flock.png'>
+          </div>
+          <div class="divider-text">
+            <ion-item-divider>
+              <ion-label>{{ 'survey.survey-details.morality' | translate }}</ion-label>
+            </ion-item-divider>
+          </div>
+        </div>
+
         <ion-row>
           <ion-col size-xs="12" size-md="3">
             <ion-input color="gunung-nago-survey" label="{{ 'survey.survey-details.dead' | translate }}"
@@ -90,9 +118,17 @@
           </ion-col>
         </ion-row>
 
-        <ion-item-divider>
-          <ion-label>{{ 'survey.survey-details.production' | translate }}</ion-label>
-        </ion-item-divider>
+        <div class="divider-wrapper mt-1">
+          <div class="flock-section">
+            <img class="survey-divider-img" src='./assets/flaticon/eggs.png'>
+          </div>
+          <div class="divider-text">
+            <ion-item-divider>
+              <ion-label>{{ 'survey.survey-details.production' | translate }}</ion-label>
+            </ion-item-divider>
+          </div>
+        </div>
+
         <ion-item-divider>
           <ion-label>Big Eggs</ion-label>
         </ion-item-divider>
@@ -103,9 +139,8 @@
               formControlName="bigEggsTie" [(ngModel)]="bigEggsTie" (ngModelChange)="calculateTotalItem()"></ion-input>
           </ion-col>
           <ion-col size-xs="12" size-md="3">
-            <ion-input color="gunung-nago-survey" label="{{ 'survey.survey-details.tray' | translate }}"
-              label-placement="floating" fill="outline" type="number" min="0" max="9" maxlength="1" clear-input="true"
-              formControlName="bigEggsTray" [(ngModel)]="bigEggsTray"
+            <ion-input color="gunung-nago-survey" label="Tray" label-placement="floating" fill="outline" type="number"
+              min="0" max="9" maxlength="1" clear-input="true" formControlName="bigEggsTray" [(ngModel)]="bigEggsTray"
               (ngModelChange)="calculateTotalItem()"></ion-input>
             <div class="error-messages">
               <ng-container *ngFor="let error of errorMessages.tray">
@@ -142,10 +177,9 @@
               (ngModelChange)="calculateTotalItem()"></ion-input>
           </ion-col>
           <ion-col size-xs="12" size-md="3">
-            <ion-input color="gunung-nago-survey" label="{{ 'survey.survey-details.tray' | translate }}"
-              label-placement="floating" fill="outline" type="number" min="0" max="9" maxlength="2" clear-input="true"
-              formControlName="mediumEggsTray" [(ngModel)]="mediumEggsTray"
-              (ngModelChange)="validateItem($event); calculateTotalItem()"></ion-input>
+            <ion-input color="gunung-nago-survey" label="Tray" label-placement="floating" fill="outline" type="number"
+              min="0" max="9" maxlength="2" clear-input="true" formControlName="mediumEggsTray"
+              [(ngModel)]="mediumEggsTray" (ngModelChange)="validateItem($event); calculateTotalItem()"></ion-input>
             <div class="error-messages">
               <ng-container *ngFor="let error of errorMessages.tray">
                 <div class="error-message"
@@ -181,10 +215,9 @@
               (ngModelChange)="calculateTotalItem()"></ion-input>
           </ion-col>
           <ion-col size-xs="12" size-md="3">
-            <ion-input color="gunung-nago-survey" label="{{ 'survey.survey-details.tray' | translate }}"
-              label-placement="floating" fill="outline" type="number" min="0" max="9" maxlength="1" clear-input="true"
-              formControlName="smallEggsTray" [(ngModel)]="smallEggsTray"
-              (ngModelChange)="calculateTotalItem()"></ion-input>
+            <ion-input color="gunung-nago-survey" label="Tray" label-placement="floating" fill="outline" type="number"
+              min="0" max="9" maxlength="1" clear-input="true" formControlName="smallEggsTray"
+              [(ngModel)]="smallEggsTray" (ngModelChange)="calculateTotalItem()"></ion-input>
             <div class="error-messages">
               <ng-container *ngFor="let error of errorMessages.tray">
                 <div class="error-message"
@@ -242,84 +275,172 @@
         </ion-row>
       </ion-card-content>
 
-      <!-- feed -->
-      <div class="ion-padding">
-        <ion-item-divider>
-          <ion-label>Feed</ion-label>
-        </ion-item-divider>
-
-        <div *ngIf="feedLines.length > 0">
-
-          <div *ngFor="let feed of feedLines; let i=index;">
-            <div class="em-title" [style.color]="i === 0 ? 'black' : 'grey'">Allocation Date: {{feed.createdDate |
-              date:'dd-MM-yyyy'}}
+      <ion-row>
+        <ion-col size-xs="12" size-md="6">
+          <!-- feed -->
+          <div class="ion-padding">
+            <div class="divider-wrapper">
+              <div class="flock-section">
+                <img class="survey-divider-img" src='./assets/flaticon/feed.png'>
+              </div>
+              <div class="divider-text">
+                <ion-item-divider>
+                  <ion-label>Feed</ion-label>
+                </ion-item-divider>
+              </div>
             </div>
-            <ion-row>
-              <ion-col size-xs="12" size-md="3">
-                <div class="em-body-title">Bags Allocated: {{feed.bagsAllocated}}</div>
-                <div class="em-body-title">Bags Left: {{feed.bagsLeft}}</div>
-                <div>
-                  <ion-input color="gunung-nago-survey" label="Enter bags eaten" label-placement="floating"
-                    fill="outline" type="number" min="0" clear-input="true" [max]="feed.bagsLeft"
-                    [(ngModel)]="feed.bagsEaten" name="bagsEaten" [ngModelOptions]="{standalone: true}"></ion-input>
+
+            <div *ngIf="feedLines.length > 0">
+              <div *ngFor="let feed of feedLines; let i=index;">
+                <div class="em-title" [style.color]="i === 0 ? 'black' : 'grey'">Allocation Date: {{feed.createdDate |
+                  date:'dd-MM-yyyy'}}
                 </div>
+                <ion-row>
+                  <ion-col size-xs="12" size-md="4">
+                    <div class="em-body-title">Bags Allocated: {{feed.bagsAllocated}}</div>
+                    <div class="em-body-title">Bags Left: {{feed.bagsLeft}}</div>
+                    <div>
+                      <ion-input color="gunung-nago-survey" label="Enter bags eaten" label-placement="floating"
+                        fill="outline" type="number" min="0" clear-input="true" [max]="feed.bagsLeft"
+                        [(ngModel)]="feed.bagsEaten" name="bagsEaten" [ngModelOptions]="{standalone: true}"></ion-input>
+                    </div>
+                  </ion-col>
+                </ion-row>
+                <br>
+              </div>
+            </div>
+          </div>
+
+        </ion-col>
+        <ion-col size-xs="12" size-md="6">
+          <!-- health -->
+          <div class="ion-padding">
+            <div class="divider-wrapper">
+              <div class="flock-section">
+                <img class="survey-divider-img" src='./assets/flaticon/health-products.png'>
+              </div>
+              <div class="divider-text">
+                <ion-item-divider>
+                  <ion-label>{{ 'survey.survey-details.vaccine-medication' | translate }}</ion-label>
+                </ion-item-divider>
+              </div>
+            </div>
+
+            <mat-form-field class="autocomplete-full-width" appearance="outline">
+              <input matInput placeholder="Search health product..." [(ngModel)]="selectedHealthProduct"
+                [matAutocomplete]="auto" [formControl]="searchHealthProductCtrl" placeholder="Seach health product">
+              <button *ngIf="selectedHealthProduct" matSuffix mat-icon-button aria-label="Clear"
+                (click)="clearSelection()">
+                <ion-icon name="close-outline"></ion-icon>
+              </button>
+              <mat-autocomplete [panelWidth]="400" #auto="matAutocomplete" (optionSelected)="onHealthProductSelected()"
+                [displayWith]="displayWith">
+                <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                <ng-container *ngIf="!isLoading">
+                  <mat-option *ngFor="let healthProduct of filteredHealthProducts" [value]="healthProduct">
+                    <span>{{healthProduct.name}}</span>
+                  </mat-option>
+                </ng-container>
+              </mat-autocomplete>
+            </mat-form-field>
+
+            <div *ngIf="selectedHealthProducts.length > 0">
+              <div *ngFor="let selectedHealthProduct of selectedHealthProducts; let i=index;">
+                <ion-chip color="gunung-nago-report">
+                  <ion-label>{{selectedHealthProduct.healthProductName}}</ion-label>
+                  <ion-icon name="close"
+                    (click)="removeHealthProduct(selectedHealthProduct.healthProductId)"></ion-icon>
+                </ion-chip>
+
+                <div *ngFor="let healthProductStock of selectedHealthProduct.healthSurveyStockDtos; let j = index;">
+                  <div class="em-title" [style.color]="j === 0 ? 'black' : 'grey'">{{j === 0 ? 'New Stock' :
+                    'Old Stock'}}
+                  </div>
+                  <ion-row>
+                    <ion-col size-xs="12" size-md="3">
+                      <div class="em-body-title">Total Units: {{healthProductStock.unitsTotal}}</div>
+                      <div></div>
+                      <div>
+                        <ion-input color="gunung-nago-survey" label="Enter units used" label-placement="floating"
+                          fill="outline" type="number" min="0" clear-input="true" [max]="healthProductStock.unitsTotal"
+                          [(ngModel)]="healthProductStock.unitsUsed" [ngModelOptions]="{standalone: true}"
+                          (ngModelChange)="changeUnitsUsed($event, healthProductStock.unitsTotal, i, j)"
+                          name="unitsUsed"></ion-input>
+                      </div>
+                    </ion-col>
+                  </ion-row>
+                  <br>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col size-xs="12" size-md="6">
+          <!-- manure -->
+          <div class="ion-padding">
+            <div class="divider-wrapper">
+              <div class="flock-section">
+                <img class="survey-divider-img" src='./assets/flaticon/manure-bag.png'>
+              </div>
+              <div class="divider-text">
+                <ion-item-divider>
+                  <ion-label>Manure</ion-label>
+                </ion-item-divider>
+              </div>
+            </div>
+
+            <ion-row>
+              <ion-col size-xs="12" size-md="4">
+                <ion-input color="gunung-nago-survey" label="Bags collected" label-placement="floating" fill="outline"
+                  type="number" min="0" clear-input="true" formControlName="manureBags"
+                  [(ngModel)]="manureBags"></ion-input>
+              </ion-col>
+              <ion-col size-xs="12" size-md="4">
+                <ion-input color="gunung-nago-survey" label="Weight" label-placement="floating" fill="outline"
+                  type="number" min="0" clear-input="true" formControlName="manureWeight"
+                  [(ngModel)]="manureWeight"></ion-input>
               </ion-col>
             </ion-row>
-            <br>
           </div>
-        </div>
-      </div>
+        </ion-col>
 
-      <!-- health -->
-      <div class="ion-padding">
-        <ion-item-divider>
-          <ion-label>{{ 'survey.survey-details.vaccine-medication' | translate }}</ion-label>
-        </ion-item-divider>
-        <mat-form-field class="autocomplete-full-width" appearance="outline">
-          <input matInput placeholder="Search health product..." [(ngModel)]="selectedHealthProduct"
-            [matAutocomplete]="auto" [formControl]="searchHealthProductCtrl" placeholder="Seach health product">
-          <button *ngIf="selectedHealthProduct" matSuffix mat-icon-button aria-label="Clear" (click)="clearSelection()">
-            <ion-icon name="close-outline"></ion-icon>
-          </button>
-          <mat-autocomplete [panelWidth]="400" #auto="matAutocomplete" (optionSelected)="onHealthProductSelected()"
-            [displayWith]="displayWith">
-            <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
-            <ng-container *ngIf="!isLoading">
-              <mat-option *ngFor="let healthProduct of filteredHealthProducts" [value]="healthProduct">
-                <span>{{healthProduct.name}}</span>
-              </mat-option>
-            </ng-container>
-          </mat-autocomplete>
-        </mat-form-field>
-
-        <div *ngIf="selectedHealthProducts.length > 0">
-          <div *ngFor="let selectedHealthProduct of selectedHealthProducts; let i=index;">
-            <ion-chip color="gunung-nago-report">
-              <ion-label>{{selectedHealthProduct.healthProductName}}</ion-label>
-              <ion-icon name="close" (click)="removeHealthProduct(selectedHealthProduct.healthProductId)"></ion-icon>
-            </ion-chip>
-
-            <div *ngFor="let healthProductStock of selectedHealthProduct.healthSurveyStockDtos; let j = index;">
-              <div class="em-title" [style.color]="j === 0 ? 'black' : 'grey'">{{j === 0 ? 'New Stock' : 'Old Stock'}}
+        <ion-col size-xs="12" size-md="6">
+          <!-- weight -->
+          <div class="ion-padding">
+            <div class="divider-wrapper">
+              <div class="flock-section">
+                <img class="survey-divider-img" src='./assets/flaticon/quantity.png'>
               </div>
-              <ion-row>
-                <ion-col size-xs="12" size-md="3">
-                  <div class="em-body-title">Total Units: {{healthProductStock.unitsTotal}}</div>
-                  <div></div>
-                  <div>
-                    <ion-input color="gunung-nago-survey" label="Enter units used" label-placement="floating"
-                      fill="outline" type="number" min="0" clear-input="true" [max]="healthProductStock.unitsTotal"
-                      [(ngModel)]="healthProductStock.unitsUsed" [ngModelOptions]="{standalone: true}"
-                      (ngModelChange)="changeUnitsUsed($event, healthProductStock.unitsTotal, i, j)"
-                      name="unitsUsed"></ion-input>
-                  </div>
-                </ion-col>
-              </ion-row>
-              <br>
+              <div class="divider-text">
+                <ion-item-divider>
+                  <ion-label>Chicken Weight</ion-label>
+                </ion-item-divider>
+              </div>
             </div>
+
+            <ion-row>
+              <ion-col size-xs="12" size-md="4">
+                <ion-input color="gunung-nago-survey" label="Amount of chicken weighted" label-placement="floating"
+                  fill="outline" type="number" min="0" clear-input="true" formControlName="amountOfChickenWeighted"
+                  [(ngModel)]="amountOfChickenWeighted"></ion-input>
+              </ion-col>
+              <ion-col size-xs="12" size-md="4">
+                <ion-input color="gunung-nago-survey" label="Total weighted" label-placement="floating" fill="outline"
+                  type="number" min="0" clear-input="true" formControlName="totalWeight"
+                  [(ngModel)]="totalWeight"></ion-input>
+              </ion-col>
+              <ion-col size-xs="12" size-md="4">
+                <ion-input color="gunung-nago-survey" label="Average weight" label-placement="floating" fill="outline"
+                  type="number" min="0" clear-input="true"
+                  [value]="(totalWeight / amountOfChickenWeighted) | number :'1.2-2'"></ion-input>
+              </ion-col>
+            </ion-row>
           </div>
-        </div>
-      </div>
+        </ion-col>
+      </ion-row>
 
       <!-- comment -->
       <div class="ion-padding">

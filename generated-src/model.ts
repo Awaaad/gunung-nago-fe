@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2023-10-22 23:35:21.
+// Generated using typescript-generator version 3.2.1263 on 2023-10-26 21:20:22.
 
 export class CageDto {
     id!: number;
@@ -88,6 +88,16 @@ export class EggStockDto {
 }
 
 export class EggStockDtoBuilder {
+}
+
+export class EggTransferDto {
+    bigGoodToBadEggs!: number;
+    bigGoodBrokenEggs!: number;
+    mediumGoodToBadEggs!: number;
+    mediumGoodBrokenEggs!: number;
+    smallGoodToBadEggs!: number;
+    smallGoodBrokenEggs!: number;
+    badBrokenEggs!: number;
 }
 
 export class FarmDto {
@@ -426,54 +436,6 @@ export class PurchaseSaveDto {
     purchaseDetailsDtos!: PurchaseDetailsDto[];
 }
 
-export class FeedPurchaseInvoiceDetailsDto {
-    id!: number;
-    number!: string;
-    supplierName!: string;
-    supplierAddress!: string;
-    supplierTelephoneNumber!: number;
-    supplierTelephoneNumberTwo!: number;
-    supplierTelephoneNumberThree!: number;
-    createdBy!: string;
-    createdDate!: Date;
-    discount!: number;
-    totalPrice!: number;
-    comment!: string;
-    purchaseInvoiceFeedDetailsDtos!: PurchaseInvoiceFeedDetailsDto[];
-}
-
-export class FlockPurchaseInvoiceDetailsDto {
-    id!: number;
-    number!: string;
-    supplierName!: string;
-    supplierAddress!: string;
-    supplierTelephoneNumber!: number;
-    supplierTelephoneNumberTwo!: number;
-    supplierTelephoneNumberThree!: number;
-    createdBy!: string;
-    createdDate!: Date;
-    discount!: number;
-    totalPrice!: number;
-    comment!: string;
-    purchaseInvoiceFlockDetailsDtos!: PurchaseInvoiceFlockDetailsDto[];
-}
-
-export class HealthPurchaseInvoiceDetailsDto {
-    id!: number;
-    number!: string;
-    supplierName!: string;
-    supplierAddress!: string;
-    supplierTelephoneNumber!: number;
-    supplierTelephoneNumberTwo!: number;
-    supplierTelephoneNumberThree!: number;
-    createdBy!: string;
-    createdDate!: Date;
-    discount!: number;
-    totalPrice!: number;
-    comment!: string;
-    purchaseInvoiceHealthProductDetailsDtos!: PurchaseInvoiceHealthProductDetailsDto[];
-}
-
 export class PurchaseInvoiceDetailsDto {
     id!: number;
     number!: string;
@@ -500,45 +462,6 @@ export class PurchaseInvoiceDto {
     discount!: number;
 }
 
-export class PurchaseInvoiceFeedDetailsDto {
-    feedId!: number;
-    feedName!: string;
-    feedCategory!: FeedCategory;
-    weight!: number;
-    unitsPerBox!: number;
-    boxesReceived!: number;
-    bonusBoxesReceived!: number;
-    wholesalePrice!: number;
-    pricePerBox!: number;
-    tax!: number;
-    discount!: number;
-}
-
-export class PurchaseInvoiceFlockDetailsDto {
-    flockId!: number;
-    name!: string;
-    age!: number;
-    boxesReceived!: number;
-    bonusBoxesReceived!: number;
-    wholesalePrice!: number;
-    pricePerBox!: number;
-    tax!: number;
-    discount!: number;
-}
-
-export class PurchaseInvoiceHealthProductDetailsDto {
-    healthProductId!: number;
-    healthProductName!: string;
-    healthType!: HealthType;
-    boxesReceived!: number;
-    bonusBoxesReceived!: number;
-    wholesalePrice!: number;
-    pricePerBox!: number;
-    tax!: number;
-    discount!: number;
-    expiryDate!: Date;
-}
-
 export class PurchaseInvoiceSearchCriteriaDto {
     invoiceNumber!: string;
     supplierId!: number;
@@ -549,10 +472,9 @@ export class PurchaseInvoiceSearchCriteriaDto {
     farmId!: number;
 }
 
-export class EggReceiptDetailsDto {
+export class ReceiptDetailsDto {
     id!: number;
     salesInvoiceId!: number;
-    salesInvoiceType!: SalesInvoiceType;
     totalPrice!: number;
     soldAt!: number;
     createdBy!: string;
@@ -567,29 +489,7 @@ export class EggReceiptDetailsDto {
     salesInvoiceCategory!: SalesInvoiceCategory;
     salesInvoiceStatus!: SalesInvoiceStatus;
     comment!: string;
-    salesInvoiceEggDetailsDtos!: SalesInvoiceEggDetailsDto[];
-    paymentDtos!: PaymentDto[];
-}
-
-export class FlockReceiptDetailsDto {
-    id!: number;
-    salesInvoiceId!: number;
-    salesInvoiceType!: SalesInvoiceType;
-    totalPrice!: number;
-    soldAt!: number;
-    createdBy!: string;
-    createdDate!: Date;
-    customerFirstName!: string;
-    customerLastName!: string;
-    customerAddress!: string;
-    customerTelephoneNumber!: number;
-    driverFirstName!: string;
-    driverLastName!: string;
-    salesPerson!: string;
-    salesInvoiceCategory!: SalesInvoiceCategory;
-    salesInvoiceStatus!: SalesInvoiceStatus;
-    comment!: string;
-    salesInvoiceFlockDetailsDtos!: SalesInvoiceFlockDetailsDto[];
+    saleDetailsDtos!: SaleDetailsDto[];
     paymentDtos!: PaymentDto[];
 }
 
@@ -619,6 +519,10 @@ export class DailyProductionReportDto {
     comment!: string;
     eggTray!: number;
     productionRate!: number;
+    manureBags!: number;
+    amountOfChickenWeighted!: number;
+    totalWeight!: number;
+    averageWeight!: number;
     healthReportDtos!: HealthReportDto[];
 }
 
@@ -656,51 +560,6 @@ export class SalesInvoiceDto {
     driverLastName!: string;
     salesInvoiceCategory!: SalesInvoiceCategory;
     salesInvoiceStatus!: SalesInvoiceStatus;
-}
-
-export class SalesInvoiceEggDetailsDto {
-    id!: number;
-    bigGoodPiece!: number;
-    bigGoodPricePerPiece!: number;
-    bigGoodTie!: number;
-    bigGoodPricePerTie!: number;
-    bigGoodTray!: number;
-    bigGoodPricePerTray!: number;
-    mediumGoodPiece!: number;
-    mediumGoodPricePerPiece!: number;
-    mediumGoodTie!: number;
-    mediumGoodPricePerTie!: number;
-    mediumGoodTray!: number;
-    mediumGoodPricePerTray!: number;
-    smallGoodPiece!: number;
-    smallGoodPricePerPiece!: number;
-    smallGoodTie!: number;
-    smallGoodPricePerTie!: number;
-    smallGoodTray!: number;
-    smallGoodPricePerTray!: number;
-    badPiece!: number;
-    badPricePerPiece!: number;
-    badTie!: number;
-    badPricePerTie!: number;
-    badTray!: number;
-    badPricePerTray!: number;
-    totalEggs!: number;
-    totalPrice!: number;
-}
-
-export class SalesInvoiceFlockDetailsDto {
-    id!: number;
-    saleDate!: Date;
-    quantityForSterile!: number;
-    quantityForGood!: number;
-    pricePerChickenForSterile!: number;
-    pricePerChickenForGood!: number;
-}
-
-export class SalesInvoiceManureDetailsDto {
-    id!: number;
-    price!: number;
-    quantity!: number;
 }
 
 export class SalesInvoiceSearchCriteriaDto {
@@ -799,6 +658,9 @@ export class SurveyDto {
     alive!: number;
     totalSterile!: number;
     comment!: string;
+    manureBags!: number;
+    amountOfChickenWeighted!: number;
+    totalWeight!: number;
     healthSurveyDtos!: HealthSurveyDto[];
     feedSurveyDtos!: FeedSurveyDto[];
 }
