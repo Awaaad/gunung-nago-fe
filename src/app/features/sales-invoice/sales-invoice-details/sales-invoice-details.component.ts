@@ -62,7 +62,6 @@ export class SalesInvoiceDetailsComponent implements OnInit {
     this.fileApiService.generateSaleInvoicePdf(this.salesInvoiceId).subscribe(fileResponse => {
       this.utilsService.openTemplateInNewTab(fileResponse);
     })
-    
   }
 
   public ionChangeLanguage(event: any): void {
@@ -71,7 +70,6 @@ export class SalesInvoiceDetailsComponent implements OnInit {
 
   public findSalesInvoiceDetailsById(): void {
     this.salesInvoiceApiService.findSalesInvoiceDetailsById(this.salesInvoiceId).subscribe(salesInvoiceDetailsFrontDto => {
-      console.log(salesInvoiceDetailsFrontDto);
       this.salesInvoiceDetailsFrontDto = salesInvoiceDetailsFrontDto;
       this.totalPrice = salesInvoiceDetailsFrontDto.totalPrice;
     })

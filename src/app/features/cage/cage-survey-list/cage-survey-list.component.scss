@@ -23,6 +23,10 @@ ion-card-content {
 
 @media only screen and (min-width: 768px) {
     .flock-modal {
-        --height: 50em;
+        --height: 30em;
     }
+}
+
+.warning-text {
+    font-size: 16px;
 }

@@ -4,7 +4,6 @@ import { DailyProductionReportDto } from 'generated-src/model';
 import { Subscription } from 'rxjs';
 import { ReportApiService } from '../../../shared/apis/report.api.service';
 import { TranslateService } from '@ngx-translate/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment';
 
 @Component({

@@ -1,0 +1,313 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      <div class="router-links">
+        <div class="title">
+          <img class="header-logo" src='./assets/flaticon/flock-in-cage.png'>
+          <h3 class="header-nav-products">Flock Transfer</h3>
+        </div>
+        <div>
+          <ion-item class="language-selection">
+            <ion-select aria-label="language" interface="popover" placeholder="Select language" [(ngModel)]="language"
+              (ionChange)="ionChangeLanguage($event)">
+              <ion-select-option value="en">English</ion-select-option>
+              <ion-select-option value="id">Indonesian</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </div>
+      </div>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content [fullscreen]="false" class="ion-padding">
+  <div class="divider-wrapper">
+    <div>
+      <img class="transfer-divider-img" src='./assets/flaticon/transfer.png'>
+    </div>
+    <div class="divider-text">
+      <ion-item-divider>
+        <ion-label>Transfer Flock to Cage</ion-label>
+      </ion-item-divider>
+    </div>
+  </div>
+
+  <ion-row cdkDropListGroup class="flock-transfer-container">
+    <ion-col size-xs="12" size-md="6">
+      <div class="subtitle">
+        <img class="cart-logo" src='./assets/flaticon/flock.png'>
+        <div class="form-section-cart">Flocks</div>
+      </div>
+
+      <ion-row cdkDropList [cdkDropListData]="flocks" (cdkDropListDropped)="drop($event)">
+        <ion-col size-xs="12" size-md="6" *ngFor="let flock of flocks">
+          <ion-card cdkDrag [cdkDragData]="flock">
+            <ion-card-content>
+              <div class="flock-section">
+                <div>
+                  <strong>{{flock.name}}</strong>
+                </div>
+                <img class="flocks" src='./assets/flaticon/flock.png'>
+                <div class="flock-count">
+                  <strong>{{flock.initialFlockCategory}} - QTY: {{flock.initialQuantity}}</strong>
+                </div>
+              </div>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+
+    </ion-col>
+    <ion-col size-xs="12" size-md="6">
+      <div class="subtitle">
+        <img class="cart-logo" src='./assets/flaticon/cage.png'>
+        <div class="form-section-cart">Cages</div>
+      </div>
+
+      <div>
+        <div *ngFor="let dropCage of dropCages">
+          <ion-row>
+            <ion-col size-xs="12" size-md="6" *ngFor="let cage of dropCage.flockToCage">
+              <ion-card>
+                <ion-card-content>
+                  <div class="cage-section">
+                    <div>
+                      <strong>{{cage[0].cageName? cage[0].cageName : cage[1].cageName}}</strong>
+                    </div>
+                    <img class="cages" src='./assets/flaticon/cage.png'>
+                    <div class="cage-count">
+                      <strong>{{cage[0].cageCategory? cage[0].cageCategory : cage[1].cageCategory}}</strong>
+                    </div>
+                  </div>
+
+                  <div class="example-list drop-list" cdkDropList [cdkDropListData]="cage" (cdkDropListDropped)="drop($event)">
+                    <!-- <div class="flock-drop-area">
+                      <div>
+
+                      </div>
+
+                      <div class="remove-btn">
+                        <ion-button color="gunung-nago-warehouse" *ngIf="cage[0].name" (click)="remove(cage)"><ion-icon
+                            name="trash"></ion-icon></ion-button>
+                      </div>
+                    </div>
+
+                    <div class="flock-section m-1" *ngIf="cage[0].name">
+                      <div>
+                        <strong>{{cage[0].name}}</strong>
+                      </div>
+                      <img class="flocks-in-cage" src='./assets/flaticon/flock-in-cage.png'>
+                      <div class="flock-count">
+                        <strong>{{cage[0].initialFlockCategory}} - QTY: {{cage[0].initialQuantity}}</strong>
+                      </div>
+                    </div> -->
+                    <span class="flock-cage-drop">
+                      <div class="flock-section m-1" *ngIf="cage[0].name">
+                        <div>
+                          <strong>{{cage[0].name}}</strong>
+                        </div>
+                        <img class="flocks-in-cage" src='./assets/flaticon/flock-in-cage.png'>
+                        <div class="flock-count">
+                          <strong>{{cage[0].initialFlockCategory}} - QTY: {{cage[0].initialQuantity}}</strong>
+                        </div>
+                      </div>
+                    </span>
+                    <span class="remove-btn">
+                      <ion-button color="gunung-nago-warehouse" *ngIf="cage[0].name" (click)="remove(cage)"><ion-icon
+                        name="trash"></ion-icon></ion-button>
+                    </span>
+                  </div>
+                </ion-card-content>
+              </ion-card>
+            </ion-col>
+
+          </ion-row>
+        </div>
+      </div>
+    </ion-col>
+  </ion-row>
+
+  <div class="wrapper-bottom">
+    <div class="btn-container-stock">
+      <ion-button class="cancel-btn" (click)="cancelTransfer()">Cancel</ion-button>
+      <ion-button color="positive-btn" (click)="saveTransfer()">Save</ion-button>
+    </div>
+  </div>
+
+
+  <ion-row>
+    <ion-col size-xs="12" size-md="6">
+      <div class="divider-wrapper">
+        <div>
+          <img class="transfer-divider-img" src='./assets/flaticon/add-flock.png'>
+        </div>
+        <div class="divider-text">
+          <ion-item-divider>
+            <ion-label>Add Flock(s)</ion-label>
+          </ion-item-divider>
+        </div>
+      </div>
+
+      <form [formGroup]="flockDetailsForm">
+        <div formArrayName="flockDetails" *ngFor="let flockDetails of flockDetailsFields?.controls; let i = index">
+          <div [formGroupName]="i">
+            <ion-card>
+              <ion-card-content>
+                <div class="form-array-index">
+                  <h6>Flock {{i + 1}}</h6>
+                  <ion-button *ngIf="flockDetailsFields != null && flockDetailsFields.length > 1"
+                    (click)="removeFlockDetails(i)" class="delete-product-btn" color="gunung-nago-warehouse"><ion-icon
+                      name="trash"></ion-icon></ion-button>
+                </div>
+                <ion-row>
+                  <ion-col size-xs="12" size-md="3">
+                    <ion-input color="gunung-nago-primary" label="Name" label-placement="floating" fill="outline"
+                      type="text" clear-input="true" formControlName="name"></ion-input>
+                  </ion-col>
+                  <ion-col size-xs="12" size-md="3">
+                    <ion-input color="gunung-nago-primary" label="Age" label-placement="floating" fill="outline"
+                      type="number" min="0" clear-input="true" formControlName="initialAge"></ion-input>
+                    <div class="error-messages">
+                      <ng-container *ngFor="let error of errorMessages.initialAge">
+                        <div class="error-message"
+                          *ngIf="flockDetails.get('initialAge')?.hasError(error.type) && (flockDetails.get('initialAge')?.dirty || flockDetails.get('initialAge')?.touched)">
+                          {{ error.message }}
+                        </div>
+                      </ng-container>
+                    </div>
+                  </ion-col>
+                  <ion-col size-xs="12" size-md="3">
+                    <ion-input color="gunung-nago-primary" label="Quantity" label-placement="floating" fill="outline"
+                      type="number" min="0" clear-input="true" formControlName="initialQuantity"></ion-input>
+                    <div class="error-messages">
+                      <ng-container *ngFor="let error of errorMessages.initialQuantity">
+                        <div class="error-message"
+                          *ngIf="flockDetails.get('initialQuantity')?.hasError(error.type) && (flockDetails.get('initialQuantity')?.dirty || flockDetails.get('initialQuantity')?.touched)">
+                          {{ error.message }}
+                        </div>
+                      </ng-container>
+                    </div>
+                  </ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col size-xs="12" size-md="3">
+                    <ion-select color="gunung-nago-primary"
+                      label="{{ 'flock.flock-details.aquisition-type' | translate }}" label-placement="floating"
+                      fill="outline" interface="popover"
+                      placeholder="{{ 'flock.flock-details.aquisition-type' | translate }}"
+                      formControlName="aquisitionType">
+                      <ion-select-option value="PURCHASE">Purchase</ion-select-option>
+                      <ion-select-option value="BORN_ON_FARM">Born on farm</ion-select-option>
+                    </ion-select>
+                    <div class="error-messages">
+                      <ng-container *ngFor="let error of errorMessages.aquisitionType">
+                        <div class="error-message"
+                          *ngIf="flockDetails.get('aquisitionType')?.hasError(error.type) && (flockDetails.get('aquisitionType')?.dirty || flockDetails.get('aquisitionType')?.touched)">
+                          {{ error.message }}
+                        </div>
+                      </ng-container>
+                    </div>
+                  </ion-col>
+
+                  <ion-col size-xs="12" size-md="3">
+                    <mat-form-field class="date-full-width" appearance="outline">
+                      <mat-label>Aquisition Date</mat-label>
+                      <input matInput [matDatepicker]="picker" [max]="today" formControlName="aquisitionDate">
+                      <mat-hint>DD/MM/YYYY</mat-hint>
+                      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                      <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                    <div class="error-messages">
+                      <ng-container *ngFor="let error of errorMessages.aquisitionDate">
+                        <div class="error-message"
+                          *ngIf="flockDetails.get('aquisitionDate')?.hasError(error.type) && (flockDetails.get('aquisitionDate')?.dirty || flockDetails.get('aquisitionDate')?.touched)">
+                          {{ error.message }}
+                        </div>
+                      </ng-container>
+                    </div>
+                  </ion-col>
+                </ion-row>
+              </ion-card-content>
+            </ion-card>
+          </div>
+        </div>
+        <div class="btn-container">
+          <ion-button color="neutral-btn mr-05" (click)="addFlockDetails()">Add flock</ion-button>
+          <ion-button color="positive-btn" [disabled]="flockDetailsForm.invalid" (click)="saveFlock()">Save</ion-button>
+        </div>
+      </form>
+    </ion-col>
+    <ion-col size-xs="12" size-md="6">
+      <div class="divider-wrapper">
+        <div>
+          <img class="transfer-divider-img" src='./assets/flaticon/add-cage.png'>
+        </div>
+        <div class="divider-text">
+          <ion-item-divider>
+            <ion-label>Add cage(s)</ion-label>
+          </ion-item-divider>
+        </div>
+      </div>
+      <form [formGroup]="cageDetailsForm">
+        <div formArrayName="cageDetails" *ngFor="let cageDetails of cageDetailsFields?.controls; let i = index">
+          <div [formGroupName]="i">
+            <ion-card>
+              <ion-card-content>
+                <div class="form-array-index">
+                  <h6>Cage {{i + 1}}</h6>
+                  <ion-button *ngIf="cageDetailsFields != null && cageDetailsFields.length > 1"
+                    (click)="removeCageDetails(i)" class="delete-product-btn" color="gunung-nago-warehouse"><ion-icon
+                      name="trash"></ion-icon></ion-button>
+                </div>
+                <ion-row>
+                  <ion-col size-xs="12" size-md="3">
+                    <ion-toggle labelPlacement="start" class="toggle" formControlName="active"
+                      color="gunung-nago-report">{{
+                      'cage.cage-details.active' | translate }}*</ion-toggle>
+                  </ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col size-xs="12" size-md="3">
+                    <ion-input color="gunung-nago-primary" label="{{ 'cage.cage-details.name' | translate }}*"
+                      label-placement="floating" fill="outline" type="text" clear-input="true" maxlength="5"
+                      formControlName="name" required="true"></ion-input>
+                    <div class="error-messages">
+                      <ng-container *ngFor="let error of errorMessages.name">
+                        <div class="error-message"
+                          *ngIf="cageDetails.get('name')?.hasError(error.type) && (cageDetails.get('name')?.dirty || cageDetails.get('name')?.touched)">
+                          {{ error.message }}
+                        </div>
+                      </ng-container>
+                    </div>
+                  </ion-col>
+                  <ion-col size-xs="12" size-md="3">
+                    <ion-select color="gunung-nago-primary" label="{{ 'cage.cage-details.cage-category' | translate }}"
+                      label-placement="floating" fill="outline" interface="popover" required="true"
+                      placeholder="{{ 'cage.cage-details.cage-category' | translate }}" formControlName="cageCategory">
+                      <ion-select-option *ngFor="let category of cageCategories" [value]="category">{{ category
+                        }}</ion-select-option>
+                    </ion-select>
+                    <div class="error-messages">
+                      <ng-container *ngFor="let error of errorMessages.cageCategory">
+                        <div class="error-message"
+                          *ngIf="cageDetails.get('cageCategory')?.hasError(error.type) && (cageDetails.get('cageCategory')?.dirty || cageDetails.get('cageCategory')?.touched)">
+                          {{ error.message }}
+                        </div>
+                      </ng-container>
+                    </div>
+                  </ion-col>
+                </ion-row>
+              </ion-card-content>
+            </ion-card>
+          </div>
+        </div>
+        <div class="btn-container">
+          <ion-button color="neutral-btn mr-05" (click)="addCageDetails()">Add Cage</ion-button>
+          <ion-button color="positive-btn" [disabled]="cageDetailsForm.invalid" (click)="saveCage()">Save</ion-button>
+        </div>
+      </form>
+    </ion-col>
+  </ion-row>
+</ion-content>

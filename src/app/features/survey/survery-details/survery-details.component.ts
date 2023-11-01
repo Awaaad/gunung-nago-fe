@@ -335,13 +335,9 @@ export class SurveryDetailsComponent implements OnInit {
   }
 
   public save(): void {
-    console.log(this.surveyForm)
-
     this.utilsService.presentLoading();
     this.initialiseSurveyDto();
     this.setFeedSurvey();
-    console.log(this.surveyForm)
-
     this.populateSurveyDtoWithFormValues();
     if (!JSON.parse(this.edit)) {
       this.surveyApiService.save(this.surveyDto).subscribe({

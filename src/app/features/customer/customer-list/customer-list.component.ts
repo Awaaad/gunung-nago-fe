@@ -83,8 +83,8 @@ export class CustomerListComponent {
       sortOrder: this.sortOrder.toUpperCase(),
     }
 
-    this.customerSearchSubscription = this.customerApiService.search(customerSearchCriteriaDto).subscribe(suppliers => {
-      this.infiniteCustomers = [...this.infiniteCustomers, ...suppliers.content];
+    this.customerSearchSubscription = this.customerApiService.search(customerSearchCriteriaDto).subscribe(customers => {
+      this.infiniteCustomers = [...this.infiniteCustomers, ...customers.content];
       this.customers = new MatTableDataSource<CustomerDto>(this.infiniteCustomers);
 
       if (event) {

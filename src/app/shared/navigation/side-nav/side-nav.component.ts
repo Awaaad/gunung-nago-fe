@@ -15,6 +15,7 @@ export class SideNavComponent  implements OnInit {
   public manure = 'assets/flaticon/manure-icon.svg';
   public egg = 'assets/flaticon/egg-icon.svg';
   public pos = 'assets/flaticon/point-of-sale-icon.svg';
+  public transfer = 'assets/flaticon/transfer-icon.svg';
   constructor() { }
 
   ngOnInit() {}

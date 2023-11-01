@@ -100,14 +100,20 @@
             <ion-icon [src]="flock" class="font-size-60"></ion-icon>Flock
           </ion-item>
           <div class="accordion-sub" slot="content">
-            <ion-item routerLink="">
+            <ion-item routerLink="/flock/flock-list">
               <ion-icon name="list" color="dark"></ion-icon>Flock List
+            </ion-item>
+            <ion-item routerLink="/flock/flock-details">
+              <ion-icon name="add" color="dark"></ion-icon>Add Flock
             </ion-item>
             <ion-item routerLink="/flock/flock-sale-details">
               <ion-icon name="pricetag" color="dark"></ion-icon><span>Flock Sale</span>
             </ion-item>
             <ion-item routerLink="/flock/flock-stock">
               <ion-icon [src]="stock" class="font-size-60"></ion-icon>Update Flock Stock
+            </ion-item>
+            <ion-item routerLink="/flock/flock-transfer">
+              <ion-icon [src]="transfer" class="font-size-60"></ion-icon>Flock Transfer
             </ion-item>
           </div>
         </ion-accordion>
@@ -125,7 +131,7 @@
               <ion-icon name="pricetag" color="dark"></ion-icon><span>Egg Sale</span>
             </ion-item>
             <ion-item routerLink="/egg/egg-transfer">
-              <ion-icon [src]="stock" class="font-size-60"></ion-icon>Egg Transfer
+              <ion-icon [src]="transfer" class="font-size-60"></ion-icon>Egg Transfer
             </ion-item>
           </div>
         </ion-accordion>
@@ -174,6 +180,22 @@
             </ion-item>
             <ion-item routerLink="/customer/customer-details">
               <ion-icon name="add" color="dark"></ion-icon>Add Customer
+            </ion-item>
+          </div>
+        </ion-accordion>
+      </ion-accordion-group>
+
+      <ion-accordion-group>
+        <ion-accordion value="first">
+          <ion-item slot="header" color="light">
+            <ion-icon name="people" color="dark"></ion-icon>User
+          </ion-item>
+          <div class="accordion-sub" slot="content">
+            <ion-item routerLink="/user/user-list">
+              <ion-icon name="list" color="dark"></ion-icon>User List
+            </ion-item>
+            <ion-item routerLink="/user/user-details">
+              <ion-icon name="add" color="dark"></ion-icon>Add User
             </ion-item>
           </div>
         </ion-accordion>

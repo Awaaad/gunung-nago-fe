@@ -67,6 +67,10 @@ const routes: Routes = [
     loadChildren: () => import('./features/security/security.module').then(m => m.SecurityModule)
   },
   {
+    path: 'user',
+    loadChildren: () => import('./features/user/user.module').then(m => m.UserModule)
+  },
+  {
     path: '',
     redirectTo: 'security',
     pathMatch: 'full',

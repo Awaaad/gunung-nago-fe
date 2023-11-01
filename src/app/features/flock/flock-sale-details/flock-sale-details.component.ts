@@ -151,7 +151,6 @@ export class FlockSaleDetailsComponent implements OnInit {
     }
     this.flockStockApiService.findTotalFlockStockCount().subscribe(flockStockCountDto => {
       this.flockStockCountDto = flockStockCountDto;
-      console.log(flockStockCountDto);
     })
   }
 

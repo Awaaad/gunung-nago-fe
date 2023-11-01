@@ -25,10 +25,12 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { FlockStockComponent } from './flock-stock/flock-stock.component';
 import { SupplierApiService } from 'src/app/shared/apis/supplier.api.service';
 import { FlockStockApiService } from 'src/app/shared/apis/flock-stock.api.service';
+import { FlockTransferComponent } from './flock-transfer/flock-transfer.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 export const MY_FORMATS = ConstantHelper.dateFormat;
 
 @NgModule({
-  declarations: [FlockListComponent, FlockDetailsComponent, FlockSaleDetailsComponent, FlockStockComponent],
+  declarations: [FlockListComponent, FlockDetailsComponent, FlockSaleDetailsComponent, FlockStockComponent, FlockTransferComponent],
   imports: [
     CommonModule,
     FlockRoutingModule,
@@ -44,6 +46,7 @@ export const MY_FORMATS = ConstantHelper.dateFormat;
     MatAutocompleteModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    DragDropModule
   ],
   providers: [FlockApiService, FlockSaleApiService, SurveyApiService, CageApiService, CustomerApiService, SupplierApiService, FlockStockApiService,
     {

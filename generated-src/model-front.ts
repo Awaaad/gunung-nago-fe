@@ -263,3 +263,15 @@ export class EggTransferFrontDto {
     smallGoodBrokenEggs: number | null | undefined | any;
     badBrokenEggs: number | null | undefined | any;
 }
+
+export class FlockToCage {
+    cageId: number | null | undefined | any;
+    flockId: number | null | undefined | any;
+    name!: string | null | undefined | any;
+    cageName!: string | null | undefined | any;
+    cageCategory!: CageCategory | null | undefined | any;
+}
+
+export class DropCage {
+    flockToCage!: FlockToCage[] | [] | any;
+}

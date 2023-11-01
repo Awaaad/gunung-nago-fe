@@ -141,7 +141,6 @@ export class EggTransferComponent implements OnInit {
 
   public save(): void {
     this.mapToEggTransferDto();
-    console.log(this.eggTransferDto)
     this.utilsService.presentLoading();
     this.eggStockApiService.transfer(this.eggTransferDto).subscribe({
       next: (data: string) => {

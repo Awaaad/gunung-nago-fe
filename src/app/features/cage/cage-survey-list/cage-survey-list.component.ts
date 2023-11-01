@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { CageApiService } from '../../../shared/apis/cage.api.service';
-import { AquisitionType, CageCategory, CageDto } from 'generated-src/model';
+import { AquisitionType, CageCategory, CageDto, FlockCategory } from 'generated-src/model';
 import { SurveyApiService } from '../../../shared/apis/survey.api.service';
 import * as moment from 'moment';
 import { IonModal } from '@ionic/angular';
@@ -17,32 +17,26 @@ import { HttpErrorResponse } from '@angular/common/http';
   templateUrl: './cage-survey-list.component.html',
   styleUrls: ['./cage-survey-list.component.scss'],
 })
-export class CageSurveyListComponent implements OnInit {
+export class CageSurveyListComponent {
   @ViewChild(IonModal) modal!: IonModal;
   public cages: CageDto[] = [];
   public cagesDara: CageDto[] = [];
   public cagesDoc: CageDto[] = [];
   public language = "en";
   public isModalOpen: boolean = false;
-  public isNoActiveFlockAlertOpen: boolean = false;
   public isSurveyAlreadyRecordedAlertOpen: boolean = false;
+  public isFlockAndCageIncompatible: boolean = false;
   public warningMessage: string = '';
   public alertButtons: any[] = [];
   public isResponsePositive: boolean = false;
   public selectedCageId!: number;
 
-  // flock form values
-  public population: number = 0;
-  public dead: number = 0;
-  public sterile: number = 0;
-  public remaining: number = 0;
-  public tie: number = 0;
-  public item: number = 0;
-  public broken: number = 0;
-  public totalItem: number = 0;
-  private flockSaveDto!: FlockSaveFrontDto;
-  public aquisitionTypes: string[] = [];
-  public date: Date = new Date();
+  public transferForm!: FormGroup;
+  public transferCages: CageDto[] = [];
+  public flockId!: number;
+  public flockCategory!: FlockCategory;
+  public cageCategory!: CageCategory;
+
   public today: Date = new Date();
 
   constructor(
@@ -54,8 +48,7 @@ export class CageSurveyListComponent implements OnInit {
     private utilsService: UtilsService
   ) { }
 
-  ngOnInit(): void {
-    this.aquisitionTypes = Object.keys(AquisitionType);
+  ionViewWillEnter(): void {
     this.initialiseAlertButtons();
     this.getAllActiveCages();
   }
@@ -65,22 +58,40 @@ export class CageSurveyListComponent implements OnInit {
   }
 
   public routeToSurveyDetails(cage: CageDto) {
-    this.isNoActiveFlockAlertOpen = false;
     this.isSurveyAlreadyRecordedAlertOpen = false;
+    this.isFlockAndCageIncompatible = false;
     this.selectedCageId = cage.id;
     this.surveyApiService.findIfSurveyHasBeenRegisteredForCage(cage.id).subscribe(data => {
-      if (data == null) {
-        this.warningMessage = 'There are no active flocks for the selected cage. \n Would you like to create one?';
-        this.isNoActiveFlockAlertOpen = true;
-      } else if (data === moment(new Date()).startOf('day').format(moment.HTML5_FMT.DATE)) {
+      // if (data == null) {
+      //   this.warningMessage = 'There are no active flocks for the selected cage. \n Would you like to create one?';
+      //   this.isNoActiveFlockAlertOpen = true;
+      // } else 
+      if (data === moment(new Date()).startOf('day').format(moment.HTML5_FMT.DATE)) {
         this.warningMessage = 'A survey has already been recorded today for the selected cage. \n Would you like to edit the recorded survey?';
         this.isSurveyAlreadyRecordedAlertOpen = true;
       } else {
-        this.isNoActiveFlockAlertOpen = false;
-        this.isSurveyAlreadyRecordedAlertOpen = false;
-        this.router.navigate([`survey/survey-details/${cage.id}/${false}`]);
+        this.surveyApiService.findMostRecentSurveyDtoForCage(cage.id).subscribe(data => {
+          if (data.flockCategory != (cage.cageCategory) as unknown as FlockCategory) {
+            this.isFlockAndCageIncompatible = true;
+            this.flockId = data.flockId;
+            this.flockCategory = data.flockCategory;
+            this.cageCategory = data.cageCategory;
+            this.getAllFreeCages(data.flockCategory);
+            this.initialiseFormBuilder(this.flockId);
+          } else {
+            this.isSurveyAlreadyRecordedAlertOpen = false;
+            this.isFlockAndCageIncompatible = false;
+            this.router.navigate([`survey/survey-details/${cage.id}/${false}`]);
+          }
+        })
       }
     })
+  }
+
+  public skip(): void {
+    this.isFlockAndCageIncompatible = false;
+    this.modal.dismiss(null, 'cancel');
+    this.router.navigate([`survey/survey-details/${this.selectedCageId}/${false}`]);
   }
 
   public getAllActiveCages() {
@@ -88,6 +99,12 @@ export class CageSurveyListComponent implements OnInit {
       this.cagesDoc = cages.filter((cage: { cageCategory: string; }) => cage.cageCategory === CageCategory.DOC);
       this.cagesDara = cages.filter((cage: { cageCategory: string; }) => cage.cageCategory === CageCategory.DARA);
       this.cages = cages.filter((cage: { cageCategory: string; }) => cage.cageCategory === CageCategory.NORM);
+    })
+  }
+
+  public getAllFreeCages(cageCategory: string) {
+    this.cageApiService.getAllInactiveCagesByCategory(cageCategory).subscribe(cages => {
+      this.transferCages = cages;
     })
   }
 
@@ -117,73 +134,22 @@ export class CageSurveyListComponent implements OnInit {
     if (this.isSurveyAlreadyRecordedAlertOpen && this.isResponsePositive === true) {
       this.router.navigate([`survey/survey-details/${this.selectedCageId}/${true}`]);
     }
-    if (this.isNoActiveFlockAlertOpen && this.isResponsePositive === true) {
-      this.isNoActiveFlockAlertOpen = false;
-      this.isModalOpen = true;
-    }
   }
 
-  public flockForm = new FormGroup({
-    age: new FormControl({ value: 1, disabled: false }, Validators.compose([])),
-    population: new FormControl({ value: this.population, disabled: false }, Validators.compose([])),
-    dead: new FormControl({ value: this.dead, disabled: false }, Validators.compose([])),
-    sterile: new FormControl({ value: this.sterile, disabled: false }, Validators.compose([])),
-    tie: new FormControl({ value: this.tie, disabled: false }, Validators.compose([])),
-    item: new FormControl({ value: this.item, disabled: false }, Validators.compose([])),
-    broken: new FormControl({ value: this.broken, disabled: false }, Validators.compose([])),
-    aquisitionDate: new FormControl({ value: this.date, disabled: false }, Validators.compose([])),
-    aquisitionType: new FormControl({ value: AquisitionType.PURCHASE, disabled: false }, Validators.compose([])),
-    cageId: new FormControl({ value: this.selectedCageId, disabled: false }),
-  });
-
-  public calculateRemaining() {
-    this.remaining = this.population - (this.dead + this.sterile)
+  private initialiseFormBuilder(flockId: number): void {
+    this.transferForm = new FormGroup({
+      flockId: new FormControl({ value: flockId, disabled: false }, Validators.compose([])),
+      cageId: new FormControl({ value: null, disabled: false }, Validators.compose([])),
+    });
   }
 
-  public calculateTotalItem() {
-    this.totalItem = (this.tie * 300) + this.item + this.broken;
-  }
-
-  private initialiseFlockSaveDto(): void {
-    // this.flockSaveDto = {
-    //   id: null,
-    //   active: true,
-    //   initialAge: null,
-    //   initialQuantity: null,
-    //   aquisitionDate: null,
-    //   aquisitionType: null,
-    //   cageId: null,
-    //   death: null,
-    //   sterile: null,
-    //   badEggs: null,
-    //   goodEggs: null
-    // }
-  }
-
-  private populateFlockSaveDtoWithFormValues(): void {
-    // this.flockSaveDto = {
-    //   id: null,
-    //   active: true,
-    //   initialAge: this.flockForm.value.age,
-    //   initialQuantity: this.flockForm.value.population,
-    //   aquisitionDate: this.flockForm.value.aquisitionDate,
-    //   aquisitionType: this.flockForm.value.aquisitionType,
-    //   cageId: this.selectedCageId,
-    //   death: this.flockForm.value.dead,
-    //   sterile: this.flockForm.value.sterile,
-    //   badEggs: this.broken,
-    //   goodEggs: (this.tie * 300) + this.item
-    // };
-  }
-
-  private saveFlock(): void {
+  private saveTransfer(): void {
     this.utilsService.presentLoading();
-    this.initialiseFlockSaveDto();
-    this.populateFlockSaveDtoWithFormValues();
-    this.flockApiService.save(this.flockSaveDto).subscribe({
+    this.flockApiService.transferFlockToCage([this.transferForm.value]).subscribe({
       next: (data: string) => {
         this.utilsService.dismissLoading();
-        this.utilsService.successMsg('Flock successfully saved');
+        this.utilsService.successMsg('Flock transferred successfully');
+        this.router.navigate([`survey/survey-details/${this.transferForm.value.cageId}/${false}`]);
       },
       error: (error: HttpErrorResponse) => {
         this.utilsService.dismissLoading();
@@ -193,7 +159,7 @@ export class CageSurveyListComponent implements OnInit {
   }
 
   public cancel(): void {
-    this.isModalOpen = false;
+    this.isFlockAndCageIncompatible = false;
     this.modal.dismiss(null, 'cancel');
   }
 
@@ -204,10 +170,10 @@ export class CageSurveyListComponent implements OnInit {
   public onWillDismiss(event: Event): void {
     const ev = event as CustomEvent<OverlayEventDetail<string>>;
     if (ev.detail.role === 'backdrop') {
-      this.isModalOpen = false;
+      this.isFlockAndCageIncompatible = false;
     }
     if (ev.detail.role === 'confirm') {
-      this.saveFlock();
+      this.saveTransfer();
     }
   }
 }

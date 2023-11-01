@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { FlockDto, FlockPurchaseDto } from 'generated-src/model';
+import { FlockCageTransferDto, FlockDto, FlockPurchaseDto } from 'generated-src/model';
 import { FlockSaveFrontDto, PageResult } from 'generated-src/model-front';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -12,14 +12,22 @@ export class FlockApiService {
   constructor(private http: HttpClient) { }
 
   public save(flockSaveDto: FlockSaveFrontDto): Observable<any> {
-    return this.http.post(`${this.baseUrl}`, flockSaveDto, {responseType: 'text'});
+    return this.http.post(`${this.baseUrl}`, flockSaveDto, { responseType: 'text' });
   }
 
   public search(searchValues: any): Observable<PageResult<FlockDto>> {
     return this.http.get<PageResult<FlockDto>>(`${this.baseUrl}search`, { params: searchValues });
   }
 
+  public findAllActiveFlocksWithoutCage(): Observable<FlockDto[]> {
+    return this.http.get<FlockDto[]>(`${this.baseUrl}no-cage`);
+  }
+
   public updateFlockStock(flockPurchaseDto: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}stock`, flockPurchaseDto, {responseType: 'text'});
+    return this.http.post(`${this.baseUrl}stock`, flockPurchaseDto, { responseType: 'text' });
+  }
+
+  public transferFlockToCage(flockCageTransferDtos: FlockCageTransferDto[]): Observable<any> {
+    return this.http.put(`${this.baseUrl}transfer`, flockCageTransferDtos, { responseType: 'text' });
   }
 }

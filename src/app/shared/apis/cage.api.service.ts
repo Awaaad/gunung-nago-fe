@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
 import { PageResult } from 'generated-src/model-front';
-import { CageDto } from 'generated-src/model';
+import { CageCategory, CageDto } from 'generated-src/model';
 
 @Injectable()
 export class CageApiService {
@@ -12,7 +12,7 @@ export class CageApiService {
   constructor(private http: HttpClient) { }
 
   public save(cages: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}`, cages, {responseType: 'text'});
+    return this.http.post(`${this.baseUrl}`, cages, { responseType: 'text' });
   }
 
   public edit(cageDto: CageDto): Observable<any> {
@@ -29,5 +29,13 @@ export class CageApiService {
 
   public getAllActiveCages(): Observable<CageDto[]> {
     return this.http.get<CageDto[]>(`${this.baseUrl}all`);
+  }
+
+  public getAllInactiveCages(): Observable<CageDto[]> {
+    return this.http.get<CageDto[]>(`${this.baseUrl}all/inactive`);
+  }
+
+  public getAllInactiveCagesByCategory(cageCategory: string): Observable<CageDto[]> {
+    return this.http.get<CageDto[]>(`${this.baseUrl}all/inactive/${cageCategory}`);
   }
 }

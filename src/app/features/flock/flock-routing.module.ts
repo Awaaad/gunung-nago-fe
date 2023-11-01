@@ -4,6 +4,7 @@ import { FlockListComponent } from './flock-list/flock-list.component';
 import { FlockDetailsComponent } from './flock-details/flock-details.component';
 import { FlockSaleDetailsComponent } from './flock-sale-details/flock-sale-details.component';
 import { FlockStockComponent } from './flock-stock/flock-stock.component';
+import { FlockTransferComponent } from './flock-transfer/flock-transfer.component';
 
 const routes: Routes = [
   {
@@ -21,6 +22,10 @@ const routes: Routes = [
   {
     path: 'flock-stock',
     component: FlockStockComponent
+  },
+  {
+    path: 'flock-transfer',
+    component: FlockTransferComponent
   },
 ];
 

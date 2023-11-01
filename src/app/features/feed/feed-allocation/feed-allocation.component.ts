@@ -65,7 +65,6 @@ export class FeedAllocationComponent implements OnInit {
 
   public changedSelectedFeedStock(feedStock: FeedStockDto): void {
     this.toBeSelectedFeedStock = feedStock;
-    console.log(this.selectedFeedStock.id != 0 && this.selectedFeedStock.id != feedStock.id)
     if (this.selectedFeedStock.id != 0 && this.selectedFeedStock.id != feedStock.id) {
       this.isChangeInFeedStock = true;
     } else {
@@ -146,6 +145,9 @@ export class FeedAllocationComponent implements OnInit {
     this.utilsService.presentLoading();
     this.flockFeedLineApiService.allocateFeedStockToFlock(this.cages).subscribe({
       next: (data: string) => {
+        this.initialiseSelectedFeedStock();
+        this.toBeSelectedFeedStock = this.selectedFeedStock;
+        this.isChangeInFeedStock = false;
         this.cages = [];
         this.cagesNorm = [];
         this.cagesDara = [];
@@ -162,6 +164,13 @@ export class FeedAllocationComponent implements OnInit {
   }
 
   public cancel(): void {
-
+    this.initialiseSelectedFeedStock();
+    this.toBeSelectedFeedStock = this.selectedFeedStock;
+    this.cages = [];
+    this.cagesNorm = [];
+    this.cagesDara = [];
+    this.cagesDoc = [];
+    this.findAllFeedStockForAllocation();
+    this.isChangeInFeedStock = false;
   }
 }

@@ -21,7 +21,7 @@ export class FlockListComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   public language = "en";
-  public displayedColumns: string[] = ['cageName', 'active', 'initialAge', 'initialFlockCategory', 'initialQuantity', 'aquisitionDate', 'aquisitionType'];
+  public displayedColumns: string[] = ['name', 'cageName', 'active', 'initialAge', 'initialFlockCategory', 'initialQuantity', 'aquisitionDate', 'aquisitionType'];
   public flocks = new MatTableDataSource<FlockDto>;
   private infiniteFlocks: FlockDto[] = [];
   public flockSearchSubscription!: Subscription;

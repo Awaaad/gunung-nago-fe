@@ -6,7 +6,7 @@
     <ion-title>
       <div class="router-links">
         <div class="title">
-          <img class="header-logo" src='./assets/icon/chicken/icons8-chicken-64.png'>
+          <img class="header-logo" src='./assets/flaticon/add-flock.png'>
           <h3 class="header-nav-products">{{ 'flock.flock-details.flock-details' | translate }}</h3>
         </div>
         <div>
@@ -25,67 +25,100 @@
 
 <ion-content [fullscreen]="false" class="ion-padding">
   <form [formGroup]="flockDetailsForm">
-    <ion-card>
-      <ion-card-content>
+    <div formArrayName="flockDetails" *ngFor="let flockDetails of flockDetailsFields?.controls; let i = index">
+      <div [formGroupName]="i">
+        <ion-card>
+          <ion-card-content>
+            <div class="form-array-index">
+              <h6>Flock {{i + 1}}</h6>
+              <ion-button *ngIf="flockDetailsFields != null && flockDetailsFields.length > 1"
+                (click)="removeFlockDetails(i)" class="delete-product-btn" color="gunung-nago-warehouse"><ion-icon
+                  name="trash"></ion-icon></ion-button>
+            </div>
+            <ion-row>
+              <ion-col size-xs="12" size-md="3">
+                <ion-input color="gunung-nago-primary" label="Name" label-placement="floating" fill="outline"
+                  type="text" clear-input="true" formControlName="name"></ion-input>
+              </ion-col>
+              <ion-col size-xs="12" size-md="3">
+                <ion-input color="gunung-nago-primary" label="Age" label-placement="floating" fill="outline"
+                  type="number" min="0" clear-input="true" formControlName="initialAge"></ion-input>
+                <div class="error-messages">
+                  <ng-container *ngFor="let error of errorMessages.initialAge">
+                    <div class="error-message"
+                      *ngIf="flockDetails.get('initialAge')?.hasError(error.type) && (flockDetails.get('initialAge')?.dirty || flockDetails.get('initialAge')?.touched)">
+                      {{ error.message }}
+                    </div>
+                  </ng-container>
+                </div>
+              </ion-col>
+              <ion-col size-xs="12" size-md="3">
+                <ion-input color="gunung-nago-primary" label="Quantity" label-placement="floating" fill="outline"
+                  type="number" min="0" clear-input="true" formControlName="initialQuantity"></ion-input>
+                <div class="error-messages">
+                  <ng-container *ngFor="let error of errorMessages.initialQuantity">
+                    <div class="error-message"
+                      *ngIf="flockDetails.get('initialQuantity')?.hasError(error.type) && (flockDetails.get('initialQuantity')?.dirty || flockDetails.get('initialQuantity')?.touched)">
+                      {{ error.message }}
+                    </div>
+                  </ng-container>
+                </div>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size-xs="12" size-md="3">
+                <ion-select color="gunung-nago-primary" label="{{ 'flock.flock-details.aquisition-type' | translate }}"
+                  label-placement="floating" fill="outline" interface="popover"
+                  placeholder="{{ 'flock.flock-details.aquisition-type' | translate }}"
+                  formControlName="aquisitionType">
+                  <ion-select-option value="PURCHASE">Purchase</ion-select-option>
+                  <!-- <ion-select-option value="BORN_ON_FARM">Born on farm</ion-select-option> -->
+                </ion-select>
+                <div class="error-messages">
+                  <ng-container *ngFor="let error of errorMessages.aquisitionType">
+                    <div class="error-message"
+                      *ngIf="flockDetails.get('aquisitionType')?.hasError(error.type) && (flockDetails.get('aquisitionType')?.dirty || flockDetails.get('aquisitionType')?.touched)">
+                      {{ error.message }}
+                    </div>
+                  </ng-container>
+                </div>
+              </ion-col>
 
-        <ion-item-divider>
-          <ion-label>{{ 'flock.flock-details.cage' | translate }}</ion-label>
-        </ion-item-divider>
-        <ion-row>
-          <ion-col size-xs="12" size-md="3">
-            <ion-select color="gunung-nago-primary" label="{{ 'flock.flock-details.cage' | translate }}"
-              label-placement="floating" fill="outline" interface="popover"
-              placeholder="{{ 'flock.flock-details.cage' | translate }}" formControlName="cageId">
-              <ion-select-option value="1">A</ion-select-option>
-              <ion-select-option value="2">B</ion-select-option>
-              <ion-select-option value="3">C</ion-select-option>
-            </ion-select>
-          </ion-col>
-        </ion-row>
+              <ion-col size-xs="12" size-md="3">
+                <mat-form-field class="date-full-width" appearance="outline">
+                  <mat-label>Aquisition Date</mat-label>
+                  <input matInput [matDatepicker]="picker" [max]="today" formControlName="aquisitionDate">
+                  <mat-hint>DD/MM/YYYY</mat-hint>
+                  <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+                <div class="error-messages">
+                  <ng-container *ngFor="let error of errorMessages.aquisitionDate">
+                    <div class="error-message"
+                      *ngIf="flockDetails.get('aquisitionDate')?.hasError(error.type) && (flockDetails.get('aquisitionDate')?.dirty || flockDetails.get('aquisitionDate')?.touched)">
+                      {{ error.message }}
+                    </div>
+                  </ng-container>
+                </div>
+              </ion-col>
+            </ion-row>
 
-        <ion-item-divider>
-          <ion-label>{{ 'flock.flock-details.general' | translate }}</ion-label>
-        </ion-item-divider>
-        <ion-row>
-          <ion-col size-xs="12" size-md="3">
-            <ion-input color="gunung-nago-primary" label="{{ 'flock.flock-details.initial-age' | translate }}"
-              label-placement="floating" fill="outline" type="number" min="0" clear-input="true"
-              formControlName="initialAge"></ion-input>
-          </ion-col>
-          <ion-col size-xs="12" size-md="3">
-            <ion-input color="gunung-nago-primary" label="{{ 'flock.flock-details.initial-population' | translate }}"
-              label-placement="floating" fill="outline" type="number" min="0" clear-input="true"
-              formControlName="initialQuantity"></ion-input>
-          </ion-col>
-        </ion-row>
-
-        <ion-item-divider>
-          <ion-label>{{ 'flock.flock-details.aquisition' | translate }}</ion-label>
-        </ion-item-divider>
-        <ion-row>
-          <ion-col size-xs="12" size-md="3">
-            <ion-select color="gunung-nago-primary" label="{{ 'flock.flock-details.aquisition-type' | translate }}"
-              label-placement="floating" fill="outline" interface="popover"
-              placeholder="{{ 'flock.flock-details.aquisition-type' | translate }}" formControlName="aquisitionType">
-              <ion-select-option value="PURCHASE">Purchase</ion-select-option>
-              <ion-select-option value="BORN_ON_FARM">Born on farm</ion-select-option>
-            </ion-select>
-          </ion-col>
-
-          <ion-col size-xs="12" size-md="3">
-            <ion-input color="gunung-nago-primary" label="{{ 'flock.flock-details.aquisition-date' | translate }}"
-              label-placement="floating" fill="outline" type="number" min="0" clear-input="true"
-              formControlName="aquisitionDate"></ion-input>
-            <!-- <ion-datetime color="gunung-nago-primary" label-placement="floating" fill="outline"></ion-datetime> -->
-          </ion-col>
-        </ion-row>
-      </ion-card-content>
-
-      <div class="btn-container">
-        <ion-button class="cancel-btn">Cancel</ion-button>
-        <ion-button color="gunung-nago-primary">Save</ion-button>
+            <ion-row>
+              <ion-col size-xs="12" size-md="3">
+                <ion-select color="gunung-nago-primary" label="Cage" label-placement="floating" fill="outline"
+                  interface="popover" formControlName="cageId">
+                  <ion-select-option *ngFor="let cage of cages" [value]="cage.id">{{
+                    cage.name}}</ion-select-option>
+                </ion-select>
+              </ion-col>
+            </ion-row>
+          </ion-card-content>
+        </ion-card>
       </div>
-
-    </ion-card>
+    </div>
+    <div class="btn-container">
+      <ion-button color="neutral-btn mr-05" (click)="addFlockDetails()">Add flock</ion-button>
+      <ion-button color="positive-btn" [disabled]="flockDetailsForm.invalid" (click)="save()">Save</ion-button>
+    </div>
   </form>
 </ion-content>
