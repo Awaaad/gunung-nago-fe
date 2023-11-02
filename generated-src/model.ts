@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2023-11-01 17:58:28.
+// Generated using typescript-generator version 3.2.1263 on 2023-11-02 12:29:57.
 
 export class CageDto {
     id!: number;
@@ -85,6 +85,10 @@ export class EggStockDto {
     smallEggs!: number;
     badEggs!: number;
     totalEggs!: number;
+    createdBy!: string;
+    lastModifiedBy!: string;
+    createdDate!: Date;
+    lastModifiedDate!: Date;
 }
 
 export class EggStockDtoBuilder {
@@ -166,6 +170,7 @@ export class FeedSurveyDto {
 export class FlockCageTransferDto {
     flockId!: number;
     cageId!: number;
+    quantity!: number;
 }
 
 export class FlockDto {
@@ -668,6 +673,7 @@ export class SurveyDto {
     manureWeight!: number;
     amountOfChickenWeighted!: number;
     totalWeight!: number;
+    createdDate!: Date;
     healthSurveyDtos!: HealthSurveyDto[];
     feedSurveyDtos!: FeedSurveyDto[];
 }

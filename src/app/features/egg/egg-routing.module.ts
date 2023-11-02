@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { EggSaleDetailsComponent } from './egg-sale-details/egg-sale-details.component';
 import { EggTransferComponent } from './egg-transfer/egg-transfer.component';
+import { EggStockComponent } from './egg-stock/egg-stock.component';
 
 const routes: Routes = [
   {
@@ -11,6 +12,10 @@ const routes: Routes = [
   {
     path: 'egg-transfer',
     component: EggTransferComponent
+  },
+  {
+    path: 'egg-stock',
+    component: EggStockComponent
   },
 ];
 

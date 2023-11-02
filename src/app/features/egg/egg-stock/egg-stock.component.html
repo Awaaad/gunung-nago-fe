@@ -1,0 +1,214 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      <div class="router-links">
+        <div class="title">
+          <img class="header-logo" src='./assets/flaticon/egg-stock.png'>
+          <h3 class="header-nav-products">Egg Stock</h3>
+        </div>
+        <div>
+          <ion-item class="language-selection">
+            <ion-select aria-label="language" interface="popover" placeholder="Select language" [(ngModel)]="language"
+              (ionChange)="ionChangeLanguage($event)">
+              <ion-select-option value="en">English</ion-select-option>
+              <ion-select-option value="id">Indonesian</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </div>
+      </div>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="false" class="ion-padding">
+  <ion-row>
+    <ion-col col-md-12 size="12" size-sm>
+      <ion-card>
+        <ion-card-content>
+          <div class="good-bad-egg-section">
+            <div class="egg-section">
+              <div>
+                <strong>Total</strong>
+              </div>
+              <img class="eggs" src='./assets/flaticon/eggs.png'>
+              <div class="egg-count">
+                <strong>{{eggStock.totalEggs}}</strong>
+              </div>
+            </div>
+
+            <div class="egg-section">
+              <div>
+                <strong>Good</strong>
+              </div>
+              <img class="eggs" src='./assets/flaticon/good-eggs.png'>
+              <div class="egg-count">
+                <strong>{{eggStock.goodEggs}}</strong>
+              </div>
+            </div>
+
+            <div class="egg-section">
+              <div>
+                <strong>Bad</strong>
+              </div>
+              <img class="eggs" src='./assets/flaticon/bad-eggs.png'>
+              <div class="egg-count">
+                <strong>{{eggStock.badEggs}}</strong>
+              </div>
+            </div>
+
+            <div class="egg-section">
+              <div>
+                <strong>Created By</strong>
+              </div>
+              <img class="eggs" src='./assets/flaticon/user.png'>
+              <div class="egg-count">
+                <strong>{{eggStock.createdBy | titlecase}}</strong>
+              </div>
+            </div>
+
+            <div class="egg-section">
+              <div>
+                <strong>Last Modified By</strong>
+              </div>
+              <img class="eggs" src='./assets/flaticon/user.png'>
+              <div class="egg-count">
+                <strong>{{eggStock.lastModifiedBy | titlecase}}</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="good-bad-egg-section">
+            <div class="egg-section">
+              <div>
+                <strong>Big</strong>
+              </div>
+              <img class="eggs" src='./assets/flaticon/category-big.png'>
+              <div class="egg-count">
+                <strong>{{eggStock.bigEggs}}</strong>
+              </div>
+            </div>
+            <div class="egg-section">
+              <div>
+                <strong>Medium</strong>
+              </div>
+              <img class="eggs medium-category" src='./assets/flaticon/category-medium.png'>
+              <div class="egg-count">
+                <strong>{{eggStock.mediumEggs}}</strong>
+              </div>
+            </div>
+            <div class="egg-section">
+              <div>
+                <strong>Small</strong>
+              </div>
+              <img class="eggs small-category" src='./assets/flaticon/category-small.png'>
+              <div class="egg-count">
+                <strong>{{eggStock.smallEggs}}</strong>
+              </div>
+            </div>
+
+            <div class="egg-section">
+              <div>
+                <strong>Created Date</strong>
+              </div>
+              <img class="eggs" src='./assets/flaticon/clock.png'>
+              <div class="egg-count">
+                <strong>{{eggStock.createdDate | date:'dd-MM-yyyy HH:mm'}}</strong>
+              </div>
+            </div>
+
+            <div class="egg-section">
+              <div>
+                <strong>Last Modified Date</strong>
+              </div>
+              <img class="eggs" src='./assets/flaticon/clock.png'>
+              <div class="egg-count">
+                <strong>{{eggStock.lastModifiedDate | date:'dd-MM-yyyy HH:mm'}}</strong>
+              </div>
+            </div>
+          </div>
+
+        </ion-card-content>
+      </ion-card>
+    </ion-col>
+  </ion-row>
+  <div class="btn-container">
+    <ion-button color="neutral-btn" (click)="openModal(eggStock)">Edit</ion-button>
+  </div>
+
+  <ion-modal (willDismiss)="onWillDismiss($event)" [isOpen]="isModalOpen" cssClass="customer-modal"
+    backdropDismiss="true">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <div class="title">
+            <img class="header-logo ml-15" src='./assets/flaticon/edit.png'>
+            <h3 class="modal-header-text">Edit Egg Stock</h3>
+          </div>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content [fullscreen]="false" class="ion-padding">
+        <form [formGroup]="eggStockEditForm">
+          <ion-row>
+            <ion-col size-xs="12" size-md="6">
+              <ion-input color="gunung-nago-primary" label="Big Eggs*" label-placement="floating" fill="outline"
+                type="text" clear-input="true" formControlName="bigEggs" required="true"></ion-input>
+              <div class="error-messages">
+                <ng-container *ngFor="let error of errorMessages.bigEggs">
+                  <div class="error-message"
+                    *ngIf="eggStockEditForm.get('bigEggs')?.hasError(error.type) && (eggStockEditForm.get('bigEggs')?.dirty || eggStockEditForm.get('bigEggs')?.touched)">
+                    {{ error.message }}
+                  </div>
+                </ng-container>
+              </div>
+            </ion-col>
+            <ion-col size-xs="12" size-md="6">
+              <ion-input color="gunung-nago-primary" label="Medium Eggs*" label-placement="floating" fill="outline"
+                type="text" clear-input="true" formControlName="mediumEggs" required="true"></ion-input>
+              <div class="error-messages">
+                <ng-container *ngFor="let error of errorMessages.mediumEggs">
+                  <div class="error-message"
+                    *ngIf="eggStockEditForm.get('mediumEggs')?.hasError(error.type) && (eggStockEditForm.get('mediumEggs')?.dirty || eggStockEditForm.get('mediumEggs')?.touched)">
+                    {{ error.message }}
+                  </div>
+                </ng-container>
+              </div>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size-xs="12" size-md="6">
+              <ion-input color="gunung-nago-primary" label="Small Eggs*" label-placement="floating" fill="outline"
+                type="text" clear-input="true" formControlName="smallEggs" required="true"></ion-input>
+              <div class="error-messages">
+                <ng-container *ngFor="let error of errorMessages.smallEggs">
+                  <div class="error-message"
+                    *ngIf="eggStockEditForm.get('smallEggs')?.hasError(error.type) && (eggStockEditForm.get('smallEggs')?.dirty || eggStockEditForm.get('smallEggs')?.touched)">
+                    {{ error.message }}
+                  </div>
+                </ng-container>
+              </div>
+            </ion-col>
+            <ion-col size-xs="12" size-md="6">
+              <ion-input color="gunung-nago-primary" label="Bad Eggs*" label-placement="floating" fill="outline"
+                type="text" clear-input="true" formControlName="badEggs" required="true"></ion-input>
+              <div class="error-messages">
+                <ng-container *ngFor="let error of errorMessages.badEggs">
+                  <div class="error-message"
+                    *ngIf="eggStockEditForm.get('badEggs')?.hasError(error.type) && (eggStockEditForm.get('badEggs')?.dirty || eggStockEditForm.get('badEggs')?.touched)">
+                    {{ error.message }}
+                  </div>
+                </ng-container>
+              </div>
+            </ion-col>
+          </ion-row>
+        </form>
+        <div class="modal-btn-container ion-text-right">
+          <ion-button class="cancel-btn" (click)="cancel()">Cancel</ion-button>
+          <ion-button color="positive-btn" (click)="confirm()" [disabled]="eggStockEditForm.invalid">Save</ion-button>
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+</ion-content>

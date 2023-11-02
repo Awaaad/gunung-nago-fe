@@ -1,7 +1,8 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { EggStockDto, EggTransferDto } from 'generated-src/model';
+import { EggTransferDto } from 'generated-src/model';
+import { EggStockFrontDto } from 'generated-src/model-front';
 import { EggStockApiService } from 'src/app/shared/apis/egg-stock.api.service';
 import { UtilsService } from 'src/app/shared/utils/utils.service';
 
@@ -12,7 +13,7 @@ import { UtilsService } from 'src/app/shared/utils/utils.service';
 })
 export class EggTransferComponent implements OnInit {
   public language = "en";
-  public eggStock!: EggStockDto;
+  public eggStock!: EggStockFrontDto;
   public eggTransferDto!: EggTransferDto;
 
   public big: boolean = false;
@@ -67,7 +68,11 @@ export class EggTransferComponent implements OnInit {
       mediumEggs: 0,
       smallEggs: 0,
       goodEggs: 0,
-      badEggs: 0
+      badEggs: 0,
+      createdBy: '',
+      lastModifiedBy: 0,
+      createdDate: '',
+      lastModifiedDate: 0,
     }
     this.eggStockApiService.findEggStockForSale().subscribe(eggStock => {
       this.eggStock = eggStock;

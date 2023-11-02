@@ -5,6 +5,7 @@ import { FlockDetailsComponent } from './flock-details/flock-details.component';
 import { FlockSaleDetailsComponent } from './flock-sale-details/flock-sale-details.component';
 import { FlockStockComponent } from './flock-stock/flock-stock.component';
 import { FlockTransferComponent } from './flock-transfer/flock-transfer.component';
+import { FlockCageCategoryTransferComponent } from './flock-cage-category-transfer/flock-cage-category-transfer.component';
 
 const routes: Routes = [
   {
@@ -26,6 +27,10 @@ const routes: Routes = [
   {
     path: 'flock-transfer',
     component: FlockTransferComponent
+  },
+  {
+    path: 'flock-cage-category-transfer',
+    component: FlockCageCategoryTransferComponent
   },
 ];
 

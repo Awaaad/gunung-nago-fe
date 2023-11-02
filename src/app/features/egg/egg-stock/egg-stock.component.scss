@@ -1,0 +1,53 @@
+.subtitle {
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    padding-left: 10px;
+
+    .cart-logo {
+        width: 23px;
+    }
+
+    .cart-text {
+        font-size: 24px;
+        padding-top: 8px;
+        margin-top: 5px;
+        padding-left: 5px;
+    }
+}
+
+.form-section-cart {
+    font-weight: 500;
+    padding-top: 9px;
+    padding-left: 7px;
+    color: black;
+    font-size: 18px;
+}
+
+.eggs {
+    width: 4em;
+}
+
+.egg-section {
+    text-align: center;
+    color: black;
+    width: 11em;
+}
+
+.egg-count {
+    font-size: 18px;
+}
+
+.good-bad-egg-section {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 1.75em;
+}
+
+.medium-category {
+    margin-top: 3px;
+}
+
+.small-category {
+    margin-top: 19px;
+}

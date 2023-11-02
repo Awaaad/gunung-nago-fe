@@ -1,11 +1,10 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators, FormArray } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
 import { IonModal } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { PaymentType, CustomerDto, EggStockDto, SalesInvoiceCategory, UserDto } from 'generated-src/model';
-import { CustomerFrontDto, EggSaleSaveFrontDto } from 'generated-src/model-front';
+import { PaymentType, CustomerDto, SalesInvoiceCategory, UserDto } from 'generated-src/model';
+import { CustomerFrontDto, EggSaleSaveFrontDto, EggStockFrontDto } from 'generated-src/model-front';
 import * as moment from 'moment';
 import { Subscription, filter, distinctUntilChanged, debounceTime, tap, switchMap, finalize } from 'rxjs';
 import { CustomerApiService } from 'src/app/shared/apis/customer.api.service';
@@ -24,7 +23,7 @@ export class EggSaleDetailsComponent implements OnInit {
   @ViewChild(IonModal) modal!: IonModal;
   public isModalOpen: boolean = false;
   public language = "en";
-  public eggStock!: EggStockDto;
+  public eggStock!: EggStockFrontDto;
   public eggSaleForm!: FormGroup;
   public eggSaleSaveDto!: EggSaleSaveFrontDto;
 
@@ -122,10 +121,8 @@ export class EggSaleDetailsComponent implements OnInit {
   };
 
   constructor(
-    private activatedRoute: ActivatedRoute,
     private customerApiService: CustomerApiService,
     private formBuilder: FormBuilder,
-    private router: Router,
     private eggSaleApiService: EggSaleApiService,
     private eggStockApiService: EggStockApiService,
     private securityApiService: SecurityApiService,
@@ -157,7 +154,11 @@ export class EggSaleDetailsComponent implements OnInit {
       mediumEggs: 0,
       smallEggs: 0,
       goodEggs: 0,
-      badEggs: 0
+      badEggs: 0,
+      createdBy: '',
+      lastModifiedBy: 0,
+      createdDate: '',
+      lastModifiedDate: 0,
     }
     this.eggStockApiService.findEggStockForSale().subscribe(eggStock => {
       this.eggStock = eggStock;
@@ -183,7 +184,7 @@ export class EggSaleDetailsComponent implements OnInit {
     }
   }
 
-  private setCheckbox(eggStock: EggStockDto): void {
+  private setCheckbox(eggStock: EggStockFrontDto): void {
     eggStock.bigEggs > 0 ? this.eggSaleForm?.get("big")?.enable() : this.eggSaleForm?.get("big")?.disable();
     eggStock.mediumEggs > 0 ? this.eggSaleForm?.get("medium")?.enable() : this.eggSaleForm?.get("medium")?.disable();
     eggStock.smallEggs > 0 ? this.eggSaleForm?.get("small")?.enable() : this.eggSaleForm?.get("small")?.disable();

@@ -88,7 +88,8 @@ export class FlockTransferComponent {
           flockId: null,
           cageName: cage.name,
           name: '',
-          cageCategory: cage.cageCategory
+          cageCategory: cage.cageCategory,
+          quantity: null
         }]
         this.dropCages[0].flockToCage.push(flockToCage);
       })
@@ -105,16 +106,12 @@ export class FlockTransferComponent {
     if (event.container.data.length > 1) {
       return;
     } else {
-      if (event.previousContainer === event.container) {
-        moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-      } else {
-        transferArrayItem(
-          event.previousContainer.data,
-          event.container.data,
-          event.previousIndex,
-          event.currentIndex,
-        );
-      }
+      transferArrayItem(
+        this.flocks,
+        event.container.data,
+        this.flocks.findIndex(flock => flock.id === (event.item.data as unknown as FlockDto).id),
+        0,
+      );
     }
     if (event.container.data[0].initialFlockCategory != event.container.data[1].cageCategory as FlockCategory) {
       this.flocks.push(event.container.data[0]);
@@ -162,7 +159,8 @@ export class FlockTransferComponent {
       if (flockCage.length > 1) {
         const flockCageTransferDto: FlockCageTransferDto = {
           flockId: flockCage[0].id,
-          cageId: flockCage[1].cageId
+          cageId: flockCage[1].cageId,
+          quantity: 0
         }
         this.flockCageTransferDtoList.push(flockCageTransferDto);
       }

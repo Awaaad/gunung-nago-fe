@@ -270,8 +270,35 @@ export class FlockToCage {
     name!: string | null | undefined | any;
     cageName!: string | null | undefined | any;
     cageCategory!: CageCategory | null | undefined | any;
+    quantity!: number | null | undefined | any;
 }
 
 export class DropCage {
     flockToCage!: FlockToCage[] | [] | any;
+}
+
+export class EggStockFrontDto {
+    goodEggs!: number | null | undefined | any;
+    bigEggs!: number | null | undefined | any;
+    mediumEggs!: number | null | undefined | any;
+    smallEggs!: number | null | undefined | any;
+    badEggs!: number | null | undefined | any;
+    totalEggs!: number | null | undefined | any;
+    createdBy!: string | null | undefined | any;
+    lastModifiedBy!: string | null | undefined | any;
+    createdDate!: Date | null | undefined | any;
+    lastModifiedDate!: Date | null | undefined | any;
+}
+
+export class FlockFrontDto {
+    id!: number | null | undefined | any;
+    name!: string | null | undefined | any;
+    active!: boolean | null | undefined | any;
+    initialAge!: number | null | undefined | any;
+    initialFlockCategory!: FlockCategory | null | undefined | any;
+    initialQuantity!: number | null | undefined | any;
+    aquisitionDate!: Date | null | undefined | any;
+    aquisitionType!: AquisitionType | null | undefined | any;
+    cageName!: string | null | undefined | any;
+    quantity!: number | null | undefined | any;
 }

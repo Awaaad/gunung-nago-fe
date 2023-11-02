@@ -3,12 +3,11 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { IonModal } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { ManureStockDto, SalesInvoiceCategory, UserDto, PaymentType, CustomerDto, SaleDetailsDto, SalesInvoiceType, EggQuantityType, FlockType, EggType, CageCategory, CageDto, SurveyDto, EggStockDto, FlockStockCountDto } from 'generated-src/model';
-import { ManureSaleSaveFrontDto, CustomerFrontDto, SaleDetailsFrontDto, SaleSaveFrontDto } from 'generated-src/model-front';
+import { ManureStockDto, SalesInvoiceCategory, UserDto, PaymentType, CustomerDto, SalesInvoiceType, EggQuantityType, FlockType, EggType, CageCategory, CageDto, SurveyDto, FlockStockCountDto } from 'generated-src/model';
+import { CustomerFrontDto, SaleDetailsFrontDto, SaleSaveFrontDto, EggStockFrontDto } from 'generated-src/model-front';
 import * as moment from 'moment';
 import { Subscription, filter, distinctUntilChanged, debounceTime, tap, switchMap, finalize } from 'rxjs';
 import { CustomerApiService } from 'src/app/shared/apis/customer.api.service';
-import { ManureSaleApiService } from 'src/app/shared/apis/manure-sale.api.service';
 import { ManureStockApiService } from 'src/app/shared/apis/manure-stock.api.service';
 import { SecurityApiService } from 'src/app/shared/apis/security.api.service';
 import { UtilsService } from 'src/app/shared/utils/utils.service';
@@ -69,7 +68,7 @@ export class PointOfSaleComponent implements OnInit {
   public showManure: boolean = false;
 
   public cages: CageDto[] = [];
-  public eggStock!: EggStockDto;
+  public eggStock!: EggStockFrontDto;
   public manureStock!: ManureStockDto;
   public flockStockCountDto!: FlockStockCountDto;
   public saleSaveDto!: SaleSaveFrontDto;
@@ -199,7 +198,11 @@ export class PointOfSaleComponent implements OnInit {
       mediumEggs: 0,
       smallEggs: 0,
       goodEggs: 0,
-      badEggs: 0
+      badEggs: 0,
+      createdBy: '',
+      lastModifiedBy: 0,
+      createdDate: '',
+      lastModifiedDate: 0,
     }
     this.eggStockApiService.findEggStockForSale().subscribe(eggStock => {
       this.eggStock = eggStock;

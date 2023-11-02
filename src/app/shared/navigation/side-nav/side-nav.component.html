@@ -115,11 +115,12 @@
             <ion-item routerLink="/flock/flock-transfer">
               <ion-icon [src]="transfer" class="font-size-60"></ion-icon>Flock Transfer
             </ion-item>
+            <ion-item routerLink="/flock/flock-cage-category-transfer">
+              <ion-icon [src]="transfer" class="font-size-60"></ion-icon>Flock Cage Category Transfer
+            </ion-item>
           </div>
         </ion-accordion>
       </ion-accordion-group>
-
-
 
       <ion-accordion-group>
         <ion-accordion value="first">
@@ -129,6 +130,9 @@
           <div class="accordion-sub" slot="content">
             <ion-item routerLink="/egg/egg-sale-details" routerDirection="forward">
               <ion-icon name="pricetag" color="dark"></ion-icon><span>Egg Sale</span>
+            </ion-item>
+            <ion-item routerLink="/egg/egg-stock">
+              <ion-icon [src]="stock" class="font-size-60"></ion-icon>Egg Stock
             </ion-item>
             <ion-item routerLink="/egg/egg-transfer">
               <ion-icon [src]="transfer" class="font-size-60"></ion-icon>Egg Transfer
@@ -172,7 +176,7 @@
       <ion-accordion-group>
         <ion-accordion value="first">
           <ion-item slot="header" color="light">
-            <ion-icon name="people" color="dark"></ion-icon>Customer
+            <ion-icon [src]="customer" class="font-size-60"></ion-icon>Customer
           </ion-item>
           <div class="accordion-sub" slot="content">
             <ion-item routerLink="/customer/customer-list">

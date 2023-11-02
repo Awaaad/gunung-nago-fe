@@ -49,7 +49,7 @@
                 <div>
                   <strong>{{flock.name}}</strong>
                 </div>
-                <img class="flocks" src='./assets/flaticon/flock.png'>
+                <img class="flocks" src='./assets/flaticon/flocks.png'>
                 <div class="flock-count">
                   <strong>{{flock.initialFlockCategory}} - QTY: {{flock.initialQuantity}}</strong>
                 </div>
@@ -83,32 +83,12 @@
                   </div>
 
                   <div class="example-list drop-list" cdkDropList [cdkDropListData]="cage" (cdkDropListDropped)="drop($event)">
-                    <!-- <div class="flock-drop-area">
-                      <div>
-
-                      </div>
-
-                      <div class="remove-btn">
-                        <ion-button color="gunung-nago-warehouse" *ngIf="cage[0].name" (click)="remove(cage)"><ion-icon
-                            name="trash"></ion-icon></ion-button>
-                      </div>
-                    </div>
-
-                    <div class="flock-section m-1" *ngIf="cage[0].name">
-                      <div>
-                        <strong>{{cage[0].name}}</strong>
-                      </div>
-                      <img class="flocks-in-cage" src='./assets/flaticon/flock-in-cage.png'>
-                      <div class="flock-count">
-                        <strong>{{cage[0].initialFlockCategory}} - QTY: {{cage[0].initialQuantity}}</strong>
-                      </div>
-                    </div> -->
                     <span class="flock-cage-drop">
                       <div class="flock-section m-1" *ngIf="cage[0].name">
                         <div>
                           <strong>{{cage[0].name}}</strong>
                         </div>
-                        <img class="flocks-in-cage" src='./assets/flaticon/flock-in-cage.png'>
+                        <img class="flocks-in-cage" src='./assets/flaticon/flocks-in-cage.png'>
                         <div class="flock-count">
                           <strong>{{cage[0].initialFlockCategory}} - QTY: {{cage[0].initialQuantity}}</strong>
                         </div>

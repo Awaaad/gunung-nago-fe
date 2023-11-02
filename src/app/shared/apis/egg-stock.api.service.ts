@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { EggStockDto } from 'generated-src/model';
-import { EggTransferFrontDto } from 'generated-src/model-front';
+import { EggStockFrontDto, EggTransferFrontDto } from 'generated-src/model-front';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
@@ -15,7 +15,11 @@ export class EggStockApiService {
     return this.http.get<EggStockDto>(`${this.baseUrl}`);
   }
 
+  public edit(eggStockDto: EggStockFrontDto): Observable<any> {
+    return this.http.put(`${this.baseUrl}`, eggStockDto);
+  }
+
   public transfer(eggTransferDto: EggTransferFrontDto): Observable<any> {
     return this.http.post(`${this.baseUrl}transfer`, eggTransferDto, { responseType: 'text' });
-}
+  }
 }
