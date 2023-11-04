@@ -1,14 +1,14 @@
-import { CdkDragDrop, copyArrayItem, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, copyArrayItem } from '@angular/cdk/drag-drop';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormArray } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
-import { FlockDto, FlockCageTransferDto, FlockCategory } from 'generated-src/model';
-import { FlockToCage, DropCage, FlockFrontDto } from 'generated-src/model-front';
+import { FlockCageTransferDto, FlockCategory } from 'generated-src/model';
+import { FlockToCage, DropCage, FlockCageIncompatibleFrontDto } from 'generated-src/model-front';
 import { CageApiService } from 'src/app/shared/apis/cage.api.service';
 import { FlockApiService } from 'src/app/shared/apis/flock.api.service';
 import { UtilsService } from 'src/app/shared/utils/utils.service';
-import { cloneDeep, drop } from 'lodash';
+import { cloneDeep } from 'lodash';
 const _ = { cloneDeep };
 
 @Component({
@@ -18,7 +18,7 @@ const _ = { cloneDeep };
 })
 export class FlockCageCategoryTransferComponent implements OnInit {
   public language = "en";
-  public flocks: FlockFrontDto[] = [];
+  public flocks: FlockCageIncompatibleFrontDto[] = [];
   public flockToCageList: FlockToCage[] = [];
   public dropCages: DropCage[] = [];
   public flockCageTransferDtoList: FlockCageTransferDto[] = [];
@@ -35,7 +35,7 @@ export class FlockCageCategoryTransferComponent implements OnInit {
   ngOnInit() { }
 
   ionViewWillEnter() {
-    this.getAllActiveFlocksWithoutCage();
+    this.getFlocksWithIncompatibleCages();
     this.getAllFreeCages();
     this.dropCages = [{
       flockToCage: []
@@ -62,8 +62,8 @@ export class FlockCageCategoryTransferComponent implements OnInit {
     })
   }
 
-  private getAllActiveFlocksWithoutCage(): void {
-    this.flockApiService.findAllActiveFlocksWithoutCage().subscribe(flocks => {
+  private getFlocksWithIncompatibleCages(): void {
+    this.flockApiService.findFlocksWithIncompatibleCages().subscribe(flocks => {
       this.flocks = flocks;
       this.flocks.forEach(flock => {
         flock.quantity = flock.initialQuantity;
@@ -79,7 +79,7 @@ export class FlockCageCategoryTransferComponent implements OnInit {
       copyArrayItem(
         this.flocks,
         event.container.data,
-        this.flocks.findIndex(flock => flock.id === (event.item.data as unknown as FlockDto).id),
+        this.flocks.findIndex(flock => flock.flockId === (event.item.data as unknown as FlockCageIncompatibleFrontDto).flockId),
         1,
       );
     }
@@ -90,8 +90,8 @@ export class FlockCageCategoryTransferComponent implements OnInit {
 
   public remove(flock: any): void {
     console.log(flock);
-    const x: FlockFrontDto = flock[1];
-    const retrievedFlock = this.flocks.find(flock => flock.id === x.id);
+    const x: FlockCageIncompatibleFrontDto = flock[1];
+    const retrievedFlock = this.flocks.find(flock => flock.flockId === x.flockId);
     if (retrievedFlock != null) {
       retrievedFlock.quantity = retrievedFlock.initialQuantity;
     }
@@ -99,21 +99,22 @@ export class FlockCageCategoryTransferComponent implements OnInit {
   }
 
   public decreaseFlockQuantity(event: any, flockToCage: any) {
+    console.log(flockToCage)
     this.disableSave = false;
-    const flock = this.flocks.find(flock => flock.id === flockToCage[1].id);
+    const flock = this.flocks.find(flock => flock.flockId === flockToCage[1].flockId);
 
     if ((this.dropCages.map(dropCage => dropCage.flockToCage)[0]
-    .filter((dropCage: any) => dropCage.length > 1)
-    .filter((dropCage: any) => dropCage[1].id === flockToCage[1].id)
-    .map((dropCage: any) => dropCage[0])
-    .map((dropCage: any) => dropCage.quantity) as number[]).reduce((acc, value) => acc + value, 0) > flock?.initialQuantity) {
+      .filter((dropCage: any) => dropCage.length > 1)
+      .filter((dropCage: any) => dropCage[1].flockId === flockToCage[1].flockId)
+      .map((dropCage: any) => dropCage[0])
+      .map((dropCage: any) => dropCage.quantity) as number[]).reduce((acc, value) => acc + value, 0) > flock?.initialQuantity) {
       this.disableSave = true;
     }
 
     if (flock != null) {
       flock.quantity = flock.initialQuantity - (this.dropCages.map(dropCage => dropCage.flockToCage)[0]
         .filter((dropCage: any) => dropCage.length > 1)
-        .filter((dropCage: any) => dropCage[1].id === flockToCage[1].id)
+        .filter((dropCage: any) => dropCage[1].flockId === flockToCage[1].flockId)
         .map((dropCage: any) => dropCage[0])
         .map((dropCage: any) => dropCage.quantity) as number[]).reduce((acc, value) => acc + value, 0);
     }
@@ -121,7 +122,7 @@ export class FlockCageCategoryTransferComponent implements OnInit {
 
   public cancelTransfer(): void {
     this.flockCageTransferDtoList = [];
-    this.getAllActiveFlocksWithoutCage();
+    this.getFlocksWithIncompatibleCages();
     this.getAllFreeCages();
     this.dropCages = [{
       flockToCage: []
@@ -149,8 +150,8 @@ export class FlockCageCategoryTransferComponent implements OnInit {
     this.dropCages.map(dropCage => dropCage.flockToCage)[0].forEach((flockCage: any) => {
       if (flockCage.length > 1) {
         const flockCageTransferDto: FlockCageTransferDto = {
-          flockId: flockCage[0].id,
-          cageId: flockCage[1].cageId,
+          flockId: flockCage[1].flockId,
+          cageId: flockCage[0].cageId,
           quantity: flockCage[0].quantity
         }
         this.flockCageTransferDtoList.push(flockCageTransferDto);

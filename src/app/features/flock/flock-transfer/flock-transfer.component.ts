@@ -4,7 +4,7 @@ import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/dr
 import { FlockApiService } from 'src/app/shared/apis/flock.api.service';
 import { CageApiService } from 'src/app/shared/apis/cage.api.service';
 import { CageCategory, CageDto, FlockCageTransferDto, FlockCategory, FlockDto } from 'generated-src/model';
-import { FlockToCage, DropCage } from 'generated-src/model-front';
+import { FlockToCage, DropCage, FlockFrontDto } from 'generated-src/model-front';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { UtilsService } from 'src/app/shared/utils/utils.service';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -16,7 +16,7 @@ import * as moment from 'moment';
 })
 export class FlockTransferComponent {
   public language = "en";
-  public flocks: FlockDto[] = [];
+  public flocks: FlockFrontDto[] = [];
   public flockToCageList: FlockToCage[] = [];
   public dropCages: DropCage[] = [];
   public flockCageTransferDtoList: FlockCageTransferDto[] = [];
@@ -28,7 +28,10 @@ export class FlockTransferComponent {
   // flock form
   public flockDetailsForm!: FormGroup;
   public initialQuantity: number = 0;
+  public actualGood: number = 0;
+  public actualSterile: number = 0;
   public initialAge: number = 0;
+  public actualAge: number = 0;
   public aquisitionDate: Date = new Date();
   public aquisitionType: string = '';
   public cageId: number = 0;
@@ -42,10 +45,19 @@ export class FlockTransferComponent {
       { type: 'required', message: 'Category is required' },
     ],
     initialQuantity: [
-      { type: 'required', message: 'Quantity is required' },
+      { type: 'required', message: 'Initial quantity is required' },
+    ],
+    actualGood: [
+      { type: 'required', message: 'Actual good quantity is required' },
+    ],
+    actualSterile: [
+      { type: 'required', message: 'Actual sterile quantity is required' },
     ],
     initialAge: [
-      { type: 'required', message: 'Age is required' },
+      { type: 'required', message: 'Initial age is required' },
+    ],
+    actualAge: [
+      { type: 'required', message: 'Actual age is required' },
     ],
     aquisitionDate: [
       { type: 'required', message: 'Aquisition date is required' },
@@ -109,11 +121,11 @@ export class FlockTransferComponent {
       transferArrayItem(
         this.flocks,
         event.container.data,
-        this.flocks.findIndex(flock => flock.id === (event.item.data as unknown as FlockDto).id),
+        this.flocks.findIndex(flock => flock.id === (event.item.data as unknown as FlockFrontDto).id),
         0,
       );
     }
-    if (event.container.data[0].initialFlockCategory != event.container.data[1].cageCategory as FlockCategory) {
+    if (event.container.data[0].actualFlockCategory != event.container.data[1].cageCategory as FlockCategory) {
       this.flocks.push(event.container.data[0]);
       event.container.data.splice(0, 1);
     }
@@ -228,8 +240,11 @@ export class FlockTransferComponent {
     return this.formBuilder.group({
       cageId: new FormControl({ value: null, disabled: false }, Validators.compose([])),
       name: new FormControl({ value: null, disabled: false }, Validators.compose([])),
-      initialQuantity: new FormControl({ value: null, disabled: false }, Validators.compose([Validators.required])),
-      initialAge: new FormControl({ value: null, disabled: false }, Validators.compose([Validators.required])),
+      initialQuantity: new FormControl({ value: this.initialQuantity, disabled: false }, Validators.compose([Validators.required])),
+      actualGood: new FormControl({ value: this.actualGood, disabled: false }, Validators.compose([Validators.required])),
+      actualSterile: new FormControl({ value: this.actualSterile, disabled: false }, Validators.compose([Validators.required])),
+      initialAge: new FormControl({ value: this.initialAge, disabled: false }, Validators.compose([Validators.required])),
+      actualAge: new FormControl({ value: this.actualAge, disabled: false }, Validators.compose([Validators.required])),
       aquisitionDate: new FormControl({ value: null, disabled: false }, Validators.compose([Validators.required])),
       aquisitionType: new FormControl({ value: 'PURCHASE', disabled: false }, Validators.compose([Validators.required])),
     });

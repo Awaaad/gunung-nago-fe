@@ -17,6 +17,7 @@ import * as moment from 'moment';
 import { SecurityApiService } from 'src/app/shared/apis/security.api.service';
 import { environment } from 'src/environments/environment';
 import { FlockStockApiService } from 'src/app/shared/apis/flock-stock.api.service';
+import { FlockApiService } from 'src/app/shared/apis/flock.api.service';
 
 @Component({
   selector: 'app-flock-sale-details',
@@ -111,13 +112,11 @@ export class FlockSaleDetailsComponent implements OnInit {
   };
 
   constructor(
-    private activatedRoute: ActivatedRoute,
     private cageApiService: CageApiService,
     private customerApiService: CustomerApiService,
-    private flockStockApiService: FlockStockApiService,
+    private flockApiService: FlockApiService,
     private formBuilder: FormBuilder,
     private securityApiService: SecurityApiService,
-    private router: Router,
     private flockSaleApiService: FlockSaleApiService,
     private surveyApiService: SurveyApiService,
     private translateService: TranslateService,
@@ -149,7 +148,7 @@ export class FlockSaleDetailsComponent implements OnInit {
       dead: 0,
       good: 0
     }
-    this.flockStockApiService.findTotalFlockStockCount().subscribe(flockStockCountDto => {
+    this.flockApiService.findTotalFlockStockCount().subscribe(flockStockCountDto => {
       this.flockStockCountDto = flockStockCountDto;
     })
   }

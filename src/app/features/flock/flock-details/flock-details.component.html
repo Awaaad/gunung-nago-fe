@@ -41,7 +41,7 @@
                   type="text" clear-input="true" formControlName="name"></ion-input>
               </ion-col>
               <ion-col size-xs="12" size-md="3">
-                <ion-input color="gunung-nago-primary" label="Age" label-placement="floating" fill="outline"
+                <ion-input color="gunung-nago-primary" label="Initial Age*" label-placement="floating" fill="outline"
                   type="number" min="0" clear-input="true" formControlName="initialAge"></ion-input>
                 <div class="error-messages">
                   <ng-container *ngFor="let error of errorMessages.initialAge">
@@ -53,8 +53,22 @@
                 </div>
               </ion-col>
               <ion-col size-xs="12" size-md="3">
-                <ion-input color="gunung-nago-primary" label="Quantity" label-placement="floating" fill="outline"
-                  type="number" min="0" clear-input="true" formControlName="initialQuantity"></ion-input>
+                <ion-input color="gunung-nago-primary" label="Actual Age*" label-placement="floating" fill="outline"
+                  type="number" min="0" clear-input="true" formControlName="actualAge"></ion-input>
+                <div class="error-messages">
+                  <ng-container *ngFor="let error of errorMessages.actualAge">
+                    <div class="error-message"
+                      *ngIf="flockDetails.get('actualAge')?.hasError(error.type) && (flockDetails.get('actualAge')?.dirty || flockDetails.get('actualAge')?.touched)">
+                      {{ error.message }}
+                    </div>
+                  </ng-container>
+                </div>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size-xs="12" size-md="3">
+                <ion-input color="gunung-nago-primary" label="Initial Quantity*" label-placement="floating"
+                  fill="outline" type="number" min="0" clear-input="true" formControlName="initialQuantity"></ion-input>
                 <div class="error-messages">
                   <ng-container *ngFor="let error of errorMessages.initialQuantity">
                     <div class="error-message"
@@ -64,10 +78,34 @@
                   </ng-container>
                 </div>
               </ion-col>
+              <ion-col size-xs="12" size-md="3">
+                <ion-input color="gunung-nago-primary" label="Actual Good Quantity*" label-placement="floating"
+                  fill="outline" type="number" min="0" clear-input="true" formControlName="actualGood"></ion-input>
+                <div class="error-messages">
+                  <ng-container *ngFor="let error of errorMessages.actualGood">
+                    <div class="error-message"
+                      *ngIf="flockDetails.get('actualGood')?.hasError(error.type) && (flockDetails.get('actualGood')?.dirty || flockDetails.get('actualGood')?.touched)">
+                      {{ error.message }}
+                    </div>
+                  </ng-container>
+                </div>
+              </ion-col>
+              <ion-col size-xs="12" size-md="3">
+                <ion-input color="gunung-nago-primary" label="Actual Sterile Quantity*" label-placement="floating"
+                  fill="outline" type="number" min="0" clear-input="true" formControlName="actualSterile"></ion-input>
+                <div class="error-messages">
+                  <ng-container *ngFor="let error of errorMessages.actualSterile">
+                    <div class="error-message"
+                      *ngIf="flockDetails.get('actualSterile')?.hasError(error.type) && (flockDetails.get('actualSterile')?.dirty || flockDetails.get('actualSterile')?.touched)">
+                      {{ error.message }}
+                    </div>
+                  </ng-container>
+                </div>
+              </ion-col>
             </ion-row>
             <ion-row>
               <ion-col size-xs="12" size-md="3">
-                <ion-select color="gunung-nago-primary" label="{{ 'flock.flock-details.aquisition-type' | translate }}"
+                <ion-select color="gunung-nago-primary" label="{{ 'flock.flock-details.aquisition-type' | translate }}*"
                   label-placement="floating" fill="outline" interface="popover"
                   placeholder="{{ 'flock.flock-details.aquisition-type' | translate }}"
                   formControlName="aquisitionType">
@@ -86,7 +124,7 @@
 
               <ion-col size-xs="12" size-md="3">
                 <mat-form-field class="date-full-width" appearance="outline">
-                  <mat-label>Aquisition Date</mat-label>
+                  <mat-label>Aquisition Date*</mat-label>
                   <input matInput [matDatepicker]="picker" [max]="today" formControlName="aquisitionDate">
                   <mat-hint>DD/MM/YYYY</mat-hint>
                   <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>

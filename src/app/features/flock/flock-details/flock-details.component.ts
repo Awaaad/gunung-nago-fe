@@ -16,7 +16,10 @@ import { UtilsService } from 'src/app/shared/utils/utils.service';
 })
 export class FlockDetailsComponent {
   public initialQuantity: number = 0;
+  public actualGood: number = 0;
+  public actualSterile: number = 0;
   public initialAge: number = 0;
+  public actualAge: number = 0;
   public aquisitionDate: Date = new Date();
   public aquisitionType: string = '';
   public cageId: number = 0;
@@ -27,10 +30,19 @@ export class FlockDetailsComponent {
   public cages: CageDto[] = [];
   public errorMessages = {
     initialQuantity: [
-      { type: 'required', message: 'Quantity is required' },
+      { type: 'required', message: 'Initial quantity is required' },
+    ],
+    actualGood: [
+      { type: 'required', message: 'Actual good quantity is required' },
+    ],
+    actualSterile: [
+      { type: 'required', message: 'Actual sterile quantity is required' },
     ],
     initialAge: [
-      { type: 'required', message: 'Age is required' },
+      { type: 'required', message: 'Initial age is required' },
+    ],
+    actualAge: [
+      { type: 'required', message: 'Actual age is required' },
     ],
     aquisitionDate: [
       { type: 'required', message: 'Aquisition date is required' },
@@ -73,8 +85,11 @@ export class FlockDetailsComponent {
     return this.formBuilder.group({
       cageId: new FormControl({ value: null, disabled: false }, Validators.compose([])),
       name: new FormControl({ value: null, disabled: false }, Validators.compose([])),
-      initialQuantity: new FormControl({ value: null, disabled: false }, Validators.compose([Validators.required])),
-      initialAge: new FormControl({ value: null, disabled: false }, Validators.compose([Validators.required])),
+      initialQuantity: new FormControl({ value: this.initialQuantity, disabled: false }, Validators.compose([Validators.required])),
+      actualGood: new FormControl({ value: this.actualGood, disabled: false }, Validators.compose([Validators.required])),
+      actualSterile: new FormControl({ value: this.actualSterile, disabled: false }, Validators.compose([Validators.required])),
+      initialAge: new FormControl({ value: this.initialAge, disabled: false }, Validators.compose([Validators.required])),
+      actualAge: new FormControl({ value: this.actualAge, disabled: false }, Validators.compose([Validators.required])),
       aquisitionDate: new FormControl({ value: null, disabled: false }, Validators.compose([Validators.required])),
       aquisitionType: new FormControl({ value: 'PURCHASE', disabled: false }, Validators.compose([Validators.required])),
     });

@@ -140,11 +140,16 @@
     width: 3em;
 }
 
-.drop-list{
+.drop-list {
     display: flex;
     justify-content: center;
 }
 
 .flock-cage-drop {
     width: 100%;
+}
+
+.outside {
+    overflow: auto;
+    max-height: 100%;
 }

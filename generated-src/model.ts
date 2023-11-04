@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2023-11-02 12:29:57.
+// Generated using typescript-generator version 3.2.1263 on 2023-11-04 09:57:44.
 
 export class CageDto {
     id!: number;
@@ -167,6 +167,19 @@ export class FeedSurveyDto {
     bagsEaten!: number;
 }
 
+export class FlockCageIncompatibleDto {
+    cageId!: number;
+    flockId!: number;
+    flockStockId!: number;
+    name!: string;
+    initialAge!: number;
+    initialFlockCategory!: FlockCategory;
+    cageCategory!: CageCategory;
+    initialQuantity!: number;
+    cageName!: string;
+    createdDate!: Date;
+}
+
 export class FlockCageTransferDto {
     flockId!: number;
     cageId!: number;
@@ -178,8 +191,13 @@ export class FlockDto {
     name!: string;
     active!: boolean;
     initialAge!: number;
+    actualAge!: number;
     initialFlockCategory!: FlockCategory;
+    actualFlockCategory!: FlockCategory;
     initialQuantity!: number;
+    actualQuantity!: number;
+    actualGood!: number;
+    actualSterile!: number;
     aquisitionDate!: Date;
     aquisitionType!: AquisitionType;
     cageName!: string;
@@ -218,7 +236,10 @@ export class FlockSaveDto {
     cageId!: number;
     active!: boolean;
     initialAge!: number;
+    actualAge!: number;
     initialQuantity!: number;
+    actualGood!: number;
+    actualSterile!: number;
     bonusQuantity!: number;
     aquisitionDate!: Date;
     aquisitionType!: AquisitionType;
@@ -708,6 +729,7 @@ export enum FlockCategory {
 
 export enum AquisitionType {
     PURCHASE = 'PURCHASE',
+    TRANSFER = 'TRANSFER',
 }
 
 export enum HealthType {

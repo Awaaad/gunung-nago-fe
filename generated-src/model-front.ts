@@ -295,10 +295,28 @@ export class FlockFrontDto {
     name!: string | null | undefined | any;
     active!: boolean | null | undefined | any;
     initialAge!: number | null | undefined | any;
+    actualAge!: number | null | undefined | any;
     initialFlockCategory!: FlockCategory | null | undefined | any;
+    actualFlockCategory!: FlockCategory | null | undefined | any;
     initialQuantity!: number | null | undefined | any;
+    actualQuantity!: number | null | undefined | any;
+    actualGood!: number | null | undefined | any;
+    actualSterile!: number | null | undefined | any;
     aquisitionDate!: Date | null | undefined | any;
     aquisitionType!: AquisitionType | null | undefined | any;
+    cageName!: string | null | undefined | any;
+    quantity!: number | null | undefined | any;
+}
+
+export class FlockCageIncompatibleFrontDto {
+    cageId!: number | null | undefined | any;
+    flockId!: number | null | undefined | any;
+    flockStockId!: number | null | undefined | any;
+    name!: string | null | undefined | any;
+    initialAge!: number | null | undefined | any;
+    initialFlockCategory!: FlockCategory | null | undefined | any;
+    cageCategory!: CageCategory | null | undefined | any;
+    initialQuantity!: number | null | undefined | any;
     cageName!: string | null | undefined | any;
     quantity!: number | null | undefined | any;
 }
