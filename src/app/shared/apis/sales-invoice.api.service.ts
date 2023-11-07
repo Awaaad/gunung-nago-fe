@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { SalesInvoiceDto } from 'generated-src/model';
+import { SalesInvoiceDto, SalesInvoicePerMonthDto, TodayAndCurrentMonthProfitDto } from 'generated-src/model';
 import { PageResult, SalesInvoiceDetailsFrontDto } from 'generated-src/model-front';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
@@ -17,5 +17,13 @@ export class SalesInvoiceApiService {
 
     public findSalesInvoiceDetailsById(id: number): Observable<SalesInvoiceDetailsFrontDto> {
         return this.http.get<any>(`${this.baseUrl}${id}`);
+    }
+
+    public findTodayAndCurrentMonthProfit(): Observable<TodayAndCurrentMonthProfitDto> {
+        return this.http.get<any>(`${this.baseUrl}profits-today`);
+    }
+
+    public findTotalSalesPerMonth(): Observable<SalesInvoicePerMonthDto> {
+        return this.http.get<any>(`${this.baseUrl}sales-per-year`);
     }
 }

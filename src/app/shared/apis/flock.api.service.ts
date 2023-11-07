@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { FlockCageTransferDto, FlockDto, FlockStockCountDto } from 'generated-src/model';
+import { FlockCageTransferDto, FlockDto, FlockStockCountDto, FlocksCategoryDto, TotalFlocksAndPercentageChangeDto } from 'generated-src/model';
 import { FlockCageIncompatibleFrontDto, FlockFrontDto, FlockSaveFrontDto, PageResult } from 'generated-src/model-front';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -37,5 +37,13 @@ export class FlockApiService {
 
   public transferFlockToCage(flockCageTransferDtos: FlockCageTransferDto[]): Observable<any> {
     return this.http.put(`${this.baseUrl}transfer`, flockCageTransferDtos, { responseType: 'text' });
+  }
+
+  public getTotalFlocksAndPercentageChange(): Observable<any> {
+    return this.http.get<TotalFlocksAndPercentageChangeDto>(`${this.baseUrl}today-total-flocks`);
+  }
+
+  public getTotalFlocksPerCategory(): Observable<FlocksCategoryDto> {
+    return this.http.get<FlocksCategoryDto>(`${this.baseUrl}total-flocks-per-category`);
   }
 }

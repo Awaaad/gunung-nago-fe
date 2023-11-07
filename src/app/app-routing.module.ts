@@ -67,6 +67,10 @@ const routes: Routes = [
     loadChildren: () => import('./features/security/security.module').then(m => m.SecurityModule)
   },
   {
+    path: 'dashboard',
+    loadChildren: () => import('./features/dashboard/dashboard.module').then(m => m.DashboardModule)
+  },
+  {
     path: 'user',
     loadChildren: () => import('./features/user/user.module').then(m => m.UserModule)
   },

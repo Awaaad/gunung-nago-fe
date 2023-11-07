@@ -1,0 +1,325 @@
+<ion-content>
+  <ion-row>
+    <ion-col size-lg="3" size-md="12" size-xs="12">
+      <ion-card (click)="navigateToSalesInvoiceList()">
+        <ion-card-content class="card-info-one">
+          <div class="total-flocks">
+            <h3 style="text-transform:uppercase;">Total Sales</h3>
+          </div>
+          <hr>
+          <ion-item>
+            <div class="total-flocks">
+              <p>Daily</p>
+              <h1>{{todayAndCurrentMonthTotalSales?.todaySalesAmount}}</h1>
+            </div>
+          </ion-item>
+          <ion-item lines="none">
+            <div class="total-flocks">
+              <p>Monthly</p>
+              <h1>{{todayAndCurrentMonthTotalSales?.monthlySalesAmount}}</h1>
+            </div>
+            
+          </ion-item>
+          <div class="total-flocks-img">
+            <img [src]="totalSales" width="70px">
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </ion-col>
+    <ion-col size-lg="3" size-md="12" size-xs="12">
+      <ion-card (click)="navigateToSalesInvoiceList()">
+        <ion-card-content class="card-info-one">
+          <div class="total-flocks">
+            <h3 style="text-transform:uppercase;">Total Purchases</h3>
+          </div>
+          <hr>
+          <ion-item>
+            <div class="total-flocks">
+              <p>Daily</p>
+              <h1>{{todayAndCurrentMonthTotalPurchases?.todayPurchaseAmount}}</h1>
+            </div>
+          </ion-item>
+          <ion-item lines="none">
+            <div class="total-flocks">
+              <p>Monthly</p>
+              <h1>{{todayAndCurrentMonthTotalPurchases?.monthlyPurchaseAmount}}</h1>
+            </div>
+            
+          </ion-item>
+          <div class="total-flocks-img">
+            <img [src]="totalPurchases" width="70px">
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </ion-col>
+    <ion-col size-lg="3" size-md="12" size-xs="12">
+      <ion-card (click)="navigateToSalesInvoiceList()">
+        <ion-card-content class="card-info-one">
+          <div class="total-flocks">
+            <h3 style="text-transform:uppercase;">Total Profit</h3>
+          </div>
+          <hr>
+          <ion-item>
+            <div class="total-flocks">
+              <p>Daily</p>
+              <h1>{{todayAndCurrentMonthTotalprofit?.todayProfitAmount}}</h1>
+            </div>
+          </ion-item>
+          <ion-item lines="none">
+            <div class="total-flocks">
+              <p>Monthly</p>
+              <h1>{{todayAndCurrentMonthTotalprofit?.monthlyProfitAmount}}</h1>
+            </div>
+            
+          </ion-item>
+          <div class="total-flocks-img">
+            <img [src]="totalProfit" width="70px">
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </ion-col>
+    <ion-col size-lg="3" size-md="12" size-xs="12">
+      <ion-card (click)="navigateToSalesInvoiceList()">
+        <ion-card-content class="card-info-one">
+          <div class="total-flocks">
+            <h3 style="text-transform:uppercase;">Total Credit</h3>
+          </div>
+          <hr>
+          <ion-item>
+            <div class="total-flocks">
+              <p>Daily</p>
+              <h1>122325</h1>
+            </div>
+          </ion-item>
+          <ion-item lines="none">
+            <div class="total-flocks">
+              <p>Monthly</p>
+              <h1>122325</h1>
+            </div>
+            
+          </ion-item>
+          <div class="total-flocks-img">
+            <img [src]="totalCredit" width="70px">
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col size-lg="3" size-md="12" size-xs="12">
+      <ion-card (click)="navigateToSalesInvoiceList()">
+        <ion-card-content class="card-info-two">
+          <h3 style="text-transform:uppercase; font-weight: 500;">Total Flocks</h3>
+          <div class="chart-container">
+            <canvas  id="MyChart" >{{ chart }}</canvas>
+          </div>
+          </ion-card-content>
+        </ion-card>
+    </ion-col>
+    <ion-col size-lg="2" size-md="12" size-xs="12">
+      <ion-card (click)="navigateToSalesInvoiceList()">
+        <ion-card-content class="card-info-two">
+          <div class="total-flocks-select">
+            <ion-select>
+              <ion-select-option value="apple">Apple</ion-select-option>
+              <ion-select-option value="banana">Banana</ion-select-option>
+              <ion-select-option value="orange">Orange</ion-select-option>
+            </ion-select>
+          </div>
+          <div class="total-flocks">
+            <p>Total Flocks</p>
+            <h1>{{totalFlocksAndPercentageChange?.totalFlocks}}</h1>
+            <p>{{totalFlocksAndPercentageChange?.percentageChange}}%</p>
+          </div>
+          <div class="total-flocks-img">
+            <img [src]="totalFlocks" width="70px">
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </ion-col>
+    <ion-col size-lg="2" size-md="12" size-xs="12">
+      <ion-card (click)="navigateToSalesInvoiceList()">
+        <ion-card-content class="card-info-two">
+          <div class="total-flocks-select">
+            <ion-select>
+              <ion-select-option value="apple">Apple</ion-select-option>
+              <ion-select-option value="banana">Banana</ion-select-option>
+              <ion-select-option value="orange">Orange</ion-select-option>
+            </ion-select>
+          </div>
+          <div class="total-flocks">
+            <p>Total Eggs</p>
+            <h1>{{totalGoodEggsAndPercentageChange?.totalEggs}}</h1>
+            <p>{{totalGoodEggsAndPercentageChange?.percentageChange}}%</p>
+          </div>
+          <div class="total-flocks-img">
+            <img [src]="totalEggs" width="70px">
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </ion-col>
+    <ion-col size-lg="2" size-md="12" size-xs="12">
+      <ion-card (click)="navigateToSalesInvoiceList()">
+        <ion-card-content class="card-info-two">
+          <div class="total-flocks-select">
+            <ion-select>
+              <ion-select-option value="apple">Apple</ion-select-option>
+              <ion-select-option value="banana">Banana</ion-select-option>
+              <ion-select-option value="orange">Orange</ion-select-option>
+            </ion-select>
+          </div>
+          <div class="total-flocks">
+            <p>Total Feeds</p>
+            <h1>122325</h1>
+          </div>
+          <div class="total-flocks-img">
+            <img [src]="totalFeeds" width="70px">
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </ion-col>
+    <ion-col size-lg="2" size-md="12" size-xs="12">
+      <ion-card (click)="navigateToSalesInvoiceList()">
+        <ion-card-content class="card-info-two">
+          <div class="total-flocks-select">
+            <ion-select>
+              <ion-select-option value="apple">Apple</ion-select-option>
+              <ion-select-option value="banana">Banana</ion-select-option>
+              <ion-select-option value="orange">Orange</ion-select-option>
+            </ion-select>
+          </div>
+          <div class="total-flocks">
+            <p>Total Manure</p>
+            <h1>122325</h1>
+          </div>
+          <div class="total-flocks-img">
+            <img [src]="totalManure" width="70px">
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </ion-col>
+  </ion-row>
+
+  <ion-row>
+    <ion-col size-lg="5" size-md="12" size-xs="12">
+      <ion-card>
+        <ion-card-content>
+          <div style="height:300px;width:600px;">
+            <h3 style="text-transform:uppercase; font-weight: 500;">Total Sales Line graph</h3>
+            <div class="chart-container">
+              <canvas  id="MyLineChart" >{{ chart }}</canvas>
+            </div>
+        
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </ion-col>
+    <ion-col size-lg="4" size-md="12" size-xs="12">
+      <ion-card>
+        <ion-card-content>
+          <div style="height:300px;width:300px;">
+            <h2>Sales pie chart having egg, flock, feed and manure</h2>
+            <canvas id="piechart"
+                    height="8"
+                    width="10">
+        
+            </canvas>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </ion-col>
+  </ion-row>
+
+  <ion-row>
+    <ion-col size-lg="3" size-md="12" size-xs="12">
+      <ion-card>
+        <ion-card-content>
+          <div style="height:300px;width:300px;">
+            <h2>Egg Sales</h2>
+            <canvas id="piechart"
+                    height="8"
+                    width="10">
+        
+            </canvas>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </ion-col>
+    <ion-col size-lg="3" size-md="12" size-xs="12">
+      <!-- <ion-card>
+        <ion-card-content>
+          <div style="height:300px;width:300px;">
+            <h2>Good Egg/Bad Egg Pie Chart</h2>
+            <canvas id="piechart"
+                    height="8"
+                    width="10">
+        
+            </canvas>
+          </div>
+        </ion-card-content>
+      </ion-card> -->
+    </ion-col>
+    <ion-col size-lg="3" size-md="12" size-xs="12">
+      <ion-card>
+        <ion-card-content>
+          <div style="height:300px;width:300px;">
+            <h2>Feed Sales</h2>
+            <canvas id="piechart"
+                    height="8"
+                    width="10">
+        
+            </canvas>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </ion-col>
+    <ion-col size-lg="3" size-md="12" size-xs="12">
+      <ion-card>
+        <ion-card-content>
+          <div style="height:300px;width:300px;">
+            <h2>Feed Level Remaining</h2>
+            <canvas id="piechart"
+                    height="8"
+                    width="10">
+        
+            </canvas>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </ion-col>
+   
+  </ion-row>
+
+  <ion-row>
+    <ion-col size-lg="6" size-md="12" size-xs="12">
+      <ion-card>
+        <ion-card-content>
+          <div style="height:300px;width:300px;">
+            <h2>Flock Sales</h2>
+            <canvas id="piechart"
+                    height="8"
+                    width="10">
+        
+            </canvas>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </ion-col>
+    <ion-col size-lg="6" size-md="12" size-xs="12">
+      <ion-card>
+        <ion-card-content>
+          <div style="height:300px;width:300px;">
+            <h2>Manure Sales</h2>
+            <canvas id="piechart"
+                    height="8"
+                    width="10">
+        
+            </canvas>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </ion-col>
+  </ion-row>
+</ion-content>
+
+

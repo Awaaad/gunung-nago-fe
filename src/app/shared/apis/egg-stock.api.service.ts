@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { EggStockDto } from 'generated-src/model';
+import { EggStockDto, TotalEggsAndPercentageChangeDto } from 'generated-src/model';
 import { EggStockFrontDto, EggTransferFrontDto } from 'generated-src/model-front';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -21,5 +21,9 @@ export class EggStockApiService {
 
   public transfer(eggTransferDto: EggTransferFrontDto): Observable<any> {
     return this.http.post(`${this.baseUrl}transfer`, eggTransferDto, { responseType: 'text' });
+  }
+
+  public findTotalGoodEggs(): Observable<TotalEggsAndPercentageChangeDto> {
+    return this.http.get<TotalEggsAndPercentageChangeDto>(`${this.baseUrl}today-total-eggs`);
   }
 }

@@ -783,3 +783,51 @@ export enum SalesInvoiceStatus {
     COMPLETED = 'COMPLETED',
     PAID = 'PAID',
 }
+
+// dashboard models
+
+export class TodayAndCurrentMonthPaymentDto {
+    todaySalesAmount!: number;
+    monthlySalesAmount!: number;
+}
+
+export class TodayAndCurrentMonthPurchaseDto {
+    todayPurchaseAmount!: number;
+    monthlyPurchaseAmount!: number;
+}
+
+export class TodayAndCurrentMonthProfitDto {
+    todayProfitAmount!: number;
+    monthlyProfitAmount!: number;
+}
+
+export class TotalFlocksAndPercentageChangeDto {
+    totalFlocks!: number;
+    percentageChange!: number;
+}
+
+export class TotalEggsAndPercentageChangeDto {
+    totalEggs!: number;
+    percentageChange!: number;
+}
+
+export class FlocksCategoryDto {
+    doc!: number;
+    dara!: number;
+    norm!: number;
+}
+
+export class SalesInvoicePerMonthDto {
+    jan!: number;
+    feb!: number;
+    mar!: number;
+    apr!: number;
+    may!: number;
+    jun!: number;
+    jul!: number;
+    aug!: number;
+    sep!: number;
+    oct!: number;
+    nov!: number;
+    dec!: number;
+}

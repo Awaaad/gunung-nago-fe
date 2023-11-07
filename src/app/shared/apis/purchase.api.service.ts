@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { TodayAndCurrentMonthPurchaseDto } from 'generated-src/model';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
