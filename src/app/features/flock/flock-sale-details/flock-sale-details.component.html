@@ -388,7 +388,8 @@
             </thead>
             <tbody>
               <tr *ngFor="let invoiceDetail of flockSaleForm.get('flockSaleDetails')?.value let i = index">
-                <td data-label="Product" *ngIf="invoiceDetail.quantitySoldForGood > 0">CHICKEN - <strong>GOOD</strong></td>
+                <td data-label="Product" *ngIf="invoiceDetail.quantitySoldForGood > 0">CHICKEN - <strong>GOOD</strong>
+                </td>
                 <td data-label="Quantity" *ngIf="invoiceDetail.quantitySoldForGood > 0">
                   {{invoiceDetail?.quantitySoldForGood}}
                 </td>
@@ -398,7 +399,8 @@
                   {{invoiceDetail.pricePerChickenForGood * invoiceDetail.quantitySoldForGood | number :
                   '1.2-2'}}</td>
 
-                <td data-label="Product" *ngIf="invoiceDetail.quantitySoldForSterile > 0">CHICKEN - <strong>STERILE</strong></td>
+                <td data-label="Product" *ngIf="invoiceDetail.quantitySoldForSterile > 0">CHICKEN -
+                  <strong>STERILE</strong></td>
                 <td data-label="Quantity" *ngIf="invoiceDetail.quantitySoldForSterile > 0">
                   {{invoiceDetail?.quantitySoldForSterile}}</td>
                 <td data-label="Unit Price" *ngIf="invoiceDetail.quantitySoldForSterile > 0">Rp
@@ -439,7 +441,7 @@
     </ion-col>
   </ion-row>
 
-  <ion-modal (willDismiss)="onWillDismiss($event)" [isOpen]="isModalOpen" cssClass="flock-modal"
+  <ion-modal (willDismiss)="onWillDismiss($event)" [isOpen]="isModalOpen" cssClass="payment-modal"
     backdropDismiss="false">
     <ng-template>
       <ion-header>
@@ -453,9 +455,29 @@
       <ion-content [fullscreen]="false" class="ion-padding">
         <form [formGroup]="paymentForm">
           <ion-row>
-            <ion-col size-xs="6" size-md="3">
+            <ion-col size-xs="6" size-md="6">
               <ion-input color="gunung-nago-primary" label="Total Price" label-placement="floating" fill="outline"
                 type="number" formControlName="totalPrice"></ion-input>
+            </ion-col>
+            <ion-col size-xs="6" size-md="6">
+              <ion-input color="gunung-nago-primary" label="Sold at*" label-placement="floating" fill="outline"
+                type="number" formControlName="soldAt"></ion-input>
+              <div class="error-messages">
+                <ng-container *ngFor="let error of errorMessages.soldAt">
+                  <div class="error-message"
+                    *ngIf="paymentForm.get('soldAt')?.hasError(error.type) && (paymentForm.get('soldAt')?.dirty || paymentForm.get('soldAt')?.touched)">
+                    {{ error.message }}
+                  </div>
+                </ng-container>
+              </div>
+            </ion-col>
+          </ion-row>
+
+          <ion-row>
+            <ion-col size-xs="6" size-md="6">
+              <ion-input color="gunung-nago-primary" label="Discount (%)" label-placement="floating" fill="outline"
+                [disabled]="true" type="number"
+                [value]="(((paymentForm.get('totalPrice')?.value - paymentForm.get('soldAt')?.value)) / paymentForm.get('totalPrice')?.value) * 100"></ion-input>
             </ion-col>
           </ion-row>
 
@@ -527,8 +549,8 @@
             </ion-item-divider>
             <ion-radio-group [(ngModel)]="salesInvoiceCategory" (ionChange)="selectSalesInvoiceCategory($event)">
               <div *ngFor="let salesInvoiceCategory of salesInvoiceCategories" class="radio-class">
-                <ion-radio color="positive-btn"
-                  [value]="salesInvoiceCategory">{{salesInvoiceCategory === 'IN_STORE'? 'In Store' : 'Delivery'}}</ion-radio><br />
+                <ion-radio color="positive-btn" [value]="salesInvoiceCategory">{{salesInvoiceCategory === 'IN_STORE'?
+                  'In Store' : 'Delivery'}}</ion-radio><br />
               </div>
             </ion-radio-group>
           </ion-col>

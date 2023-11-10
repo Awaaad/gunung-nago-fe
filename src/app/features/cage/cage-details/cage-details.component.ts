@@ -63,7 +63,7 @@ export class CageDetailsComponent implements OnInit {
     return this.formBuilder.group({
       id: null,
       name: new FormControl({ value: null, disabled: false }, Validators.compose([Validators.required])),
-      active: new FormControl({ value: false, disabled: false }, Validators.compose([Validators.required])),
+      active: false,
       cageCategory: new FormControl({ value: null, disabled: false }, Validators.compose([Validators.required]))
     });
   }

@@ -310,7 +310,7 @@
     </ion-col>
   </ion-row>
 
-  <ion-modal (willDismiss)="onWillDismiss($event)" [isOpen]="isModalOpen" cssClass="flock-modal"
+  <ion-modal (willDismiss)="onWillDismiss($event)" [isOpen]="isModalOpen" cssClass="payment-modal"
     backdropDismiss="false">
     <ng-template>
       <ion-header>
@@ -324,9 +324,29 @@
       <ion-content [fullscreen]="false" class="ion-padding">
         <form [formGroup]="paymentForm">
           <ion-row>
-            <ion-col size-xs="6" size-md="3">
+            <ion-col size-xs="6" size-md="6">
               <ion-input color="gunung-nago-primary" label="Total Price" label-placement="floating" fill="outline"
                 type="number" formControlName="totalPrice"></ion-input>
+            </ion-col>
+            <ion-col size-xs="6" size-md="6">
+              <ion-input color="gunung-nago-primary" label="Sold at*" label-placement="floating" fill="outline"
+                type="number" formControlName="soldAt"></ion-input>
+              <div class="error-messages">
+                <ng-container *ngFor="let error of errorMessages.soldAt">
+                  <div class="error-message"
+                    *ngIf="paymentForm.get('soldAt')?.hasError(error.type) && (paymentForm.get('soldAt')?.dirty || paymentForm.get('soldAt')?.touched)">
+                    {{ error.message }}
+                  </div>
+                </ng-container>
+              </div>
+            </ion-col>
+          </ion-row>
+
+          <ion-row>
+            <ion-col size-xs="6" size-md="6">
+              <ion-input color="gunung-nago-primary" label="Discount (%)" label-placement="floating" fill="outline"
+                [disabled]="true" type="number"
+                [value]="(((paymentForm.get('totalPrice')?.value - paymentForm.get('soldAt')?.value)) / paymentForm.get('totalPrice')?.value) * 100"></ion-input>
             </ion-col>
           </ion-row>
 

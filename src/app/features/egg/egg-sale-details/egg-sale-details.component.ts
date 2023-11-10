@@ -361,6 +361,7 @@ export class EggSaleDetailsComponent implements OnInit {
         telephoneNumber: null,
         totalAmountDue: null,
       },
+      soldAt: null,
       driverId: null,
       salesInvoiceCategory: null,
       comment: null,
@@ -413,6 +414,7 @@ export class EggSaleDetailsComponent implements OnInit {
       driverId: this.selectedDriver ? this.selectedDriver.id : null,
       salesInvoiceCategory: this.salesInvoiceCategory,
       comment: this.comment,
+      soldAt: this.paymentForm?.get("soldAt")?.value,
       paymentSaveDtos: this.paymentForm.value.payments,
       newCustomer: this.isNewCustomer,
       big: this.big,
@@ -488,7 +490,7 @@ export class EggSaleDetailsComponent implements OnInit {
     this.paymentForm.get('payments')?.value.forEach((payment: any) => {
       totalAmountPaid += payment.amountPaid;
     });
-    if (totalAmountPaid <= this.paymentForm.get('totalPrice')?.value) {
+    if (totalAmountPaid <= this.paymentForm.get('soldAt')?.value) {
       return true;
     } else {
       return false;
@@ -500,7 +502,7 @@ export class EggSaleDetailsComponent implements OnInit {
     this.paymentForm.get('payments')?.value.forEach((payment: any) => {
       totalAmountPaid += payment.amountPaid;
     });
-    if (totalAmountPaid === this.paymentForm.get('totalPrice')?.value) {
+    if (totalAmountPaid === this.paymentForm.get('soldAt')?.value) {
       return true;
     } else {
       return false;
@@ -577,18 +579,18 @@ export class EggSaleDetailsComponent implements OnInit {
 
   public calculateTotalCost(): void {
     this.totalCost =
-    (this.eggSaleForm.get('bigGoodPiece')?.value * this.eggSaleForm.get('bigGoodPricePerPiece')?.value) + 
-    (this.eggSaleForm.get('bigGoodTray')?.value * this.eggSaleForm.get('bigGoodPricePerTray')?.value) + 
-    (this.eggSaleForm.get('bigGoodTie')?.value * this.eggSaleForm.get('bigGoodPricePerTie')?.value) + 
-    (this.eggSaleForm.get('mediumGoodPiece')?.value * this.eggSaleForm.get('mediumGoodPricePerPiece')?.value) + 
-    (this.eggSaleForm.get('mediumGoodTray')?.value * this.eggSaleForm.get('mediumGoodPricePerTray')?.value) + 
-    (this.eggSaleForm.get('mediumGoodTie')?.value * this.eggSaleForm.get('mediumGoodPricePerTie')?.value) + 
-    (this.eggSaleForm.get('smallGoodPiece')?.value * this.eggSaleForm.get('smallGoodPricePerPiece')?.value) + 
-    (this.eggSaleForm.get('smallGoodTray')?.value * this.eggSaleForm.get('smallGoodPricePerTray')?.value) + 
-    (this.eggSaleForm.get('smallGoodTie')?.value * this.eggSaleForm.get('smallGoodPricePerTie')?.value) + 
-    (this.eggSaleForm.get('badPiece')?.value * this.eggSaleForm.get('badPricePerPiece')?.value) + 
-    (this.eggSaleForm.get('badTray')?.value * this.eggSaleForm.get('badPricePerTray')?.value) + 
-    (this.eggSaleForm.get('badTie')?.value * this.eggSaleForm.get('badPricePerTie')?.value);
+      (this.eggSaleForm.get('bigGoodPiece')?.value * this.eggSaleForm.get('bigGoodPricePerPiece')?.value) +
+      (this.eggSaleForm.get('bigGoodTray')?.value * this.eggSaleForm.get('bigGoodPricePerTray')?.value) +
+      (this.eggSaleForm.get('bigGoodTie')?.value * this.eggSaleForm.get('bigGoodPricePerTie')?.value) +
+      (this.eggSaleForm.get('mediumGoodPiece')?.value * this.eggSaleForm.get('mediumGoodPricePerPiece')?.value) +
+      (this.eggSaleForm.get('mediumGoodTray')?.value * this.eggSaleForm.get('mediumGoodPricePerTray')?.value) +
+      (this.eggSaleForm.get('mediumGoodTie')?.value * this.eggSaleForm.get('mediumGoodPricePerTie')?.value) +
+      (this.eggSaleForm.get('smallGoodPiece')?.value * this.eggSaleForm.get('smallGoodPricePerPiece')?.value) +
+      (this.eggSaleForm.get('smallGoodTray')?.value * this.eggSaleForm.get('smallGoodPricePerTray')?.value) +
+      (this.eggSaleForm.get('smallGoodTie')?.value * this.eggSaleForm.get('smallGoodPricePerTie')?.value) +
+      (this.eggSaleForm.get('badPiece')?.value * this.eggSaleForm.get('badPricePerPiece')?.value) +
+      (this.eggSaleForm.get('badTray')?.value * this.eggSaleForm.get('badPricePerTray')?.value) +
+      (this.eggSaleForm.get('badTie')?.value * this.eggSaleForm.get('badPricePerTie')?.value);
   }
 
   private initialisePaymentFormBuilder(): void {
@@ -607,6 +609,11 @@ export class EggSaleDetailsComponent implements OnInit {
       (this.badTie * this.badPricePerTie);
     this.paymentForm = this.formBuilder.group({
       totalPrice: new FormControl({ value: this.totalPrice, disabled: true }, Validators.compose([Validators.required])),
+      soldAt: new FormControl({ value: this.totalPrice, disabled: false }, Validators.compose([
+        Validators.required,
+        Validators.min(0),
+        Validators.max(this.totalPrice),
+      ])),
       payments: this.formBuilder.array([
         this.addPaymentFormGroup()
       ])

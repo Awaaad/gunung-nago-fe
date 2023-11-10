@@ -7,7 +7,7 @@
       <div class="router-links">
         <div class="title">
           <img class="header-logo" src='./assets/flaticon/flock-in-cage.png'>
-          <h3 class="header-nav-products">Flock Transfer</h3>
+          <h3 class="header-nav-products">Flock Cage Category Transfer</h3>
         </div>
         <div>
           <ion-item class="language-selection">
@@ -34,89 +34,99 @@
     </div>
   </div>
 
-  <ion-row cdkDropListGroup class="flock-transfer-container">
-    <ion-col size-xs="12" size-md="6">
-      <div class="subtitle">
-        <img class="cart-logo" src='./assets/flaticon/flock.png'>
-        <div class="form-section-cart">Flocks</div>
-      </div>
-
-      <ion-row cdkDropList [cdkDropListData]="flocks" (cdkDropListDropped)="drop($event)">
-        <ion-col size-xs="12" size-md="6" *ngFor="let flock of flocks">
-          <ion-card cdkDrag [cdkDragData]="flock" *ngIf="flock.quantity > 0">
-            <ion-card-content>
-              <div class="flock-section">
-                <div>
-                  <strong>{{flock.cageName}}</strong>
-                </div>
-                <img class="flocks" src='./assets/flaticon/flocks.png'>
-                <div class="flock-count">
-                  <strong>{{flock.name}}</strong>
-                  <strong>{{flock.initialFlockCategory}} - QTY: {{flock.quantity}}</strong>
-                </div>
-              </div>
-            </ion-card-content>
-          </ion-card>
-        </ion-col>
-      </ion-row>
-
-    </ion-col>
-    <ion-col size-xs="12" size-md="6">
-      <div class="subtitle">
-        <img class="cart-logo" src='./assets/flaticon/cage.png'>
-        <div class="form-section-cart">Cages</div>
-      </div>
-
-      <div>
-        <div *ngFor="let dropCage of dropCages">
-          <ion-row>
-            <ion-col size-xs="12" size-md="6" *ngFor="let cage of dropCage.flockToCage">
-              <ion-card>
-                <ion-card-content>
-                  <div class="cage-section">
-                    <div>
-                      <strong>{{cage[0].cageName? cage[0].cageName : cage[1].cageName}}</strong>
-                    </div>
-                    <img class="cages" src='./assets/flaticon/cage.png'>
-                    <div class="cage-count">
-                      <strong>{{cage[0].cageCategory? cage[0].cageCategory : cage[1].cageCategory}}</strong>
-                    </div>
-                  </div>
-
-                  <div class="example-list drop-list" cdkDropList [cdkDropListData]="cage"
-                    (cdkDropListDropped)="drop($event)">
-                    <span class="flock-cage-drop">
-                      <div class="flock-section m-1" *ngIf="cage[1]?.flockId">
-                        <div>
-                          <strong>{{cage[1].name ? cage[1].name : ''}}</strong>
-                        </div>
-                        <img class="flocks-in-cage" src='./assets/flaticon/flocks-in-cage.png'>
-                        <div class="flock-count">
-                          <strong>{{cage[1].initialFlockCategory}} - QTY: {{cage[0].quantity}}</strong>
-                        </div>
-                      </div>
-                    </span>
-                    <span class="remove-btn">
-                      <ion-button color="gunung-nago-warehouse" *ngIf="cage[1]?.flockId" (click)="remove(cage)"><ion-icon
-                          name="trash"></ion-icon></ion-button>
-                    </span>
-                  </div>
-                  <div class="mt-1" *ngIf="cage[1]?.flockId">
-                    <ion-input color="gunung-nago-primary" label="Quantity*" label-placement="floating" fill="outline"
-                      type="number" clear-input="true" [(ngModel)]="cage[0].quantity"
-                      (ngModelChange)="decreaseFlockQuantity($event, cage);" required="true"></ion-input>
-                  </div>
-                </ion-card-content>
-              </ion-card>
-            </ion-col>
-
-          </ion-row>
+  <div class="outside" cdkScrollable>
+    <ion-row cdkDropListGroup class="flock-transfer-container">
+      <ion-col size-xs="12" size-md="6">
+        <div class="subtitle">
+          <img class="cart-logo" src='./assets/flaticon/flock.png'>
+          <div class="form-section-cart">Flocks</div>
         </div>
-      </div>
-    </ion-col>
-  </ion-row>
 
-  <div class="wrapper-bottom">
+        <ion-row cdkDropList [cdkDropListData]="flocks" (cdkDropListDropped)="drop($event)">
+          <ion-col size-xs="12" size-md="6" *ngFor="let flock of flocks">
+            <ion-card cdkDrag [cdkDragData]="flock" *ngIf="flock.quantity > 0">
+              <ion-card-content>
+                <div class="flock-section">
+                  <div>
+                    <strong>{{flock.name}}</strong>
+                    <br>
+                    <strong>Age: {{flock.initialAge / 7 | number:'1.0-0'}} weeks and {{flock.initialAge % 7}}
+                      days ({{flock.initialFlockCategory}})</strong>
+                  </div>
+                  <img class="flocks" src='./assets/flaticon/flocks.png'>
+                  <div class="flock-count">
+                    <strong>Current Cage: {{flock.cageName}} - {{flock.cageCategory}}</strong><br>
+                    <strong>QTY: {{flock.quantity}}</strong><br>
+                  </div>
+                </div>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+
+      </ion-col>
+      <ion-col size-xs="12" size-md="6">
+        <div class="subtitle">
+          <img class="cart-logo" src='./assets/flaticon/cage.png'>
+          <div class="form-section-cart">Cages</div>
+        </div>
+
+        <div>
+          <div *ngFor="let dropCage of dropCages">
+            <ion-row>
+              <ion-col size-xs="12" size-md="6" *ngFor="let cage of dropCage.flockToCage">
+                <ion-card>
+                  <ion-card-content>
+                    <div class="cage-section">
+                      <div>
+                        <strong>{{cage[0].cageName? cage[0].cageName : cage[1].cageName}}</strong>
+                      </div>
+                      <img class="cages" src='./assets/flaticon/cage.png'>
+                      <div class="cage-count">
+                        <strong>{{cage[0].cageCategory? cage[0].cageCategory : cage[1].cageCategory}}</strong>
+                      </div>
+                    </div>
+
+                    <div class="example-list drop-list" cdkDropList [cdkDropListData]="cage"
+                      (cdkDropListDropped)="drop($event)">
+                      <span class="flock-cage-drop">
+                        <div class="flock-section m-1" *ngIf="cage[1]?.flockId">
+                          <div>
+                            <strong>{{cage[1].name ? cage[1].name : ''}}</strong>
+                            <br>
+                            <strong>Age: {{cage[1].initialAge / 7 | number:'1.0-0'}} weeks and {{cage[1].initialAge %
+                              7}}
+                              days ({{cage[1].initialFlockCategory}})</strong>
+                          </div>
+                          <img class="flocks-in-cage" src='./assets/flaticon/flocks-in-cage.png'>
+                          <div class="flock-count">
+                            <strong>Current Cage: {{cage[1].cageName}} - {{cage[1].cageCategory}}</strong><br>
+                            <strong>QTY: {{cage[0].quantity}}</strong>
+                          </div>
+                        </div>
+                      </span>
+                      <span class="remove-btn">
+                        <ion-button color="gunung-nago-warehouse" *ngIf="cage[1]?.flockId"
+                          (click)="remove(cage)"><ion-icon name="trash"></ion-icon></ion-button>
+                      </span>
+                    </div>
+                    <div class="mt-1" *ngIf="cage[1]?.flockId">
+                      <ion-input color="gunung-nago-primary" label="Quantity*" label-placement="floating" fill="outline"
+                        type="number" clear-input="true" [(ngModel)]="cage[0].quantity"
+                        (ngModelChange)="decreaseFlockQuantity($event, cage);" required="true"></ion-input>
+                    </div>
+                  </ion-card-content>
+                </ion-card>
+              </ion-col>
+
+            </ion-row>
+          </div>
+        </div>
+      </ion-col>
+    </ion-row>
+  </div>
+
+  <div class="wrapper-bottom mt-1">
     <div class="btn-container-stock">
       <ion-button class="cancel-btn" (click)="cancelTransfer()">Cancel</ion-button>
       <ion-button color="positive-btn" (click)="saveTransfer()" [disabled]="disableSave">Save</ion-button>

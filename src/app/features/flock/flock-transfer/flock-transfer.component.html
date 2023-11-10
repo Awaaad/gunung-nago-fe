@@ -49,10 +49,13 @@
                 <div class="flock-section">
                   <div>
                     <strong>{{flock.name}}</strong>
+                    <br>
+                    <strong>Age: {{flock.actualAge / 7 | number:'1.0-0'}} weeks and {{flock.actualAge % 7}}
+                      days ({{flock.actualFlockCategory}})</strong>
                   </div>
                   <img class="flocks" src='./assets/flaticon/flocks.png'>
                   <div class="flock-count">
-                    <strong>{{flock.actualFlockCategory}} - QTY: {{flock.actualQuantity}}</strong>
+                    <strong>QTY: {{flock.actualQuantity}}</strong>
                   </div>
                 </div>
               </ion-card-content>
@@ -112,7 +115,7 @@
     </ion-row>
   </div>
 
-  <div class="wrapper-bottom">
+  <div class="wrapper-bottom mt-1">
     <div class="btn-container-stock">
       <ion-button class="cancel-btn" (click)="cancelTransfer()">Cancel</ion-button>
       <ion-button color="positive-btn" (click)="saveTransfer()">Save</ion-button>
@@ -284,13 +287,6 @@
                     (click)="removeCageDetails(i)" class="delete-product-btn" color="gunung-nago-warehouse"><ion-icon
                       name="trash"></ion-icon></ion-button>
                 </div>
-                <ion-row>
-                  <ion-col size-xs="12" size-md="3">
-                    <ion-toggle labelPlacement="start" class="toggle" formControlName="active"
-                      color="gunung-nago-report">{{
-                      'cage.cage-details.active' | translate }}*</ion-toggle>
-                  </ion-col>
-                </ion-row>
                 <ion-row>
                   <ion-col size-xs="12" size-md="3">
                     <ion-input color="gunung-nago-primary" label="{{ 'cage.cage-details.name' | translate }}*"

@@ -380,7 +380,8 @@ export class FlockSaleDetailsComponent implements OnInit {
       newCustomer: false,
       driverId: null,
       salesInvoiceCategory: null,
-      comment: null
+      comment: null,
+      soldAt: null
     }
   }
 
@@ -399,7 +400,8 @@ export class FlockSaleDetailsComponent implements OnInit {
       newCustomer: this.isNewCustomer,
       driverId: this.selectedDriver?.id,
       salesInvoiceCategory: this.salesInvoiceCategory,
-      comment: this.comment
+      comment: this.comment,
+      soldAt: this.paymentForm?.get("soldAt")?.value,
     }
   }
 
@@ -441,7 +443,7 @@ export class FlockSaleDetailsComponent implements OnInit {
     this.paymentForm.get('payments')?.value.forEach((payment: any) => {
       totalAmountPaid += payment.amountPaid;
     });
-    if (totalAmountPaid <= this.paymentForm.get('totalPrice')?.value) {
+    if (totalAmountPaid <= this.paymentForm.get('soldAt')?.value) {
       return true;
     } else {
       return false;
@@ -453,7 +455,7 @@ export class FlockSaleDetailsComponent implements OnInit {
     this.paymentForm.get('payments')?.value.forEach((payment: any) => {
       totalAmountPaid += payment.amountPaid;
     });
-    if (totalAmountPaid === this.paymentForm.get('totalPrice')?.value) {
+    if (totalAmountPaid === this.paymentForm.get('soldAt')?.value) {
       return true;
     } else {
       return false;
@@ -501,6 +503,11 @@ export class FlockSaleDetailsComponent implements OnInit {
   private initialisePaymentFormBuilder(): void {
     this.paymentForm = this.formBuilder.group({
       totalPrice: new FormControl({ value: this.totalPrice, disabled: true }, Validators.compose([Validators.required])),
+      soldAt: new FormControl({ value: this.totalPrice, disabled: false }, Validators.compose([
+        Validators.required,
+        Validators.min(0),
+        Validators.max(this.totalPrice),
+      ])),
       payments: this.formBuilder.array([
         this.addPaymentFormGroup()
       ])

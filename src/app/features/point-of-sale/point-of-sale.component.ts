@@ -281,7 +281,7 @@ export class PointOfSaleComponent implements OnInit {
         telephoneNumber: new FormControl({ value: '', disabled: !this.isNewCustomer }, Validators.compose([Validators.required, Validators.pattern("^[0-9]*$"),]))
       }),
       quantity: new FormControl(this.quantity, Validators.compose([Validators.min(0)])),
-      price: new FormControl(this.price, Validators.compose([Validators.min(0)])),
+      price: new FormControl(this.price, Validators.compose([Validators.min(0)]))
     });
   }
 
@@ -399,7 +399,7 @@ export class PointOfSaleComponent implements OnInit {
     this.paymentForm.get('payments')?.value.forEach((payment: any) => {
       totalAmountPaid += payment.amountPaid;
     });
-    if (totalAmountPaid <= this.paymentForm.get('totalPrice')?.value) {
+    if (totalAmountPaid <= this.paymentForm.get('soldAt')?.value) {
       return true;
     } else {
       return false;
@@ -411,7 +411,7 @@ export class PointOfSaleComponent implements OnInit {
     this.paymentForm.get('payments')?.value.forEach((payment: any) => {
       totalAmountPaid += payment.amountPaid;
     });
-    if (totalAmountPaid === this.paymentForm.get('totalPrice')?.value) {
+    if (totalAmountPaid === this.paymentForm.get('soldAt')?.value) {
       return true;
     } else {
       return false;
@@ -433,7 +433,8 @@ export class PointOfSaleComponent implements OnInit {
       comment: null,
       paymentSaveDtos: [],
       newCustomer: false,
-      saleDetailsDtos: []
+      saleDetailsDtos: [],
+      soldAt: null
     }
   }
 
@@ -452,7 +453,8 @@ export class PointOfSaleComponent implements OnInit {
       comment: this.comment,
       paymentSaveDtos: this.paymentForm.value.payments,
       newCustomer: this.isNewCustomer,
-      saleDetailsDtos: this.saleDetailsDto
+      saleDetailsDtos: this.saleDetailsDto,
+      soldAt: this.paymentForm?.get("soldAt")?.value
     }
   }
 
@@ -489,6 +491,8 @@ export class PointOfSaleComponent implements OnInit {
     this.saleDetailsDto = [];
     this.initialiseFormBuilder();
     this.setCustomerNewValue(this.isNewCustomer);
+    this.initialiseSaleDetailDto();
+    this.addSaleDetailsToStock();
     if (this.searchCustomerCtrl) {
       this.searchCustomerCtrl.setValue(null);
     }
@@ -497,6 +501,11 @@ export class PointOfSaleComponent implements OnInit {
   private initialisePaymentFormBuilder(): void {
     this.paymentForm = this.formBuilder.group({
       totalPrice: new FormControl({ value: this.totalPrice, disabled: true }, Validators.compose([Validators.required])),
+      soldAt: new FormControl({ value: this.totalPrice, disabled: false }, Validators.compose([
+        Validators.required,
+        Validators.min(0),
+        Validators.max(this.totalPrice),
+      ])),
       payments: this.formBuilder.array([
         this.addPaymentFormGroup()
       ])

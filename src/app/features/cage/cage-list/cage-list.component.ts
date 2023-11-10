@@ -35,7 +35,7 @@ export class CageListComponent {
   public sortBy: string = 'name';
   public cageCategories: string[] = [];
   public cageCategory: CageCategory | string = '';
-  public active: boolean = true;
+  public active: boolean | string = '';
   public isModalOpen: boolean = false;
   public errorMessages = {
     name: [
@@ -104,7 +104,7 @@ export class CageListComponent {
 
   public reset(): void {
     this.cageCategory = '';
-    this.active = true;
+    this.active = '';
     this.page = 0;
     this.utilsService.presentLoadingDuration(500).then(value => {
       this.search();

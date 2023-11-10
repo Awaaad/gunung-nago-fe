@@ -61,7 +61,7 @@
               </div>
               <img class="headers" src='./assets/flaticon/age.png'>
               <div class="headers-count">
-                <strong>{{flockAge}}</strong>
+                <strong>{{flockAge / 7 | number:'1.0-0'}} weeks and {{flockAge % 7}} days</strong>
               </div>
             </div>
           </ion-col>

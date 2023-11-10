@@ -198,10 +198,13 @@
             <ion-chip class="chip-approved" *ngIf="element.salesInvoiceStatus === 'APPROVED'">
               <ion-label>{{element.salesInvoiceStatus | titlecase}}</ion-label>
             </ion-chip>
-            <ion-chip class="chip-cancelled" *ngIf="element.salesInvoiceStatus === 'CANCELLED'">
+            <ion-chip class="chip-completed" *ngIf="element.salesInvoiceStatus === 'COMPLETED'">
               <ion-label>{{element.salesInvoiceStatus | titlecase}}</ion-label>
             </ion-chip>
-            <ion-chip class="chip-completed" *ngIf="element.salesInvoiceStatus === 'COMPLETED'">
+            <ion-chip class="chip-past-due" *ngIf="element.salesInvoiceStatus === 'PAST_DUE'">
+              <ion-label>{{element.salesInvoiceStatus | titlecase}}</ion-label>
+            </ion-chip>
+            <ion-chip class="chip-outstanding" *ngIf="element.salesInvoiceStatus === 'OUTSTANDING'">
               <ion-label>{{element.salesInvoiceStatus | titlecase}}</ion-label>
             </ion-chip>
           </td>
@@ -217,16 +220,27 @@
           <td mat-cell *matCellDef="let element"> {{element.totalPrice | number :'1.2-2'}} </td>
         </ng-container>
 
+        <ng-container matColumnDef="soldAt">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="soldAt"> Sold At </th>
+          <td mat-cell *matCellDef="let element"> {{element.soldAt | number :'1.2-2'}} </td>
+        </ng-container>
+
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef> Actions </th>
           <td mat-cell *matCellDef="let element">
             <div class="table-btn">
-              <ion-button color="neutral-btn" class="mr-05"><ion-icon name="create"></ion-icon></ion-button>
+              <ion-icon color="positive-btn" class="table-view-details-icon mr-05" name="eye"
+                (click)="routeToSalesInvoiceDetails(element)"></ion-icon>
+
+              <ion-icon *ngIf="element.salesInvoiceStatus !== 'PAID'" color="gunung-nago-warehouse"
+                class="table-credit-icon mr-05" name="card"></ion-icon>
+
+              <ion-icon class="table-view-more-icon" name="list" (click)="openStatusModal(element)"></ion-icon>
             </div>
           </td>
         </ng-container>
 
-        <!-- <ng-container matColumnDef="amountPaid">
+        <ng-container matColumnDef="amountPaid">
           <th mat-header-cell *matHeaderCellDef mat-sort-header="amountPaid"> Amount Paid </th>
           <td mat-cell *matCellDef="let element">
             <div *ngFor="let payment of element.paymentDtos">
@@ -253,17 +267,17 @@
           <th mat-header-cell *matHeaderCellDef mat-sort-header="amountDue"> Amount Due </th>
           <td mat-cell *matCellDef="let element">
             <div *ngFor="let payment of element.paymentDtos">
-              <span *ngIf="payment.paymentType == 'CREDIT'">
+              <span *ngIf="payment.paymentType == 'CREDIT' && !payment.settled">
                 <strong>Credit:</strong> {{payment.amountPaid | number :'1.2-2'}}
                 <br>
                 <strong>Deadline:</strong> {{payment.paymentDeadline | date:'dd-MM-yyyy'}}
               </span>
             </div>
           </td>
-        </ng-container> -->
-
+        </ng-container>
+        <!-- (click)="routeToSalesInvoiceDetails(row)" -->
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row (click)="routeToSalesInvoiceDetails(row)" *matRowDef="let row; columns: displayedColumns;"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
     </div>
   </ion-card>
@@ -271,4 +285,217 @@
     <ion-infinite-scroll-content loadingSpinner="crescent" loadingText="Loading more sales invoices...">
     </ion-infinite-scroll-content>
   </ion-infinite-scroll>
+
+  <ion-modal (willDismiss)="onModalStatusWillDismiss($event)" [isOpen]="isStatusModalOpen" cssClass="status-modal"
+    backdropDismiss="true">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <div class="title">
+            <img class="header-logo ml-15" src='./assets/flaticon/workflow.png'>
+            <h3 class="modal-header-text">Change Invoice Status</h3>
+          </div>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content [fullscreen]="false" class="ion-padding">
+        <ion-item-divider>Invoice</ion-item-divider>
+        <ion-row class="status-modal-invoice">
+          <ion-col size-xs="12" size-md="4">
+            <div class="status-modal-invoice-item">
+              Number: <strong>{{selectedInvoice.id}}</strong>
+            </div>
+            <div class="mt-1">
+              <span *ngIf="selectedInvoice.customerFirstName != 'anonymous'">Customer Name:
+                <strong>{{selectedInvoice.customerFirstName}} {{selectedInvoice.customerLastName}}</strong></span>
+            </div>
+
+            <div class="mt-1">
+              <div>
+                Total Price: <strong>{{selectedInvoice.totalPrice}}</strong>
+              </div>
+            </div>
+            <div class="mt-1">
+              <div>
+                Sold At: <strong>{{selectedInvoice.soldAt}}</strong>
+              </div>
+            </div>
+          </ion-col>
+
+          <ion-col size-xs="12" size-md="4">
+            <div>
+              Date Issued: <strong>{{selectedInvoice.createdDate | date:'dd-MM-yyyy HH:mm'}}</strong>
+            </div>
+            <div class="mt-1" *ngIf="selectedInvoice.salesInvoiceCategory === 'DELIVERY'">
+              <div class="d-flex">
+                <img class="table-content-icon" src='./assets/flaticon/delivery.png'>
+                <div class="table-content-text"><strong>Delivery</strong></div>
+              </div>
+            </div>
+            <div class="mt-1" *ngIf="selectedInvoice.salesInvoiceCategory === 'IN_STORE'">
+              <div class="d-flex">
+                <img class="table-content-icon" src='./assets/flaticon/in-store.png'>
+                <div class="table-content-text"><strong>In Store</strong></div>
+              </div>
+            </div>
+
+            <div class="mt-1">
+              <div>
+                Discount: <strong>{{selectedInvoice.discount}} %</strong>
+              </div>
+            </div>
+
+            <div class="mt-1" *ngIf="amountDue > 0">
+              <div>
+                Amount Due: <strong class="amount-due">{{amountDue}}</strong>
+              </div>
+            </div>
+          </ion-col>
+
+          <ion-col size-xs="12" size-md="4">
+            <div class="modal-status-chip">
+              <ion-chip class="chip-paid" *ngIf="selectedInvoice.salesInvoiceStatus === 'PAID'">
+                <ion-label>{{selectedInvoice.salesInvoiceStatus | titlecase}}</ion-label>
+              </ion-chip>
+              <ion-chip class="chip-pending" *ngIf="selectedInvoice.salesInvoiceStatus === 'PENDING'">
+                <ion-label>{{selectedInvoice.salesInvoiceStatus | titlecase}}</ion-label>
+              </ion-chip>
+              <ion-chip class="chip-cancelled" *ngIf="selectedInvoice.salesInvoiceStatus === 'CANCELLED'">
+                <ion-label>{{selectedInvoice.salesInvoiceStatus | titlecase}}</ion-label>
+              </ion-chip>
+              <ion-chip class="chip-approved" *ngIf="selectedInvoice.salesInvoiceStatus === 'APPROVED'">
+                <ion-label>{{selectedInvoice.salesInvoiceStatus | titlecase}}</ion-label>
+              </ion-chip>
+              <ion-chip class="chip-completed" *ngIf="selectedInvoice.salesInvoiceStatus === 'COMPLETED'">
+                <ion-label>{{selectedInvoice.salesInvoiceStatus | titlecase}}</ion-label>
+              </ion-chip>
+              <ion-chip class="chip-past-due" *ngIf="selectedInvoice.salesInvoiceStatus === 'PAST_DUE'">
+                <ion-label>{{selectedInvoice.salesInvoiceStatus | titlecase}}</ion-label>
+              </ion-chip>
+              <ion-chip class="chip-outstanding" *ngIf="selectedInvoice.salesInvoiceStatus === 'OUTSTANDING'">
+                <ion-label>{{selectedInvoice.salesInvoiceStatus | titlecase}}</ion-label>
+              </ion-chip>
+            </div>
+          </ion-col>
+        </ion-row>
+
+        <ion-item-divider class="mt-1">Status</ion-item-divider>
+        <div>
+          <ion-radio-group [(ngModel)]="selectedStatus">
+            <div class="radio-class">
+              <ion-radio value="CANCELLED" color="gunung-nago-warehouse"
+                labelPlacement="end">Cancelled</ion-radio><br />
+
+              <ion-radio value="APPROVED"
+                [disabled]="!(selectedInvoice.salesInvoiceCategory === 'DELIVERY' && selectedInvoice.salesInvoiceStatus === 'PENDING')"
+                color="gunung-nago-survey" labelPlacement="end">Approved</ion-radio><br />
+
+              <ion-radio value="COMPLETED"
+                [disabled]="!(selectedInvoice.salesInvoiceCategory === 'DELIVERY' && selectedInvoice.salesInvoiceStatus === 'APPROVED')"
+                color="gunung-nago-survey" labelPlacement="end">Completed</ion-radio><br />
+
+              <ion-radio value="PAID" [disabled]="selectedInvoice.salesInvoiceStatus == 'PAID'" color="positive-btn"
+                labelPlacement="end">Paid</ion-radio><br />
+            </div>
+          </ion-radio-group>
+        </div>
+
+        <form [formGroup]="paymentForm" *ngIf="selectedStatus === 'PAID'">
+          <ion-row *ngIf="selectedStatus === 'PAID' && (!selectedInvoice.discount || selectedInvoice.discount > 0)">
+            <ion-col size-xs="5" size-md="5">
+              <ion-input color="gunung-nago-primary" label="Total Price" label-placement="floating" fill="outline"
+                type="number" formControlName="totalPrice"></ion-input>
+            </ion-col>
+            <ion-col size-xs="5" size-md="5">
+              <ion-input color="gunung-nago-primary" label="Sold at*" label-placement="floating" fill="outline"
+                type="number" formControlName="soldAt"></ion-input>
+              <div class="error-messages">
+                <ng-container *ngFor="let error of errorMessages.soldAt">
+                  <div class="error-message"
+                    *ngIf="paymentForm.get('soldAt')?.hasError(error.type) && (paymentForm.get('soldAt')?.dirty || paymentForm.get('soldAt')?.touched)">
+                    {{ error.message }}
+                  </div>
+                </ng-container>
+              </div>
+            </ion-col>
+            <ion-col size-xs="2" size-md="2"
+              *ngIf="selectedStatus === 'PAID' && (!selectedInvoice.discount || selectedInvoice.discount > 0)">
+              <ion-input color="gunung-nago-primary" label="Discount (%)" label-placement="floating" fill="outline"
+                [disabled]="true" type="number"
+                [value]="(((paymentForm.get('totalPrice')?.value - paymentForm.get('soldAt')?.value)) / paymentForm.get('totalPrice')?.value) * 100"></ion-input>
+            </ion-col>
+          </ion-row>
+
+          <div class="add-payment-area">
+            <div>
+
+            </div>
+            <div>
+              <ion-button color="neutral-btn" class="add-payment-btn" (click)="addPayment()">Add Payment</ion-button>
+            </div>
+          </div>
+
+          <div formArrayName="payments" *ngFor="let payment of paymentsFields?.controls; let i = index">
+            <ion-item-divider>
+              <ion-label>Payment</ion-label>
+            </ion-item-divider>
+            <span [formGroupName]="i">
+              <ion-button *ngIf="paymentsFields != null && paymentsFields.length > 1" (click)="removePayment(i)"
+                class="remove-payment-btn" color="danger"><span class="material-icons">delete</span></ion-button>
+              <ion-row>
+                <ion-col size="6" size-sm>
+                  <ion-input color="gunung-nago-primary" label="Amount Paid" label-placement="floating" fill="outline"
+                    type="number" formControlName="amountPaid"></ion-input>
+                  <div class="error-messages">
+                    <ng-container *ngFor="let error of errorMessages.amountPaid">
+                      <div class="error-message"
+                        *ngIf="payment.get('amountPaid')?.hasError(error.type) && (payment.get('amountPaid')?.dirty || payment.get('amountPaid')?.touched)">
+                        {{ error.message }}
+                      </div>
+                    </ng-container>
+                  </div>
+                </ion-col>
+
+                <ion-col size="6">
+                  <ion-select color="gunung-nago-primary" label="Payment Mode" label-placement="floating" fill="outline"
+                    interface="popover" placeholder="Payment Mode" formControlName="paymentType">
+                    <ion-select-option *ngFor="let paymentType of paymentTypes" [value]="paymentType">{{
+                      paymentType}}</ion-select-option>
+                  </ion-select>
+                  <div class="error-messages">
+                    <ng-container *ngFor="let error of errorMessages.paymentType">
+                      <div class="error-message"
+                        *ngIf="payment.get('paymentType')?.hasError(error.type) && (payment.get('paymentType')?.dirty || payment.get('paymentType')?.touched)">
+                        {{ error.message }}
+                      </div>
+                    </ng-container>
+                  </div>
+                </ion-col>
+              </ion-row>
+
+              <ion-row *ngIf="payment.get('paymentType')?.value === 'CREDIT'">
+                <ion-col size="6">
+                  <mat-form-field class="date-full-width" appearance="outline">
+                    <mat-label>Payment Deadline</mat-label>
+                    <input matInput [matDatepicker]="picker" [min]="today" formControlName="paymentDeadline">
+                    <mat-hint>DD/MM/YYYY</mat-hint>
+                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                  </mat-form-field>
+                </ion-col>
+              </ion-row>
+            </span>
+          </div>
+        </form>
+
+        <div class="modal-btn-container ion-text-right">
+          <ion-button class="cancel-btn" (click)="cancelStatusChange()">Cancel</ion-button>
+          <ion-button color="positive-btn" *ngIf="selectedStatus !== 'PAID'"
+            (click)="confirmStatusChange()">Save</ion-button>
+          <ion-button color="positive-btn" *ngIf="selectedStatus === 'PAID'"
+            [disabled]="!checkPaymentLessThanSoldAt() || paymentForm.invalid || selectedInvoice.totalPrice < 1 || !checkPaymentCompleted()"
+            (click)="confirmStatusChange()">Save</ion-button>
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
 </ion-content>

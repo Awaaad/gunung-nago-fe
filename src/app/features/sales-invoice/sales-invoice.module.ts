@@ -18,6 +18,8 @@ import { SalesInvoiceApiService } from 'src/app/shared/apis/sales-invoice.api.se
 import { ReceiptApiService } from 'src/app/shared/apis/receipt.api.service';
 import { SecurityApiService } from 'src/app/shared/apis/security.api.service';
 import { FileApiService } from 'src/app/shared/apis/file.api.service';
+import { MatMenuModule } from '@angular/material/menu';
+import { PaymentApiService } from 'src/app/shared/apis/payment.api.service';
 
 @NgModule({
   declarations: [SalesInvoiceListComponent, SalesInvoiceDetailsComponent],
@@ -34,8 +36,9 @@ import { FileApiService } from 'src/app/shared/apis/file.api.service';
     MatFormFieldModule,
     MatNativeDateModule,
     MatDatepickerModule,
-    MatInputModule
+    MatInputModule,
+    MatMenuModule
   ],
-  providers: [SalesInvoiceApiService, ReceiptApiService, SecurityApiService, FileApiService]
+  providers: [SalesInvoiceApiService, ReceiptApiService, SecurityApiService, FileApiService, PaymentApiService]
 })
 export class SalesInvoiceModule { }

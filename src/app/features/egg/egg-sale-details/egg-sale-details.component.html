@@ -346,7 +346,7 @@
               <div>
                 <ion-input color="gunung-nago-survey" label="Tie" label-placement="floating" fill="outline"
                   type="number" min="0" clear-input="true" formControlName="bigGoodTie" [(ngModel)]="bigGoodTie"
-                  (change)="calculateTotalCost()"></ion-input>
+                  (ngModelChange)="calculateTotalCost()"></ion-input>
                 <div class="error-messages">
                   <ng-container *ngFor="let error of errorMessages.minValue">
                     <div class="error-message"
@@ -359,7 +359,7 @@
               <div class="mt-1">
                 <ion-input color="gunung-nago-survey" label="Price per Tie" label-placement="floating" fill="outline"
                   type="number" min="0" clear-input="true" formControlName="bigGoodPricePerTie"
-                  [(ngModel)]="bigGoodPricePerTie" (change)="calculateTotalCost()"></ion-input>
+                  [(ngModel)]="bigGoodPricePerTie" (ngModelChange)="calculateTotalCost()"></ion-input>
                 <div class="error-messages">
                   <ng-container *ngFor="let error of errorMessages.minValue">
                     <div class="error-message"
@@ -382,7 +382,7 @@
               <div>
                 <ion-input color="gunung-nago-survey" label="Tray" label-placement="floating" fill="outline"
                   type="number" min="0" clear-input="true" formControlName="bigGoodTray" [(ngModel)]="bigGoodTray"
-                  (change)="calculateTotalCost()"></ion-input>
+                  (ngModelChange)="calculateTotalCost()"></ion-input>
                 <div class="error-messages">
                   <ng-container *ngFor="let error of errorMessages.minValue">
                     <div class="error-message"
@@ -395,7 +395,7 @@
               <div class="mt-1">
                 <ion-input color="gunung-nago-survey" label="Price per tray" label-placement="floating" fill="outline"
                   type="number" min="0" clear-input="true" formControlName="bigGoodPricePerTray"
-                  [(ngModel)]="bigGoodPricePerTray" (change)="calculateTotalCost()"></ion-input>
+                  [(ngModel)]="bigGoodPricePerTray" (ngModelChange)="calculateTotalCost()"></ion-input>
                 <div class="error-messages">
                   <ng-container *ngFor="let error of errorMessages.minValue">
                     <div class="error-message"
@@ -418,7 +418,7 @@
               <div>
                 <ion-input color="gunung-nago-survey" label="Piece" label-placement="floating" fill="outline"
                   type="number" min="0" clear-input="true" formControlName="bigGoodPiece" [(ngModel)]="bigGoodPiece"
-                  (change)="calculateTotalCost()"></ion-input>
+                  (ngModelChange)="calculateTotalCost()"></ion-input>
                 <div class="error-messages">
                   <ng-container *ngFor="let error of errorMessages.minValue">
                     <div class="error-message"
@@ -431,7 +431,7 @@
               <div class="mt-1">
                 <ion-input color="gunung-nago-survey" label="Price per piece" label-placement="floating" fill="outline"
                   type="number" min="0" clear-input="true" formControlName="bigGoodPricePerPiece"
-                  [(ngModel)]="bigGoodPricePerPiece" (change)="calculateTotalCost()"></ion-input>
+                  [(ngModel)]="bigGoodPricePerPiece" (ngModelChange)="calculateTotalCost()"></ion-input>
                 <div class="error-messages">
                   <ng-container *ngFor="let error of errorMessages.minValue">
                     <div class="error-message"
@@ -467,7 +467,7 @@
               <div>
                 <ion-input color="gunung-nago-survey" label="Tie" label-placement="floating" fill="outline"
                   type="number" min="0" clear-input="true" formControlName="mediumGoodTie" [(ngModel)]="mediumGoodTie"
-                  (change)="calculateTotalCost()"></ion-input>
+                  (ngModelChange)="calculateTotalCost()"></ion-input>
                 <div class="error-messages">
                   <ng-container *ngFor="let error of errorMessages.minValue">
                     <div class="error-message"
@@ -480,7 +480,7 @@
               <div class="mt-1">
                 <ion-input color="gunung-nago-survey" label="Price per Tie" label-placement="floating" fill="outline"
                   type="number" min="0" clear-input="true" formControlName="mediumGoodPricePerTie"
-                  [(ngModel)]="mediumGoodPricePerTie" (change)="calculateTotalCost()"></ion-input>
+                  [(ngModel)]="mediumGoodPricePerTie" (ngModelChange)="calculateTotalCost()"></ion-input>
                 <div class="error-messages">
                   <ng-container *ngFor="let error of errorMessages.minValue">
                     <div class="error-message"
@@ -503,7 +503,7 @@
               <div>
                 <ion-input color="gunung-nago-survey" label="Tray" label-placement="floating" fill="outline"
                   type="number" min="0" clear-input="true" formControlName="mediumGoodTray" [(ngModel)]="mediumGoodTray"
-                  (change)="calculateTotalCost()"></ion-input>
+                  (ngModelChange)="calculateTotalCost()"></ion-input>
                 <div class="error-messages">
                   <ng-container *ngFor="let error of errorMessages.minValue">
                     <div class="error-message"
@@ -516,7 +516,7 @@
               <div class="mt-1">
                 <ion-input color="gunung-nago-survey" label="Price per tray" label-placement="floating" fill="outline"
                   type="number" min="0" clear-input="true" formControlName="mediumGoodPricePerTray"
-                  [(ngModel)]="mediumGoodPricePerTray" (change)="calculateTotalCost()"></ion-input>
+                  [(ngModel)]="mediumGoodPricePerTray" (ngModelChange)="calculateTotalCost()"></ion-input>
                 <div class="error-messages">
                   <ng-container *ngFor="let error of errorMessages.minValue">
                     <div class="error-message"
@@ -539,7 +539,7 @@
               <div>
                 <ion-input color="gunung-nago-survey" label="Piece" label-placement="floating" fill="outline"
                   type="number" min="0" clear-input="true" formControlName="mediumGoodPiece"
-                  [(ngModel)]="mediumGoodPiece" (change)="calculateTotalCost()"></ion-input>
+                  [(ngModel)]="mediumGoodPiece" (ngModelChange)="calculateTotalCost()"></ion-input>
                 <div class="error-messages">
                   <ng-container *ngFor="let error of errorMessages.minValue">
                     <div class="error-message"
@@ -552,7 +552,7 @@
               <div class="mt-1">
                 <ion-input color="gunung-nago-survey" label="Price per piece" label-placement="floating" fill="outline"
                   type="number" min="0" clear-input="true" formControlName="mediumGoodPricePerPiece"
-                  [(ngModel)]="mediumGoodPricePerPiece" (change)="calculateTotalCost()"></ion-input>
+                  [(ngModel)]="mediumGoodPricePerPiece" (ngModelChange)="calculateTotalCost()"></ion-input>
                 <div class="error-messages">
                   <ng-container *ngFor="let error of errorMessages.minValue">
                     <div class="error-message"
@@ -588,7 +588,7 @@
               <div>
                 <ion-input color="gunung-nago-survey" label="Tie" label-placement="floating" fill="outline"
                   type="number" min="0" clear-input="true" formControlName="smallGoodTie" [(ngModel)]="smallGoodTie"
-                  (change)="calculateTotalCost()"></ion-input>
+                  (ngModelChange)="calculateTotalCost()"></ion-input>
                 <div class="error-messages">
                   <ng-container *ngFor="let error of errorMessages.minValue">
                     <div class="error-message"
@@ -601,7 +601,7 @@
               <div class="mt-1">
                 <ion-input color="gunung-nago-survey" label="Price per Tie" label-placement="floating" fill="outline"
                   type="number" min="0" clear-input="true" formControlName="smallGoodPricePerTie"
-                  [(ngModel)]="smallGoodPricePerTie" (change)="calculateTotalCost()"></ion-input>
+                  [(ngModel)]="smallGoodPricePerTie" (ngModelChange)="calculateTotalCost()"></ion-input>
                 <div class="error-messages">
                   <ng-container *ngFor="let error of errorMessages.minValue">
                     <div class="error-message"
@@ -624,7 +624,7 @@
               <div>
                 <ion-input color="gunung-nago-survey" label="Tray" label-placement="floating" fill="outline"
                   type="number" min="0" clear-input="true" formControlName="smallGoodTray" [(ngModel)]="smallGoodTray"
-                  (change)="calculateTotalCost()"></ion-input>
+                  (ngModelChange)="calculateTotalCost()"></ion-input>
                 <div class="error-messages">
                   <ng-container *ngFor="let error of errorMessages.minValue">
                     <div class="error-message"
@@ -637,7 +637,7 @@
               <div class="mt-1">
                 <ion-input color="gunung-nago-survey" label="Price per tray" label-placement="floating" fill="outline"
                   type="number" min="0" clear-input="true" formControlName="smallGoodPricePerTray"
-                  [(ngModel)]="smallGoodPricePerTray" (change)="calculateTotalCost()"></ion-input>
+                  [(ngModel)]="smallGoodPricePerTray" (ngModelChange)="calculateTotalCost()"></ion-input>
                 <div class="error-messages">
                   <ng-container *ngFor="let error of errorMessages.minValue">
                     <div class="error-message"
@@ -660,7 +660,7 @@
               <div>
                 <ion-input color="gunung-nago-survey" label="Piece" label-placement="floating" fill="outline"
                   type="number" min="0" clear-input="true" formControlName="smallGoodPiece" [(ngModel)]="smallGoodPiece"
-                  (change)="calculateTotalCost()"></ion-input>
+                  (ngModelChange)="calculateTotalCost()"></ion-input>
                 <div class="error-messages">
                   <ng-container *ngFor="let error of errorMessages.minValue">
                     <div class="error-message"
@@ -673,7 +673,7 @@
               <div class="mt-1">
                 <ion-input color="gunung-nago-survey" label="Price per piece" label-placement="floating" fill="outline"
                   type="number" min="0" clear-input="true" formControlName="smallGoodPricePerPiece"
-                  [(ngModel)]="smallGoodPricePerPiece" (change)="calculateTotalCost()"></ion-input>
+                  [(ngModel)]="smallGoodPricePerPiece" (ngModelChange)="calculateTotalCost()"></ion-input>
                 <div class="error-messages">
                   <ng-container *ngFor="let error of errorMessages.minValue">
                     <div class="error-message"
@@ -713,7 +713,7 @@
               <div>
                 <ion-input color="gunung-nago-survey" label="Tie" label-placement="floating" fill="outline"
                   type="number" min="0" clear-input="true" formControlName="badTie" [(ngModel)]="badTie"
-                  (change)="calculateTotalCost()"></ion-input>
+                  (ngModelChange)="calculateTotalCost()"></ion-input>
                 <div class="error-messages">
                   <ng-container *ngFor="let error of errorMessages.minValue">
                     <div class="error-message"
@@ -726,7 +726,7 @@
               <div class="mt-1">
                 <ion-input color="gunung-nago-survey" label="Price per Tie" label-placement="floating" fill="outline"
                   type="number" min="0" clear-input="true" formControlName="badPricePerTie" [(ngModel)]="badPricePerTie"
-                  (change)="calculateTotalCost()"></ion-input>
+                  (ngModelChange)="calculateTotalCost()"></ion-input>
                 <div class="error-messages">
                   <ng-container *ngFor="let error of errorMessages.minValue">
                     <div class="error-message"
@@ -749,7 +749,7 @@
               <div>
                 <ion-input color="gunung-nago-survey" label="Tray" label-placement="floating" fill="outline"
                   type="number" min="0" clear-input="true" formControlName="badTray" [(ngModel)]="badTray"
-                  (change)="calculateTotalCost()"></ion-input>
+                  (ngModelChange)="calculateTotalCost()"></ion-input>
                 <div class="error-messages">
                   <ng-container *ngFor="let error of errorMessages.minValue">
                     <div class="error-message"
@@ -762,7 +762,7 @@
               <div class="mt-1">
                 <ion-input color="gunung-nago-survey" label="Price per tray" label-placement="floating" fill="outline"
                   type="number" min="0" clear-input="true" formControlName="badPricePerTray"
-                  [(ngModel)]="badPricePerTray" (change)="calculateTotalCost()"></ion-input>
+                  [(ngModel)]="badPricePerTray" (ngModelChange)="calculateTotalCost()"></ion-input>
                 <div class="error-messages">
                   <ng-container *ngFor="let error of errorMessages.minValue">
                     <div class="error-message"
@@ -785,7 +785,7 @@
               <div>
                 <ion-input color="gunung-nago-survey" label="Piece" label-placement="floating" fill="outline"
                   type="number" min="0" clear-input="true" formControlName="badPiece" [(ngModel)]="badPiece"
-                  (ngModelChange)="validatePiece($event);" (change)="calculateTotalCost()"></ion-input>
+                  (ngModelChange)="validatePiece($event);" (ngModelChange)="calculateTotalCost()"></ion-input>
                 <div class="error-messages">
                   <ng-container *ngFor="let error of errorMessages.minValue">
                     <div class="error-message"
@@ -798,7 +798,7 @@
               <div class="mt-1">
                 <ion-input color="gunung-nago-survey" label="Price per piece" label-placement="floating" fill="outline"
                   type="number" min="0" clear-input="true" formControlName="badPricePerPiece"
-                  [(ngModel)]="badPricePerPiece" (change)="calculateTotalCost()"></ion-input>
+                  [(ngModel)]="badPricePerPiece" (ngModelChange)="calculateTotalCost()"></ion-input>
                 <div class="error-messages">
                   <ng-container *ngFor="let error of errorMessages.minValue">
                     <div class="error-message"
@@ -1038,7 +1038,7 @@
     </ion-col>
   </ion-row>
 
-  <ion-modal (willDismiss)="onWillDismiss($event)" [isOpen]="isModalOpen" cssClass="flock-modal"
+  <ion-modal (willDismiss)="onWillDismiss($event)" [isOpen]="isModalOpen" cssClass="payment-modal"
     backdropDismiss="false">
     <ng-template>
       <ion-header>
@@ -1052,15 +1052,34 @@
       <ion-content [fullscreen]="false" class="ion-padding">
         <form [formGroup]="paymentForm">
           <ion-row>
-            <ion-col size-xs="6" size-md="3">
+            <ion-col size-xs="6" size-md="6">
               <ion-input color="gunung-nago-primary" label="Total Price" label-placement="floating" fill="outline"
                 type="number" formControlName="totalPrice"></ion-input>
+            </ion-col>
+            <ion-col size-xs="6" size-md="6">
+              <ion-input color="gunung-nago-primary" label="Sold at*" label-placement="floating" fill="outline"
+                type="number" formControlName="soldAt"></ion-input>
+              <div class="error-messages">
+                <ng-container *ngFor="let error of errorMessages.soldAt">
+                  <div class="error-message"
+                    *ngIf="paymentForm.get('soldAt')?.hasError(error.type) && (paymentForm.get('soldAt')?.dirty || paymentForm.get('soldAt')?.touched)">
+                    {{ error.message }}
+                  </div>
+                </ng-container>
+              </div>
+            </ion-col>
+          </ion-row>
+
+          <ion-row>
+            <ion-col size-xs="6" size-md="6">
+              <ion-input color="gunung-nago-primary" label="Discount (%)" label-placement="floating" fill="outline" [disabled]="true"
+                type="number"
+                [value]="(((paymentForm.get('totalPrice')?.value - paymentForm.get('soldAt')?.value)) / paymentForm.get('totalPrice')?.value) * 100"></ion-input>
             </ion-col>
           </ion-row>
 
           <div class="add-payment-area">
             <div>
-
             </div>
             <div>
               <ion-button color="neutral-btn" class="add-payment-btn" (click)="addPayment()">Add Payment</ion-button>
@@ -1076,7 +1095,7 @@
                 class="remove-payment-btn" color="danger"><span class="material-icons">delete</span></ion-button>
               <ion-row>
                 <ion-col size="6" size-sm>
-                  <ion-input color="gunung-nago-primary" label="Amount Paid" label-placement="floating" fill="outline"
+                  <ion-input color="gunung-nago-primary" label="Amount Paid*" label-placement="floating" fill="outline"
                     type="number" formControlName="amountPaid"></ion-input>
                   <div class="error-messages">
                     <ng-container *ngFor="let error of errorMessages.amountPaid">
@@ -1089,8 +1108,8 @@
                 </ion-col>
 
                 <ion-col size="6">
-                  <ion-select color="gunung-nago-primary" label="Payment Mode" label-placement="floating" fill="outline"
-                    interface="popover" placeholder="Payment Mode" formControlName="paymentType">
+                  <ion-select color="gunung-nago-primary" label="Payment Mode*" label-placement="floating"
+                    fill="outline" interface="popover" placeholder="Payment Mode" formControlName="paymentType">
                     <ion-select-option *ngFor="let paymentType of paymentTypes" [value]="paymentType">{{
                       paymentType}}</ion-select-option>
                   </ion-select>

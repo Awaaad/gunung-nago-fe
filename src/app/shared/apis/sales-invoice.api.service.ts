@@ -18,4 +18,20 @@ export class SalesInvoiceApiService {
     public findSalesInvoiceDetailsById(id: number): Observable<SalesInvoiceDetailsFrontDto> {
         return this.http.get<any>(`${this.baseUrl}${id}`);
     }
+
+    public approveSalesInvoiceStatus(id: number): Observable<any> {
+        return this.http.post(`${this.baseUrl}approved/${id}`, null, { responseType: 'text' });
+    }
+
+    public cancelSalesInvoiceStatus(id: number): Observable<any> {
+        return this.http.post(`${this.baseUrl}cancelled/${id}`, null, { responseType: 'text' });
+    }
+
+    public completeSalesInvoiceStatus(id: number): Observable<any> {
+        return this.http.post(`${this.baseUrl}completed/${id}`, null, { responseType: 'text' });
+    }
+
+    public paidSalesInvoiceStatus(id: number): Observable<any> {
+        return this.http.post(`${this.baseUrl}paid/${id}`, null, { responseType: 'text' });
+    }
 }

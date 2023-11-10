@@ -47,11 +47,13 @@ export class FlockSaleSaveFrontDto {
     salesInvoiceCategory!: SalesInvoiceCategory | null | undefined;
     driverId!: number | null | undefined;
     comment!: string | null | undefined;
+    soldAt!: number | null | undefined;
 }
 
 export class EggSaleSaveFrontDto {
     customerDto!: CustomerFrontDto | null | undefined;
     paymentSaveDtos!: PaymentSaveFrontDto[] | [] | null | undefined;
+    soldAt!: number | null | undefined;
     salesInvoiceCategory!: SalesInvoiceCategory | null | undefined;
     driverId!: number | null | undefined;
     comment!: string | null | undefined;
@@ -143,6 +145,7 @@ export class ManureSaleSaveFrontDto {
     salesInvoiceCategory!: SalesInvoiceCategory | null | undefined | any;
     quantity!: number | null | undefined | any;
     price!: number | null | undefined | any;
+    soldAt!: number | null | undefined | any;
     driverId!: number | null | undefined | any;
     comment!: string | null | undefined | any;
     newCustomer!: boolean | null | undefined | any;
@@ -156,6 +159,7 @@ export class SaleSaveFrontDto {
     comment!: string | null | undefined;
     saleDetailsDtos!: SaleDetailsDto[] | [] | null | undefined;
     newCustomer!: boolean | null | undefined;
+    soldAt!: number | null | undefined;
 }
 
 export class SaleDetailsFrontDto {
@@ -319,4 +323,11 @@ export class FlockCageIncompatibleFrontDto {
     initialQuantity!: number | null | undefined | any;
     cageName!: string | null | undefined | any;
     quantity!: number | null | undefined | any;
+}
+
+export class SalesInvoiceSettleCreditPaymentFrontDto {
+    invoiceId!: number | null | undefined | any;
+    soldAt!: number | null | undefined | any;
+    discount!: number | null | undefined | any;
+    paymentSaveDtos!: PaymentSaveFrontDto[] | [] | null | undefined;
 }

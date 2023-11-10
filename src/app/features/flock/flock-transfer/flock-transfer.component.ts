@@ -138,7 +138,6 @@ export class FlockTransferComponent {
 
   public cancelTransfer(): void {
     this.flockCageTransferDtoList = [];
-    this.initialiseCageFormBuilder();
     this.getAllActiveFlocksWithoutCage();
     this.getAllFreeCages();
     this.dropCages = [{
@@ -192,7 +191,7 @@ export class FlockTransferComponent {
     return this.formBuilder.group({
       id: null,
       name: new FormControl({ value: null, disabled: false }, Validators.compose([Validators.required])),
-      active: new FormControl({ value: false, disabled: false }, Validators.compose([Validators.required])),
+      active: false,
       cageCategory: new FormControl({ value: null, disabled: false }, Validators.compose([Validators.required]))
     });
   }

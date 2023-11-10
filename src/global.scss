@@ -154,6 +154,7 @@ ion-card {
 .table-btn {
     display: flex;
     justify-content: end;
+    font-size: 2em;
 }
 
 .mr-05 {
@@ -301,4 +302,66 @@ strong {
     height: 30px;
     color: black;
     background: var(--ion-color-step-300, #edeef0);
+}
+
+
+.table-view-more-icon {
+    border: 2px solid transparent;
+    padding: 2px;
+    border-radius: 4px;
+}
+
+.table-view-more-icon:hover {
+    border: 2px solid black;
+    padding: 2px;
+    border-radius: 4px;
+}
+
+.table-view-details-icon {
+    border: 2px solid transparent;
+    padding: 2px;
+    border-radius: 4px;
+}
+
+.table-view-details-icon:hover {
+    border: 2px solid var(--ion-color-positive-btn);
+    padding: 2px;
+    border-radius: 4px;
+}
+
+.table-edit-icon {
+    border: 2px solid transparent;
+    padding: 2px;
+    border-radius: 4px;
+}
+
+.table-edit-icon:hover {
+    border: 2px solid var(--ion-color-neutral-btn);
+    padding: 2px;
+    border-radius: 4px;
+}
+
+.table-credit-icon {
+    border: 2px solid transparent;
+    padding: 2px;
+    border-radius: 4px;
+}
+
+.table-credit-icon:hover {
+    border: 2px solid var(--ion-color-gunung-nago-warehouse);
+    padding: 2px;
+    border-radius: 4px;
+}
+
+ion-radio {
+    font-size: 15px;
+}
+
+.d-flex {
+    display: flex;
+}
+
+.payment-modal {
+    --height: 55em;
+    --width: 50em;
 }

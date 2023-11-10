@@ -254,7 +254,8 @@ export class ManureSaleDetailsComponent implements OnInit {
       newCustomer: false,
       driverId: null,
       salesInvoiceCategory: null,
-      comment: null
+      comment: null,
+      soldAt: null,
     }
   }
 
@@ -274,10 +275,10 @@ export class ManureSaleDetailsComponent implements OnInit {
       salesInvoiceCategory: this.salesInvoiceCategory,
       quantity: this.quantity,
       price: this.price,
-      comment: this.comment
+      comment: this.comment,
+      soldAt: this.paymentForm?.get("soldAt")?.value
     }
   }
-
 
   private checkIfCreditAllowed(): boolean {
     return (this.selectedCustomer != null && this.selectedCustomer.id != null) || (this.isNewCustomer && this.manureSaleForm?.get("customer.telephoneNumber")?.value != '');
@@ -317,7 +318,7 @@ export class ManureSaleDetailsComponent implements OnInit {
     this.paymentForm.get('payments')?.value.forEach((payment: any) => {
       totalAmountPaid += payment.amountPaid;
     });
-    if (totalAmountPaid <= this.paymentForm.get('totalPrice')?.value) {
+    if (totalAmountPaid <= this.paymentForm.get('soldAt')?.value) {
       return true;
     } else {
       return false;
@@ -329,7 +330,7 @@ export class ManureSaleDetailsComponent implements OnInit {
     this.paymentForm.get('payments')?.value.forEach((payment: any) => {
       totalAmountPaid += payment.amountPaid;
     });
-    if (totalAmountPaid === this.paymentForm.get('totalPrice')?.value) {
+    if (totalAmountPaid === this.paymentForm.get('soldAt')?.value) {
       return true;
     } else {
       return false;
@@ -378,6 +379,11 @@ export class ManureSaleDetailsComponent implements OnInit {
     this.totalPrice = this.quantity * this.price;
     this.paymentForm = this.formBuilder.group({
       totalPrice: new FormControl({ value: this.totalPrice, disabled: true }, Validators.compose([Validators.required])),
+      soldAt: new FormControl({ value: this.totalPrice, disabled: false }, Validators.compose([
+        Validators.required,
+        Validators.min(0),
+        Validators.max(this.totalPrice),
+      ])),
       payments: this.formBuilder.array([
         this.addPaymentFormGroup()
       ])

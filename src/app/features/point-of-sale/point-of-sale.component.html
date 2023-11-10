@@ -370,12 +370,12 @@
               *ngIf="(saleDetail.salesInvoiceType === 'FLOCK' && saleDetail.flockType != null)">
               <ion-input color="gunung-nago-survey" label="Quantity" label-placement="floating" fill="outline"
                 type="number" min="0" clear-input="true" [(ngModel)]="saleDetail.quantity"
-                (change)="calculateTotalPrice()"></ion-input>
+                (ngModelChange)="calculateTotalPrice()"></ion-input>
             </ion-col>
             <ion-col size-lg="2" size-md="3" size-xs="12" *ngIf="saleDetail.quantity > 0">
               <ion-input color="gunung-nago-survey" label="Price" label-placement="floating" fill="outline"
                 type="number" min="0" clear-input="true" [(ngModel)]="saleDetail.price"
-                (change)="calculateTotalPrice()"></ion-input>
+                (ngModelChange)="calculateTotalPrice()"></ion-input>
             </ion-col>
             <ion-col size-lg="2" size-md="3" size-xs="12" *ngIf="saleDetail.quantity > 0 && saleDetail.price > 0">
               <div class="total-per ml-05">
@@ -468,12 +468,12 @@
               *ngIf="(saleDetail.salesInvoiceType === 'EGG' && saleDetail.eggQuantityType != null)">
               <ion-input color="gunung-nago-survey" label="Quantity" label-placement="floating" fill="outline"
                 type="number" min="0" clear-input="true" [(ngModel)]="saleDetail.quantity"
-                (change)="calculateTotalPrice()"></ion-input>
+                (ngModelChange)="calculateTotalPrice()"></ion-input>
             </ion-col>
             <ion-col size-lg="2" size-md="3" size-xs="12" *ngIf="saleDetail.quantity > 0">
               <ion-input color="gunung-nago-survey" label="Price" label-placement="floating" fill="outline"
                 type="number" min="0" clear-input="true" [(ngModel)]="saleDetail.price"
-                (change)="calculateTotalPrice()"></ion-input>
+                (ngModelChange)="calculateTotalPrice()"></ion-input>
             </ion-col>
             <ion-col size-lg="2" size-md="3" size-xs="12" *ngIf="saleDetail.quantity > 0 && saleDetail.price > 0">
               <div class="total-per ml-05">
@@ -503,12 +503,12 @@
             <ion-col size-lg="2" size-md="3" size-xs="12">
               <ion-input color="gunung-nago-survey" label="Quantity" label-placement="floating" fill="outline"
                 type="number" min="0" clear-input="true" [(ngModel)]="saleDetail.quantity"
-                (change)="calculateTotalPrice()"></ion-input>
+                (ngModelChange)="calculateTotalPrice()"></ion-input>
             </ion-col>
             <ion-col size-lg="2" size-md="3" size-xs="12" *ngIf="saleDetail.quantity > 0">
               <ion-input color="gunung-nago-survey" label="Price" label-placement="floating" fill="outline"
                 type="number" min="0" clear-input="true" [(ngModel)]="saleDetail.price"
-                (change)="calculateTotalPrice()"></ion-input>
+                (ngModelChange)="calculateTotalPrice()"></ion-input>
             </ion-col>
             <ion-col size-lg="2" size-md="3" size-xs="12" *ngIf="saleDetail.quantity > 0 && saleDetail.price > 0">
               <div class="total-per ml-05">
@@ -665,7 +665,7 @@
     </ion-col>
   </ion-row>
 
-  <ion-modal (willDismiss)="onWillDismiss($event)" [isOpen]="isModalOpen" cssClass="flock-modal"
+  <ion-modal (willDismiss)="onWillDismiss($event)" [isOpen]="isModalOpen" cssClass="payment-modal"
     backdropDismiss="false">
     <ng-template>
       <ion-header>
@@ -679,9 +679,29 @@
       <ion-content [fullscreen]="false" class="ion-padding">
         <form [formGroup]="paymentForm">
           <ion-row>
-            <ion-col size-xs="6" size-md="3">
+            <ion-col size-xs="6" size-md="6">
               <ion-input color="gunung-nago-primary" label="Total Price" label-placement="floating" fill="outline"
                 type="number" formControlName="totalPrice"></ion-input>
+            </ion-col>
+            <ion-col size-xs="6" size-md="6">
+              <ion-input color="gunung-nago-primary" label="Sold at*" label-placement="floating" fill="outline"
+                type="number" formControlName="soldAt"></ion-input>
+              <div class="error-messages">
+                <ng-container *ngFor="let error of errorMessages.soldAt">
+                  <div class="error-message"
+                    *ngIf="paymentForm.get('soldAt')?.hasError(error.type) && (paymentForm.get('soldAt')?.dirty || paymentForm.get('soldAt')?.touched)">
+                    {{ error.message }}
+                  </div>
+                </ng-container>
+              </div>
+            </ion-col>
+          </ion-row>
+
+          <ion-row>
+            <ion-col size-xs="6" size-md="6">
+              <ion-input color="gunung-nago-primary" label="Discount (%)" label-placement="floating" fill="outline"
+                [disabled]="true" type="number"
+                [value]="(((paymentForm.get('totalPrice')?.value - paymentForm.get('soldAt')?.value)) / paymentForm.get('totalPrice')?.value) * 100"></ion-input>
             </ion-col>
           </ion-row>
 

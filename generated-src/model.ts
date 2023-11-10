@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2023-11-04 09:57:44.
+// Generated using typescript-generator version 3.2.1263 on 2023-11-10 11:27:39.
 
 export class CageDto {
     id!: number;
@@ -43,6 +43,8 @@ export class EggSaleSaveDto {
     medium!: boolean;
     small!: boolean;
     bad!: boolean;
+    soldAt!: number;
+    discount!: number;
     customerDto!: CustomerDto;
     paymentSaveDtos!: PaymentSaveDto[];
     salesInvoiceCategory!: SalesInvoiceCategory;
@@ -222,6 +224,8 @@ export class FlockSaleDetailsDto {
 
 export class FlockSaleSaveDto {
     customerDto!: CustomerDto;
+    soldAt!: number;
+    discount!: number;
     flockSaleDetailsDtos!: FlockSaleDetailsDto[];
     paymentSaveDtos!: PaymentSaveDto[];
     salesInvoiceCategory!: SalesInvoiceCategory;
@@ -354,6 +358,8 @@ export class HealthSurveyStockDto {
 
 export class ManureSaleSaveDto {
     customerDto!: CustomerDto;
+    soldAt!: number;
+    discount!: number;
     paymentSaveDtos!: PaymentSaveDto[];
     salesInvoiceCategory!: SalesInvoiceCategory;
     quantity!: number;
@@ -379,8 +385,8 @@ export class PaymentDto {
     id!: number;
     amountPaid!: number;
     paymentDeadline!: Date;
-    previousPaymentType!: PaymentType;
     paymentType!: PaymentType;
+    settled!: boolean;
 }
 
 export class PaymentSaveDto {
@@ -388,6 +394,13 @@ export class PaymentSaveDto {
     paymentDeadline!: Date;
     previousPaymentType!: PaymentType;
     paymentType!: PaymentType;
+}
+
+export class SalesInvoiceSettleCreditPaymentDto {
+    invoiceId!: number;
+    soldAt!: number;
+    discount!: number;
+    paymentSaveDtos!: PaymentSaveDto[];
 }
 
 export class SaleDetailsDto {
@@ -403,6 +416,8 @@ export class SaleDetailsDto {
 
 export class SaleSaveDto {
     customerDto!: CustomerDto;
+    soldAt!: number;
+    discount!: number;
     paymentSaveDtos!: PaymentSaveDto[];
     salesInvoiceCategory!: SalesInvoiceCategory;
     driverId!: number;
@@ -584,6 +599,7 @@ export class SalesInvoiceDto {
     salesInvoiceType!: SalesInvoiceType;
     totalPrice!: number;
     soldAt!: number;
+    discount!: number;
     createdBy!: string;
     createdDate!: Date;
     customerFirstName!: string;
@@ -592,6 +608,7 @@ export class SalesInvoiceDto {
     driverLastName!: string;
     salesInvoiceCategory!: SalesInvoiceCategory;
     salesInvoiceStatus!: SalesInvoiceStatus;
+    paymentDtos!: PaymentDto[];
 }
 
 export class SalesInvoiceSearchCriteriaDto {
@@ -781,5 +798,8 @@ export enum SalesInvoiceStatus {
     CANCELLED = 'CANCELLED',
     APPROVED = 'APPROVED',
     COMPLETED = 'COMPLETED',
+    OUTSTANDING = 'OUTSTANDING',
+    PAST_DUE = 'PAST_DUE',
     PAID = 'PAID',
+    PARTLY_PAID = 'PARTLY_PAID',
 }

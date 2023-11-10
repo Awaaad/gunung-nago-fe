@@ -10,6 +10,12 @@ import { UtilsService } from 'src/app/shared/utils/utils.service';
 import { SalesInvoiceApiService } from 'src/app/shared/apis/sales-invoice.api.service';
 import { Router } from '@angular/router';
 import { SecurityApiService } from 'src/app/shared/apis/security.api.service';
+import { OverlayEventDetail } from '@ionic/core/components';
+import { HttpErrorResponse } from '@angular/common/http';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import * as moment from 'moment';
+import { SalesInvoiceSettleCreditPaymentFrontDto } from 'generated-src/model-front';
+import { PaymentApiService } from 'src/app/shared/apis/payment.api.service';
 
 @Component({
   selector: 'app-sales-invoice-list',
@@ -23,12 +29,12 @@ export class SalesInvoiceListComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   public language = "en";
-  public displayedColumns: string[] = ['id', 'name', 'createdBy', 'createdDate', 'category', 'driver', 'totalPrice', 'status'];
+  public displayedColumns: string[] = ['id', 'name', 'createdBy', 'createdDate', 'category', 'driver', 'totalPrice', 'soldAt', 'amountPaid', 'amountDue', 'status', 'actions'];
   public salesInvoices = new MatTableDataSource<SalesInvoiceDto>;
   private infiniteSalesInvoices: SalesInvoiceDto[] = [];
   public salesInvoiceSearchSubscription!: Subscription;
   private page: number = 0;
-  private size: number = 20;
+  private size: number = 50;
   public sortOrder: string = 'desc';
   public sortBy: string = 'createdDate';
   public customerName: string = '';
@@ -44,7 +50,14 @@ export class SalesInvoiceListComponent {
   public salesInvoiceStatus: SalesInvoiceStatus | string = '';
   public salesInvoiceCategories: string[] = [];
   public salesInvoiceCategory: SalesInvoiceCategory | string = '';
-  public isModalOpen: boolean = false;
+  public isStatusModalOpen: boolean = false;
+  public selectedInvoice!: SalesInvoiceDto;
+  public selectedStatus!: SalesInvoiceStatus | null;
+  public today: Date = new Date();
+  public paymentForm!: FormGroup;
+  public paymentTypes: string[] = [];
+  private salesInvoiceSettleCreditPaymentFrontDto!: SalesInvoiceSettleCreditPaymentFrontDto;
+  public amountDue!: number;
   public errorMessages = {
     name: [
       { type: 'required', message: 'Name is required' },
@@ -55,10 +68,34 @@ export class SalesInvoiceListComponent {
     telephoneNumber: [
       { type: 'required', message: 'Telephone Number is required' },
     ],
+    amountPaid: [
+      { type: 'required', message: 'Amount paid is required' },
+      { type: 'min', message: 'Amount paid cannot be less than 0' },
+      { type: 'max', message: 'Amount paid cannot be more than Sold at' }
+    ],
+    totalPrice: [
+      { type: 'required', message: 'Total price is required' },
+    ],
+    soldAt: [
+      { type: 'required', message: 'Sold at is required' },
+      { type: 'min', message: 'Sold at cannot be less than 0' },
+      { type: 'max', message: 'Sold at cannot be more than Total Price' },
+    ],
+    paymentType: [
+      { type: 'required', message: 'Payment mode is required' },
+    ],
+    minValue: [
+      { type: 'min', message: 'Value cannot be less than 0' }
+    ],
+    maxValue: [
+      { type: 'max', message: 'Value cannot be greater than quantity in stock' }
+    ]
   };
 
   constructor(
     private salesInvoiceApiService: SalesInvoiceApiService,
+    private paymentApiService: PaymentApiService,
+    private formBuilder: FormBuilder,
     private router: Router,
     private securityApiService: SecurityApiService,
     private translateService: TranslateService,
@@ -70,6 +107,7 @@ export class SalesInvoiceListComponent {
     this.salesInvoiceTypes = Object.keys(SalesInvoiceType);
     this.salesInvoiceStatuses = Object.keys(SalesInvoiceStatus);
     this.salesInvoiceCategories = Object.keys(SalesInvoiceCategory);
+    this.paymentTypes = Object.keys(PaymentType);
     this.getAllUsernames();
     this.getAllDrivers();
     this.search();
@@ -202,6 +240,7 @@ export class SalesInvoiceListComponent {
   }
 
   public reset(): void {
+    this.selectedStatus = null;
     this.dateFrom = null;
     this.dateTo = null;
     this.selectedDriverId = '0';
@@ -210,6 +249,8 @@ export class SalesInvoiceListComponent {
     this.salesInvoiceStatus = '';
     this.salesInvoiceCategory = '';
     this.username = '';
+    this.amountDue = 0;
+    this.initialisePaymentFormBuilder();
     this.utilsService.presentLoadingDuration(500).then(() => {
       this.search();
     });
@@ -242,6 +283,172 @@ export class SalesInvoiceListComponent {
         sum = sum + payment.amountPaid;
     })
     return sum;
+  }
+
+  public openStatusModal(salesInvoiceDto: SalesInvoiceDto): void {
+    this.selectedInvoice = salesInvoiceDto;
+    this.initialisePaymentFormBuilder();
+    this.isStatusModalOpen = true;
+  }
+
+  public cancelStatusChange(): void {
+    this.isStatusModalOpen = false;
+    this.selectedStatus = null;
+    this.modal.dismiss(null, 'cancel');
+  }
+
+  public confirmStatusChange(): void {
+    this.modal.dismiss(null, 'confirm');
+  }
+
+  public onModalStatusWillDismiss(event: Event): void {
+    const ev = event as CustomEvent<OverlayEventDetail<string>>;
+    if (ev.detail.role === 'backdrop') {
+      this.isStatusModalOpen = false;
+      this.selectedStatus = null;
+    }
+    if (ev.detail.role === 'confirm') {
+      this.isStatusModalOpen = false;
+      this.changeStatusOfInvoice();
+    }
+  }
+
+  private changeStatusOfInvoice(): void {
+    this.utilsService.presentLoading();
+    if (this.selectedStatus === SalesInvoiceStatus.APPROVED) {
+      this.salesInvoiceApiService.approveSalesInvoiceStatus(this.selectedInvoice.id).subscribe({
+        next: (data: string) => {
+          this.reset();
+          this.utilsService.dismissLoading();
+          this.utilsService.successMsg(`Invoice ${this.selectedInvoice.id} successfully changed to ${this.selectedStatus?.toLowerCase()}`);
+        },
+        error: (error: HttpErrorResponse) => {
+          this.utilsService.dismissLoading();
+          this.utilsService.unsuccessMsg('Error', 'gunung-nago-warehouse');
+        }
+      });
+    }
+    if (this.selectedStatus === SalesInvoiceStatus.CANCELLED) {
+      this.salesInvoiceApiService.cancelSalesInvoiceStatus(this.selectedInvoice.id).subscribe({
+        next: (data: string) => {
+          this.reset();
+          this.utilsService.dismissLoading();
+          this.utilsService.successMsg(`Invoice ${this.selectedInvoice.id} successfully changed to ${this.selectedStatus?.toLowerCase()}`);
+        },
+        error: (error: HttpErrorResponse) => {
+          this.utilsService.dismissLoading();
+          this.utilsService.unsuccessMsg('Error', 'gunung-nago-warehouse');
+        }
+      });
+    }
+    if (this.selectedStatus === SalesInvoiceStatus.COMPLETED) {
+      this.salesInvoiceApiService.completeSalesInvoiceStatus(this.selectedInvoice.id).subscribe({
+        next: (data: string) => {
+          this.reset();
+          this.utilsService.dismissLoading();
+          this.utilsService.successMsg(`Invoice ${this.selectedInvoice.id} successfully changed to ${this.selectedStatus?.toLowerCase()}`);
+        },
+        error: (error: HttpErrorResponse) => {
+          this.utilsService.dismissLoading();
+          this.utilsService.unsuccessMsg('Error', 'gunung-nago-warehouse');
+        }
+      });
+    }
+    if (this.selectedStatus === SalesInvoiceStatus.PAID) {
+      this.populatePaymentDto();
+      this.paymentApiService.settleInvoicePayment(this.salesInvoiceSettleCreditPaymentFrontDto).subscribe({
+        next: (data: string) => {
+          this.reset();
+          this.utilsService.dismissLoading();
+          this.utilsService.successMsg(`Payment for Invoice ${this.selectedInvoice.id} settled successfully`);
+        },
+        error: (error: HttpErrorResponse) => {
+          this.utilsService.dismissLoading();
+          this.utilsService.unsuccessMsg('Error', 'gunung-nago-warehouse');
+        }
+      });
+    }
+
+  }
+
+  private initialisePaymentFormBuilder(): void {
+    const amountDue = this.selectedInvoice.paymentDtos.filter(payment => payment.paymentType === PaymentType.CREDIT && payment.settled === false).map(payment => payment.amountPaid).reduce((acc, value) => {
+      return acc + value;
+    }, 0);
+    this.amountDue = amountDue;
+    this.paymentForm = this.formBuilder.group({
+      totalPrice: new FormControl({ value: amountDue, disabled: true }, Validators.compose([Validators.required])),
+      soldAt: new FormControl({ value: amountDue, disabled: this.selectedInvoice.soldAt < this.selectedInvoice.totalPrice }, Validators.compose([
+        Validators.required,
+        Validators.min(0),
+        Validators.max(amountDue),
+      ])),
+      payments: this.formBuilder.array([
+        this.addPaymentFormGroup()
+      ])
+    });
+  }
+
+  addPaymentFormGroup() {
+    return this.formBuilder.group({
+      amountPaid: new FormControl(0, Validators.compose([
+        Validators.required,
+        Validators.min(0)
+      ])),
+      paymentType: new FormControl('CASH', Validators.compose([
+        Validators.required
+      ])),
+      paymentDeadline: new FormControl(moment(new Date()).startOf('day').format(moment.HTML5_FMT.DATE), Validators.compose([
+        Validators.required
+      ])),
+    })
+  }
+
+  addPayment(): void {
+    if ((this.paymentForm.get('payments') as FormArray).length < 2) {
+      (this.paymentForm.get('payments') as FormArray).push(this.addPaymentFormGroup());
+    }
+  }
+
+  removePayment(paymentGroupIndex: number): void {
+    (this.paymentForm.get('payments') as FormArray).removeAt(paymentGroupIndex);
+  }
+
+  get paymentsFields() {
+    return this.paymentForm ? this.paymentForm.get('payments') as FormArray : null;
+  }
+
+  public checkPaymentLessThanSoldAt(): boolean {
+    let totalAmountPaid = 0;
+    this.paymentForm.get('payments')?.value.forEach((payment: any) => {
+      totalAmountPaid += payment.amountPaid;
+    });
+    if (totalAmountPaid <= this.paymentForm.get('soldAt')?.value) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public checkPaymentCompleted(): boolean {
+    let totalAmountPaid = 0;
+    this.paymentForm.get('payments')?.value.forEach((payment: any) => {
+      totalAmountPaid += payment.amountPaid;
+    });
+    if (totalAmountPaid === this.paymentForm.get('soldAt')?.value) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  private populatePaymentDto(): void {
+    this.salesInvoiceSettleCreditPaymentFrontDto = {
+      invoiceId: this.selectedInvoice.id,
+      soldAt: this.paymentForm?.get("soldAt")?.value,
+      discount: null,
+      paymentSaveDtos: this.paymentForm.value.payments,
+    }
   }
 }
 
