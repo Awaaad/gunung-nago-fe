@@ -4,7 +4,7 @@ import { FormGroup, FormControl, FormBuilder, Validators, FormArray } from '@ang
 import { IonModal } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { ManureStockDto, SalesInvoiceCategory, UserDto, PaymentType, CustomerDto, SalesInvoiceType, EggQuantityType, FlockType, EggType, CageCategory, CageDto, SurveyDto, FlockStockCountDto } from 'generated-src/model';
-import { CustomerFrontDto, SaleDetailsFrontDto, SaleSaveFrontDto, EggStockFrontDto } from 'generated-src/model-front';
+import { CustomerFrontDto, SaleDetailsFrontDto, SaleSaveFrontDto, EggStockFrontDto, SalesInvoiceDetailsFrontDto } from 'generated-src/model-front';
 import * as moment from 'moment';
 import { Subscription, filter, distinctUntilChanged, debounceTime, tap, switchMap, finalize } from 'rxjs';
 import { CustomerApiService } from 'src/app/shared/apis/customer.api.service';
@@ -18,6 +18,8 @@ import { SurveyApiService } from 'src/app/shared/apis/survey.api.service';
 import { EggStockApiService } from 'src/app/shared/apis/egg-stock.api.service';
 import { FlockStockApiService } from 'src/app/shared/apis/flock-stock.api.service';
 import { PointOfSaleApiService } from 'src/app/shared/apis/point-of-sale.api.service';
+import { ActivatedRoute } from '@angular/router';
+import { SalesInvoiceApiService } from 'src/app/shared/apis/sales-invoice.api.service';
 
 @Component({
   selector: 'app-point-of-sale',
@@ -25,6 +27,9 @@ import { PointOfSaleApiService } from 'src/app/shared/apis/point-of-sale.api.ser
   styleUrls: ['./point-of-sale.component.scss'],
 })
 export class PointOfSaleComponent implements OnInit {
+  public salesInvoiceDetailsFrontDto!: SalesInvoiceDetailsFrontDto;
+  public salesInvoiceId: any = this.activatedRoute.snapshot.paramMap.get('salesInvoiceId');
+
   @ViewChild(IonModal) modal!: IonModal;
   public isModalOpen: boolean = false;
   public language = "en";
@@ -73,7 +78,7 @@ export class PointOfSaleComponent implements OnInit {
   public flockStockCountDto!: FlockStockCountDto;
   public saleSaveDto!: SaleSaveFrontDto;
   public saleDetailDto!: SaleDetailsFrontDto;
-  public saleDetailsDto: SaleDetailsFrontDto[] = [];
+  public saleDetailsDto: SaleDetailsFrontDto[] = []; //
   public salesInvoiceTypes: string[] = [];
   public eggQuantityTypes: string[] = [];
   public flockTypes: string[] = [];
@@ -121,12 +126,20 @@ export class PointOfSaleComponent implements OnInit {
     private surveyApiService: SurveyApiService,
     private translateService: TranslateService,
     private pointOfSaleApiService: PointOfSaleApiService,
-    private utilsService: UtilsService
+    private utilsService: UtilsService,
+    private readonly activatedRoute: ActivatedRoute,
+    private salesInvoiceApiService: SalesInvoiceApiService,
   ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.initialiseFormBuilder();
-    this.initialiseSelectedCustomer();
+    if(this.salesInvoiceId !== null){
+      this.findSalesInvoiceDetailsById();
+    }
+    else{
+      this.initialiseSelectedCustomer();
+    }
+    
     this.searchCustomerAutoComplete();
     this.paymentTypes = Object.keys(PaymentType);
     this.salesInvoiceCategories = Object.keys(SalesInvoiceCategory);
@@ -138,6 +151,38 @@ export class PointOfSaleComponent implements OnInit {
     this.getEggStock();
     this.getManureStock();
     this.findTotalFlockStockCount();
+    
+  }
+
+  public findSalesInvoiceDetailsById(): void {
+    this.salesInvoiceApiService.findSalesInvoiceDetailsById(this.salesInvoiceId).subscribe(salesInvoiceDetailsFrontDto => {
+      this.salesInvoiceDetailsFrontDto = salesInvoiceDetailsFrontDto;
+      console.log(this.salesInvoiceDetailsFrontDto);
+      //this.totalPrice = salesInvoiceDetailsFrontDto.totalPrice;
+      this.initialiseCustomerOnSalesInvoiceEdit();
+      this.saleForm?.get("customer.firstName")?.setValue(salesInvoiceDetailsFrontDto.customerFirstName);
+      this.saleForm?.get("customer.lastName")?.setValue(salesInvoiceDetailsFrontDto.customerLastName);
+      this.saleForm?.get("customer.address")?.setValue(salesInvoiceDetailsFrontDto.customerAddress);
+      this.saleForm?.get("customer.telephoneNumber")?.setValue(salesInvoiceDetailsFrontDto.customerTelephoneNumber);
+      
+      this.salesInvoiceDetailsFrontDto.saleDetailsDtos?.forEach(saleDetail => {
+        this.saleDetailDto.amount = saleDetail.quantity;
+        this.saleDetailDto.cageId = saleDetail.cageId;
+        this.saleDetailDto.eggQuantityType = saleDetail.eggQuantityType;
+        this.saleDetailDto.eggType = saleDetail.eggType;
+        this.saleDetailDto.flockId = saleDetail.flockId;
+        this.saleDetailDto.flockType = saleDetail.flockType;
+        this.saleDetailDto.goodChicken = "";
+        this.saleDetailDto.price = saleDetail.price;
+        this.saleDetailDto.quantity = saleDetail.quantity;
+        this.saleDetailDto.salesInvoiceType = saleDetail.salesInvoiceType;
+        this.saleDetailDto.sterileChicken = "";
+      }
+     
+      );
+      
+    })
+    
   }
 
   ionViewWillEnter(): void {
@@ -340,6 +385,19 @@ export class PointOfSaleComponent implements OnInit {
     };
   }
 
+  private initialiseCustomerOnSalesInvoiceEdit(): void {
+    
+    this.selectedCustomer = {
+      id: "",
+      firstName: this.salesInvoiceDetailsFrontDto.customerFirstName,
+      lastName: this.salesInvoiceDetailsFrontDto.customerLastName,
+      address: this.salesInvoiceDetailsFrontDto.customerAddress,
+      telephoneNumber: this.salesInvoiceDetailsFrontDto.customerTelephoneNumber,
+      totalAmountDue: this.salesInvoiceDetailsFrontDto.totalPrice
+    };
+    
+  }
+
   public clearCustomer(ctrl: FormControl): void {
     ctrl.setValue(null);
     this.saleForm?.get("customer.firstName")?.setValue("");
@@ -460,6 +518,9 @@ export class PointOfSaleComponent implements OnInit {
 
   public save(): void {
     this.utilsService.presentLoading();
+    if(this.salesInvoiceId !== null){
+      this.salesInvoiceApiService.cancelSalesInvoiceStatus(this.salesInvoiceId).subscribe();
+    }
     this.initialiseSaleSaveDto();
     this.populateSaleSaveDtoWithValues();
     this.saleSaveDto.paymentSaveDtos?.forEach(payment => {

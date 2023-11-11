@@ -176,6 +176,11 @@ export class SalesInvoiceListComponent {
     this.router.navigate([`sales-invoice/sales-invoice-details/${salesInvoiceDto.id}`]);
   }
 
+  public routeToPointOfSalesEdit(salesInvoiceDto: SalesInvoiceDto): void {
+    console.log(salesInvoiceDto)
+    this.router.navigate([`point-of-sale/sales-invoice-id/${salesInvoiceDto.id}`]);
+  }
+
   public selectDateFrom(): void {
     this.utilsService.presentLoadingDuration(500).then(() => {
       this.search();

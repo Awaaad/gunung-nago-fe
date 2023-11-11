@@ -7,6 +7,10 @@ const routes: Routes = [
     path: '',
     component: PointOfSaleComponent
   },
+  {
+    path: 'sales-invoice-id/:salesInvoiceId',
+    component: PointOfSaleComponent
+  },
 ];
 
 @NgModule({

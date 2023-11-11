@@ -25,6 +25,7 @@ import { SurveyApiService } from 'src/app/shared/apis/survey.api.service';
 import { EggStockApiService } from 'src/app/shared/apis/egg-stock.api.service';
 import { FlockStockApiService } from 'src/app/shared/apis/flock-stock.api.service';
 import { PointOfSaleApiService } from 'src/app/shared/apis/point-of-sale.api.service';
+import { SalesInvoiceApiService } from 'src/app/shared/apis/sales-invoice.api.service';
 
 
 @NgModule({
@@ -47,7 +48,7 @@ import { PointOfSaleApiService } from 'src/app/shared/apis/point-of-sale.api.ser
     MatDatepickerModule,
     MatNativeDateModule,
   ],
-  providers: [CustomerApiService, ManureStockApiService, CageApiService, SurveyApiService, EggStockApiService, FlockStockApiService, PointOfSaleApiService,
+  providers: [SalesInvoiceApiService, CustomerApiService, ManureStockApiService, CageApiService, SurveyApiService, EggStockApiService, FlockStockApiService, PointOfSaleApiService,
     {
       provide: DateAdapter,
       useClass: MomentDateAdapter,
