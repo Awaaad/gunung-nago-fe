@@ -1,0 +1,207 @@
+.input {
+    width: 100%;
+    padding-right: 10px;
+}
+
+table {
+    width: 100%;
+}
+
+th.mat-header-cell,
+td.mat-cell {
+    text-align: center;
+    border: 1px solid #CCC;
+    padding: 0 !important;
+}
+
+.container {
+    width: 80%;
+    padding: 0;
+}
+
+.table-responsive {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+}
+
+tbody {
+    overflow-x: scroll;
+}
+
+// .mat-mdc-table tbody,
+// .mat-mdc-table tfoot,
+.mat-mdc-table thead,
+.mat-mdc-cell,
+// .mat-mdc-footer-cell,
+// .mat-mdc-header-row,
+// .mat-mdc-row,
+// .mat-mdc-footer-row,
+// .mat-mdc-table 
+.mat-mdc-header-cell {
+    border: 1px solid #CCC;
+}
+
+.mat-mdc-cell:first-child {
+    border-left: 0;
+}
+
+.mat-mdc-cell:last-child {
+    border-right: 0;
+}
+
+.mdc-data-table__header-cell {
+    border-top: 0;
+}
+
+.mdc-data-table__header-cell:first-child {
+    border-left: 0;
+}
+
+.mdc-data-table__header-cell:last-child {
+    border-right: 0;
+}
+
+.mat-mdc-table .mdc-data-table__header-row {
+    background: var(--ion-color-gunung-nago-sales-invoice);
+    color: white;
+}
+
+.mdc-data-table__header-cell {
+    color: white;
+}
+
+
+.chip-paid {
+    background-color: var(--ion-color-gunung-nago-report);
+    color: white;
+    font-size: 15px;
+}
+
+.chip-pending {
+    background-color: var(--ion-color-gunung-nago-feed);
+    color: white;
+    font-size: 15px;
+}
+
+.chip-outstanding {
+    background-color: var(--ion-color-gunung-nago-feed);
+    color: white;
+    font-size: 15px;
+}
+
+.chip-cancelled {
+    background-color: var(--ion-color-medium-tint);
+    color: white;
+    font-size: 15px;
+}
+
+.chip-past-due {
+    background-color: var(--ion-color-gunung-nago-warehouse);
+    color: white;
+    font-size: 15px;
+}
+
+.chip-approved {
+    background-color: var(--ion-color-gunung-nago-survey);
+    color: white;
+    font-size: 15px;
+}
+
+.chip-completed {
+    background-color: var(--ion-color-gunung-nago-survey);
+    color: white;
+    font-size: 15px;
+}
+
+.red {
+    ion-datetime-button::part(native) {
+        background: #FFF;
+    }
+}
+
+.radio-class {
+    margin: 10px;
+}
+
+.status-modal {
+    --height: 60em;
+    --width: 60em;
+}
+
+.status-modal-invoice {
+    display: flex;
+    justify-content: space-between;
+    font-size: 15px;
+}
+
+.add-payment-btn {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    margin-right: 5px;
+}
+
+.remove-payment-btn {
+    font-size: 12px;
+    float: right;
+    height: 30px;
+    width: 40px;
+    margin-top: 23px;
+    margin-right: 5px;
+}
+
+.add-payment-area {
+    display: flex;
+    justify-content: space-between;
+}
+
+.amount-due {
+    color: var(--ion-color-gunung-nago-warehouse)
+}
+
+.modal-status-chip {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.subtitle {
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+
+    .cart-logo {
+        width: 23px;
+    }
+}
+
+.form-section-cart {
+    font-weight: 500;
+    padding-top: 10px;
+    padding-left: 7px;
+    color: black;
+    font-size: 18px;
+}
+
+.balance {
+    font-size: 17px;
+    padding: 10px;
+    color: black;
+}
+
+.balance-right {
+    float: right;
+}
+
+
+.input-number {
+    border-radius: 0px;
+    width: 75px;
+    border-top: 0;
+    border-right: 0;
+    border-left: 0;
+
+    &:focus {
+        outline-color: none;
+        border-bottom-color: #28ba62;
+    }
+}

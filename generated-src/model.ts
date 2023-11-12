@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2023-11-10 11:27:39.
+// Generated using typescript-generator version 3.2.1263 on 2023-11-12 21:34:10.
 
 export class CageDto {
     id!: number;
@@ -403,6 +403,12 @@ export class SalesInvoiceSettleCreditPaymentDto {
     paymentSaveDtos!: PaymentSaveDto[];
 }
 
+export class SettleCustomerCreditPaymentDto {
+    customerId!: number;
+    paymentDtos!: PaymentDto[];
+    soldAtForUnlockedCreditPayments!: number;
+}
+
 export class SaleDetailsDto {
     salesInvoiceType!: SalesInvoiceType;
     quantity!: number;
@@ -609,6 +615,10 @@ export class SalesInvoiceDto {
     salesInvoiceCategory!: SalesInvoiceCategory;
     salesInvoiceStatus!: SalesInvoiceStatus;
     paymentDtos!: PaymentDto[];
+    locked!: boolean;
+    totalAmountDue!: number;
+    totalLockedAmountDue!: number;
+    totalUnlockedAmountDue!: number;
 }
 
 export class SalesInvoiceSearchCriteriaDto {
@@ -620,6 +630,8 @@ export class SalesInvoiceSearchCriteriaDto {
     salesInvoiceStatus!: SalesInvoiceStatus;
     salesInvoiceCategory!: SalesInvoiceCategory;
     farmId!: number;
+    customerId!: number;
+    credit!: boolean;
 }
 
 export class SalesInvoiceLineDto {

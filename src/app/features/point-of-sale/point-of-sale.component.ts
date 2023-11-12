@@ -78,7 +78,7 @@ export class PointOfSaleComponent implements OnInit {
   public flockStockCountDto!: FlockStockCountDto;
   public saleSaveDto!: SaleSaveFrontDto;
   public saleDetailDto!: SaleDetailsFrontDto;
-  public saleDetailsDto: SaleDetailsFrontDto[] = []; //
+  public saleDetailsDto: SaleDetailsFrontDto[] = [];
   public salesInvoiceTypes: string[] = [];
   public eggQuantityTypes: string[] = [];
   public flockTypes: string[] = [];
@@ -133,13 +133,13 @@ export class PointOfSaleComponent implements OnInit {
 
   async ngOnInit() {
     this.initialiseFormBuilder();
-    if(this.salesInvoiceId !== null){
+    if (this.salesInvoiceId !== null) {
       this.findSalesInvoiceDetailsById();
     }
-    else{
+    else {
       this.initialiseSelectedCustomer();
     }
-    
+
     this.searchCustomerAutoComplete();
     this.paymentTypes = Object.keys(PaymentType);
     this.salesInvoiceCategories = Object.keys(SalesInvoiceCategory);
@@ -151,7 +151,7 @@ export class PointOfSaleComponent implements OnInit {
     this.getEggStock();
     this.getManureStock();
     this.findTotalFlockStockCount();
-    
+
   }
 
   public findSalesInvoiceDetailsById(): void {
@@ -164,7 +164,7 @@ export class PointOfSaleComponent implements OnInit {
       this.saleForm?.get("customer.lastName")?.setValue(salesInvoiceDetailsFrontDto.customerLastName);
       this.saleForm?.get("customer.address")?.setValue(salesInvoiceDetailsFrontDto.customerAddress);
       this.saleForm?.get("customer.telephoneNumber")?.setValue(salesInvoiceDetailsFrontDto.customerTelephoneNumber);
-      
+
       this.salesInvoiceDetailsFrontDto.saleDetailsDtos?.forEach(saleDetail => {
         this.saleDetailDto.amount = saleDetail.quantity;
         this.saleDetailDto.cageId = saleDetail.cageId;
@@ -178,11 +178,8 @@ export class PointOfSaleComponent implements OnInit {
         this.saleDetailDto.salesInvoiceType = saleDetail.salesInvoiceType;
         this.saleDetailDto.sterileChicken = "";
       }
-     
       );
-      
     })
-    
   }
 
   ionViewWillEnter(): void {
@@ -386,7 +383,6 @@ export class PointOfSaleComponent implements OnInit {
   }
 
   private initialiseCustomerOnSalesInvoiceEdit(): void {
-    
     this.selectedCustomer = {
       id: "",
       firstName: this.salesInvoiceDetailsFrontDto.customerFirstName,
@@ -395,7 +391,7 @@ export class PointOfSaleComponent implements OnInit {
       telephoneNumber: this.salesInvoiceDetailsFrontDto.customerTelephoneNumber,
       totalAmountDue: this.salesInvoiceDetailsFrontDto.totalPrice
     };
-    
+
   }
 
   public clearCustomer(ctrl: FormControl): void {
@@ -518,7 +514,7 @@ export class PointOfSaleComponent implements OnInit {
 
   public save(): void {
     this.utilsService.presentLoading();
-    if(this.salesInvoiceId !== null){
+    if (this.salesInvoiceId !== null) {
       this.salesInvoiceApiService.cancelSalesInvoiceStatus(this.salesInvoiceId).subscribe();
     }
     this.initialiseSaleSaveDto();

@@ -11,6 +11,7 @@ import { CustomerApiService } from 'src/app/shared/apis/customer.api.service';
 import { UtilsService } from 'src/app/shared/utils/utils.service';
 import { OverlayEventDetail } from '@ionic/core/components';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-customer-list',
@@ -48,6 +49,7 @@ export class CustomerListComponent {
 
   constructor(
     private customerApiService: CustomerApiService,
+    private router: Router,
     private translateService: TranslateService,
     private utilsService: UtilsService
   ) {
@@ -171,5 +173,13 @@ export class CustomerListComponent {
         this.utilsService.unsuccessMsg('Error', 'gunung-nago-warehouse');
       }
     });
+  }
+
+  public routeToCustomerStatementOfAccount(customerId: number): void {
+    this.router.navigate([`customer/customer-statement-of-account/${customerId}`]);
+  }
+
+  public routeToSalesInvoiceCustomerCreditList(customerId: number): void {
+    this.router.navigate([`sales-invoice/sales-invoice-customer-credit-list/${customerId}`]);
   }
 }
