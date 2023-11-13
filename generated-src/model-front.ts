@@ -160,6 +160,7 @@ export class SaleSaveFrontDto {
     saleDetailsDtos!: SaleDetailsDto[] | [] | null | undefined;
     newCustomer!: boolean | null | undefined;
     soldAt!: number | null | undefined;
+    salesInvoiceId!: number | null | undefined;
 }
 
 export class SaleDetailsFrontDto {

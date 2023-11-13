@@ -59,6 +59,10 @@ const routes: Routes = [
     loadChildren: () => import('./features/point-of-sale/point-of-sale.module').then(m => m.PointOfSaleModule)
   },
   {
+    path: 'return-invoice',
+    loadChildren: () => import('./features/return-invoice/return-invoice.module').then(m => m.ReturnInvoiceModule)
+  },
+  {
     path: 'stock-update',
     loadChildren: () => import('./features/stock-update/stock-update.module').then(m => m.StockUpdateModule)
   },

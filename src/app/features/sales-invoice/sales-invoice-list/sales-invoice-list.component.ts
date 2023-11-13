@@ -181,6 +181,11 @@ export class SalesInvoiceListComponent {
     this.router.navigate([`point-of-sale/sales-invoice-id/${salesInvoiceDto.id}`]);
   }
 
+  public routeToReturnInvoice(salesInvoiceDto: SalesInvoiceDto): void {
+    this.modal.dismiss(null, 'cancel');
+    this.router.navigate([`return-invoice/${salesInvoiceDto.id}`]);
+  }
+
   public selectDateFrom(): void {
     this.utilsService.presentLoadingDuration(500).then(() => {
       this.search();
@@ -345,6 +350,9 @@ export class SalesInvoiceListComponent {
           this.utilsService.unsuccessMsg('Error', 'gunung-nago-warehouse');
         }
       });
+    }
+    if (this.selectedStatus === SalesInvoiceStatus.RETURNED) {
+      console.log("re")
     }
     if (this.selectedStatus === SalesInvoiceStatus.COMPLETED) {
       this.salesInvoiceApiService.completeSalesInvoiceStatus(this.selectedInvoice.id).subscribe({

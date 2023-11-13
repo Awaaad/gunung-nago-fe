@@ -802,4 +802,5 @@ export enum SalesInvoiceStatus {
     PAST_DUE = 'PAST_DUE',
     PAID = 'PAID',
     PARTLY_PAID = 'PARTLY_PAID',
+    RETURNED = 'RETURNED'
 }

@@ -287,7 +287,7 @@
           <ion-col size-lg="2" size-md="3" size-xs="12">
             <ion-select color="gunung-nago-primary" label="Type" label-placement="floating" fill="outline"
               interface="popover" clear-input="true" placeholder="Type" [(ngModel)]="saleDetail.salesInvoiceType"
-              (ionChange)="ionSelectType($event)">
+              (ionChange)="ionSelectType($event, i)">
               <ion-select-option *ngFor="let salesInvoiceType of salesInvoiceTypes" [value]="salesInvoiceType">{{
                 salesInvoiceType | titlecase
                 }}</ion-select-option>

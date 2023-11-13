@@ -207,6 +207,9 @@
             <ion-chip class="chip-outstanding" *ngIf="element.salesInvoiceStatus === 'OUTSTANDING'">
               <ion-label>{{element.salesInvoiceStatus | titlecase}}</ion-label>
             </ion-chip>
+            <ion-chip class="chip-returned" *ngIf="element.salesInvoiceStatus === 'RETURNED'">
+              <ion-label>{{element.salesInvoiceStatus | titlecase}}</ion-label>
+            </ion-chip>
           </td>
         </ng-container>
 
@@ -229,14 +232,15 @@
           <th mat-header-cell *matHeaderCellDef> Actions </th>
           <td mat-cell *matCellDef="let element">
             <div class="table-btn">
-              <ion-icon color="positive-btn" class="table-view-details-icon mr-05" name="eye"
+              <ion-icon color="positive-btn" class="table-view-details-icon" name="eye"
                 (click)="routeToSalesInvoiceDetails(element)"></ion-icon>
 
               <ion-icon *ngIf="element.salesInvoiceStatus !== 'PAID'" color="gunung-nago-warehouse"
-                class="table-credit-icon mr-05" name="card"></ion-icon>
+                class="table-credit-icon" name="card"></ion-icon>
 
               <ion-icon class="table-view-more-icon" name="list" (click)="openStatusModal(element)"></ion-icon>
-              <ion-icon name="create"  (click)="routeToPointOfSalesEdit(element)"></ion-icon>
+              
+              <ion-icon *ngIf="getTotalAmountPaid(element.paymentDtos) === 0 && element.salesInvoiceStatus === 'OUTSTANDING'"class="table-edit-icon" color="neutral-btn"  (click)="routeToPointOfSalesEdit(element)" name="create"></ion-icon>    
             </div>
           </td>
         </ng-container>
@@ -375,6 +379,9 @@
               <ion-chip class="chip-outstanding" *ngIf="selectedInvoice.salesInvoiceStatus === 'OUTSTANDING'">
                 <ion-label>{{selectedInvoice.salesInvoiceStatus | titlecase}}</ion-label>
               </ion-chip>
+              <ion-chip class="chip-returned" *ngIf="selectedInvoice.salesInvoiceStatus === 'RETURNED'">
+                <ion-label>{{selectedInvoice.salesInvoiceStatus | titlecase}}</ion-label>
+              </ion-chip>
             </div>
           </ion-col>
         </ion-row>
@@ -384,6 +391,7 @@
           <ion-radio-group [(ngModel)]="selectedStatus">
             <div class="radio-class">
               <ion-radio value="CANCELLED" color="gunung-nago-warehouse"
+                [disabled]="!(selectedInvoice.salesInvoiceStatus === 'OUTSTANDING' && getTotalAmountPaid(selectedInvoice.paymentDtos) === 0)"
                 labelPlacement="end">Cancelled</ion-radio><br />
 
               <ion-radio value="APPROVED"
@@ -495,6 +503,9 @@
           <ion-button color="positive-btn" *ngIf="selectedStatus === 'PAID'"
             [disabled]="!checkPaymentLessThanSoldAt() || paymentForm.invalid || selectedInvoice.totalPrice < 1 || !checkPaymentCompleted()"
             (click)="confirmStatusChange()">Save</ion-button>
+          <ion-button
+            
+            (click)="routeToReturnInvoice(selectedInvoice)">Return Invoice</ion-button>
         </div>
       </ion-content>
     </ng-template>

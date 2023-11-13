@@ -20,6 +20,7 @@ import { FlockStockApiService } from 'src/app/shared/apis/flock-stock.api.servic
 import { PointOfSaleApiService } from 'src/app/shared/apis/point-of-sale.api.service';
 import { ActivatedRoute } from '@angular/router';
 import { SalesInvoiceApiService } from 'src/app/shared/apis/sales-invoice.api.service';
+import { ReturnApiService } from 'src/app/shared/apis/return.api.service';
 
 @Component({
   selector: 'app-point-of-sale',
@@ -129,6 +130,7 @@ export class PointOfSaleComponent implements OnInit {
     private utilsService: UtilsService,
     private readonly activatedRoute: ActivatedRoute,
     private salesInvoiceApiService: SalesInvoiceApiService,
+    private returnApiService: ReturnApiService
   ) { }
 
   async ngOnInit() {
@@ -178,11 +180,8 @@ export class PointOfSaleComponent implements OnInit {
         this.saleDetailDto.salesInvoiceType = saleDetail.salesInvoiceType;
         this.saleDetailDto.sterileChicken = "";
       }
-     
       );
-      
     })
-    
   }
 
   ionViewWillEnter(): void {
@@ -215,7 +214,21 @@ export class PointOfSaleComponent implements OnInit {
     })
   }
 
-  public ionSelectType(event: any) {
+  public resetInputsUponChange(index:any){
+    this.saleDetailsDto[index].price = null;
+    this.saleDetailsDto[index].quantity = null;
+    this.saleDetailsDto[index].amount = null;
+    this.saleDetailsDto[index].cageId = null;
+    this.saleDetailsDto[index].eggQuantityType = null;
+    this.saleDetailsDto[index].eggType = null;
+    this.saleDetailsDto[index].flockId = null;
+    this.saleDetailsDto[index].flockType = null;
+    this.saleDetailsDto[index].goodChicken = null;
+    this.saleDetailsDto[index].sterileChicken = null;
+  }
+
+  public ionSelectType(event: any, index:number) {
+    this.resetInputsUponChange(index);
     if (event.detail.value === 'FLOCK') {
       this.showFlock = true;
       this.showEgg = false;
@@ -492,7 +505,8 @@ export class PointOfSaleComponent implements OnInit {
       paymentSaveDtos: [],
       newCustomer: false,
       saleDetailsDtos: [],
-      soldAt: null
+      soldAt: null,
+      salesInvoiceId: null
     }
   }
 
@@ -512,8 +526,32 @@ export class PointOfSaleComponent implements OnInit {
       paymentSaveDtos: this.paymentForm.value.payments,
       newCustomer: this.isNewCustomer,
       saleDetailsDtos: this.saleDetailsDto,
-      soldAt: this.paymentForm?.get("soldAt")?.value
+      soldAt: this.paymentForm?.get("soldAt")?.value,
+      salesInvoiceId: this.salesInvoiceId? this.salesInvoiceId : null
     }
+  }
+
+  public saveReturn(): void {
+    this.utilsService.presentLoading();
+    this.initialiseSaleSaveDto();
+    this.populateSaleSaveDtoWithValues();
+    this.saleSaveDto.paymentSaveDtos?.forEach(payment => {
+      payment.paymentDeadline = moment(payment.paymentDeadline).startOf('day').format(moment.HTML5_FMT.DATE)
+    })
+    this.returnApiService.save(this.saleSaveDto).subscribe({
+      next: (data: string) => {
+        this.salesInvoiceCategory = SalesInvoiceCategory.IN_STORE;
+        this.selectedDriver = null;
+        this.comment = null;
+        this.reset();
+        this.utilsService.dismissLoading();
+        this.utilsService.successMsg('Return made successfully');
+      },
+      error: (error: HttpErrorResponse) => {
+        this.utilsService.dismissLoading();
+        this.utilsService.unsuccessMsg('Error', 'gunung-nago-warehouse');
+      }
+    });
   }
 
   public save(): void {
@@ -600,6 +638,7 @@ export class PointOfSaleComponent implements OnInit {
     if (ev.detail.role === 'confirm') {
       this.isModalOpen = false;
       this.save();
+      //this.saveReturn();
     }
   }
 
