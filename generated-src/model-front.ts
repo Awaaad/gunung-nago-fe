@@ -331,3 +331,10 @@ export class SalesInvoiceSettleCreditPaymentFrontDto {
     discount!: number | null | undefined | any;
     paymentSaveDtos!: PaymentSaveFrontDto[] | [] | null | undefined;
 }
+
+export class SettleCustomerCreditPaymentFrontDto {
+    customerId!: number | null | undefined | any;
+    soldAtForUnlockedCreditPayments!: number | null | undefined | any;
+    paymentDtos!: PaymentSaveFrontDto[] | [] | null | undefined;
+    paymentDeadline!: Date | any;
+}

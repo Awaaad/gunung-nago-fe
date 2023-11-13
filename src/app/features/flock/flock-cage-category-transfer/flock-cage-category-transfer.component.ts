@@ -72,7 +72,6 @@ export class FlockCageCategoryTransferComponent implements OnInit {
   }
 
   public drop(event: CdkDragDrop<any[]>): void {
-    console.log(event.container);
     if (event.container.data.length > 1) {
       return;
     } else {
@@ -89,7 +88,6 @@ export class FlockCageCategoryTransferComponent implements OnInit {
   }
 
   public remove(flock: any): void {
-    console.log(flock);
     const x: FlockCageIncompatibleFrontDto = flock[1];
     const retrievedFlock = this.flocks.find(flock => flock.flockId === x.flockId);
     if (retrievedFlock != null) {
@@ -99,7 +97,6 @@ export class FlockCageCategoryTransferComponent implements OnInit {
   }
 
   public decreaseFlockQuantity(event: any, flockToCage: any) {
-    console.log(flockToCage)
     this.disableSave = false;
     const flock = this.flocks.find(flock => flock.flockId === flockToCage[1].flockId);
 
@@ -157,6 +154,5 @@ export class FlockCageCategoryTransferComponent implements OnInit {
         this.flockCageTransferDtoList.push(flockCageTransferDto);
       }
     });
-    console.log(this.flockCageTransferDtoList);
   }
 }

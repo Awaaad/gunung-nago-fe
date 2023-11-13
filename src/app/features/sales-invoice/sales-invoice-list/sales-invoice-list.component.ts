@@ -177,7 +177,6 @@ export class SalesInvoiceListComponent {
   }
 
   public routeToPointOfSalesEdit(salesInvoiceDto: SalesInvoiceDto): void {
-    console.log(salesInvoiceDto)
     this.router.navigate([`point-of-sale/sales-invoice-id/${salesInvoiceDto.id}`]);
   }
 

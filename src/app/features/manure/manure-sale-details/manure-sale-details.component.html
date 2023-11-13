@@ -384,7 +384,7 @@
                   <ion-select color="gunung-nago-primary" label="Payment Mode" label-placement="floating" fill="outline"
                     interface="popover" placeholder="Payment Mode" formControlName="paymentType">
                     <ion-select-option *ngFor="let paymentType of paymentTypes" [value]="paymentType">{{
-                      paymentType}}</ion-select-option>
+                      paymentType | titlecase}}</ion-select-option>
                   </ion-select>
                   <div class="error-messages">
                     <ng-container *ngFor="let error of errorMessages.paymentType">

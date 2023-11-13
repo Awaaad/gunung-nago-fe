@@ -157,7 +157,6 @@ export class PointOfSaleComponent implements OnInit {
   public findSalesInvoiceDetailsById(): void {
     this.salesInvoiceApiService.findSalesInvoiceDetailsById(this.salesInvoiceId).subscribe(salesInvoiceDetailsFrontDto => {
       this.salesInvoiceDetailsFrontDto = salesInvoiceDetailsFrontDto;
-      console.log(this.salesInvoiceDetailsFrontDto);
       //this.totalPrice = salesInvoiceDetailsFrontDto.totalPrice;
       this.initialiseCustomerOnSalesInvoiceEdit();
       this.saleForm?.get("customer.firstName")?.setValue(salesInvoiceDetailsFrontDto.customerFirstName);

@@ -7,7 +7,7 @@
       <div class="router-links">
         <div class="title">
           <img class="header-logo" src='./assets/flaticon/sales-invoice.png'>
-          <h3 class="header-nav-products">Sales Invoice List</h3>
+          <h3 class="header-nav-products">{{firstName}} {{lastName}}'s Account</h3>
         </div>
         <div>
           <ion-item class="language-selection">
@@ -34,9 +34,9 @@
               <div class="form-section-cart">Locked Invoices</div>
             </div>
 
-            <div class="balance">Total Locked Amount Due: <span class="balance-right">{{totalLockedAmountDue | number
-                :
-                '1.2-2'}}</span>
+            <div class="balance">Total Locked Amount Due: <span class="balance-right">{{totalLockedAmountDue != null ?
+                (totalLockedAmountDue |
+                number:'1.2-2') : (0 | number: '1.2-2')}}</span>
             </div>
           </ion-card-content>
         </ion-card>
@@ -52,17 +52,32 @@
               <div class="form-section-cart">Unlocked Invoices</div>
             </div>
 
-            <div class="balance">Total Unlocked Amount Due: <span class="balance-right">{{totalUnlockedAmountDue |
+            <div class="balance">Total Unlocked Amount Due: <span class="balance-right">{{totalUnlockedAmountDue != null
+                ? (totalUnlockedAmountDue |
                 number :
-                '1.2-2'}}</span>
+                '1.2-2') : (0 | number: '1.2-2')}}</span>
             </div>
 
-            <div class="balance" *ngIf="totalUnlockedAmountDue">Sold At: <input [max]="totalUnlockedAmountDue"
+            <ion-row *ngIf="totalUnlockedAmountDue">
+              <ion-col size-xs="12" size-md="6">
+                <ion-input color="gunung-nago-primary" label="Sold at*" label-placement="floating" fill="outline"
+                  type="number" clear-input="true" [(ngModel)]="soldAt"
+                  (ngModelChange)="calculateTotalAmountDue(soldAt)"></ion-input>
+              </ion-col>
+              <ion-col size-xs="12" size-md="6">
+                <ion-input color="gunung-nago-primary" label="Discount (%)" [disabled]="true" label-placement="floating"
+                  fill="outline" type="number" clear-input="true" [value]="((totalUnlockedAmountDue -
+                  soldAt) /
+                  totalUnlockedAmountDue) * 100 | number : '1.2-2'" required="true"></ion-input>
+              </ion-col>
+            </ion-row>
+
+            <!-- <div class="balance" *ngIf="totalUnlockedAmountDue">Sold At: <input [max]="totalUnlockedAmountDue"
                 oninput="validity.valid||(value=0);" [min]="0" class="input-number balance-right calculator-paid"
                 type="number" [(ngModel)]="soldAt" (ngModelChange)="calculateTotalAmountDue(soldAt)"></div>
             <div *ngIf="soldAt > 0" class="balance">Discount: <span class="balance-right">{{((totalUnlockedAmountDue -
                 soldAt) /
-                totalUnlockedAmountDue) * 100 | number : '1.2-2'}} %</span></div>
+                totalUnlockedAmountDue) * 100 | number : '1.2-2'}} %</span></div> -->
 
           </ion-card-content>
         </ion-card>
@@ -73,33 +88,25 @@
         <ion-card class="payment-area">
           <ion-card-content>
             <div class="subtitle">
-              <img class="cart-logo" src='./assets/header_icons/payment-method.png'>
+              <img class="cart-logo" src='./assets/flaticon/payment-method.png'>
               <div class="form-section-cart">Payment</div>
             </div>
 
-            <div class="balance">Total Amount Due: <span class="balance-right">{{totalAmountDue | number :
-                '1.2-2'}}</span>
+            <div class="balance">Total Amount Due: <span class="balance-right">{{totalAmountDue != null
+                ? (totalAmountDue | number :
+                '1.2-2') : (0 | number: '1.2-2')}}</span>
             </div>
 
-            <div class="balance">AmountPaid: <input [max]="totalAmountDue" oninput="validity.valid||(value=0);"
-                [min]="0" class="input-number balance-right calculator-paid" type="number" [(ngModel)]="amountPaid">
-
-              <!-- <ion-input color="gunung-nago-primary" label="Total Price" label-placement="floating" fill="outline"
-                type="number" formControlName="totalPrice"></ion-input> -->
-            </div>
-
-            <div class="btn-container">
-              <ion-button class="cancel-btn" (click)="reset()">Cancel</ion-button>
-              <!-- <ion-button *ngIf="totalUnlockedAmountDue"
-                [disabled]="(((totalUnlockedAmountDue - soldAt) / totalUnlockedAmountDue) * 100) > 15 || soldAt === 0 || amountPaid > totalAmountDue || amountPaid === 0"
+            <div class="btn-container" *ngIf="totalAmountDue">
+              <ion-button (click)="openPaymentModal()" *ngIf="totalUnlockedAmountDue"
+                [disabled]="(((totalUnlockedAmountDue - soldAt) / totalUnlockedAmountDue) * 100) > 15 || soldAt === 0"
                 class="make-purchase-btn" color="positive-btn">
-                Confirm
+                Settle Account
               </ion-button>
-              <ion-button *ngIf="!totalUnlockedAmountDue" [disabled]="amountPaid > totalAmountDue || amountPaid === 0"
-                class="make-purchase-btn" color="positive-btn">
-                Confirm
-              </ion-button> -->
-              <ion-button (click)="test()">Test</ion-button>
+              <ion-button (click)="openPaymentModal()" *ngIf="!totalUnlockedAmountDue" class="make-purchase-btn"
+                color="positive-btn">
+                Settle Account
+              </ion-button>
             </div>
           </ion-card-content>
         </ion-card>
@@ -207,9 +214,6 @@
 
               <ion-icon class="table-edit-icon mr-05" color="neutral-btn" (click)="routeToPointOfSalesEdit(element)"
                 name="create"></ion-icon>
-
-              <ion-icon class="table-view-more-icon" name="list" (click)="openStatusModal(element)"></ion-icon>
-
             </div>
           </td>
         </ng-container>
@@ -259,46 +263,25 @@
     </ion-infinite-scroll-content>
   </ion-infinite-scroll>
 
-  <ion-modal (willDismiss)="onModalStatusWillDismiss($event)" [isOpen]="isStatusModalOpen" cssClass="status-modal"
+  <ion-modal (willDismiss)="onModalPaymentWillDismiss($event)" [isOpen]="isPaymentModalOpen" cssClass="status-modal"
     backdropDismiss="true">
     <ng-template>
       <ion-header>
         <ion-toolbar>
           <div class="title">
-            <img class="header-logo ml-15" src='./assets/flaticon/workflow.png'>
-            <h3 class="modal-header-text">Change Invoice Status</h3>
+            <img class="header-logo ml-15" src='./assets/flaticon/payment-method.png'>
+            <h3 class="modal-header-text">Settle Account</h3>
           </div>
         </ion-toolbar>
       </ion-header>
       <ion-content [fullscreen]="false" class="ion-padding">
-        <ion-item-divider>Invoice</ion-item-divider>
-
-        <form [formGroup]="paymentForm" *ngIf="selectedStatus === 'PAID'">
-          <ion-row *ngIf="selectedStatus === 'PAID' && (!selectedInvoice.discount || selectedInvoice.discount > 0)">
-            <ion-col size-xs="5" size-md="5">
-              <ion-input color="gunung-nago-primary" label="Total Price" label-placement="floating" fill="outline"
-                type="number" formControlName="totalPrice"></ion-input>
-            </ion-col>
-            <ion-col size-xs="5" size-md="5">
-              <ion-input color="gunung-nago-primary" label="Sold at*" label-placement="floating" fill="outline"
-                type="number" formControlName="soldAt"></ion-input>
-              <div class="error-messages">
-                <ng-container *ngFor="let error of errorMessages.soldAt">
-                  <div class="error-message"
-                    *ngIf="paymentForm.get('soldAt')?.hasError(error.type) && (paymentForm.get('soldAt')?.dirty || paymentForm.get('soldAt')?.touched)">
-                    {{ error.message }}
-                  </div>
-                </ng-container>
-              </div>
-            </ion-col>
-            <ion-col size-xs="2" size-md="2"
-              *ngIf="selectedStatus === 'PAID' && (!selectedInvoice.discount || selectedInvoice.discount > 0)">
-              <ion-input color="gunung-nago-primary" label="Discount (%)" label-placement="floating" fill="outline"
-                [disabled]="true" type="number"
-                [value]="(((paymentForm.get('totalPrice')?.value - paymentForm.get('soldAt')?.value)) / paymentForm.get('totalPrice')?.value) * 100"></ion-input>
-            </ion-col>
-          </ion-row>
-
+        <ion-row>
+          <ion-col size-xs="5" size-md="5">
+            <ion-input color="gunung-nago-primary" label="Sold at" label-placement="floating" fill="outline"
+              type="number" [value]="totalAmountDue" [disabled]="true"></ion-input>
+          </ion-col>
+        </ion-row>
+        <form [formGroup]="paymentForm">
           <div class="add-payment-area">
             <div>
 
@@ -333,7 +316,7 @@
                   <ion-select color="gunung-nago-primary" label="Payment Mode" label-placement="floating" fill="outline"
                     interface="popover" placeholder="Payment Mode" formControlName="paymentType">
                     <ion-select-option *ngFor="let paymentType of paymentTypes" [value]="paymentType">{{
-                      paymentType}}</ion-select-option>
+                      paymentType | titlecase}}</ion-select-option>
                   </ion-select>
                   <div class="error-messages">
                     <ng-container *ngFor="let error of errorMessages.paymentType">
@@ -345,29 +328,30 @@
                   </div>
                 </ion-col>
               </ion-row>
-
-              <ion-row *ngIf="payment.get('paymentType')?.value === 'CREDIT'">
-                <ion-col size="6">
-                  <mat-form-field class="date-full-width" appearance="outline">
-                    <mat-label>Payment Deadline</mat-label>
-                    <input matInput [matDatepicker]="picker" [min]="today" formControlName="paymentDeadline">
-                    <mat-hint>DD/MM/YYYY</mat-hint>
-                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-                    <mat-datepicker #picker></mat-datepicker>
-                  </mat-form-field>
-                </ion-col>
-              </ion-row>
             </span>
           </div>
         </form>
 
+        <ion-item-divider *ngIf="checkPaymentLessThanSoldAt()">
+          <ion-label>Credit</ion-label>
+        </ion-item-divider>
+        <ion-row *ngIf="checkPaymentLessThanSoldAt()">
+          <ion-col size="6">
+            <mat-form-field class="date-full-width" appearance="outline">
+              <mat-label>Payment Deadline</mat-label>
+              <input matInput [matDatepicker]="picker" [min]="today" [(ngModel)]="paymentDeadline">
+              <mat-hint>DD/MM/YYYY</mat-hint>
+              <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+          </ion-col>
+        </ion-row>
+
         <div class="modal-btn-container ion-text-right">
-          <ion-button class="cancel-btn" (click)="cancelStatusChange()">Cancel</ion-button>
-          <ion-button color="positive-btn" *ngIf="selectedStatus !== 'PAID'"
-            (click)="confirmStatusChange()">Save</ion-button>
-          <ion-button color="positive-btn" *ngIf="selectedStatus === 'PAID'"
-            [disabled]="!checkPaymentLessThanSoldAt() || paymentForm.invalid || selectedInvoice.totalPrice < 1 || !checkPaymentCompleted()"
-            (click)="confirmStatusChange()">Save</ion-button>
+          <ion-button class="cancel-btn" (click)="cancelPayment()">Cancel</ion-button>
+          <ion-button (click)="confirmPayment()"
+            [disabled]="checkPaymentCompleted() || paymentForm.invalid || (checkPaymentLessThanSoldAt() && paymentDeadline == null)"
+            color="positive-btn">Save</ion-button>
         </div>
       </ion-content>
     </ng-template>

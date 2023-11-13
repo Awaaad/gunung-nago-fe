@@ -175,11 +175,11 @@ export class CustomerListComponent {
     });
   }
 
-  public routeToCustomerStatementOfAccount(customerId: number): void {
-    this.router.navigate([`customer/customer-statement-of-account/${customerId}`]);
+  public routeToCustomerStatementOfAccount(customer: CustomerDto): void {
+    this.router.navigate([`customer/customer-statement-of-account/${customer.id}`]);
   }
 
-  public routeToSalesInvoiceCustomerCreditList(customerId: number): void {
-    this.router.navigate([`sales-invoice/sales-invoice-customer-credit-list/${customerId}`]);
+  public routeToSalesInvoiceCustomerCreditList(customer: CustomerDto): void {
+    this.router.navigate([`sales-invoice/sales-invoice-customer-credit-list/${customer.id}`], { queryParams: { lastName: customer.lastName, firstName: customer.firstName } });
   }
 }
