@@ -32,8 +32,7 @@
             <div class="form-array-index">
               <h6>Manure {{i + 1}}</h6>
               <ion-button *ngIf="manureDetailsFields != null && manureDetailsFields.length > 1"
-                (click)="removeManureDetails(i)" class="delete-product-btn" color="gunung-nago-warehouse"><ion-icon
-                  name="trash"></ion-icon></ion-button>
+                (click)="removeManureDetails(i)" class="delete-product-btn" color="gunung-nago-warehouse"><span class="material-icons">delete</span></ion-button>
             </div>
             <ion-row>
               <ion-col size-xs="12" size-md="6">

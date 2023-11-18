@@ -42,7 +42,7 @@
               </div>
               <img class="eggs" src='./assets/flaticon/eggs.png'>
               <div class="egg-count">
-                <strong>{{eggStock.totalEggs}}</strong>
+                <!-- <strong>{{eggStock.totalEggs}}</strong> -->
               </div>
             </div>
 
@@ -52,7 +52,7 @@
               </div>
               <img class="eggs" src='./assets/flaticon/good-eggs.png'>
               <div class="egg-count">
-                <strong>{{eggStock.goodEggs}}</strong>
+                <!-- <strong>{{eggStock.goodEggs}}</strong> -->
               </div>
             </div>
 
@@ -62,7 +62,7 @@
               </div>
               <img class="eggs" src='./assets/flaticon/bad-eggs.png'>
               <div class="egg-count">
-                <strong>{{eggStock.badEggs}}</strong>
+                <!-- <strong>{{eggStock.badEggs}}</strong> -->
               </div>
             </div>
           </div>
@@ -74,7 +74,7 @@
               </div>
               <img class="eggs" src='./assets/flaticon/category-big.png'>
               <div class="egg-count">
-                <strong>{{eggStock.bigEggs}}</strong>
+                <!-- <strong>{{eggStock.bigEggs}}</strong> -->
               </div>
             </div>
             <div class="egg-section">
@@ -83,7 +83,7 @@
               </div>
               <img class="eggs medium-category" src='./assets/flaticon/category-medium.png'>
               <div class="egg-count">
-                <strong>{{eggStock.mediumEggs}}</strong>
+                <!-- <strong>{{eggStock.mediumEggs}}</strong> -->
               </div>
             </div>
             <div class="egg-section">
@@ -92,7 +92,7 @@
               </div>
               <img class="eggs small-category" src='./assets/flaticon/category-small.png'>
               <div class="egg-count">
-                <strong>{{eggStock.smallEggs}}</strong>
+                <!-- <strong>{{eggStock.smallEggs}}</strong> -->
               </div>
             </div>
           </div>
@@ -117,20 +117,20 @@
           </ion-item-divider>
           <ion-list>
             <ion-item>
-              <ion-checkbox justify="space-between" [disabled]="eggStock.bigEggs < 1" [(ngModel)]="big"
-                color="positive-btn" (ionChange)="bigCheckboxChange($event)">Big</ion-checkbox>
+              <!-- <ion-checkbox justify="space-between" [disabled]="eggStock.bigEggs < 1" [(ngModel)]="big"
+                color="positive-btn" (ionChange)="bigCheckboxChange($event)">Big</ion-checkbox> -->
             </ion-item>
             <ion-item>
-              <ion-checkbox justify="space-between" [disabled]="eggStock.mediumEggs < 1" [(ngModel)]="medium"
-                color="positive-btn" (ionChange)="mediumCheckboxChange($event)">Medium</ion-checkbox>
+              <!-- <ion-checkbox justify="space-between" [disabled]="eggStock.mediumEggs < 1" [(ngModel)]="medium"
+                color="positive-btn" (ionChange)="mediumCheckboxChange($event)">Medium</ion-checkbox> -->
             </ion-item>
             <ion-item>
-              <ion-checkbox justify="space-between" [disabled]="eggStock.smallEggs < 1" [(ngModel)]="small"
-                color="positive-btn" (ionChange)="smallCheckboxChange($event)">Small</ion-checkbox>
+              <!-- <ion-checkbox justify="space-between" [disabled]="eggStock.smallEggs < 1" [(ngModel)]="small"
+                color="positive-btn" (ionChange)="smallCheckboxChange($event)">Small</ion-checkbox> -->
             </ion-item>
             <ion-item class="bad-checkbox-item">
-              <ion-checkbox justify="space-between" [disabled]="eggStock.badEggs < 1" [(ngModel)]="bad"
-                color="positive-btn" (ionChange)="badCheckboxChange($event)">Bad</ion-checkbox>
+              <!-- <ion-checkbox justify="space-between" [disabled]="eggStock.badEggs < 1" [(ngModel)]="bad"
+                color="positive-btn" (ionChange)="badCheckboxChange($event)">Bad</ion-checkbox> -->
             </ion-item>
           </ion-list>
         </ion-card-content>
@@ -154,7 +154,7 @@
               </div>
               <img class="eggs" src='./assets/flaticon/eggs.png'>
               <div class="egg-count">
-                <strong>{{(eggStock.goodEggs - (((bigGoodPieceBad + (bigGoodTrayBad * 30) + (bigGoodTieBad * 300)) +
+                <!-- <strong>{{(eggStock.goodEggs - (((bigGoodPieceBad + (bigGoodTrayBad * 30) + (bigGoodTieBad * 300)) +
                   (bigGoodPieceBroken + (bigGoodTrayBroken * 30) + (bigGoodTieBroken * 300))) +
                   ((mediumGoodPieceBad + (mediumGoodTrayBad * 30) + (mediumGoodTieBad * 300)) + (mediumGoodPieceBroken +
                   (mediumGoodTrayBroken * 30) + (mediumGoodTieBroken * 300))) +
@@ -163,7 +163,7 @@
                   (eggStock.badEggs + (((bigGoodPieceBad + (bigGoodTrayBad * 30) + (bigGoodTieBad * 300))) +
                   ((mediumGoodPieceBad + (mediumGoodTrayBad * 30) + (mediumGoodTieBad * 300))) +
                   ((smallGoodPieceBad + (smallGoodTrayBad * 30) + (smallGoodTieBad * 300))))) -
-                  (badPieceBroken + ((badTieBroken * 300) + (badTrayBroken * 30)))}}</strong>
+                  (badPieceBroken + ((badTieBroken * 300) + (badTrayBroken * 30)))}}</strong> -->
               </div>
             </div>
 
@@ -173,12 +173,12 @@
               </div>
               <img class="eggs" src='./assets/flaticon/good-eggs.png'>
               <div class="egg-count">
-                <strong>{{eggStock.goodEggs - (((bigGoodPieceBad + (bigGoodTrayBad * 30) + (bigGoodTieBad * 300)) +
+                <!-- <strong>{{eggStock.goodEggs - (((bigGoodPieceBad + (bigGoodTrayBad * 30) + (bigGoodTieBad * 300)) +
                   (bigGoodPieceBroken + (bigGoodTrayBroken * 30) + (bigGoodTieBroken * 300))) +
                   ((mediumGoodPieceBad + (mediumGoodTrayBad * 30) + (mediumGoodTieBad * 300)) + (mediumGoodPieceBroken +
                   (mediumGoodTrayBroken * 30) + (mediumGoodTieBroken * 300))) +
                   ((smallGoodPieceBad + (smallGoodTrayBad * 30) + (smallGoodTieBad * 300)) + (smallGoodPieceBroken +
-                  (smallGoodTrayBroken * 30) + (smallGoodTieBroken * 300))))}}</strong>
+                  (smallGoodTrayBroken * 30) + (smallGoodTieBroken * 300))))}}</strong> -->
               </div>
             </div>
 
@@ -188,10 +188,10 @@
               </div>
               <img class="eggs" src='./assets/flaticon/bad-eggs.png'>
               <div class="egg-count">
-                <strong>{{(eggStock.badEggs + (((bigGoodPieceBad + (bigGoodTrayBad * 30) + (bigGoodTieBad * 300))) +
+                <!-- <strong>{{(eggStock.badEggs + (((bigGoodPieceBad + (bigGoodTrayBad * 30) + (bigGoodTieBad * 300))) +
                   ((mediumGoodPieceBad + (mediumGoodTrayBad * 30) + (mediumGoodTieBad * 300))) +
                   ((smallGoodPieceBad + (smallGoodTrayBad * 30) + (smallGoodTieBad * 300))))) -
-                  (badPieceBroken + ((badTieBroken * 300) + (badTrayBroken * 30)))}}</strong>
+                  (badPieceBroken + ((badTieBroken * 300) + (badTrayBroken * 30)))}}</strong> -->
               </div>
             </div>
           </div>
@@ -203,8 +203,8 @@
               </div>
               <img class="eggs" src='./assets/flaticon/category-big.png'>
               <div class="egg-count">
-                <strong>{{eggStock.bigEggs - ((bigGoodPieceBad + (bigGoodTrayBad * 30) + (bigGoodTieBad * 300)) +
-                  (bigGoodPieceBroken + (bigGoodTrayBroken * 30) + (bigGoodTieBroken * 300)))}}</strong>
+                <!-- <strong>{{eggStock.bigEggs - ((bigGoodPieceBad + (bigGoodTrayBad * 30) + (bigGoodTieBad * 300)) +
+                  (bigGoodPieceBroken + (bigGoodTrayBroken * 30) + (bigGoodTieBroken * 300)))}}</strong> -->
               </div>
             </div>
             <div class="egg-section">
@@ -213,9 +213,9 @@
               </div>
               <img class="eggs medium-category" src='./assets/flaticon/category-medium.png'>
               <div class="egg-count">
-                <strong>{{eggStock.mediumEggs - ((mediumGoodPieceBad + (mediumGoodTrayBad * 30) + (mediumGoodTieBad *
+                <!-- <strong>{{eggStock.mediumEggs - ((mediumGoodPieceBad + (mediumGoodTrayBad * 30) + (mediumGoodTieBad *
                   300)) + (mediumGoodPieceBroken + (mediumGoodTrayBroken * 30) + (mediumGoodTieBroken *
-                  300)))}}</strong>
+                  300)))}}</strong> -->
               </div>
             </div>
             <div class="egg-section">
@@ -224,8 +224,8 @@
               </div>
               <img class="eggs small-category" src='./assets/flaticon/category-small.png'>
               <div class="egg-count">
-                <strong>{{eggStock.smallEggs - ((smallGoodPieceBad + (smallGoodTrayBad * 30) + (smallGoodTieBad * 300))
-                  + (smallGoodPieceBroken + (smallGoodTrayBroken * 30) + (smallGoodTieBroken * 300)))}}</strong>
+                <!-- <strong>{{eggStock.smallEggs - ((smallGoodPieceBad + (smallGoodTrayBad * 30) + (smallGoodTieBad * 300))
+                  + (smallGoodPieceBroken + (smallGoodTrayBroken * 30) + (smallGoodTieBroken * 300)))}}</strong> -->
               </div>
             </div>
           </div>

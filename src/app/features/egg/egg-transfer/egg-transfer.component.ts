@@ -63,12 +63,10 @@ export class EggTransferComponent implements OnInit {
 
   private getEggStock(): void {
     this.eggStock = {
-      totalEggs: 0,
-      bigEggs: 0,
-      mediumEggs: 0,
-      smallEggs: 0,
-      goodEggs: 0,
-      badEggs: 0,
+      goodEggs: null,
+      badEggs: null,
+      totalEggs: null,
+      eggCategoryStockDtos: [],
       createdBy: '',
       lastModifiedBy: 0,
       createdDate: '',

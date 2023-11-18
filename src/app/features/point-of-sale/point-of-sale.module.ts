@@ -17,7 +17,6 @@ import { TranslateModule } from '@ngx-translate/core';
 import { EggRoutingModule } from '../egg/egg-routing.module';
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 import { CustomerApiService } from 'src/app/shared/apis/customer.api.service';
-import { ManureSaleApiService } from 'src/app/shared/apis/manure-sale.api.service';
 import { ManureStockApiService } from 'src/app/shared/apis/manure-stock.api.service';
 import { MY_FORMATS } from '../report/report.module';
 import { CageApiService } from 'src/app/shared/apis/cage.api.service';
@@ -26,6 +25,7 @@ import { EggStockApiService } from 'src/app/shared/apis/egg-stock.api.service';
 import { FlockStockApiService } from 'src/app/shared/apis/flock-stock.api.service';
 import { PointOfSaleApiService } from 'src/app/shared/apis/point-of-sale.api.service';
 import { SalesInvoiceApiService } from 'src/app/shared/apis/sales-invoice.api.service';
+import { FlockApiService } from 'src/app/shared/apis/flock.api.service';
 
 
 @NgModule({
@@ -48,7 +48,7 @@ import { SalesInvoiceApiService } from 'src/app/shared/apis/sales-invoice.api.se
     MatDatepickerModule,
     MatNativeDateModule,
   ],
-  providers: [SalesInvoiceApiService, CustomerApiService, ManureStockApiService, CageApiService, SurveyApiService, EggStockApiService, FlockStockApiService, PointOfSaleApiService,
+  providers: [SalesInvoiceApiService, CustomerApiService, ManureStockApiService, CageApiService, FlockApiService, SurveyApiService, EggStockApiService, FlockStockApiService, PointOfSaleApiService,
     {
       provide: DateAdapter,
       useClass: MomentDateAdapter,

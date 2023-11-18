@@ -53,12 +53,10 @@ export class EggStockComponent implements OnInit {
 
   private getEggStock(): void {
     this.eggStock = {
-      totalEggs: 0,
-      bigEggs: 0,
-      mediumEggs: 0,
-      smallEggs: 0,
-      goodEggs: 0,
-      badEggs: 0,
+      goodEggs: null,
+      badEggs: null,
+      totalEggs: null,
+      eggCategoryStockDtos: [],
       createdBy: '',
       lastModifiedBy: '',
       createdDate: 0,
@@ -70,10 +68,10 @@ export class EggStockComponent implements OnInit {
   }
   public initialiseEggStockEditForm(eggStockDetails: EggStockFrontDto): void {
     this.eggStockEditForm = new FormGroup({
-      bigEggs: new FormControl({ value: eggStockDetails.bigEggs, disabled: false }, Validators.compose([Validators.required])),
-      mediumEggs: new FormControl({ value: eggStockDetails.mediumEggs, disabled: false }, Validators.compose([Validators.required])),
-      smallEggs: new FormControl({ value: eggStockDetails.smallEggs, disabled: false }, Validators.compose([Validators.required])),
-      badEggs: new FormControl({ value: eggStockDetails.badEggs, disabled: false }, Validators.compose([Validators.required])),
+      bigEggs: new FormControl({ value: null, disabled: false }, Validators.compose([Validators.required])),
+      mediumEggs: new FormControl({ value: null, disabled: false }, Validators.compose([Validators.required])),
+      smallEggs: new FormControl({ value: null, disabled: false }, Validators.compose([Validators.required])),
+      badEggs: new FormControl({ value: null, disabled: false }, Validators.compose([Validators.required])),
     })
   }
 

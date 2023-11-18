@@ -152,8 +152,7 @@
           <th mat-header-cell *matHeaderCellDef [style.background-color]="stockColor"> </th>
           <td mat-cell *matCellDef="let element; let i = index;">
             <div class="table-btn">
-              <ion-button color="gunung-nago-warehouse" class="mr-05" (click)="removeFlockInStock(element, i)"><ion-icon
-                  name="trash"></ion-icon></ion-button>
+              <ion-button color="gunung-nago-warehouse" class="mr-05" (click)="removeFlockInStock(element, i)"><span class="material-icons">delete</span></ion-button>
             </div>
           </td>
         </ng-container>

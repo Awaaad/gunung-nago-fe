@@ -22,6 +22,7 @@ import { HealthProductApiService } from 'src/app/shared/apis/health-product.api.
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatChipsModule } from '@angular/material/chips';
 import { FlockFeedLineApiService } from 'src/app/shared/apis/flock-feed-line.api.service';
+import { EggCategoryApiService } from 'src/app/shared/apis/egg-category.api.service';
 
 @NgModule({
   declarations: [SurveyListComponent, SurveryDetailsComponent],
@@ -44,6 +45,6 @@ import { FlockFeedLineApiService } from 'src/app/shared/apis/flock-feed-line.api
     MatAutocompleteModule,
     MatChipsModule
   ],
-  providers: [SurveyApiService, HealthProductApiService, FlockFeedLineApiService]
+  providers: [SurveyApiService, HealthProductApiService, FlockFeedLineApiService, EggCategoryApiService]
 })
 export class SurveyModule { }
