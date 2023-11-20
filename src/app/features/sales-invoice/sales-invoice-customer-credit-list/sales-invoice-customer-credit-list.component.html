@@ -1,0 +1,359 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      <div class="router-links">
+        <div class="title">
+          <img class="header-logo" src='./assets/flaticon/sales-invoice.png'>
+          <h3 class="header-nav-products">{{firstName}} {{lastName}}'s Account</h3>
+        </div>
+        <div>
+          <ion-item class="language-selection">
+            <ion-select aria-label="language" interface="popover" placeholder="Select language" [(ngModel)]="language"
+              (ionChange)="ionChangeLanguage($event)">
+              <ion-select-option value="en">English</ion-select-option>
+              <ion-select-option value="id">Indonesian</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </div>
+      </div>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="false" class="ion-padding" [scrollEvents]="true" (ionScroll)="onScroll($event)">
+  <ion-row>
+    <ion-col size-lg="4" size-md="12" size-xs="12">
+      <div>
+        <ion-card class="payment-area">
+          <ion-card-content>
+            <div class="subtitle">
+              <img class="cart-logo" src="./assets/flaticon/padlock.png" />
+              <div class="form-section-cart">Locked Invoices</div>
+            </div>
+
+            <div class="balance">Total Locked Amount Due: <span class="balance-right">{{totalLockedAmountDue != null ?
+                (totalLockedAmountDue |
+                number:'1.2-2') : (0 | number: '1.2-2')}}</span>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </ion-col>
+    <ion-col size-lg="4" size-md="12" size-xs="12">
+
+      <div>
+        <ion-card class="payment-area">
+          <ion-card-content>
+            <div class="subtitle">
+              <img class="cart-logo" src="./assets/flaticon/open-padlock.png" />
+              <div class="form-section-cart">Unlocked Invoices</div>
+            </div>
+
+            <div class="balance">Total Unlocked Amount Due: <span class="balance-right">{{totalUnlockedAmountDue != null
+                ? (totalUnlockedAmountDue |
+                number :
+                '1.2-2') : (0 | number: '1.2-2')}}</span>
+            </div>
+
+            <ion-row *ngIf="totalUnlockedAmountDue">
+              <ion-col size-xs="12" size-md="6">
+                <ion-input color="gunung-nago-primary" label="Sold at*" label-placement="floating" fill="outline"
+                  type="number" clear-input="true" [(ngModel)]="soldAt"
+                  (ngModelChange)="calculateTotalAmountDue(soldAt)"></ion-input>
+              </ion-col>
+              <ion-col size-xs="12" size-md="6">
+                <ion-input color="gunung-nago-primary" label="Discount (%)" [disabled]="true" label-placement="floating"
+                  fill="outline" type="number" clear-input="true" [value]="((totalUnlockedAmountDue -
+                  soldAt) /
+                  totalUnlockedAmountDue) * 100 | number : '1.2-2'" required="true"></ion-input>
+              </ion-col>
+            </ion-row>
+
+            <!-- <div class="balance" *ngIf="totalUnlockedAmountDue">Sold At: <input [max]="totalUnlockedAmountDue"
+                oninput="validity.valid||(value=0);" [min]="0" class="input-number balance-right calculator-paid"
+                type="number" [(ngModel)]="soldAt" (ngModelChange)="calculateTotalAmountDue(soldAt)"></div>
+            <div *ngIf="soldAt > 0" class="balance">Discount: <span class="balance-right">{{((totalUnlockedAmountDue -
+                soldAt) /
+                totalUnlockedAmountDue) * 100 | number : '1.2-2'}} %</span></div> -->
+
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </ion-col>
+    <ion-col size-lg="4" size-md="12" size-xs="12">
+      <div>
+        <ion-card class="payment-area">
+          <ion-card-content>
+            <div class="subtitle">
+              <img class="cart-logo" src='./assets/flaticon/payment-method.png'>
+              <div class="form-section-cart">Payment</div>
+            </div>
+
+            <div class="balance">Total Amount Due: <span class="balance-right">{{totalAmountDue != null
+                ? (totalAmountDue | number :
+                '1.2-2') : (0 | number: '1.2-2')}}</span>
+            </div>
+
+            <div class="btn-container" *ngIf="totalAmountDue">
+              <ion-button (click)="openPaymentModal()" *ngIf="totalUnlockedAmountDue"
+                [disabled]="(((totalUnlockedAmountDue - soldAt) / totalUnlockedAmountDue) * 100) > 15 || soldAt === 0"
+                class="make-purchase-btn" color="positive-btn">
+                Settle Account
+              </ion-button>
+              <ion-button (click)="openPaymentModal()" *ngIf="!totalUnlockedAmountDue" class="make-purchase-btn"
+                color="positive-btn">
+                Settle Account
+              </ion-button>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </ion-col>
+  </ion-row>
+
+  <ion-card>
+    <div class="mat-elevation-z8 table-responsive">
+      <table mat-table matSort (matSortChange)="sortData($event)" matSortDisableClear="true"
+        [dataSource]="salesInvoices">
+        <ng-container matColumnDef="locked">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="locked"> Locked </th>
+          <td mat-cell *matCellDef="let element">
+            <mat-icon *ngIf="!element.discount">lock_open</mat-icon>
+            <mat-icon *ngIf="element.discount">lock</mat-icon>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="id"> Invoice Number </th>
+          <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="name"> Customer Name </th>
+          <td mat-cell *matCellDef="let element">
+            <span *ngIf="element.customerFirstName != 'anonymous'">{{element.customerFirstName}}</span>
+            <span *ngIf="element.customerLastName != 'anonymous'"> {{element.customerLastName}}</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="createdBy">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="createdBy"> Salesperson </th>
+          <td mat-cell *matCellDef="let element"> {{element.createdBy | titlecase}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="createdDate">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="createdDate"> Date Issued </th>
+          <td mat-cell *matCellDef="let element"> {{element.createdDate | date:'dd-MM-yyyy HH:mm'}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="category">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="category"> Option </th>
+          <td mat-cell *matCellDef="let element">
+            <div *ngIf="element.salesInvoiceCategory === 'IN_STORE'" class="table-content-wrapper">
+              <img class="table-content-icon" src='./assets/flaticon/in-store.png'>
+              <div class="table-content-text">In Store</div>
+            </div>
+            <div *ngIf="element.salesInvoiceCategory === 'DELIVERY'" class="table-content-wrapper">
+              <img class="table-content-icon" src='./assets/flaticon/delivery.png'>
+              <div class="table-content-text">Delivery</div>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="status"> Status </th>
+          <td mat-cell *matCellDef="let element">
+            <ion-chip class="chip-paid" *ngIf="element.salesInvoiceStatus === 'PAID'">
+              <ion-label>{{element.salesInvoiceStatus | titlecase}}</ion-label>
+            </ion-chip>
+            <ion-chip class="chip-pending" *ngIf="element.salesInvoiceStatus === 'PENDING'">
+              <ion-label>{{element.salesInvoiceStatus | titlecase}}</ion-label>
+            </ion-chip>
+            <ion-chip class="chip-cancelled" *ngIf="element.salesInvoiceStatus === 'CANCELLED'">
+              <ion-label>{{element.salesInvoiceStatus | titlecase}}</ion-label>
+            </ion-chip>
+            <ion-chip class="chip-approved" *ngIf="element.salesInvoiceStatus === 'APPROVED'">
+              <ion-label>{{element.salesInvoiceStatus | titlecase}}</ion-label>
+            </ion-chip>
+            <ion-chip class="chip-completed" *ngIf="element.salesInvoiceStatus === 'COMPLETED'">
+              <ion-label>{{element.salesInvoiceStatus | titlecase}}</ion-label>
+            </ion-chip>
+            <ion-chip class="chip-past-due" *ngIf="element.salesInvoiceStatus === 'PAST_DUE'">
+              <ion-label>{{element.salesInvoiceStatus | titlecase}}</ion-label>
+            </ion-chip>
+            <ion-chip class="chip-outstanding" *ngIf="element.salesInvoiceStatus === 'OUTSTANDING'">
+              <ion-label>{{element.salesInvoiceStatus | titlecase}}</ion-label>
+            </ion-chip>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="driver">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="driver"> Driver </th>
+          <td mat-cell *matCellDef="let element"> {{element.driverFirstName}} {{element.driverLastName}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="totalPrice">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="totalPrice"> Total Price </th>
+          <td mat-cell *matCellDef="let element"> {{element.totalPrice | number :'1.2-2'}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="soldAt">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="soldAt"> Sold At </th>
+          <td mat-cell *matCellDef="let element"> {{element.soldAt | number :'1.2-2'}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef> Actions </th>
+          <td mat-cell *matCellDef="let element">
+            <div class="table-btn">
+              <ion-icon color="positive-btn" class="table-view-details-icon mr-05" name="eye"
+                (click)="routeToSalesInvoiceDetails(element)"></ion-icon>
+
+              <ion-icon class="table-edit-icon mr-05" color="neutral-btn" (click)="routeToPointOfSalesEdit(element)"
+                name="create"></ion-icon>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="amountPaid">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="amountPaid"> Amount Paid </th>
+          <td mat-cell *matCellDef="let element">
+            <div *ngFor="let payment of element.paymentDtos">
+              <span *ngIf="payment.paymentType !== 'CREDIT'">
+                <span *ngIf="payment.paymentType == 'CASH'">
+                  <strong>Cash:</strong> {{payment.amountPaid | number :'1.2-2'}}
+                </span>
+                <span *ngIf="payment.paymentType == 'CARD'">
+                  <strong>Card:</strong> {{payment.amountPaid | number :'1.2-2'}}
+                </span>
+                <span *ngIf="payment.paymentType == 'CHEQUE'">
+                  <strong>Cheque:</strong> {{payment.amountPaid | number :'1.2-2'}}
+                </span>
+                <span *ngIf="payment.paymentType == 'Electronic'">
+                  <strong>Electronic:</strong> {{payment.amountPaid | number :'1.2-2'}}
+                </span>
+              </span>
+            </div>
+            <div><strong>Total:</strong> {{getTotalAmountPaid(element.paymentDtos) | number :'1.2-2'}}</div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="amountDue">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="amountDue"> Amount Due </th>
+          <td mat-cell *matCellDef="let element">
+            <div *ngFor="let payment of element.paymentDtos">
+              <span *ngIf="payment.paymentType == 'CREDIT' && !payment.settled">
+                <strong>Credit:</strong> {{payment.amountPaid | number :'1.2-2'}}
+                <br>
+                <strong>Deadline:</strong> {{payment.paymentDeadline | date:'dd-MM-yyyy'}}
+              </span>
+            </div>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+  </ion-card>
+  <ion-infinite-scroll threshold="100px" position="bottom" (ionInfinite)="loadData($event)">
+    <ion-infinite-scroll-content loadingSpinner="crescent" loadingText="Loading more sales invoices...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+
+  <ion-modal (willDismiss)="onModalPaymentWillDismiss($event)" [isOpen]="isPaymentModalOpen" cssClass="status-modal"
+    backdropDismiss="true">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <div class="title">
+            <img class="header-logo ml-15" src='./assets/flaticon/payment-method.png'>
+            <h3 class="modal-header-text">Settle Account</h3>
+          </div>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content [fullscreen]="false" class="ion-padding">
+        <ion-row>
+          <ion-col size-xs="5" size-md="5">
+            <ion-input color="gunung-nago-primary" label="Sold at" label-placement="floating" fill="outline"
+              type="number" [value]="totalAmountDue" [disabled]="true"></ion-input>
+          </ion-col>
+        </ion-row>
+        <form [formGroup]="paymentForm">
+          <div class="add-payment-area">
+            <div>
+
+            </div>
+            <div>
+              <ion-button color="neutral-btn" class="add-payment-btn" (click)="addPayment()">Add Payment</ion-button>
+            </div>
+          </div>
+
+          <div formArrayName="payments" *ngFor="let payment of paymentsFields?.controls; let i = index">
+            <ion-item-divider>
+              <ion-label>Payment</ion-label>
+            </ion-item-divider>
+            <span [formGroupName]="i">
+              <ion-button *ngIf="paymentsFields != null && paymentsFields.length > 1" (click)="removePayment(i)"
+                class="remove-payment-btn" color="danger"><span class="material-icons">delete</span></ion-button>
+              <ion-row>
+                <ion-col size="6" size-sm>
+                  <ion-input color="gunung-nago-primary" label="Amount Paid" label-placement="floating" fill="outline"
+                    type="number" formControlName="amountPaid"></ion-input>
+                  <div class="error-messages">
+                    <ng-container *ngFor="let error of errorMessages.amountPaid">
+                      <div class="error-message"
+                        *ngIf="payment.get('amountPaid')?.hasError(error.type) && (payment.get('amountPaid')?.dirty || payment.get('amountPaid')?.touched)">
+                        {{ error.message }}
+                      </div>
+                    </ng-container>
+                  </div>
+                </ion-col>
+
+                <ion-col size="6">
+                  <ion-select color="gunung-nago-primary" label="Payment Mode" label-placement="floating" fill="outline"
+                    interface="popover" placeholder="Payment Mode" formControlName="paymentType">
+                    <ion-select-option *ngFor="let paymentType of paymentTypes" [value]="paymentType">{{
+                      paymentType | titlecase}}</ion-select-option>
+                  </ion-select>
+                  <div class="error-messages">
+                    <ng-container *ngFor="let error of errorMessages.paymentType">
+                      <div class="error-message"
+                        *ngIf="payment.get('paymentType')?.hasError(error.type) && (payment.get('paymentType')?.dirty || payment.get('paymentType')?.touched)">
+                        {{ error.message }}
+                      </div>
+                    </ng-container>
+                  </div>
+                </ion-col>
+              </ion-row>
+            </span>
+          </div>
+        </form>
+
+        <ion-item-divider *ngIf="checkPaymentLessThanSoldAt()">
+          <ion-label>Credit</ion-label>
+        </ion-item-divider>
+        <ion-row *ngIf="checkPaymentLessThanSoldAt()">
+          <ion-col size="6">
+            <mat-form-field class="date-full-width" appearance="outline">
+              <mat-label>Payment Deadline</mat-label>
+              <input matInput [matDatepicker]="picker" [min]="today" [(ngModel)]="paymentDeadline">
+              <mat-hint>DD/MM/YYYY</mat-hint>
+              <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+          </ion-col>
+        </ion-row>
+
+        <div class="modal-btn-container ion-text-right">
+          <ion-button class="cancel-btn" (click)="cancelPayment()">Cancel</ion-button>
+          <ion-button (click)="confirmPayment()"
+            [disabled]="checkPaymentCompleted() || paymentForm.invalid || (checkPaymentLessThanSoldAt() && paymentDeadline == null)"
+            color="positive-btn">Save</ion-button>
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+</ion-content>

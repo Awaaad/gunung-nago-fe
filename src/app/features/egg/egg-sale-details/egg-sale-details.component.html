@@ -1072,8 +1072,8 @@
 
           <ion-row>
             <ion-col size-xs="6" size-md="6">
-              <ion-input color="gunung-nago-primary" label="Discount (%)" label-placement="floating" fill="outline" [disabled]="true"
-                type="number"
+              <ion-input color="gunung-nago-primary" label="Discount (%)" label-placement="floating" fill="outline"
+                [disabled]="true" type="number"
                 [value]="(((paymentForm.get('totalPrice')?.value - paymentForm.get('soldAt')?.value)) / paymentForm.get('totalPrice')?.value) * 100"></ion-input>
             </ion-col>
           </ion-row>
@@ -1111,7 +1111,7 @@
                   <ion-select color="gunung-nago-primary" label="Payment Mode*" label-placement="floating"
                     fill="outline" interface="popover" placeholder="Payment Mode" formControlName="paymentType">
                     <ion-select-option *ngFor="let paymentType of paymentTypes" [value]="paymentType">{{
-                      paymentType}}</ion-select-option>
+                      paymentType | titlecase}}</ion-select-option>
                   </ion-select>
                   <div class="error-messages">
                     <ng-container *ngFor="let error of errorMessages.paymentType">

@@ -89,7 +89,12 @@
           <th mat-header-cell *matHeaderCellDef> </th>
           <td mat-cell *matCellDef="let element">
             <div class="table-btn">
-              <ion-icon class="table-edit-icon" color="neutral-btn" (click)="openModal(element)" name="create"></ion-icon>
+              <ion-icon color="positive-btn" class="table-statement-of-account-icon mr-05" (click)="routeToCustomerStatementOfAccount(element)" name="file-tray-full"></ion-icon>
+
+              <ion-icon color="gunung-nago-warehouse" class="table-credit-icon mr-05" (click)="routeToSalesInvoiceCustomerCreditList(element)" name="card"></ion-icon>
+
+              <ion-icon class="table-edit-icon" color="neutral-btn" (click)="openModal(element)"
+                name="create"></ion-icon>
             </div>
           </td>
         </ng-container>

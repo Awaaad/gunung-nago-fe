@@ -114,12 +114,6 @@ tbody {
     font-size: 15px;
 }
 
-.chip-returned {
-    background-color: var(--ion-color-neutral-btn);
-    color: white;
-    font-size: 15px;
-}
-
 .red {
     ion-datetime-button::part(native) {
         background: #FFF;
@@ -168,4 +162,50 @@ tbody {
 .modal-status-chip {
     display: flex;
     justify-content: flex-end;
+}
+
+.subtitle {
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+
+    .cart-logo {
+        width: 23px;
+    }
+}
+
+.form-section-cart {
+    font-weight: 500;
+    padding-top: 10px;
+    padding-left: 7px;
+    color: black;
+    font-size: 18px;
+}
+
+.balance {
+    font-size: 17px;
+    padding: 10px;
+    color: black;
+}
+
+.balance-right {
+    float: right;
+}
+
+
+.input-number {
+    border-radius: 0px;
+    width: 75px;
+    border-top: 0;
+    border-right: 0;
+    border-left: 0;
+
+    &:focus {
+        outline-color: none;
+        border-bottom-color: #28ba62;
+    }
+}
+
+.btn-container {
+    margin: 1em 0em 0.7em 0;
 }

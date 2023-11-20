@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { SalesInvoiceDto } from 'generated-src/model';
-import { PageResult, SalesInvoiceDetailsFrontDto } from 'generated-src/model-front';
+import { PageResult, SalesInvoiceDetailsForReturnFrontDto, SalesInvoiceDetailsFrontDto } from 'generated-src/model-front';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
 
@@ -17,6 +17,10 @@ export class SalesInvoiceApiService {
 
     public findSalesInvoiceDetailsById(id: number): Observable<SalesInvoiceDetailsFrontDto> {
         return this.http.get<any>(`${this.baseUrl}${id}`);
+    }
+
+    public findSalesInvoiceDetailsForReturnById(id: number): Observable<SalesInvoiceDetailsForReturnFrontDto> {
+        return this.http.get<any>(`${this.baseUrl}sales-invoice-for-return/${id}`);
     }
 
     public approveSalesInvoiceStatus(id: number): Observable<any> {

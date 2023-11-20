@@ -1,35 +1,36 @@
-import { Component, ViewChild } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormGroup, FormBuilder, FormControl, Validators, FormArray } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { ActivatedRoute, Router } from '@angular/router';
 import { IonInfiniteScroll, IonModal } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { PaymentDto, PaymentType, SalesInvoiceCategory, SalesInvoiceDto, SalesInvoiceStatus, SalesInvoiceType, UserDto } from 'generated-src/model';
-import { Subscription } from 'rxjs';
-import { UtilsService } from 'src/app/shared/utils/utils.service';
-import { SalesInvoiceApiService } from 'src/app/shared/apis/sales-invoice.api.service';
-import { Router } from '@angular/router';
-import { SecurityApiService } from 'src/app/shared/apis/security.api.service';
-import { OverlayEventDetail } from '@ionic/core/components';
-import { HttpErrorResponse } from '@angular/common/http';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { SalesInvoiceDto, UserDto, SalesInvoiceType, SalesInvoiceStatus, SalesInvoiceCategory, PaymentType, PaymentDto, SettleCustomerCreditPaymentDto } from 'generated-src/model';
+import { SettleCustomerCreditPaymentFrontDto } from 'generated-src/model-front';
 import * as moment from 'moment';
-import { SalesInvoiceSettleCreditPaymentFrontDto } from 'generated-src/model-front';
+import { Subscription } from 'rxjs';
 import { PaymentApiService } from 'src/app/shared/apis/payment.api.service';
+import { SalesInvoiceApiService } from 'src/app/shared/apis/sales-invoice.api.service';
+import { SecurityApiService } from 'src/app/shared/apis/security.api.service';
+import { UtilsService } from 'src/app/shared/utils/utils.service';
+import { OverlayEventDetail } from '@ionic/core/components';
 
 @Component({
-  selector: 'app-sales-invoice-list',
-  templateUrl: './sales-invoice-list.component.html',
-  styleUrls: ['./sales-invoice-list.component.scss'],
+  selector: 'app-sales-invoice-customer-credit-list',
+  templateUrl: './sales-invoice-customer-credit-list.component.html',
+  styleUrls: ['./sales-invoice-customer-credit-list.component.scss'],
 })
-export class SalesInvoiceListComponent {
+export class SalesInvoiceCustomerCreditListComponent {
+  public customerId: any = this.activatedRoute.snapshot.paramMap.get('customerId');
   @ViewChild('picker') picker: any;
   @ViewChild(IonInfiniteScroll, { static: true }) infiniteScroll!: IonInfiniteScroll;
   @ViewChild(IonModal) modal!: IonModal;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   public language = "en";
-  public displayedColumns: string[] = ['id', 'name', 'createdBy', 'createdDate', 'category', 'driver', 'totalPrice', 'soldAt', 'amountPaid', 'amountDue', 'status', 'actions'];
+  public displayedColumns: string[] = ['locked', 'id', 'createdBy', 'createdDate', 'category', 'driver', 'totalPrice', 'soldAt', 'amountPaid', 'amountDue', 'status'];
   public salesInvoices = new MatTableDataSource<SalesInvoiceDto>;
   private infiniteSalesInvoices: SalesInvoiceDto[] = [];
   public salesInvoiceSearchSubscription!: Subscription;
@@ -43,21 +44,30 @@ export class SalesInvoiceListComponent {
   public usernames: string[] = [];
   public username: string = '';
   public drivers: UserDto[] = [];
-  public selectedDriverId: number | any = '0';
   public salesInvoiceTypes: string[] = [];
   public salesInvoiceType: SalesInvoiceType | string = '';
   public salesInvoiceStatuses: string[] = [];
   public salesInvoiceStatus: SalesInvoiceStatus | string = '';
   public salesInvoiceCategories: string[] = [];
   public salesInvoiceCategory: SalesInvoiceCategory | string = '';
-  public isStatusModalOpen: boolean = false;
-  public selectedInvoice!: SalesInvoiceDto;
-  public selectedStatus!: SalesInvoiceStatus | null;
+  public isPaymentModalOpen: boolean = false;
   public today: Date = new Date();
   public paymentForm!: FormGroup;
   public paymentTypes: string[] = [];
-  private salesInvoiceSettleCreditPaymentFrontDto!: SalesInvoiceSettleCreditPaymentFrontDto;
+  private settleCustomerCreditPaymentDto!: SettleCustomerCreditPaymentFrontDto;
   public amountDue!: number;
+
+  public soldAt: number = 0;
+  public amountPaid: number = 0;
+  public lastName!: string;
+  public firstName!: string;
+  public totalAmountDue: number = 0;
+  public initialTotalAmountDue: number = 0;
+  public totalLockedAmountDue: number = 0;
+  public totalUnlockedAmountDue: number = 0;
+  public discountOnTotalCredit!: number;
+  public paymentDeadline = moment(this.today).startOf('day').format(moment.HTML5_FMT.DATE);
+
   public errorMessages = {
     name: [
       { type: 'required', message: 'Name is required' },
@@ -93,6 +103,7 @@ export class SalesInvoiceListComponent {
   };
 
   constructor(
+    private readonly activatedRoute: ActivatedRoute,
     private salesInvoiceApiService: SalesInvoiceApiService,
     private paymentApiService: PaymentApiService,
     private formBuilder: FormBuilder,
@@ -104,14 +115,24 @@ export class SalesInvoiceListComponent {
   }
 
   ionViewWillEnter(): void {
-    this.isStatusModalOpen = false;
     this.salesInvoiceTypes = Object.keys(SalesInvoiceType);
     this.salesInvoiceStatuses = Object.keys(SalesInvoiceStatus);
     this.salesInvoiceCategories = Object.keys(SalesInvoiceCategory);
     this.paymentTypes = Object.keys(PaymentType);
+    this.paymentTypes = this.paymentTypes.filter(paymentType => paymentType != PaymentType.CREDIT);
+    this.getRouteParams();
     this.getAllUsernames();
     this.getAllDrivers();
     this.search();
+  }
+
+  private getRouteParams(): void {
+    this.activatedRoute.queryParams
+      .subscribe(params => {
+        this.lastName = params['lastName'];
+        this.firstName = params['firstName'];
+      }
+      );
   }
 
   public ionChangeLanguage(event: any): void {
@@ -166,24 +187,12 @@ export class SalesInvoiceListComponent {
     });
   }
 
-  public ionChangeDriver(event: any): void {
-    this.selectedDriverId = event.detail.value;
-    this.utilsService.presentLoadingDuration(500).then(() => {
-      this.search();
-    });
-  }
-
   public routeToSalesInvoiceDetails(salesInvoiceDto: SalesInvoiceDto): void {
     this.router.navigate([`sales-invoice/sales-invoice-details/${salesInvoiceDto.id}`]);
   }
 
   public routeToPointOfSalesEdit(salesInvoiceDto: SalesInvoiceDto): void {
     this.router.navigate([`point-of-sale/sales-invoice-id/${salesInvoiceDto.id}`]);
-  }
-
-  public routeToReturnInvoice(salesInvoiceDto: SalesInvoiceDto): void {
-    this.modal.dismiss(null, 'cancel');
-    this.router.navigate([`return-invoice/${salesInvoiceDto.id}`]);
   }
 
   public selectDateFrom(): void {
@@ -219,14 +228,8 @@ export class SalesInvoiceListComponent {
       this.salesInvoices = new MatTableDataSource<SalesInvoiceDto>([]);
     }
     const salesInvoiceSearchCriteriaDto: any = {
-      createdBy: this.username === '' || this.username === null ? null : this.username,
-      driverId: this.selectedDriverId === '0' || this.selectedDriverId === null ? '' : this.selectedDriverId,
-      dateFrom: this.dateFrom === null ? '' : this.dateFrom,
-      dateTo: this.dateTo === null ? '' : this.dateTo,
-      customerName: this.customerName,
-      salesInvoiceType: this.salesInvoiceType,
-      salesInvoiceStatus: this.salesInvoiceStatus,
-      salesInvoiceCategory: this.salesInvoiceCategory,
+      customerId: this.customerId,
+      credit: true,
 
       page: this.page,
       size: this.size,
@@ -242,6 +245,13 @@ export class SalesInvoiceListComponent {
       this.infiniteSalesInvoices = [...this.infiniteSalesInvoices, ...salesInvoices.content];
       this.salesInvoices = new MatTableDataSource<SalesInvoiceDto>(this.infiniteSalesInvoices);
 
+      if (this.salesInvoices.data.length > 0) {
+        this.initialTotalAmountDue = this.salesInvoices.data[0]?.totalAmountDue;
+        this.totalAmountDue = this.salesInvoices.data[0]?.totalAmountDue;
+        this.totalLockedAmountDue = this.salesInvoices.data[0]?.totalLockedAmountDue;
+        this.totalUnlockedAmountDue = this.salesInvoices.data[0]?.totalUnlockedAmountDue;
+      }
+
       if (event) {
         event.target.complete();
         event.returnValue = false;
@@ -250,16 +260,24 @@ export class SalesInvoiceListComponent {
   }
 
   public reset(): void {
-    this.selectedStatus = null;
     this.dateFrom = null;
     this.dateTo = null;
-    this.selectedDriverId = '0';
     this.customerName = '';
     this.salesInvoiceType = '';
     this.salesInvoiceStatus = '';
     this.salesInvoiceCategory = '';
     this.username = '';
-    this.amountDue = 0;
+    this.amountDue = 0;  
+    this.soldAt = 0;
+    this.amountPaid = 0;
+    this.totalAmountDue = 0;
+    this.initialTotalAmountDue = 0;
+    this.totalLockedAmountDue = 0;
+    this.totalUnlockedAmountDue = 0;
+    this.discountOnTotalCredit = 0;
+    this.getRouteParams();
+    this.paymentDeadline = moment(this.today).startOf('day').format(moment.HTML5_FMT.DATE);
+    
     this.initialisePaymentFormBuilder();
     this.utilsService.presentLoadingDuration(500).then(() => {
       this.search();
@@ -295,111 +313,57 @@ export class SalesInvoiceListComponent {
     return sum;
   }
 
-  public openStatusModal(salesInvoiceDto: SalesInvoiceDto): void {
-    console.log("here")
-    this.selectedInvoice = salesInvoiceDto;
+  public openPaymentModal(): void {
     this.initialisePaymentFormBuilder();
-    this.isStatusModalOpen = true;
+    this.isPaymentModalOpen = true;
   }
 
-  public cancelStatusChange(): void {
-    this.isStatusModalOpen = false;
-    this.selectedStatus = null;
+  public cancelPayment(): void {
+    this.isPaymentModalOpen = false;
     this.modal.dismiss(null, 'cancel');
   }
 
-  public confirmStatusChange(): void {
+  public confirmPayment(): void {
     this.modal.dismiss(null, 'confirm');
   }
 
-  public onModalStatusWillDismiss(event: Event): void {
+  public onModalPaymentWillDismiss(event: Event): void {
     const ev = event as CustomEvent<OverlayEventDetail<string>>;
     if (ev.detail.role === 'backdrop') {
-      this.isStatusModalOpen = false;
-      this.selectedStatus = null;
+      this.isPaymentModalOpen = false;
     }
     if (ev.detail.role === 'confirm') {
-      this.isStatusModalOpen = false;
-      this.changeStatusOfInvoice();
+      this.isPaymentModalOpen = false;
+      this.settleInvoicePayment();
     }
   }
 
-  private changeStatusOfInvoice(): void {
+  private settleInvoicePayment(): void {
     this.utilsService.presentLoading();
-    if (this.selectedStatus === SalesInvoiceStatus.APPROVED) {
-      this.salesInvoiceApiService.approveSalesInvoiceStatus(this.selectedInvoice.id).subscribe({
-        next: (data: string) => {
-          this.reset();
-          this.utilsService.dismissLoading();
-          this.utilsService.successMsg(`Invoice ${this.selectedInvoice.id} successfully changed to ${this.selectedStatus?.toLowerCase()}`);
-        },
-        error: (error: HttpErrorResponse) => {
-          this.utilsService.dismissLoading();
-          this.utilsService.unsuccessMsg('Error', 'gunung-nago-warehouse');
-        }
-      });
-    }
-    if (this.selectedStatus === SalesInvoiceStatus.CANCELLED) {
-      this.salesInvoiceApiService.cancelSalesInvoiceStatus(this.selectedInvoice.id).subscribe({
-        next: (data: string) => {
-          this.reset();
-          this.utilsService.dismissLoading();
-          this.utilsService.successMsg(`Invoice ${this.selectedInvoice.id} successfully changed to ${this.selectedStatus?.toLowerCase()}`);
-        },
-        error: (error: HttpErrorResponse) => {
-          this.utilsService.dismissLoading();
-          this.utilsService.unsuccessMsg('Error', 'gunung-nago-warehouse');
-        }
-      });
-    }
-    if (this.selectedStatus === SalesInvoiceStatus.RETURNED) {
-      console.log("re")
-    }
-    if (this.selectedStatus === SalesInvoiceStatus.COMPLETED) {
-      this.salesInvoiceApiService.completeSalesInvoiceStatus(this.selectedInvoice.id).subscribe({
-        next: (data: string) => {
-          this.reset();
-          this.utilsService.dismissLoading();
-          this.utilsService.successMsg(`Invoice ${this.selectedInvoice.id} successfully changed to ${this.selectedStatus?.toLowerCase()}`);
-        },
-        error: (error: HttpErrorResponse) => {
-          this.utilsService.dismissLoading();
-          this.utilsService.unsuccessMsg('Error', 'gunung-nago-warehouse');
-        }
-      });
-    }
-    if (this.selectedStatus === SalesInvoiceStatus.PAID) {
-      this.populatePaymentDto();
-      this.paymentApiService.settleInvoicePayment(this.salesInvoiceSettleCreditPaymentFrontDto).subscribe({
-        next: (data: string) => {
-          this.reset();
-          this.utilsService.dismissLoading();
-          this.utilsService.successMsg(`Payment for Invoice ${this.selectedInvoice.id} settled successfully`);
-        },
-        error: (error: HttpErrorResponse) => {
-          this.utilsService.dismissLoading();
-          this.utilsService.unsuccessMsg('Error', 'gunung-nago-warehouse');
-        }
-      });
-    }
-
+    this.populatePaymentDto();
+    this.paymentApiService.settleAccount(this.settleCustomerCreditPaymentDto).subscribe({
+      next: (data: string) => {
+        this.reset();
+        this.utilsService.dismissLoading();
+        this.utilsService.successMsg(`Account settled successfully`);
+      },
+      error: (error: HttpErrorResponse) => {
+        this.utilsService.dismissLoading();
+        this.utilsService.unsuccessMsg('Error', 'gunung-nago-warehouse');
+      }
+    });
   }
 
   private initialisePaymentFormBuilder(): void {
-    const amountDue = this.selectedInvoice.paymentDtos.filter(payment => payment.paymentType === PaymentType.CREDIT && payment.settled === false).map(payment => payment.amountPaid).reduce((acc, value) => {
-      return acc + value;
-    }, 0);
-    this.amountDue = amountDue;
     this.paymentForm = this.formBuilder.group({
-      totalPrice: new FormControl({ value: amountDue, disabled: true }, Validators.compose([Validators.required])),
-      soldAt: new FormControl({ value: amountDue, disabled: this.selectedInvoice.soldAt < this.selectedInvoice.totalPrice }, Validators.compose([
+      customerId: new FormControl({ value: this.customerId, disabled: true }, Validators.compose([Validators.required])),
+      soldAtForUnlockedCreditPayments: new FormControl({ value: this.totalUnlockedAmountDue > 0 ? this.soldAt : this.totalAmountDue, disabled: true }, Validators.compose([
         Validators.required,
         Validators.min(0),
-        Validators.max(amountDue),
       ])),
       payments: this.formBuilder.array([
         this.addPaymentFormGroup()
-      ])
+      ]),
     });
   }
 
@@ -437,7 +401,7 @@ export class SalesInvoiceListComponent {
     this.paymentForm.get('payments')?.value.forEach((payment: any) => {
       totalAmountPaid += payment.amountPaid;
     });
-    if (totalAmountPaid <= this.paymentForm.get('soldAt')?.value) {
+    if (totalAmountPaid < this.totalAmountDue) {
       return true;
     } else {
       return false;
@@ -449,7 +413,7 @@ export class SalesInvoiceListComponent {
     this.paymentForm.get('payments')?.value.forEach((payment: any) => {
       totalAmountPaid += payment.amountPaid;
     });
-    if (totalAmountPaid === this.paymentForm.get('soldAt')?.value) {
+    if (totalAmountPaid > this.totalAmountDue) {
       return true;
     } else {
       return false;
@@ -457,12 +421,16 @@ export class SalesInvoiceListComponent {
   }
 
   private populatePaymentDto(): void {
-    this.salesInvoiceSettleCreditPaymentFrontDto = {
-      invoiceId: this.selectedInvoice.id,
-      soldAt: this.paymentForm?.get("soldAt")?.value,
-      discount: null,
-      paymentSaveDtos: this.paymentForm.value.payments,
+    this.settleCustomerCreditPaymentDto = {
+      customerId: this.customerId,
+      soldAtForUnlockedCreditPayments: this.paymentForm?.get("soldAtForUnlockedCreditPayments")?.value,
+      paymentDtos: this.paymentForm.value.payments,
+      paymentDeadline: moment(this.paymentDeadline).startOf('day').format(moment.HTML5_FMT.DATE)
     }
+  }
+
+  public calculateTotalAmountDue(soldAt: number): void {
+    this.totalAmountDue = soldAt + this.totalLockedAmountDue;
   }
 }
 

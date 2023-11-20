@@ -1,4 +1,4 @@
-import { AquisitionType, CageCategory, EggQuantityType, EggType, FarmDto, FeedCategory, FeedSurveyDto, FlockCategory, FlockSaleDetailsDto, FlockType, HealthSurveyDto, HealthType, PaymentType, PurchaseDetailsDto, PurchaseInvoiceType, RoleDto, SaleDetailsDto, SalesInvoiceCategory, SalesInvoiceStatus, SalesInvoiceType } from "./model";
+import { AquisitionType, CageCategory, EggQuantityType, EggType, FarmDto, FeedCategory, FeedSurveyDto, FlockCategory, FlockSaleDetailsDto, FlockType, HealthSurveyDto, HealthType, PaymentType, PurchaseDetailsDto, PurchaseInvoiceType, RoleDto, SaleDetailsDto, SaleDetailsForReturnDto, SalesInvoiceCategory, SalesInvoiceStatus, SalesInvoiceType } from "./model";
 
 export class PageResult<T> {
     public content!: Array<T>;
@@ -198,6 +198,48 @@ export class SalesInvoiceDetailsFrontDto {
     saleDetailsDtos!: SaleDetailsDto[] | [] | null | undefined;
 }
 
+export class SalesInvoiceDetailsFrontForReturnDto {
+    id!: number | null | undefined | any;
+    receiptId!: number | null | undefined | any;
+    salesInvoiceType!: SalesInvoiceType | null | undefined | any;
+    totalPrice!: number | null | undefined | any;
+    soldAt!: number | null | undefined | any;
+    createdBy!: string | null | undefined | any;
+    createdDate!: Date | null | undefined | any;
+    customerFirstName!: string | null | undefined | any;
+    customerLastName!: string | null | undefined | any;
+    customerAddress!: string | null | undefined | any;
+    customerTelephoneNumber!: number | null | undefined | any;
+    driverFirstName!: string | null | undefined | any;
+    driverLastName!: string | null | undefined | any;
+    salesPerson!: string | null | undefined | any;
+    salesInvoiceCategory!: SalesInvoiceCategory | null | undefined | any;
+    salesInvoiceStatus!: SalesInvoiceStatus | null | undefined | any;
+    comment: string | null | undefined | any;
+    saleDetailsForReturnDtos!: SaleDetailsForReturnDto[] | [] | null | undefined;
+}
+
+export class SalesInvoiceDetailsForReturnFrontDto {
+    id!: number | null | undefined | any;
+    receiptId!: number | null | undefined | any;
+    salesInvoiceType!: SalesInvoiceType | null | undefined | any;
+    totalPrice!: number | null | undefined | any;
+    soldAt!: number | null | undefined | any;
+    createdBy!: string | null | undefined | any;
+    createdDate!: Date | null | undefined | any;
+    customerFirstName!: string | null | undefined | any;
+    customerLastName!: string | null | undefined | any;
+    customerAddress!: string | null | undefined | any;
+    customerTelephoneNumber!: number | null | undefined | any;
+    driverFirstName!: string | null | undefined | any;
+    driverLastName!: string | null | undefined | any;
+    salesPerson!: string | null | undefined | any;
+    salesInvoiceCategory!: SalesInvoiceCategory | null | undefined | any;
+    salesInvoiceStatus!: SalesInvoiceStatus | null | undefined | any;
+    comment: string | null | undefined | any;
+    salesInvoiceLineForReturnDtos!: SaleDetailsForReturnDto[] | [] | null | undefined;
+}
+
 export class ProductStockSaveFrontDto {
     type!: PurchaseInvoiceType | null | undefined | any;
 
@@ -331,4 +373,11 @@ export class SalesInvoiceSettleCreditPaymentFrontDto {
     soldAt!: number | null | undefined | any;
     discount!: number | null | undefined | any;
     paymentSaveDtos!: PaymentSaveFrontDto[] | [] | null | undefined;
+}
+
+export class SettleCustomerCreditPaymentFrontDto {
+    customerId!: number | null | undefined | any;
+    soldAtForUnlockedCreditPayments!: number | null | undefined | any;
+    paymentDtos!: PaymentSaveFrontDto[] | [] | null | undefined;
+    paymentDeadline!: Date | any;
 }

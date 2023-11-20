@@ -20,9 +20,11 @@ import { SecurityApiService } from 'src/app/shared/apis/security.api.service';
 import { FileApiService } from 'src/app/shared/apis/file.api.service';
 import { MatMenuModule } from '@angular/material/menu';
 import { PaymentApiService } from 'src/app/shared/apis/payment.api.service';
+import { SalesInvoiceCustomerCreditListComponent } from './sales-invoice-customer-credit-list/sales-invoice-customer-credit-list.component';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
-  declarations: [SalesInvoiceListComponent, SalesInvoiceDetailsComponent],
+  declarations: [SalesInvoiceListComponent, SalesInvoiceDetailsComponent, SalesInvoiceCustomerCreditListComponent],
   imports: [
     CommonModule,
     SalesInvoiceRoutingModule,
@@ -37,7 +39,8 @@ import { PaymentApiService } from 'src/app/shared/apis/payment.api.service';
     MatNativeDateModule,
     MatDatepickerModule,
     MatInputModule,
-    MatMenuModule
+    MatMenuModule,
+    MatIconModule
   ],
   providers: [SalesInvoiceApiService, ReceiptApiService, SecurityApiService, FileApiService, PaymentApiService]
 })

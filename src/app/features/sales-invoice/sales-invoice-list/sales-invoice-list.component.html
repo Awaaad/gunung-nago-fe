@@ -241,6 +241,9 @@
               <ion-icon class="table-view-more-icon" name="list" (click)="openStatusModal(element)"></ion-icon>
               
               <ion-icon *ngIf="getTotalAmountPaid(element.paymentDtos) === 0 && element.salesInvoiceStatus === 'OUTSTANDING'"class="table-edit-icon" color="neutral-btn"  (click)="routeToPointOfSalesEdit(element)" name="create"></ion-icon>    
+              <!-- <ion-icon class="table-edit-icon mr-05" color="neutral-btn" (click)="routeToPointOfSalesEdit(element)"
+                name="create"></ion-icon> -->
+
             </div>
           </td>
         </ng-container>
@@ -280,7 +283,6 @@
             </div>
           </td>
         </ng-container>
-        <!-- (click)="routeToSalesInvoiceDetails(row)" -->
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
@@ -402,8 +404,9 @@
                 [disabled]="!(selectedInvoice.salesInvoiceCategory === 'DELIVERY' && selectedInvoice.salesInvoiceStatus === 'APPROVED')"
                 color="gunung-nago-survey" labelPlacement="end">Completed</ion-radio><br />
 
-              <ion-radio value="PAID" [disabled]="selectedInvoice.salesInvoiceStatus == 'PAID'" color="positive-btn"
-                labelPlacement="end">Paid</ion-radio><br />
+              <ion-radio value="PAID"
+                [disabled]="selectedInvoice.salesInvoiceStatus == 'PAID' || selectedInvoice.salesInvoiceStatus == 'CANCELLED'"
+                color="positive-btn" labelPlacement="end">Paid</ion-radio><br />
             </div>
           </ion-radio-group>
         </div>
@@ -468,7 +471,7 @@
                   <ion-select color="gunung-nago-primary" label="Payment Mode" label-placement="floating" fill="outline"
                     interface="popover" placeholder="Payment Mode" formControlName="paymentType">
                     <ion-select-option *ngFor="let paymentType of paymentTypes" [value]="paymentType">{{
-                      paymentType}}</ion-select-option>
+                      paymentType | titlecase}}</ion-select-option>
                   </ion-select>
                   <div class="error-messages">
                     <ng-container *ngFor="let error of errorMessages.paymentType">
@@ -503,8 +506,7 @@
           <ion-button color="positive-btn" *ngIf="selectedStatus === 'PAID'"
             [disabled]="!checkPaymentLessThanSoldAt() || paymentForm.invalid || selectedInvoice.totalPrice < 1 || !checkPaymentCompleted()"
             (click)="confirmStatusChange()">Save</ion-button>
-          <ion-button
-            
+          <ion-button color="neutral-btn"
             (click)="routeToReturnInvoice(selectedInvoice)">Return Invoice</ion-button>
         </div>
       </ion-content>

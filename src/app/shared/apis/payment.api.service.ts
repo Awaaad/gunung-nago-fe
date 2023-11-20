@@ -12,4 +12,8 @@ export class PaymentApiService {
     public settleInvoicePayment(salesInvoiceSettleCreditPaymentDto: any): Observable<any> {
         return this.http.post(`${this.baseUrl}settle-invoice`, salesInvoiceSettleCreditPaymentDto, { responseType: 'text' });
     }
+
+    public settleAccount(settleCustomerCreditPaymentDto: any): Observable<any> {
+        return this.http.post(`${this.baseUrl}settle-account`, settleCustomerCreditPaymentDto, { responseType: 'text' });
+    }
 }
