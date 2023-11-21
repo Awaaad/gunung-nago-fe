@@ -19,10 +19,18 @@ td.mat-cell {
     padding: 0;
 }
 
+.doc {
+    border-color: var(--ion-color-doc);
+    color: var(--ion-color-doc);
+}
+
 .table-responsive {
     display: block;
-    width: 100%;
+    // width: 100%;
     overflow-x: auto;
+    border-radius: 4px;
+    margin-left: 16px;
+    margin-right: 16px;
 }
 
 tbody {
@@ -87,12 +95,13 @@ ion-card-content {
         font-size: 15px;
     }
 }
-.sales-invoice-return{
+
+.sales-invoice-return {
     color: var(--ion-color-gunung-nago-report);
 }
 
-.return-table{
-    margin-top:0;
+.return-table {
+    margin-top: 0;
 }
 
 .invoice-margin {
@@ -163,100 +172,108 @@ ion-card-content {
     }
 }
 
-table {
-    border-collapse: collapse;
-    margin: 0;
-    padding: 0;
-    table-layout: fixed;
-    margin-top: 2em;
-    color: black;
-}
-
-.invoice-table {
-    width: 100%;
-}
-
-.summary-table {
-    margin-top: 0;
-    width: 40%;
-    float: right;
-}
-
-table caption {
-    font-size: 1.5em;
-    margin: .5em 0 .75em;
-}
-
-table tr {
-    padding: .35em;
-}
-
-table th,
-table td {
-    padding: .625em;
-    text-align: center;
-    border: 1px solid #ddd;
-}
-
-table th {
-    font-size: .85em;
-    letter-spacing: .1em;
-    text-transform: uppercase;
-}
-
-@media screen and (max-width: 600px) {
+.invoice {
     table {
-        border: 0;
+        border-collapse: collapse;
+        margin: 0;
+        padding: 0;
+        table-layout: fixed;
+        margin-top: 2em;
+        color: black;
+    }
+
+    .invoice-table {
+        width: 100%;
+    }
+
+    .summary-table {
+        margin-top: 0;
+        width: 40%;
+        float: right;
     }
 
     table caption {
-        font-size: 1.3em;
-    }
-
-    table thead {
-        border: none;
-        clip: rect(0 0 0 0);
-        height: 1px;
-        margin: -1px;
-        overflow: hidden;
-        padding: 0;
-        position: absolute;
-        width: 1px;
+        font-size: 1.5em;
+        margin: .5em 0 .75em;
     }
 
     table tr {
-        border-bottom: 3px solid #ddd;
-        display: block;
-        margin-bottom: .625em;
+        padding: .35em;
     }
 
+    table th,
     table td {
-        border-bottom: 1px solid #ddd;
-        display: block;
-        font-size: .8em;
-        text-align: right;
+        padding: .625em;
+        text-align: center;
+        border: 1px solid #ddd;
     }
 
-    table td::before {
-        content: attr(data-label);
-        float: left;
-        font-weight: bold;
+    table th {
+        font-size: .85em;
+        letter-spacing: .1em;
         text-transform: uppercase;
     }
 
-    table td:last-child {
-        border-bottom: 0;
+    @media screen and (max-width: 600px) {
+        table {
+            border: 0;
+        }
+
+        table caption {
+            font-size: 1.3em;
+        }
+
+        table thead {
+            border: none;
+            clip: rect(0 0 0 0);
+            height: 1px;
+            margin: -1px;
+            overflow: hidden;
+            padding: 0;
+            position: absolute;
+            width: 1px;
+        }
+
+        table tr {
+            border-bottom: 3px solid #ddd;
+            display: block;
+            margin-bottom: .625em;
+        }
+
+        table td {
+            border-bottom: 1px solid #ddd;
+            display: block;
+            font-size: .8em;
+            text-align: right;
+        }
+
+        table td::before {
+            content: attr(data-label);
+            float: left;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        table td:last-child {
+            border-bottom: 0;
+        }
+    }
+
+    textarea {
+        width: 100%;
+        margin-top: 1.5em;
+        background-color: white;
+        border-color: #ddd;
+        color: black;
+    }
+
+    .salesperson {
+        margin-bottom: 10px;
     }
 }
 
-textarea {
-    width: 100%;
-    margin-top: 1.5em;
-    background-color: white;
-    border-color: #ddd;
-    color: black;
-}
 
-.salesperson {
-    margin-bottom: 10px;
+ion-input {
+    margin: 5px;
+    border-bottom: 1px solid gray;
 }

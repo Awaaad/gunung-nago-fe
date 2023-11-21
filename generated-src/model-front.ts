@@ -1,4 +1,4 @@
-import { AquisitionType, CageCategory, EggCategoryStockDto, EggQuantityType, EggType, FarmDto, FeedCategory, FeedSurveyDto, FlockCategory, FlockSaleDetailsDto, FlockType, HealthSurveyDto, HealthType, PaymentType, PurchaseDetailsDto, PurchaseInvoiceType, RoleDto, SaleDetailsDto, SalesInvoiceCategory, SalesInvoiceStatus, SalesInvoiceType, SurveyEggCountDto, SaleDetailsForReturnDto } from "./model";
+import { AquisitionType, CageCategory, EggCategoryStockDto, EggQuantityType, EggType, FarmDto, FeedCategory, FeedSurveyDto, FlockCategory, FlockSaleDetailsDto, FlockType, HealthSurveyDto, HealthType, PaymentType, PurchaseDetailsDto, PurchaseInvoiceType, RoleDto, SaleDetailsDto, SalesInvoiceCategory, SalesInvoiceStatus, SalesInvoiceType, SurveyEggCountDto } from "./model";
 
 export class PageResult<T> {
     public content!: Array<T>;
@@ -137,7 +137,7 @@ export class SaleSaveFrontDto {
     salesInvoiceCategory!: SalesInvoiceCategory | null | undefined;
     driverId!: number | null | undefined;
     comment!: string | null | undefined;
-    saleDetailsDtos!: SaleDetailsDto[] | [] | null | undefined;
+    saleDetailsDtos!: SaleDetailsFrontDto[] | [] | null | undefined;
     newCustomer!: boolean | null | undefined;
     soldAt!: number | null | undefined;
     salesInvoiceId!: number | null | undefined;
@@ -198,7 +198,7 @@ export class SalesInvoiceDetailsFrontForReturnDto {
     salesInvoiceCategory!: SalesInvoiceCategory | null | undefined | any;
     salesInvoiceStatus!: SalesInvoiceStatus | null | undefined | any;
     comment: string | null | undefined | any;
-    saleDetailsForReturnDtos!: SaleDetailsForReturnDto[] | [] | null | undefined;
+    saleDetailsForReturnDtos!: SaleDetailsForReturnFrontDto[] | [] | null | undefined;
 }
 
 export class SalesInvoiceDetailsForReturnFrontDto {
@@ -219,7 +219,7 @@ export class SalesInvoiceDetailsForReturnFrontDto {
     salesInvoiceCategory!: SalesInvoiceCategory | null | undefined | any;
     salesInvoiceStatus!: SalesInvoiceStatus | null | undefined | any;
     comment: string | null | undefined | any;
-    salesInvoiceLineForReturnDtos!: SaleDetailsForReturnDto[] | [] | null | undefined;
+    salesInvoiceLineForReturnDtos!: SaleDetailsForReturnFrontDto[] | [] | null | undefined;
 }
 
 export class ProductStockSaveFrontDto {
@@ -368,4 +368,18 @@ export class EggTransferAmountFrontDto {
     tieUnsellable: number | null | undefined | any;
     trayBad: number | null | undefined | any;
     trayUnsellable: number | null | undefined | any;
+}
+
+export class SaleDetailsForReturnFrontDto {
+    id!: number;
+    salesInvoiceType!: SalesInvoiceType;
+    quantity!: number;
+    price!: number;
+    eggType!: EggType;
+    eggQuantityType!: EggQuantityType;
+    cageId!: number;
+    flockId!: number;
+    flockType!: FlockType;
+    quantityReturned!: number;
+    eggCategoryId!:number;
 }

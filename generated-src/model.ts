@@ -1,6 +1,24 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2023-11-21 16:23:43.
+// Generated using typescript-generator version 3.2.1263 on 2023-11-21 22:12:50.
+
+export class ReturnInvoiceDto {
+    returnNumber!: string;
+    comment!: string;
+    totalPrice!: number;
+    returnInvoiceLineDtos!: ReturnInvoiceLineDto[];
+}
+
+export class ReturnInvoiceLineDto {
+    returnInvoiceType!: ReturnInvoiceType;
+    pricePerBox!: number;
+    totalPrice!: number;
+    feedStockId!: number;
+    flockId!: number;
+    manureStockId!: number;
+    quantity!: number;
+    salesInvoiceLineId!: number;
+}
 
 export class CageDto {
     id!: number;
@@ -457,6 +475,7 @@ export class SettleCustomerCreditPaymentDto {
 }
 
 export class SaleDetailsDto {
+    id!: number;
     salesInvoiceType!: SalesInvoiceType;
     quantity!: number;
     price!: number;
@@ -468,20 +487,6 @@ export class SaleDetailsDto {
     flockType!: FlockType;
 }
 
-export class SaleDetailsForReturnDto {
-    id!: number;
-    salesInvoiceType!: SalesInvoiceType;
-    quantity!: number;
-    price!: number;
-    eggType!: EggType;
-    eggQuantityType!: EggQuantityType;
-    cageId!: number;
-    flockId!: number;
-    flockType!: FlockType;
-    quantityReturned!: number;
-    eggCategoryId!:number;
-}
-
 export class SaleSaveDto {
     customerDto!: CustomerDto;
     soldAt!: number;
@@ -491,6 +496,7 @@ export class SaleSaveDto {
     driverId!: number;
     comment!: string;
     saleDetailsDtos!: SaleDetailsDto[];
+    salesInvoiceId!: number;
     newCustomer!: boolean;
 }
 
@@ -663,6 +669,26 @@ export class SalesInvoiceDetailsDto {
     saleDetailsDtos!: SaleDetailsDto[];
 }
 
+export class SalesInvoiceDetailsForReturnDto {
+    id!: number;
+    receiptId!: number;
+    totalPrice!: number;
+    soldAt!: number;
+    createdBy!: string;
+    createdDate!: Date;
+    customerFirstName!: string;
+    customerLastName!: string;
+    customerAddress!: string;
+    customerTelephoneNumber!: number;
+    driverFirstName!: string;
+    driverLastName!: string;
+    salesPerson!: string;
+    salesInvoiceCategory!: SalesInvoiceCategory;
+    salesInvoiceStatus!: SalesInvoiceStatus;
+    comment!: string;
+    salesInvoiceLineForReturnDtos!: SalesInvoiceLineForReturnDto[];
+}
+
 export class SalesInvoiceDto {
     id!: number;
     salesInvoiceType!: SalesInvoiceType;
@@ -704,6 +730,18 @@ export class SalesInvoiceLineDto {
     boxesOrdered!: number;
     unitsOrdered!: number;
     totalPrice!: number;
+}
+
+export class SalesInvoiceLineForReturnDto {
+    id!: number;
+    salesInvoiceType!: SalesInvoiceType;
+    quantity!: number;
+    price!: number;
+    eggQuantityType!: EggQuantityType;
+    cageId!: number;
+    flockId!: number;
+    flockType!: FlockType;
+    quantityReturned!: number;
 }
 
 export class AuthenticatedUserDetailsDto {
@@ -791,6 +829,13 @@ export class SurveyDto {
 export class SurveyEggCountDto {
     eggCategoryId!: number;
     quantity!: number;
+}
+
+export enum ReturnInvoiceType {
+    FLOCK = 'FLOCK',
+    FEED = 'FEED',
+    EGG = 'EGG',
+    MANURE = 'MANURE',
 }
 
 export enum CageCategory {
@@ -884,5 +929,5 @@ export enum SalesInvoiceStatus {
     PAST_DUE = 'PAST_DUE',
     PAID = 'PAID',
     PARTLY_PAID = 'PARTLY_PAID',
-    RETURNED = 'RETURNED'
+    RETURNED = 'RETURNED',
 }

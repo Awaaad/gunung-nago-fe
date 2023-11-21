@@ -5,8 +5,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
 import { IonModal } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { PaymentType, SaleDetailsDto, SaleDetailsForReturnDto, SalesInvoiceDto } from 'generated-src/model';
-import { SaleSaveFrontDto, SalesInvoiceDetailsForReturnFrontDto, SalesInvoiceDetailsFrontDto, SalesInvoiceDetailsFrontForReturnDto } from 'generated-src/model-front';
+import { PaymentType, SaleDetailsDto, SalesInvoiceDto } from 'generated-src/model';
+import { SaleSaveFrontDto, SalesInvoiceDetailsForReturnFrontDto, SaleDetailsForReturnFrontDto, SalesInvoiceDetailsFrontDto, SalesInvoiceDetailsFrontForReturnDto } from 'generated-src/model-front';
 import * as moment from 'moment';
 import { ReturnApiService } from 'src/app/shared/apis/return.api.service';
 import { SalesInvoiceApiService } from 'src/app/shared/apis/sales-invoice.api.service';
@@ -21,9 +21,8 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./return-invoice.component.scss'],
 })
 export class ReturnInvoiceComponent  implements OnInit {
-
-  public salesDetailsTable = new MatTableDataSource<SaleDetailsForReturnDto>();
-  public salesInStock: SaleDetailsForReturnDto[] = [];
+  public salesDetailsTable = new MatTableDataSource<SaleDetailsForReturnFrontDto>();
+  public salesInStock: SaleDetailsForReturnFrontDto[] = [];
   public paymentForm!: FormGroup;
   public returnForm!: FormGroup;
   public returnFormGroup!: FormGroup;
@@ -236,7 +235,7 @@ export class ReturnInvoiceComponent  implements OnInit {
         formDetail.push(returnFormGroup);
       })
     
-    this.salesDetailsTable = new MatTableDataSource<SaleDetailsForReturnDto>(this.returnFormGroupDetail.value);
+    this.salesDetailsTable = new MatTableDataSource<SaleDetailsForReturnFrontDto>(this.returnFormGroupDetail.value);
   }
 
   public openModal(): void {
@@ -280,9 +279,9 @@ export class ReturnInvoiceComponent  implements OnInit {
       telephoneNumber: this.salesInvoiceDetailsForReturnDto?.customerTelephoneNumber,
       totalAmountDue: null
     }
-    const saleDetailsDtoList : SaleDetailsForReturnDto[] = [];
+    const saleDetailsDtoList : SaleDetailsForReturnFrontDto[] = [];
     this.returnFormGroupDetail.value.forEach((sale: any) =>{
-      const saleDetailsDto : SaleDetailsForReturnDto ={
+      const saleDetailsDto : SaleDetailsForReturnFrontDto ={
         salesInvoiceType: sale.salesInvoiceType,
         quantity: sale.quantity,
         price: sale.newPrice,
@@ -298,7 +297,7 @@ export class ReturnInvoiceComponent  implements OnInit {
       saleDetailsDtoList.push(saleDetailsDto);
     })
     
-    const saleSaveForm : SaleSaveFrontDto = {
+    const saleSaveForm : any = {
       customerDto: customerDto,
       paymentSaveDtos: this.paymentForm.value.payments,
       salesInvoiceCategory: this.salesInvoiceDetailsForReturnDto?.salesInvoiceCategory,
