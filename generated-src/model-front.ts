@@ -1,4 +1,4 @@
-import { AquisitionType, CageCategory, EggQuantityType, EggType, FarmDto, FeedCategory, FeedSurveyDto, FlockCategory, FlockSaleDetailsDto, FlockType, HealthSurveyDto, HealthType, PaymentType, PurchaseDetailsDto, PurchaseInvoiceType, RoleDto, SaleDetailsDto, SaleDetailsForReturnDto, SalesInvoiceCategory, SalesInvoiceStatus, SalesInvoiceType } from "./model";
+import { AquisitionType, CageCategory, EggCategoryStockDto, EggQuantityType, EggType, FarmDto, FeedCategory, FeedSurveyDto, FlockCategory, FlockSaleDetailsDto, FlockType, HealthSurveyDto, HealthType, PaymentType, PurchaseDetailsDto, PurchaseInvoiceType, RoleDto, SaleDetailsDto, SalesInvoiceCategory, SalesInvoiceStatus, SalesInvoiceType, SurveyEggCountDto, SaleDetailsForReturnDto } from "./model";
 
 export class PageResult<T> {
     public content!: Array<T>;
@@ -25,12 +25,9 @@ export class SurveyFrontDto {
     death!: number | null | undefined;
     sterile!: number | null | undefined;
     good!: number | null | undefined;
-    badEggs!: number | null | undefined;
-    bigEggs!: number | null | undefined;
-    mediumEggs!: number | null | undefined;
-    smallEggs!: number | null | undefined;
     healthSurveyDtos: HealthSurveyDto[] | null | undefined;
     feedSurveyDtos: FeedSurveyDto[] | null | undefined;
+    surveyEggCountDtos!: SurveyEggCountDto[] | null | undefined;
     comment: string | null | undefined;
     manureBags!: number | null | undefined;
     manureWeight!: number | null | undefined;
@@ -57,35 +54,18 @@ export class EggSaleSaveFrontDto {
     salesInvoiceCategory!: SalesInvoiceCategory | null | undefined;
     driverId!: number | null | undefined;
     comment!: string | null | undefined;
-    bigGoodPiece!: number | null | undefined;
-    bigGoodPricePerPiece!: number | null | undefined;
-    bigGoodTie!: number | null | undefined;
-    bigGoodPricePerTie!: number | null | undefined;
-    bigGoodTray!: number | null | undefined;
-    bigGoodPricePerTray!: number | null | undefined;
-    mediumGoodPiece!: number | null | undefined;
-    mediumGoodPricePerPiece!: number | null | undefined;
-    mediumGoodTie!: number | null | undefined;
-    mediumGoodPricePerTie!: number | null | undefined;
-    mediumGoodTray!: number | null | undefined;
-    mediumGoodPricePerTray!: number | null | undefined;
-    smallGoodPiece!: number | null | undefined;
-    smallGoodPricePerPiece!: number | null | undefined;
-    smallGoodTie!: number | null | undefined;
-    smallGoodPricePerTie!: number | null | undefined;
-    smallGoodTray!: number | null | undefined;
-    smallGoodPricePerTray!: number;
-    badPiece!: number | null | undefined;
-    badPricePerPiece!: number | null | undefined;
-    badTie!: number | null | undefined;
-    badPricePerTie!: number | null | undefined;
-    badTray!: number | null | undefined;
-    badPricePerTray!: number | null | undefined;
+    eggCategorySaleDtos!: EggCategorySaleFrontDto[] | [] | null | undefined;
     newCustomer!: boolean | null | undefined;
-    big: boolean | null | undefined;
-    medium: boolean | null | undefined;
-    small: boolean | null | undefined;
-    bad: boolean | null | undefined;
+}
+
+export class EggCategorySaleFrontDto {
+    eggCategoryId!: number | null | undefined;
+    piece!: number | null | undefined;
+    pricePerPiece!: number | null | undefined;
+    tie!: number | null | undefined;
+    pricePerTie!: number | null | undefined;
+    tray!: number | null | undefined;
+    pricePerTray!: number | null | undefined;
 }
 
 export class PaymentSaveFrontDto {
@@ -167,7 +147,8 @@ export class SaleDetailsFrontDto {
     salesInvoiceType!: SalesInvoiceType | null | undefined | any;
     quantity!: number | null | undefined | any;
     price!: number | null | undefined | any;
-    eggType!: EggType | null | undefined | any;
+    eggCategoryId!: number | null | undefined | any;
+    eggType!: string | null | undefined | any;
     eggQuantityType!: EggQuantityType | null | undefined | any;
     cageId!: number | null | undefined | any;
     flockType!: FlockType | null | undefined | any;
@@ -175,6 +156,7 @@ export class SaleDetailsFrontDto {
     sterileChicken!: number | null | undefined | any;
     goodChicken!: number | null | undefined | any;
     flockId!: number | null | undefined | any;
+    eggInitialQuantity!: number | null | undefined | any;
 }
 
 export class SalesInvoiceDetailsFrontDto {
@@ -326,11 +308,9 @@ export class DropCage {
 
 export class EggStockFrontDto {
     goodEggs!: number | null | undefined | any;
-    bigEggs!: number | null | undefined | any;
-    mediumEggs!: number | null | undefined | any;
-    smallEggs!: number | null | undefined | any;
     badEggs!: number | null | undefined | any;
     totalEggs!: number | null | undefined | any;
+    eggCategoryStockDtos!: EggCategoryStockDto[] | [] | any;
     createdBy!: string | null | undefined | any;
     lastModifiedBy!: string | null | undefined | any;
     createdDate!: Date | null | undefined | any;

@@ -26,7 +26,6 @@
 <ion-content [fullscreen]="false" class="ion-padding">
   <ion-card>
     <form [formGroup]="surveyForm">
-
       <ion-card-content>
         <ion-item-divider>
           <ion-label>{{ 'survey.survey-details.general' | translate }}</ion-label>
@@ -50,7 +49,7 @@
               </div>
               <img class="headers" src='./assets/flaticon/clock.png'>
               <div class="headers-count">
-                <strong>{{today | date:'EEEE, MMMM d, y HH:mm'}}</strong>
+                <strong>{{today}}</strong>
               </div>
             </div>
           </ion-col>
@@ -127,131 +126,74 @@
               <ion-label>{{ 'survey.survey-details.production' | translate }}</ion-label>
             </ion-item-divider>
           </div>
+          <div class="button-section">
+            <ion-button color="neutral-btn" class="add-payment-btn" (click)="addEggCategory()">Add Egg
+              Category</ion-button>
+          </div>
         </div>
 
-        <ion-item-divider>
-          <ion-label>Big Eggs</ion-label>
-        </ion-item-divider>
-        <ion-row>
-          <ion-col size-xs="12" size-md="3">
-            <ion-input color="gunung-nago-survey" label="{{ 'survey.survey-details.tie' | translate }}"
-              label-placement="floating" fill="outline" type="number" min="0" clear-input="true"
-              formControlName="bigEggsTie" [(ngModel)]="bigEggsTie" (ngModelChange)="calculateTotalItem()"></ion-input>
-          </ion-col>
-          <ion-col size-xs="12" size-md="3">
-            <ion-input color="gunung-nago-survey" label="Tray" label-placement="floating" fill="outline" type="number"
-              min="0" max="9" maxlength="1" clear-input="true" formControlName="bigEggsTray" [(ngModel)]="bigEggsTray"
-              (ngModelChange)="calculateTotalItem()"></ion-input>
-            <div class="error-messages">
-              <ng-container *ngFor="let error of errorMessages.tray">
-                <div class="error-message"
-                  *ngIf="surveyForm.get('bigEggsTray')?.hasError(error.type) && (surveyForm.get('bigEggsTray')?.dirty || surveyForm.get('bigEggsTray')?.touched)">
-                  {{ error.message }}
-                </div>
-              </ng-container>
+
+        <div formArrayName="eggCategories" *ngFor="let eggCategory of eggCategoryFields?.controls; let i = index">
+          <span [formGroupName]="i">
+            <ion-item-divider *ngIf="i > 0" class="gray-divider">
+            </ion-item-divider>
+            <div class="form-array-index">
+              <div></div>
+              <ion-button *ngIf="eggCategoryFields != null && eggCategoryFields.length > 1"
+                (click)="removeEggCategory(i)" color="gunung-nago-warehouse"><span
+                  class="material-icons">delete</span></ion-button>
             </div>
-          </ion-col>
-          <ion-col size-xs="12" size-md="3">
-            <ion-input color="gunung-nago-survey" label="{{ 'survey.survey-details.item' | translate }}"
-              label-placement="floating" fill="outline" type="number" min="0" max="29" maxlength="2" clear-input="true"
-              formControlName="bigEggsItem" [(ngModel)]="bigEggsItem"
-              (ngModelChange)="validateItem($event); calculateTotalItem()"></ion-input>
-            <div class="error-messages">
-              <ng-container *ngFor="let error of errorMessages.item">
-                <div class="error-message"
-                  *ngIf="surveyForm.get('bigEggsItem')?.hasError(error.type) && (surveyForm.get('bigEggsItem')?.dirty || surveyForm.get('bigEggsItem')?.touched)">
-                  {{ error.message }}
+            <ion-row>
+              <ion-col size-xs="12" size-md="3">
+                <ion-select color="gunung-nago-primary" label="Egg Category" label-placement="floating" fill="outline"
+                  interface="popover" placeholder="Egg Category" formControlName="eggCategoryId">
+                  <ion-select-option *ngFor="let eggCategory of eggCategories"
+                    [value]="eggCategory.id">{{eggCategory.name}} -
+                    {{eggCategory.eggType | titlecase}}</ion-select-option>
+                </ion-select>
+                <div class="error-messages">
+                  <ng-container *ngFor="let error of errorMessages.eggCategory">
+                    <div class="error-message"
+                      *ngIf="eggCategory.get('eggCategoryId')?.hasError(error.type) && (eggCategory.get('eggCategoryId')?.dirty || eggCategory.get('eggCategoryId')?.touched)">
+                      {{ error.message }}
+                    </div>
+                  </ng-container>
                 </div>
-              </ng-container>
-            </div>
-          </ion-col>
-        </ion-row>
-        <ion-item-divider>
-          <ion-label>Medium Eggs</ion-label>
-        </ion-item-divider>
-        <ion-row>
-          <ion-col size-xs="12" size-md="3">
-            <ion-input color="gunung-nago-survey" label="{{ 'survey.survey-details.tie' | translate }}"
-              label-placement="floating" fill="outline" type="number" min="0" clear-input="true"
-              formControlName="mediumEggsTie" [(ngModel)]="mediumEggsTie"
-              (ngModelChange)="calculateTotalItem()"></ion-input>
-          </ion-col>
-          <ion-col size-xs="12" size-md="3">
-            <ion-input color="gunung-nago-survey" label="Tray" label-placement="floating" fill="outline" type="number"
-              min="0" max="9" maxlength="2" clear-input="true" formControlName="mediumEggsTray"
-              [(ngModel)]="mediumEggsTray" (ngModelChange)="validateItem($event); calculateTotalItem()"></ion-input>
-            <div class="error-messages">
-              <ng-container *ngFor="let error of errorMessages.tray">
-                <div class="error-message"
-                  *ngIf="surveyForm.get('mediumEggsTray')?.hasError(error.type) && (surveyForm.get('mediumEggsTray')?.dirty || surveyForm.get('mediumEggsTray')?.touched)">
-                  {{ error.message }}
+              </ion-col>
+              <ion-col size-xs="12" size-md="3">
+                <ion-input color="gunung-nago-survey" label="{{ 'survey.survey-details.tie' | translate }}"
+                  label-placement="floating" fill="outline" type="number" min="0" clear-input="true"
+                  formControlName="tie" (ionChange)="calculateTotalItem(); calculateRemaining()"></ion-input>
+              </ion-col>
+              <ion-col size-xs="12" size-md="3">
+                <ion-input color="gunung-nago-survey" label="Tray" label-placement="floating" fill="outline"
+                  type="number" min="0" max="9" maxlength="1" clear-input="true" formControlName="tray"
+                  (ionChange)="calculateTotalItem(); calculateRemaining()"></ion-input>
+                <div class="error-messages">
+                  <ng-container *ngFor="let error of errorMessages.tray">
+                    <div class="error-message"
+                      *ngIf="eggCategory.get('tray')?.hasError(error.type) && (eggCategory.get('tray')?.dirty || eggCategory.get('tray')?.touched)">
+                      {{ error.message }}
+                    </div>
+                  </ng-container>
                 </div>
-              </ng-container>
-            </div>
-          </ion-col>
-          <ion-col size-xs="12" size-md="3">
-            <ion-input color="gunung-nago-survey" label="{{ 'survey.survey-details.item' | translate }}"
-              label-placement="floating" fill="outline" type="number" min="0" max="29" maxlength="1" clear-input="true"
-              formControlName="mediumEggsItem" [(ngModel)]="mediumEggsItem"
-              (ngModelChange)="validateItem($event); calculateTotalItem()"></ion-input>
-            <div class="error-messages">
-              <ng-container *ngFor="let error of errorMessages.item">
-                <div class="error-message"
-                  *ngIf="surveyForm.get('mediumEggsItem')?.hasError(error.type) && (surveyForm.get('mediumEggsItem')?.dirty || surveyForm.get('mediumEggsItem')?.touched)">
-                  {{ error.message }}
+              </ion-col>
+              <ion-col size-xs="12" size-md="3">
+                <ion-input color="gunung-nago-survey" label="{{ 'survey.survey-details.item' | translate }}"
+                  label-placement="floating" fill="outline" type="number" min="0" max="29" maxlength="2"
+                  clear-input="true" formControlName="item" (ionChange)="calculateTotalItem(); calculateRemaining()"></ion-input>
+                <div class="error-messages">
+                  <ng-container *ngFor="let error of errorMessages.item">
+                    <div class="error-message"
+                      *ngIf="eggCategory.get('item')?.hasError(error.type) && (eggCategory.get('item')?.dirty || eggCategory.get('item')?.touched)">
+                      {{ error.message }}
+                    </div>
+                  </ng-container>
                 </div>
-              </ng-container>
-            </div>
-          </ion-col>
-        </ion-row>
-        <ion-item-divider>
-          <ion-label>Small Eggs</ion-label>
-        </ion-item-divider>
-        <ion-row>
-          <ion-col size-xs="12" size-md="3">
-            <ion-input color="gunung-nago-survey" label="{{ 'survey.survey-details.tie' | translate }}"
-              label-placement="floating" fill="outline" type="number" min="0" clear-input="true"
-              formControlName="smallEggsTie" [(ngModel)]="smallEggsTie"
-              (ngModelChange)="calculateTotalItem()"></ion-input>
-          </ion-col>
-          <ion-col size-xs="12" size-md="3">
-            <ion-input color="gunung-nago-survey" label="Tray" label-placement="floating" fill="outline" type="number"
-              min="0" max="9" maxlength="1" clear-input="true" formControlName="smallEggsTray"
-              [(ngModel)]="smallEggsTray" (ngModelChange)="calculateTotalItem()"></ion-input>
-            <div class="error-messages">
-              <ng-container *ngFor="let error of errorMessages.tray">
-                <div class="error-message"
-                  *ngIf="surveyForm.get('smallEggsIray')?.hasError(error.type) && (surveyForm.get('smallEggsIray')?.dirty || surveyForm.get('smallEggsIray')?.touched)">
-                  {{ error.message }}
-                </div>
-              </ng-container>
-            </div>
-          </ion-col>
-          <ion-col size-xs="12" size-md="3">
-            <ion-input color="gunung-nago-survey" label="{{ 'survey.survey-details.item' | translate }}"
-              label-placement="floating" fill="outline" type="number" min="0" max="29" maxlength="2" clear-input="true"
-              formControlName="smallEggsItem" [(ngModel)]="smallEggsItem"
-              (ngModelChange)="validateItem($event); calculateTotalItem()"></ion-input>
-            <div class="error-messages">
-              <ng-container *ngFor="let error of errorMessages.item">
-                <div class="error-message"
-                  *ngIf="surveyForm.get('smallEggsItem')?.hasError(error.type) && (surveyForm.get('smallEggsItem')?.dirty || surveyForm.get('smallEggsItem')?.touched)">
-                  {{ error.message }}
-                </div>
-              </ng-container>
-            </div>
-          </ion-col>
-        </ion-row>
-        <ion-item-divider>
-          <ion-label>Bad Eggs</ion-label>
-        </ion-item-divider>
-        <ion-row>
-          <ion-col size-xs="12" size-md="3">
-            <ion-input color="gunung-nago-survey" label="{{ 'survey.survey-details.broken' | translate }}"
-              label-placement="floating" fill="outline" type="number" min="0" clear-input="true"
-              formControlName="broken" [(ngModel)]="broken" (ngModelChange)="calculateTotalItem()"></ion-input>
-          </ion-col>
-        </ion-row>
+              </ion-col>
+            </ion-row>
+          </span>
+        </div>
 
         <ion-item-divider>
           <ion-label></ion-label>
@@ -265,7 +207,7 @@
           <ion-col size-xs="12" size-md="3">
             <ion-input color="gunung-nago-survey" label="{{ 'survey.survey-details.per-hd' | translate }}"
               label-placement="floating" fill="outline" type="number" min="0" clear-input="true"
-              [value]="(totalItem / remaining) * 100" readonly="true"></ion-input>
+              [value]="(totalItem / remaining) * 100 | number : '1.2-2'" readonly="true"></ion-input>
           </ion-col>
           <ion-col size-xs="12" size-md="3">
             <ion-input color="gunung-nago-survey" label="{{ 'survey.survey-details.up-down' | translate }}"
@@ -399,7 +341,7 @@
                   [(ngModel)]="manureBags"></ion-input>
               </ion-col>
               <ion-col size-xs="12" size-md="4">
-                <ion-input color="gunung-nago-survey" label="Weight" label-placement="floating" fill="outline"
+                <ion-input color="gunung-nago-survey" label="Weight (Kg)" label-placement="floating" fill="outline"
                   type="number" min="0" clear-input="true" formControlName="manureWeight"
                   [(ngModel)]="manureWeight"></ion-input>
               </ion-col>
@@ -423,17 +365,17 @@
 
             <ion-row>
               <ion-col size-xs="12" size-md="4">
-                <ion-input color="gunung-nago-survey" label="Amount of chicken weighted" label-placement="floating"
+                <ion-input color="gunung-nago-survey" label="Amount of chicken weighted (Kg)" label-placement="floating"
                   fill="outline" type="number" min="0" clear-input="true" formControlName="amountOfChickenWeighted"
                   [(ngModel)]="amountOfChickenWeighted"></ion-input>
               </ion-col>
               <ion-col size-xs="12" size-md="4">
-                <ion-input color="gunung-nago-survey" label="Total weighted" label-placement="floating" fill="outline"
+                <ion-input color="gunung-nago-survey" label="Total weighted (Kg)" label-placement="floating" fill="outline"
                   type="number" min="0" clear-input="true" formControlName="totalWeight"
                   [(ngModel)]="totalWeight"></ion-input>
               </ion-col>
               <ion-col size-xs="12" size-md="4">
-                <ion-input color="gunung-nago-survey" label="Average weight" label-placement="floating" fill="outline"
+                <ion-input color="gunung-nago-survey" label="Average weight (Kg)" label-placement="floating" fill="outline"
                   type="number" min="0" clear-input="true"
                   [value]="(totalWeight / amountOfChickenWeighted) | number :'1.2-2'"></ion-input>
               </ion-col>

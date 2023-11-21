@@ -191,7 +191,6 @@
         </ion-card>
       </div>
 
-
       <div *ngIf="showEgg">
         <div class="subtitle">
           <img class="cart-logo" src='./assets/flaticon/eggs.png'>
@@ -233,36 +232,19 @@
                 </div>
               </div>
             </div>
-
-            <div class="good-bad-egg-section">
-              <div class="egg-section">
-                <div>
-                  <strong>Big</strong>
+            <ion-row class="egg-stock-section">
+              <ion-col col-md-3 size="3" size-sm *ngFor="let eggCategory of eggStock.eggCategoryStockDtos">
+                <div class="egg-section">
+                  <div>
+                    <strong>{{eggCategory.name | titlecase}}</strong>
+                  </div>
+                  <img class="eggs" src='./assets/flaticon/category-big.png'>
+                  <div class="egg-count">
+                    <strong>{{eggCategory.quantity}}</strong>
+                  </div>
                 </div>
-                <img class="eggs" src='./assets/flaticon/category-big.png'>
-                <div class="egg-count">
-                  <strong>{{eggStock.bigEggs}}</strong>
-                </div>
-              </div>
-              <div class="egg-section">
-                <div>
-                  <strong>Medium</strong>
-                </div>
-                <img class="eggs medium-category" src='./assets/flaticon/category-medium.png'>
-                <div class="egg-count">
-                  <strong>{{eggStock.mediumEggs}}</strong>
-                </div>
-              </div>
-              <div class="egg-section">
-                <div>
-                  <strong>Small</strong>
-                </div>
-                <img class="eggs small-category" src='./assets/flaticon/category-small.png'>
-                <div class="egg-count">
-                  <strong>{{eggStock.smallEggs}}</strong>
-                </div>
-              </div>
-            </div>
+              </ion-col>
+            </ion-row>
 
           </ion-card-content>
         </ion-card>
@@ -317,15 +299,17 @@
           <!-- Egg -->
           <ion-col size-lg="2" size-md="3" size-xs="12" *ngIf="saleDetail.salesInvoiceType === 'EGG'">
             <ion-select color="gunung-nago-primary" label="Egg Type" label-placement="floating" fill="outline"
-              interface="popover" clear-input="true" placeholder="Egg Type" [(ngModel)]="saleDetail.eggType">
-              <ion-select-option *ngFor="let eggType of eggTypes" [value]="eggType">{{
-                eggType | titlecase
+              interface="popover" clear-input="true" placeholder="Egg Type" [(ngModel)]="saleDetail.eggCategoryId"
+              (ionChange)="ionSelectEggCategory($event, i)">
+              <ion-select-option *ngFor="let eggType of eggStock.eggCategoryStockDtos"
+                [value]="eggType.eggCategoryId">{{
+                eggType.name | titlecase
                 }}</ion-select-option>
             </ion-select>
           </ion-col>
 
           <ion-col size-lg="2" size-md="3" size-xs="12"
-            *ngIf="saleDetail.salesInvoiceType === 'EGG' && saleDetail.eggType != null">
+            *ngIf="saleDetail.salesInvoiceType === 'EGG' && saleDetail.eggCategoryId != null">
             <ion-select color="gunung-nago-primary" label="Quantity Type" label-placement="floating" fill="outline"
               interface="popover" clear-input="true" placeholder="Quantity Type"
               [(ngModel)]="saleDetail.eggQuantityType">
@@ -386,80 +370,28 @@
         </div>
 
         <!-- Egg -->
-        <div *ngIf="saleDetail.salesInvoiceType === 'EGG'">
+        <div *ngIf="saleDetail.salesInvoiceType === 'EGG' && saleDetail.eggCategoryId != null">
           <ion-row class="quantity-qp">
-            <ion-col size-lg="2" size-md="3" size-xs="12"
-              *ngIf="saleDetail.eggType === 'BIG' && saleDetail.eggQuantityType != null">
+            <ion-col size-lg="2" size-md="3" size-xs="12">
               <div class="quantity-count-section">
                 <div class="quantity-section">
                   <div>
                     <strong>Quantity In Stock</strong>
                   </div>
                   <img class="quantities" src='./assets/flaticon/eggs.png'>
-                  <div class="quantity-count">
-                    <strong *ngIf="saleDetail.eggQuantityType === 'TIE'">{{eggStock.bigEggs - (saleDetail.quantity *
+
+                  <div class="quantity-count" *ngIf="saleDetail.eggQuantityType != null">
+                    <strong *ngIf="saleDetail.eggQuantityType === 'TIE'">{{saleDetail.eggInitialQuantity -
+                      (saleDetail.quantity *
                       300)}}</strong>
-                    <strong *ngIf="saleDetail.eggQuantityType === 'TRAY'">{{eggStock.bigEggs - (saleDetail.quantity *
+                    <strong *ngIf="saleDetail.eggQuantityType === 'TRAY'">{{saleDetail.eggInitialQuantity -
+                      (saleDetail.quantity *
                       30)}}</strong>
-                    <strong *ngIf="saleDetail.eggQuantityType === 'PIECE'">{{eggStock.bigEggs -
+                    <strong *ngIf="saleDetail.eggQuantityType === 'PIECE'">{{saleDetail.eggInitialQuantity -
                       saleDetail.quantity}}</strong>
                   </div>
-                </div>
-              </div>
-            </ion-col>
-            <ion-col size-lg="2" size-md="3" size-xs="12"
-              *ngIf="saleDetail.eggType === 'MEDIUM' && saleDetail.eggQuantityType != null">
-              <div class="quantity-count-section">
-                <div class="quantity-section">
-                  <div>
-                    <strong>Quantity In Stock</strong>
-                  </div>
-                  <img class="quantities" src='./assets/flaticon/eggs.png'>
-                  <div class="quantity-count">
-                    <strong *ngIf="saleDetail.eggQuantityType === 'TIE'">{{eggStock.mediumEggs - (saleDetail.quantity *
-                      300)}}</strong>
-                    <strong *ngIf="saleDetail.eggQuantityType === 'TRAY'">{{eggStock.mediumEggs - (saleDetail.quantity *
-                      30)}}</strong>
-                    <strong *ngIf="saleDetail.eggQuantityType === 'PIECE'">{{eggStock.mediumEggs -
-                      saleDetail.quantity}}</strong>
-                  </div>
-                </div>
-              </div>
-            </ion-col>
-            <ion-col size-lg="2" size-md="3" size-xs="12"
-              *ngIf="saleDetail.eggType === 'SMALL' && saleDetail.eggQuantityType != null">
-              <div class="quantity-count-section">
-                <div class="quantity-section">
-                  <div>
-                    <strong>Quantity In Stock</strong>
-                  </div>
-                  <img class="quantities" src='./assets/flaticon/eggs.png'>
-                  <div class="quantity-count">
-                    <strong *ngIf="saleDetail.eggQuantityType === 'TIE'">{{eggStock.smallEggs - (saleDetail.quantity *
-                      300)}}</strong>
-                    <strong *ngIf="saleDetail.eggQuantityType === 'TRAY'">{{eggStock.smallEggs - (saleDetail.quantity *
-                      30)}}</strong>
-                    <strong *ngIf="saleDetail.eggQuantityType === 'PIECE'">{{eggStock.smallEggs -
-                      saleDetail.quantity}}</strong>
-                  </div>
-                </div>
-              </div>
-            </ion-col>
-            <ion-col size-lg="2" size-md="3" size-xs="12"
-              *ngIf="saleDetail.eggType === 'BAD' && saleDetail.eggQuantityType != null">
-              <div class="quantity-count-section">
-                <div class="quantity-section">
-                  <div>
-                    <strong>Quantity In Stock</strong>
-                  </div>
-                  <img class="quantities" src='./assets/flaticon/eggs.png'>
-                  <div class="quantity-count">
-                    <strong *ngIf="saleDetail.eggQuantityType === 'TIE'">{{eggStock.badEggs - (saleDetail.quantity *
-                      300)}}</strong>
-                    <strong *ngIf="saleDetail.eggQuantityType === 'TRAY'">{{eggStock.badEggs - (saleDetail.quantity *
-                      30)}}</strong>
-                    <strong *ngIf="saleDetail.eggQuantityType === 'PIECE'">{{eggStock.badEggs -
-                      saleDetail.quantity}}</strong>
+                  <div class="quantity-count" *ngIf="saleDetail.eggQuantityType === null">
+                    <strong>{{saleDetail.eggInitialQuantity}}</strong>
                   </div>
                 </div>
               </div>
@@ -606,16 +538,10 @@
                   <strong>GOOD</strong>
                 </td>
                 <td data-label="Product" *ngIf="saleDetail.salesInvoiceType === 'FEED'">Feed</td>
-                <td data-label="Product" *ngIf="saleDetail.salesInvoiceType === 'EGG' && saleDetail.eggType === 'BIG'">
-                  EGG - <strong>BIG</strong></td>
-                <td data-label="Product"
-                  *ngIf="saleDetail.salesInvoiceType === 'EGG' && saleDetail.eggType === 'MEDIUM'">EGGS -
-                  <strong>MEDIUM</strong>
-                </td>
-                <td data-label="Product"
-                  *ngIf="saleDetail.salesInvoiceType === 'EGG' && saleDetail.eggType === 'SMALL'">SMALL EGGS</td>
-                <td data-label="Product" *ngIf="saleDetail.salesInvoiceType === 'EGG' && saleDetail.eggType === 'BAD'">
-                  EGG - <strong>BAD</strong></td>
+
+                <td data-label="Product" *ngIf="saleDetail.salesInvoiceType === 'EGG'">
+                  EGG - <strong>{{saleDetail.eggType}}</strong></td>
+
                 <td data-label="Quantity" *ngIf="saleDetail.salesInvoiceType === 'FLOCK'">{{saleDetail.quantity}}</td>
                 <td data-label="Quantity"
                   *ngIf="saleDetail.salesInvoiceType === 'EGG' && saleDetail.eggQuantityType === 'TIE'">
@@ -720,7 +646,8 @@
             </ion-item-divider>
             <span [formGroupName]="i">
               <ion-button *ngIf="paymentsFields != null && paymentsFields.length > 1" (click)="removePayment(i)"
-                class="remove-payment-btn" color="danger"><span class="material-icons">delete</span></ion-button>
+                class="remove-payment-btn" color="gunung-nago-warehouse"><span
+                  class="material-icons">delete</span></ion-button>
               <ion-row>
                 <ion-col size="6" size-sm>
                   <ion-input color="gunung-nago-primary" label="Amount Paid" label-placement="floating" fill="outline"

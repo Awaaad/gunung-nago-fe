@@ -3,7 +3,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { IonModal } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { PaymentType, CustomerDto, SalesInvoiceCategory, UserDto } from 'generated-src/model';
+import { PaymentType, CustomerDto, SalesInvoiceCategory, UserDto, EggCategoryStockDto, EggType } from 'generated-src/model';
 import { CustomerFrontDto, EggSaleSaveFrontDto, EggStockFrontDto } from 'generated-src/model-front';
 import * as moment from 'moment';
 import { Subscription, filter, distinctUntilChanged, debounceTime, tap, switchMap, finalize } from 'rxjs';
@@ -27,38 +27,12 @@ export class EggSaleDetailsComponent implements OnInit {
   public eggSaleForm!: FormGroup;
   public eggSaleSaveDto!: EggSaleSaveFrontDto;
 
-  public bigGoodPiece: number = 0;
-  public bigGoodPricePerPiece: number = 0;
-  public bigGoodTie: number = 0;
-  public bigGoodPricePerTie: number = 0;
-  public bigGoodTray: number = 0;
-  public bigGoodPricePerTray: number = 0;
+  public totalRemainingEggs: number = 0;
+  public totalRemainingGoodEggs: number = 0;
+  public totalRemainingBadEggs: number = 0;
 
-  public mediumGoodPiece: number = 0;
-  public mediumGoodPricePerPiece: number = 0;
-  public mediumGoodTie: number = 0;
-  public mediumGoodPricePerTie: number = 0;
-  public mediumGoodTray: number = 0;
-  public mediumGoodPricePerTray: number = 0;
-
-  public smallGoodPiece: number = 0;
-  public smallGoodPricePerPiece: number = 0;
-  public smallGoodTie: number = 0;
-  public smallGoodPricePerTie: number = 0;
-  public smallGoodTray: number = 0;
-  public smallGoodPricePerTray: number = 0;
-
-  public badPiece: number = 0;
-  public badPricePerPiece: number = 0;
-  public badTie: number = 0;
-  public badPricePerTie: number = 0;
-  public badTray: number = 0;
-  public badPricePerTray: number = 0;
-
-  public big: boolean = false;
-  public medium: boolean = false;
-  public small: boolean = false;
-  public bad: boolean = false;
+  public showFormArray: boolean = false;
+  public disableSave: boolean = false;
 
   public isNewCustomer: boolean = false;
   private searchCustomerSubscription!: Subscription;
@@ -76,7 +50,6 @@ export class EggSaleDetailsComponent implements OnInit {
   public paymentForm!: FormGroup;
   public paymentTypes: string[] = [];
   public totalPrice: number = 0;
-  public totalCost: number = 0;
   public today: Date = new Date();
   public salesInvoiceCategories: string[] = [];
   public salesInvoiceCategory: SalesInvoiceCategory = SalesInvoiceCategory.IN_STORE;
@@ -149,12 +122,10 @@ export class EggSaleDetailsComponent implements OnInit {
 
   private getEggStock(): void {
     this.eggStock = {
-      totalEggs: 0,
-      bigEggs: 0,
-      mediumEggs: 0,
-      smallEggs: 0,
-      goodEggs: 0,
-      badEggs: 0,
+      goodEggs: null,
+      badEggs: null,
+      totalEggs: null,
+      eggCategoryStockDtos: [],
       createdBy: '',
       lastModifiedBy: 0,
       createdDate: '',
@@ -162,7 +133,9 @@ export class EggSaleDetailsComponent implements OnInit {
     }
     this.eggStockApiService.findEggStockForSale().subscribe(eggStock => {
       this.eggStock = eggStock;
-      this.setCheckbox(eggStock);
+      this.totalRemainingEggs = this.eggStock.totalEggs;
+      this.totalRemainingGoodEggs = this.eggStock.goodEggs;
+      this.totalRemainingBadEggs = this.eggStock.badEggs;
     })
   }
 
@@ -184,61 +157,9 @@ export class EggSaleDetailsComponent implements OnInit {
     }
   }
 
-  private setCheckbox(eggStock: EggStockFrontDto): void {
-    eggStock.bigEggs > 0 ? this.eggSaleForm?.get("big")?.enable() : this.eggSaleForm?.get("big")?.disable();
-    eggStock.mediumEggs > 0 ? this.eggSaleForm?.get("medium")?.enable() : this.eggSaleForm?.get("medium")?.disable();
-    eggStock.smallEggs > 0 ? this.eggSaleForm?.get("small")?.enable() : this.eggSaleForm?.get("small")?.disable();
-    eggStock.badEggs > 0 ? this.eggSaleForm?.get("bad")?.enable() : this.eggSaleForm?.get("bad")?.disable();
-  }
-
-  public bigCheckboxChange(event: any): void {
-    if (!event.detail.checked) {
-      this.bigGoodPiece = 0;
-      this.bigGoodPricePerPiece = 0;
-      this.bigGoodTray = 0;
-      this.bigGoodPricePerTray = 0;
-      this.bigGoodTie = 0;
-      this.bigGoodPricePerTie = 0;
-    }
-  }
-  public mediumCheckboxChange(event: any): void {
-    if (!event.detail.checked) {
-      this.mediumGoodPiece = 0;
-      this.mediumGoodPricePerPiece = 0;
-      this.mediumGoodTray = 0;
-      this.mediumGoodPricePerTray = 0;
-      this.mediumGoodTie = 0;
-      this.mediumGoodPricePerTie = 0;
-    }
-  }
-  public smallCheckboxChange(event: any): void {
-    if (!event.detail.checked) {
-      this.smallGoodPiece = 0;
-      this.smallGoodPricePerPiece = 0;
-      this.smallGoodTray = 0;
-      this.smallGoodPricePerTray = 0;
-      this.smallGoodTie = 0;
-      this.smallGoodPricePerTie = 0;
-    }
-  }
-  public badCheckboxChange(event: any): void {
-    if (!event.detail.checked) {
-      this.badPiece = 0;
-      this.badPricePerPiece = 0;
-      this.badTray = 0;
-      this.badPricePerTray = 0;
-      this.badTie = 0;
-      this.badPricePerTie = 0;
-    }
-  }
-
   private initialiseFormBuilder(): void {
     this.eggSaleForm = this.formBuilder.group({
       newCustomer: new FormControl(this.isNewCustomer, Validators.compose([Validators.required])),
-      big: new FormControl({ value: this.big, disabled: false }, Validators.compose([Validators.required])),
-      medium: new FormControl({ value: this.medium, disabled: false }, Validators.compose([Validators.required])),
-      small: new FormControl({ value: this.small, disabled: false }, Validators.compose([Validators.required])),
-      bad: new FormControl({ value: this.bad, disabled: false }, Validators.compose([Validators.required])),
       customer: this.formBuilder.group({
         id: this.selectedCustomer?.id,
         firstName: new FormControl({ value: '', disabled: !this.isNewCustomer }, Validators.compose([Validators.required])),
@@ -246,34 +167,77 @@ export class EggSaleDetailsComponent implements OnInit {
         address: new FormControl({ value: '', disabled: !this.isNewCustomer }),
         telephoneNumber: new FormControl({ value: '', disabled: !this.isNewCustomer }, Validators.compose([Validators.required, Validators.pattern("^[0-9]*$"),]))
       }),
-      bigGoodPiece: new FormControl(this.bigGoodPiece, Validators.compose([Validators.min(0)])),
-      bigGoodPricePerPiece: new FormControl(this.bigGoodPricePerPiece, Validators.compose([Validators.min(0)])),
-      bigGoodTie: new FormControl(this.bigGoodTie, Validators.compose([Validators.min(0)])),
-      bigGoodPricePerTie: new FormControl(this.bigGoodPricePerTie, Validators.compose([Validators.min(0)])),
-      bigGoodTray: new FormControl(this.bigGoodTray, Validators.compose([Validators.min(0)])),
-      bigGoodPricePerTray: new FormControl(this.bigGoodPricePerTray, Validators.compose([Validators.min(0)])),
-
-      mediumGoodPiece: new FormControl(this.mediumGoodPiece, Validators.compose([Validators.min(0)])),
-      mediumGoodPricePerPiece: new FormControl(this.mediumGoodPricePerPiece, Validators.compose([Validators.min(0)])),
-      mediumGoodTie: new FormControl(this.mediumGoodTie, Validators.compose([Validators.min(0)])),
-      mediumGoodPricePerTie: new FormControl(this.mediumGoodPricePerTie, Validators.compose([Validators.min(0)])),
-      mediumGoodTray: new FormControl(this.mediumGoodTray, Validators.compose([Validators.min(0)])),
-      mediumGoodPricePerTray: new FormControl(this.mediumGoodPricePerTray, Validators.compose([Validators.min(0)])),
-
-      smallGoodPiece: new FormControl(this.smallGoodPiece, Validators.compose([Validators.min(0)])),
-      smallGoodPricePerPiece: new FormControl(this.smallGoodPricePerPiece, Validators.compose([Validators.min(0)])),
-      smallGoodTie: new FormControl(this.smallGoodTie, Validators.compose([Validators.min(0)])),
-      smallGoodPricePerTie: new FormControl(this.smallGoodPricePerTie, Validators.compose([Validators.min(0)])),
-      smallGoodTray: new FormControl(this.smallGoodTray, Validators.compose([Validators.min(0)])),
-      smallGoodPricePerTray: new FormControl(this.smallGoodPricePerTray, Validators.compose([Validators.min(0)])),
-
-      badPiece: new FormControl(this.badPiece, Validators.compose([Validators.min(0)])),
-      badPricePerPiece: new FormControl(this.badPricePerPiece, Validators.compose([Validators.min(0)])),
-      badTie: new FormControl(this.badTie, Validators.compose([Validators.min(0)])),
-      badPricePerTie: new FormControl(this.badPricePerTie, Validators.compose([Validators.min(0)])),
-      badTray: new FormControl(this.badTray, Validators.compose([Validators.min(0)])),
-      badPricePerTray: new FormControl(this.badPricePerTray, Validators.compose([Validators.min(0)]))
+      eggCategorySaleDtos: this.formBuilder.array([
+      ])
     });
+  }
+
+  addEggCategoryFormGroup(eggCategory: EggCategoryStockDto) {
+    return this.formBuilder.group({
+      eggCategoryId: new FormControl(eggCategory.eggCategoryId, Validators.compose([Validators.required])),
+      name: new FormControl(eggCategory.name, Validators.compose([])),
+      eggType: new FormControl(eggCategory.eggType, Validators.compose([])),
+      quantity: new FormControl(eggCategory.quantity, Validators.compose([])),
+      piece: new FormControl(null, Validators.compose([Validators.min(0)])),
+      pricePerPiece: new FormControl(null, Validators.compose([, Validators.min(0)])),
+      tie: new FormControl(null, Validators.compose([Validators.min(0)])),
+      pricePerTie: new FormControl(null, Validators.compose([Validators.min(0)])),
+      tray: new FormControl(null, Validators.compose([Validators.min(0)])),
+      pricePerTray: new FormControl(null, Validators.compose([Validators.min(0)]))
+    })
+  }
+
+  addEggCategory(event: any, eggCategory: EggCategoryStockDto): void {
+    if (!((this.eggSaleForm.get('eggCategorySaleDtos') as FormArray).value.find((form: any) => form.eggCategoryId == eggCategory.eggCategoryId))) {
+      (this.eggSaleForm.get('eggCategorySaleDtos') as FormArray).push(this.addEggCategoryFormGroup(eggCategory));
+    } else {
+      const index = (this.eggSaleForm.get('eggCategorySaleDtos') as FormArray).value.findIndex((form: any) => form.eggCategoryId == eggCategory.eggCategoryId);
+      this.removeEggCategory(index);
+    }
+    this.showFormArray = (this.eggSaleForm.get('eggCategorySaleDtos') as FormArray).length > 0;
+  }
+
+  removeEggCategory(eggCategoryGroupIndex: number): void {
+    (this.eggSaleForm.get('eggCategorySaleDtos') as FormArray).removeAt(eggCategoryGroupIndex);
+  }
+
+  get eggCategoriesFields() {
+    return this.eggSaleForm ? this.eggSaleForm.get('eggCategorySaleDtos') as FormArray : null;
+  }
+
+  public calculateRemainingEggs(): void {
+    this.disableSave = false;
+
+    for (let index = 0; index < (this.eggSaleForm.get('eggCategorySaleDtos') as FormArray).controls.length; index++) {
+      let form = (this.eggSaleForm.get('eggCategorySaleDtos') as FormArray).controls[index];
+      if (form.get('quantity')?.value < ((form.get('tie')?.value * 300) + (form.get('tray')?.value * 30) + (form.get('piece')?.value))) {
+        this.disableSave = true;
+        return;
+      }
+    }
+
+    this.totalRemainingEggs = this.eggStock.totalEggs - (this.eggSaleForm.get('eggCategorySaleDtos') as FormArray).value.map((form: any) => {
+      (form.tie * 300) + (form.tray * 30) + (form.piece)
+    }).reduce((acc: any, value: any) => acc + value, 0);
+
+    this.totalRemainingGoodEggs = this.eggStock.goodEggs -
+      (this.eggSaleForm.get('eggCategorySaleDtos') as FormArray).value.filter((form: any) => form.eggType === EggType.GOOD).map((form: any) => {
+        if (form.eggType === EggType.GOOD) {
+          return (form.tie * 300) + (form.tray * 30) + (form.piece);
+        }
+      }).reduce((acc: any, value: any) => acc + value, 0);
+
+    this.totalRemainingBadEggs = this.eggStock.badEggs -
+      (this.eggSaleForm.get('eggCategorySaleDtos') as FormArray).value.filter((form: any) => form.eggType === EggType.BAD).map((form: any) => {
+        return (form.tie * 300) + (form.tray * 30) + (form.piece);
+      }).reduce((acc: any, value: any) => acc + value, 0);
+  }
+
+  public calculateTotalPrice(): void {
+    this.totalPrice = 0;
+    (this.eggSaleForm.get('eggCategorySaleDtos') as FormArray).value.forEach((form: any) => {
+      this.totalPrice = this.totalPrice + ((form.tie * form.pricePerTie) + (form.tray * form.pricePerTray) + (form.piece * form.pricePerPiece));
+    })
   }
 
   public searchCustomerAutoComplete(): void {
@@ -367,37 +331,7 @@ export class EggSaleDetailsComponent implements OnInit {
       comment: null,
       paymentSaveDtos: [],
       newCustomer: false,
-      big: false,
-      medium: false,
-      small: false,
-      bad: false,
-      bigGoodPiece: 0,
-      bigGoodPricePerPiece: 0,
-      bigGoodTie: 0,
-      bigGoodPricePerTie: 0,
-      bigGoodTray: 0,
-      bigGoodPricePerTray: 0,
-
-      mediumGoodPiece: 0,
-      mediumGoodPricePerPiece: 0,
-      mediumGoodTie: 0,
-      mediumGoodPricePerTie: 0,
-      mediumGoodTray: 0,
-      mediumGoodPricePerTray: 0,
-
-      smallGoodPiece: 0,
-      smallGoodPricePerPiece: 0,
-      smallGoodTie: 0,
-      smallGoodPricePerTie: 0,
-      smallGoodTray: 0,
-      smallGoodPricePerTray: 0,
-
-      badPiece: 0,
-      badPricePerPiece: 0,
-      badTie: 0,
-      badPricePerTie: 0,
-      badTray: 0,
-      badPricePerTray: 0
+      eggCategorySaleDtos: []
     }
   }
 
@@ -417,38 +351,8 @@ export class EggSaleDetailsComponent implements OnInit {
       soldAt: this.paymentForm?.get("soldAt")?.value,
       paymentSaveDtos: this.paymentForm.value.payments,
       newCustomer: this.isNewCustomer,
-      big: this.big,
-      medium: this.medium,
-      small: this.small,
-      bad: this.bad,
 
-      bigGoodPiece: this.bigGoodPiece,
-      bigGoodPricePerPiece: this.bigGoodPricePerPiece,
-      bigGoodTie: this.bigGoodTie,
-      bigGoodPricePerTie: this.bigGoodPricePerTie,
-      bigGoodTray: this.bigGoodTray,
-      bigGoodPricePerTray: this.bigGoodPricePerTray,
-
-      mediumGoodPiece: this.mediumGoodPiece,
-      mediumGoodPricePerPiece: this.mediumGoodPricePerPiece,
-      mediumGoodTie: this.mediumGoodTie,
-      mediumGoodPricePerTie: this.mediumGoodPricePerTie,
-      mediumGoodTray: this.mediumGoodTray,
-      mediumGoodPricePerTray: this.mediumGoodPricePerTray,
-
-      smallGoodPiece: this.smallGoodPiece,
-      smallGoodPricePerPiece: this.smallGoodPricePerPiece,
-      smallGoodTie: this.smallGoodTie,
-      smallGoodPricePerTie: this.smallGoodPricePerTie,
-      smallGoodTray: this.smallGoodTray,
-      smallGoodPricePerTray: this.smallGoodPricePerTray,
-
-      badPiece: this.badPiece,
-      badPricePerPiece: this.badPricePerPiece,
-      badTie: this.badTie,
-      badPricePerTie: this.badPricePerTie,
-      badTray: this.badTray,
-      badPricePerTray: this.badPricePerTray
+      eggCategorySaleDtos: this.eggSaleForm?.get("eggCategorySaleDtos")?.value
     }
   }
 
@@ -533,8 +437,12 @@ export class EggSaleDetailsComponent implements OnInit {
   }
 
   public reset(): void {
-    this.totalCost = 0;
+    this.totalPrice = 0;
+    this.totalRemainingEggs = 0;
+    this.totalRemainingGoodEggs = 0;
+    this.totalRemainingBadEggs = 0;
     this.isNewCustomer = false;
+    this.showFormArray = false;
     this.setCustomerNewValue(false);
     this.eggSaleForm.reset();
     this.resetFormValues();
@@ -551,62 +459,9 @@ export class EggSaleDetailsComponent implements OnInit {
   }
 
   private resetFormValues(): void {
-    this.bigGoodPiece = 0;
-    this.bigGoodPricePerPiece = 0;
-    this.bigGoodTray = 0;
-    this.bigGoodPricePerTray = 0;
-    this.bigGoodTie = 0;
-    this.bigGoodPricePerTie = 0;
-    this.mediumGoodPiece = 0;
-    this.mediumGoodPricePerPiece = 0;
-    this.mediumGoodTray = 0;
-    this.mediumGoodPricePerTray = 0;
-    this.mediumGoodTie = 0;
-    this.mediumGoodPricePerTie = 0;
-    this.smallGoodPiece = 0;
-    this.smallGoodPricePerPiece = 0;
-    this.smallGoodTray = 0;
-    this.smallGoodPricePerTray = 0;
-    this.smallGoodTie = 0;
-    this.smallGoodPricePerTie = 0;
-    this.badPiece = 0;
-    this.badPricePerPiece = 0;
-    this.badTray = 0;
-    this.badPricePerTray = 0;
-    this.badTie = 0;
-    this.badPricePerTie = 0;
-  }
-
-  public calculateTotalCost(): void {
-    this.totalCost =
-      (this.eggSaleForm.get('bigGoodPiece')?.value * this.eggSaleForm.get('bigGoodPricePerPiece')?.value) +
-      (this.eggSaleForm.get('bigGoodTray')?.value * this.eggSaleForm.get('bigGoodPricePerTray')?.value) +
-      (this.eggSaleForm.get('bigGoodTie')?.value * this.eggSaleForm.get('bigGoodPricePerTie')?.value) +
-      (this.eggSaleForm.get('mediumGoodPiece')?.value * this.eggSaleForm.get('mediumGoodPricePerPiece')?.value) +
-      (this.eggSaleForm.get('mediumGoodTray')?.value * this.eggSaleForm.get('mediumGoodPricePerTray')?.value) +
-      (this.eggSaleForm.get('mediumGoodTie')?.value * this.eggSaleForm.get('mediumGoodPricePerTie')?.value) +
-      (this.eggSaleForm.get('smallGoodPiece')?.value * this.eggSaleForm.get('smallGoodPricePerPiece')?.value) +
-      (this.eggSaleForm.get('smallGoodTray')?.value * this.eggSaleForm.get('smallGoodPricePerTray')?.value) +
-      (this.eggSaleForm.get('smallGoodTie')?.value * this.eggSaleForm.get('smallGoodPricePerTie')?.value) +
-      (this.eggSaleForm.get('badPiece')?.value * this.eggSaleForm.get('badPricePerPiece')?.value) +
-      (this.eggSaleForm.get('badTray')?.value * this.eggSaleForm.get('badPricePerTray')?.value) +
-      (this.eggSaleForm.get('badTie')?.value * this.eggSaleForm.get('badPricePerTie')?.value);
   }
 
   private initialisePaymentFormBuilder(): void {
-    this.totalPrice =
-      (this.bigGoodPiece * this.bigGoodPricePerPiece) +
-      (this.bigGoodTray * this.bigGoodPricePerTray) +
-      (this.bigGoodTie * this.bigGoodPricePerTie) +
-      (this.mediumGoodPiece * this.mediumGoodPricePerPiece) +
-      (this.mediumGoodTray * this.mediumGoodPricePerTray) +
-      (this.mediumGoodTie * this.mediumGoodPricePerTie) +
-      (this.smallGoodPiece * this.smallGoodPricePerPiece) +
-      (this.smallGoodTray * this.smallGoodPricePerTray) +
-      (this.smallGoodTie * this.smallGoodPricePerTie) +
-      (this.badPiece * this.badPricePerPiece) +
-      (this.badTray * this.badPricePerTray) +
-      (this.badTie * this.badPricePerTie);
     this.paymentForm = this.formBuilder.group({
       totalPrice: new FormControl({ value: this.totalPrice, disabled: true }, Validators.compose([Validators.required])),
       soldAt: new FormControl({ value: this.totalPrice, disabled: false }, Validators.compose([
@@ -647,14 +502,6 @@ export class EggSaleDetailsComponent implements OnInit {
     if (ev.detail.role === 'confirm') {
       this.isModalOpen = false;
       this.save();
-    }
-  }
-
-  public validatePiece(event: any): void {
-    if (event > 30) {
-      this.badPiece = 30;
-    } else if (event < 0) {
-      this.badPiece = 0;
     }
   }
 

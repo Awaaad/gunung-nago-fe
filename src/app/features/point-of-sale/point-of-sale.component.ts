@@ -3,7 +3,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { IonModal } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { ManureStockDto, SalesInvoiceCategory, UserDto, PaymentType, CustomerDto, SalesInvoiceType, EggQuantityType, FlockType, EggType, CageCategory, CageDto, SurveyDto, FlockStockCountDto } from 'generated-src/model';
+import { ManureStockDto, SalesInvoiceCategory, UserDto, PaymentType, CustomerDto, SalesInvoiceType, EggQuantityType, FlockType, EggType, CageCategory, CageDto, SurveyDto, FlockStockCountDto, EggCategoryStockDto } from 'generated-src/model';
 import { CustomerFrontDto, SaleDetailsFrontDto, SaleSaveFrontDto, EggStockFrontDto, SalesInvoiceDetailsFrontDto } from 'generated-src/model-front';
 import * as moment from 'moment';
 import { Subscription, filter, distinctUntilChanged, debounceTime, tap, switchMap, finalize } from 'rxjs';
@@ -20,6 +20,7 @@ import { FlockStockApiService } from 'src/app/shared/apis/flock-stock.api.servic
 import { PointOfSaleApiService } from 'src/app/shared/apis/point-of-sale.api.service';
 import { ActivatedRoute } from '@angular/router';
 import { SalesInvoiceApiService } from 'src/app/shared/apis/sales-invoice.api.service';
+import { FlockApiService } from 'src/app/shared/apis/flock.api.service';
 import { ReturnApiService } from 'src/app/shared/apis/return.api.service';
 
 @Component({
@@ -35,8 +36,8 @@ export class PointOfSaleComponent implements OnInit {
   public isModalOpen: boolean = false;
   public language = "en";
   public saleForm!: FormGroup;
-  public quantity: number = 0;
-  public price: number = 0;
+  public quantity!: number;
+  public price!: number;
 
   public isNewCustomer: boolean = false;
   private searchCustomerSubscription!: Subscription;
@@ -120,7 +121,7 @@ export class PointOfSaleComponent implements OnInit {
     private cageApiService: CageApiService,
     private customerApiService: CustomerApiService,
     private formBuilder: FormBuilder,
-    private flockStockApiService: FlockStockApiService,
+    private flockApiService: FlockApiService,
     private eggStockApiService: EggStockApiService,
     private manureStockApiService: ManureStockApiService,
     private securityApiService: SecurityApiService,
@@ -159,7 +160,6 @@ export class PointOfSaleComponent implements OnInit {
   public findSalesInvoiceDetailsById(): void {
     this.salesInvoiceApiService.findSalesInvoiceDetailsById(this.salesInvoiceId).subscribe(salesInvoiceDetailsFrontDto => {
       this.salesInvoiceDetailsFrontDto = salesInvoiceDetailsFrontDto;
-      //this.totalPrice = salesInvoiceDetailsFrontDto.totalPrice;
       this.initialiseCustomerOnSalesInvoiceEdit();
       this.saleForm?.get("customer.firstName")?.setValue(salesInvoiceDetailsFrontDto.customerFirstName);
       this.saleForm?.get("customer.lastName")?.setValue(salesInvoiceDetailsFrontDto.customerLastName);
@@ -196,6 +196,7 @@ export class PointOfSaleComponent implements OnInit {
       salesInvoiceType: null,
       quantity: 0,
       price: 0,
+      eggCategoryId: null,
       eggType: null,
       eggQuantityType: null,
       cageId: null,
@@ -203,7 +204,8 @@ export class PointOfSaleComponent implements OnInit {
       amount: null,
       sterileChicken: null,
       goodChicken: null,
-      flockId: null
+      flockId: null,
+      eggInitialQuantity: null
     }
   }
 
@@ -248,14 +250,19 @@ export class PointOfSaleComponent implements OnInit {
     this.findMostRecentSurveyDtoForCage(cageId, index);
   }
 
+  public ionSelectEggCategory(event: any, index: number) {
+    const eggCategoryId = event.detail.value;
+    const eggStock = this.eggStock.eggCategoryStockDtos.find((eggCategoryStock: EggCategoryStockDto) => eggCategoryStock.eggCategoryId === eggCategoryId);
+    this.saleDetailsDto[index].eggInitialQuantity = eggStock.quantity;
+    this.saleDetailsDto[index].eggType = eggStock.name;
+  }
+
   private getEggStock(): void {
     this.eggStock = {
-      totalEggs: 0,
-      bigEggs: 0,
-      mediumEggs: 0,
-      smallEggs: 0,
-      goodEggs: 0,
-      badEggs: 0,
+      goodEggs: null,
+      badEggs: null,
+      totalEggs: null,
+      eggCategoryStockDtos: [],
       createdBy: '',
       lastModifiedBy: 0,
       createdDate: '',
@@ -284,7 +291,7 @@ export class PointOfSaleComponent implements OnInit {
       dead: 0,
       good: 0
     }
-    this.flockStockApiService.findTotalFlockStockCount().subscribe(flockStockCountDto => {
+    this.flockApiService.findTotalFlockStockCount().subscribe(flockStockCountDto => {
       this.flockStockCountDto = flockStockCountDto;
     })
   }
@@ -304,6 +311,7 @@ export class PointOfSaleComponent implements OnInit {
   }
 
   public calculateTotalPrice(): void {
+    this.totalPrice = 0;
     this.saleDetailsDto.forEach(saleDetailDto => {
       this.totalPrice = this.totalPrice + (saleDetailDto.quantity * saleDetailDto.price);
     })
@@ -590,6 +598,8 @@ export class PointOfSaleComponent implements OnInit {
     this.setCustomerNewValue(this.isNewCustomer);
     this.initialiseSaleDetailDto();
     this.addSaleDetailsToStock();
+    this.getEggStock();
+    this.findTotalFlockStockCount();
     if (this.searchCustomerCtrl) {
       this.searchCustomerCtrl.setValue(null);
     }

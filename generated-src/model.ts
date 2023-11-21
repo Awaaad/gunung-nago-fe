@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2023-11-12 21:34:10.
+// Generated using typescript-generator version 3.2.1263 on 2023-11-16 23:41:15.
 
 export class CageDto {
     id!: number;
@@ -38,11 +38,33 @@ export class CustomerSearchCriteriaDto {
     telephoneNumber!: number;
 }
 
+export class EggCategoryDto {
+    id!: number;
+    name!: string;
+    eggType!: EggType;
+}
+
+export class EggCategorySaleDto {
+    eggCategoryId!: number;
+    piece!: number;
+    pricePerPiece!: number;
+    tie!: number;
+    pricePerTie!: number;
+    tray!: number;
+    pricePerTray!: number;
+}
+
+export class EggCategorySaleDtoBuilder {
+}
+
+export class EggCategoryStockDto {
+    eggCategoryId!: number;
+    name!: string;
+    eggType!: EggType;
+    quantity!: number;
+}
+
 export class EggSaleSaveDto {
-    big!: boolean;
-    medium!: boolean;
-    small!: boolean;
-    bad!: boolean;
     soldAt!: number;
     discount!: number;
     customerDto!: CustomerDto;
@@ -50,30 +72,7 @@ export class EggSaleSaveDto {
     salesInvoiceCategory!: SalesInvoiceCategory;
     driverId!: number;
     comment!: string;
-    bigGoodPiece!: number;
-    bigGoodPricePerPiece!: number;
-    bigGoodTie!: number;
-    bigGoodPricePerTie!: number;
-    bigGoodTray!: number;
-    bigGoodPricePerTray!: number;
-    mediumGoodPiece!: number;
-    mediumGoodPricePerPiece!: number;
-    mediumGoodTie!: number;
-    mediumGoodPricePerTie!: number;
-    mediumGoodTray!: number;
-    mediumGoodPricePerTray!: number;
-    smallGoodPiece!: number;
-    smallGoodPricePerPiece!: number;
-    smallGoodTie!: number;
-    smallGoodPricePerTie!: number;
-    smallGoodTray!: number;
-    smallGoodPricePerTray!: number;
-    badPiece!: number;
-    badPricePerPiece!: number;
-    badTie!: number;
-    badPricePerTie!: number;
-    badTray!: number;
-    badPricePerTray!: number;
+    eggCategorySaleDtos!: EggCategorySaleDto[];
     newCustomer!: boolean;
 }
 
@@ -82,11 +81,9 @@ export class EggSaleSaveDtoBuilder {
 
 export class EggStockDto {
     goodEggs!: number;
-    bigEggs!: number;
-    mediumEggs!: number;
-    smallEggs!: number;
     badEggs!: number;
     totalEggs!: number;
+    eggCategoryStockDtos!: EggCategoryStockDto[];
     createdBy!: string;
     lastModifiedBy!: string;
     createdDate!: Date;
@@ -407,13 +404,15 @@ export class SettleCustomerCreditPaymentDto {
     customerId!: number;
     paymentDtos!: PaymentDto[];
     soldAtForUnlockedCreditPayments!: number;
+    paymentDeadline!: Date;
 }
 
 export class SaleDetailsDto {
     salesInvoiceType!: SalesInvoiceType;
     quantity!: number;
     price!: number;
-    eggType!: EggType;
+    eggCategoryId!: number;
+    eggType!: string;
     eggQuantityType!: EggQuantityType;
     cageId!: number;
     flockId!: number;
@@ -430,7 +429,8 @@ export class SaleDetailsForReturnDto {
     cageId!: number;
     flockId!: number;
     flockType!: FlockType;
-    quantityReturned!: number
+    quantityReturned!: number;
+    eggCategoryId!:number;
 }
 
 export class SaleSaveDto {
@@ -560,6 +560,8 @@ export class ReceiptDetailsDto {
 }
 
 export class DailyProductionReportDto {
+    configurationEggTie!: number;
+    configurationEggTray!: number;
     cageName!: string;
     initialFlockAge!: number;
     initialFlockQuantity!: number;
@@ -590,6 +592,7 @@ export class DailyProductionReportDto {
     totalWeight!: number;
     averageWeight!: number;
     healthReportDtos!: HealthReportDto[];
+    eggCategoryStocks!: EggCategoryStockDto[];
 }
 
 export class SalesInvoiceDetailsDto {
@@ -725,10 +728,7 @@ export class SurveyDto {
     death!: number;
     sterile!: number;
     good!: number;
-    badEggs!: number;
-    bigEggs!: number;
-    mediumEggs!: number;
-    smallEggs!: number;
+    surveyEggCountDtos!: SurveyEggCountDto[];
     alive!: number;
     totalSterile!: number;
     comment!: string;
@@ -741,6 +741,11 @@ export class SurveyDto {
     feedSurveyDtos!: FeedSurveyDto[];
 }
 
+export class SurveyEggCountDto {
+    eggCategoryId!: number;
+    quantity!: number;
+}
+
 export enum CageCategory {
     DOC = 'DOC',
     DARA = 'DARA',
@@ -750,6 +755,11 @@ export enum CageCategory {
 export enum Order {
     ASC = 'ASC',
     DESC = 'DESC',
+}
+
+export enum EggType {
+    GOOD = 'GOOD',
+    BAD = 'BAD',
 }
 
 export enum SalesInvoiceCategory {
@@ -792,13 +802,6 @@ export enum SalesInvoiceType {
     EGG = 'EGG',
     FEED = 'FEED',
     MANURE = 'MANURE',
-}
-
-export enum EggType {
-    BIG = 'BIG',
-    MEDIUM = 'MEDIUM',
-    SMALL = 'SMALL',
-    BAD = 'BAD',
 }
 
 export enum EggQuantityType {

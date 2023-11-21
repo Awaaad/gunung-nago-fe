@@ -160,35 +160,19 @@
               </div>
             </div>
 
-            <div class="good-bad-egg-section">
-              <div class="egg-section">
-                <div>
-                  <strong>Big</strong>
+            <ion-row class="egg-stock-section">
+              <ion-col col-md-3 size="3" size-sm *ngFor="let eggCategory of eggStock.eggCategoryStockDtos">
+                <div class="egg-section">
+                  <div>
+                    <strong>{{eggCategory.name | titlecase}}</strong>
+                  </div>
+                  <img class="eggs" src='./assets/flaticon/category-big.png'>
+                  <div class="egg-count">
+                    <strong>{{eggCategory.quantity}}</strong>
+                  </div>
                 </div>
-                <img class="eggs" src='./assets/flaticon/category-big.png'>
-                <div class="egg-count">
-                  <strong>{{eggStock.bigEggs}}</strong>
-                </div>
-              </div>
-              <div class="egg-section">
-                <div>
-                  <strong>Medium</strong>
-                </div>
-                <img class="eggs medium-category" src='./assets/flaticon/category-medium.png'>
-                <div class="egg-count">
-                  <strong>{{eggStock.mediumEggs}}</strong>
-                </div>
-              </div>
-              <div class="egg-section">
-                <div>
-                  <strong>Small</strong>
-                </div>
-                <img class="eggs small-category" src='./assets/flaticon/category-small.png'>
-                <div class="egg-count">
-                  <strong>{{eggStock.smallEggs}}</strong>
-                </div>
-              </div>
-            </div>
+              </ion-col>
+            </ion-row>
 
           </ion-card-content>
         </ion-card>
@@ -207,633 +191,171 @@
               <ion-label>Select Egg Category</ion-label>
             </ion-item-divider>
             <ion-list>
-              <ion-item>
-                <ion-checkbox justify="space-between" formControlName="big" [(ngModel)]="big" color="positive-btn"
-                  (ionChange)="bigCheckboxChange($event)">Big</ion-checkbox>
-              </ion-item>
-              <ion-item>
-                <ion-checkbox justify="space-between" formControlName="medium" [(ngModel)]="medium" color="positive-btn"
-                  (ionChange)="mediumCheckboxChange($event)">Medium</ion-checkbox>
-              </ion-item>
-              <ion-item>
-                <ion-checkbox justify="space-between" formControlName="small" [(ngModel)]="small" color="positive-btn"
-                  (ionChange)="smallCheckboxChange($event)">Small</ion-checkbox>
-              </ion-item>
-              <ion-item class="bad-checkbox-item">
-                <ion-checkbox justify="space-between" formControlName="bad" [(ngModel)]="bad" color="positive-btn"
-                  (ionChange)="badCheckboxChange($event)">Bad</ion-checkbox>
+              <ion-item *ngFor="let eggCategory of eggStock.eggCategoryStockDtos">
+                <ion-checkbox [disabled]="!(eggCategory.quantity > 0)" justify="space-between" color="positive-btn"
+                  (ionChange)="addEggCategory($event, eggCategory)">{{eggCategory.name |
+                  titlecase}}</ion-checkbox>
               </ion-item>
             </ion-list>
           </ion-card-content>
         </ion-card>
       </ion-col>
-      <ion-col col-md-6 size="6" size-sm *ngIf="!(big || medium || small || bad)"></ion-col>
-      <ion-col col-md-6 size="6" size-sm *ngIf="big || medium || small || bad">
-        <div class="subtitle">
-          <img class="cart-logo" src='./assets/flaticon/eggs.png'>
-          <div class="form-section-cart">Remaining Eggs</div>
-        </div>
-        <ion-card>
-          <ion-card-content>
-            <ion-item-divider>
-              <ion-label>Remaining Eggs Stock</ion-label>
-            </ion-item-divider>
-            <div class="good-bad-egg-section">
-              <div class="egg-section">
-                <div>
-                  <strong>Total</strong>
-                </div>
-                <img class="eggs" src='./assets/flaticon/eggs.png'>
-                <div class="egg-count">
-                  <strong>{{eggStock.totalEggs - ((bigGoodPiece + (bigGoodTray * 30) + (bigGoodTie * 300)) +
-                    (mediumGoodPiece + (mediumGoodTray * 30) + (mediumGoodTie * 300)) + (smallGoodPiece + (smallGoodTray
-                    * 30) + (smallGoodTie * 300)) + (badPiece + (badTray * 30) + (badTie * 300)))}}</strong>
-                </div>
-              </div>
-
-              <div class="egg-section">
-                <div>
-                  <strong>Good</strong>
-                </div>
-                <img class="eggs" src='./assets/flaticon/good-eggs.png'>
-                <div class="egg-count">
-                  <strong>{{eggStock.goodEggs - ((bigGoodPiece + (bigGoodTray * 30) + (bigGoodTie * 300)) +
-                    (mediumGoodPiece + (mediumGoodTray * 30) + (mediumGoodTie * 300)) + (smallGoodPiece + (smallGoodTray
-                    * 30) + (smallGoodTie * 300)))}}</strong>
-                </div>
-              </div>
-
-              <div class="egg-section">
-                <div>
-                  <strong>Bad</strong>
-                </div>
-                <img class="eggs" src='./assets/flaticon/bad-eggs.png'>
-                <div class="egg-count">
-                  <strong>{{eggStock.badEggs - (badPiece + (badTray * 30) + (badTie * 300))}}</strong>
-                </div>
-              </div>
-            </div>
-
-            <div class="good-bad-egg-section">
-              <div class="egg-section">
-                <div>
-                  <strong>Big</strong>
-                </div>
-                <img class="eggs" src='./assets/flaticon/category-big.png'>
-                <div class="egg-count">
-                  <strong>{{eggStock.bigEggs - (bigGoodPiece + (bigGoodTray * 30) + (bigGoodTie * 300))}}</strong>
-                </div>
-              </div>
-              <div class="egg-section">
-                <div>
-                  <strong>Medium</strong>
-                </div>
-                <img class="eggs medium-category" src='./assets/flaticon/category-medium.png'>
-                <div class="egg-count">
-                  <strong>{{eggStock.mediumEggs - (mediumGoodPiece + (mediumGoodTray * 30) + (mediumGoodTie *
-                    300))}}</strong>
-                </div>
-              </div>
-              <div class="egg-section">
-                <div>
-                  <strong>Small</strong>
-                </div>
-                <img class="eggs small-category" src='./assets/flaticon/category-small.png'>
-                <div class="egg-count">
-                  <strong>{{eggStock.smallEggs - (smallGoodPiece + (smallGoodTray * 30) + (smallGoodTie *
-                    300))}}</strong>
-                </div>
-              </div>
-            </div>
-
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
+      <ion-col col-md-6 size="6" size-sm></ion-col>
     </ion-row>
 
-    <div class="subtitle" *ngIf="big || medium || small">
+    <div class="subtitle" *ngIf="showFormArray">
       <img class="cart-logo" src='./assets/flaticon/egg-form.png'>
       <div class="form-section-cart">Quantity and Price</div>
     </div>
-    <div class="divider-wrapper" *ngIf="big || medium || small">
-      <div>
-        <img class="eggs-form" src='./assets/flaticon/good-eggs.png'>
-      </div>
-      <div class="divider-text">
-        <ion-item-divider>
-          <ion-label>Good Eggs</ion-label>
-        </ion-item-divider>
-      </div>
-    </div>
-    <ion-card *ngIf="big || medium || small">
+
+    <ion-card *ngIf="showFormArray">
       <ion-card-content>
-        <div class="divider-wrapper" *ngIf="big">
-          <div>
-            <img class="big-eggs-form" src='./assets/flaticon/big-eggs.png'>
+        <div formArrayName="eggCategorySaleDtos"
+          *ngFor="let eggCategory of eggCategoriesFields?.controls; let i = index">
+          <div class="divider-wrapper">
+            <div class="egg-section">
+              <img class="big-eggs-form" src='./assets/flaticon/big-eggs.png'>
+              <div class="egg-count">
+                <strong>{{eggCategory.get('quantity')?.value - ((eggCategory.get('tie')?.value * 300)+
+                  (eggCategory.get('tray')?.value * 30) + eggCategory.get('piece')?.value)}}</strong>
+              </div>
+            </div>
+            <div class="divider-text">
+              <ion-item-divider>
+                <ion-label>{{eggCategory.get('name')?.value | titlecase}} Eggs</ion-label>
+              </ion-item-divider>
+            </div>
           </div>
-          <div class="divider-text">
-            <ion-item-divider>
-              <ion-label>Big Eggs</ion-label>
-            </ion-item-divider>
-          </div>
+          <span [formGroupName]="i">
+            <ion-row>
+              <ion-col size-xs="12" size-md="4">
+                <div class="egg-form-section-right">
+                  <ion-item-divider>
+                    <ion-label>Tie</ion-label>
+                  </ion-item-divider>
+                  <div>
+                    <ion-input color="gunung-nago-survey" label="Tie" label-placement="floating" fill="outline"
+                      type="number" min="0" clear-input="true" formControlName="tie"
+                      (ionChange)="calculateTotalPrice(); calculateRemainingEggs()"></ion-input>
+                    <div class="error-messages">
+                      <ng-container *ngFor="let error of errorMessages.minValue">
+                        <div class="error-message"
+                          *ngIf="eggCategory.get('tie')?.hasError(error.type) && (eggCategory.get('tie')?.dirty || eggCategory.get('tie')?.touched)">
+                          {{ error.message }}
+                        </div>
+                      </ng-container>
+                    </div>
+                  </div>
+                  <div class="mt-1">
+                    <ion-input color="gunung-nago-survey" label="Price per Tie" label-placement="floating"
+                      fill="outline" type="number" min="0" clear-input="true" formControlName="pricePerTie"
+                      (ionChange)="calculateTotalPrice(); calculateRemainingEggs()"></ion-input>
+                    <div class="error-messages">
+                      <ng-container *ngFor="let error of errorMessages.minValue">
+                        <div class="error-message"
+                          *ngIf="eggCategory.get('pricePerTie')?.hasError(error.type) && (eggCategory.get('pricePerTie')?.dirty || eggCategory.get('pricePerTie')?.touched)">
+                          {{ error.message }}
+                        </div>
+                      </ng-container>
+                    </div>
+                  </div>
+                </div>
+                <div class="total-per ml-1">
+                  <strong>Total Price: {{eggCategory.get('tie')?.value *
+                    eggCategory.get('pricePerTie')?.value}}</strong>
+                </div>
+              </ion-col>
+              <ion-col size-xs="12" size-md="4">
+                <div class="egg-form-section-middle">
+                  <ion-item-divider>
+                    <ion-label>Tray</ion-label>
+                  </ion-item-divider>
+                  <div>
+                    <ion-input color="gunung-nago-survey" label="Tray" label-placement="floating" fill="outline"
+                      type="number" min="0" clear-input="true" formControlName="tray"
+                      (ionChange)="calculateTotalPrice(); calculateRemainingEggs()"></ion-input>
+                    <div class="error-messages">
+                      <ng-container *ngFor="let error of errorMessages.minValue">
+                        <div class="error-message"
+                          *ngIf="eggCategory.get('tray')?.hasError(error.type) && (eggCategory.get('tray')?.dirty || eggCategory.get('tray')?.touched)">
+                          {{ error.message }}
+                        </div>
+                      </ng-container>
+                    </div>
+                  </div>
+                  <div class="mt-1">
+                    <ion-input color="gunung-nago-survey" label="Price per tray" label-placement="floating"
+                      fill="outline" type="number" min="0" clear-input="true" formControlName="pricePerTray"
+                      (ionChange)="calculateTotalPrice(); calculateRemainingEggs()"></ion-input>
+                    <div class="error-messages">
+                      <ng-container *ngFor="let error of errorMessages.minValue">
+                        <div class="error-message"
+                          *ngIf="eggCategory.get('pricePerTray')?.hasError(error.type) && (eggCategory.get('pricePerTray')?.dirty || eggCategory.get('pricePerTray')?.touched)">
+                          {{ error.message }}
+                        </div>
+                      </ng-container>
+                    </div>
+                  </div>
+                </div>
+                <div class="total-per ml-05">
+                  <strong>Total Price: {{eggCategory.get('tray')?.value *
+                    eggCategory.get('pricePerTray')?.value}}</strong>
+                </div>
+              </ion-col>
+              <ion-col size-xs="12" size-md="4">
+                <div class="egg-form-section-left">
+                  <ion-item-divider>
+                    <ion-label>Piece</ion-label>
+                  </ion-item-divider>
+                  <div>
+                    <ion-input color="gunung-nago-survey" label="Piece" label-placement="floating" fill="outline"
+                      type="number" min="0" clear-input="true" formControlName="piece"
+                      (ionChange)="calculateTotalPrice(); calculateRemainingEggs()"></ion-input>
+                    <div class="error-messages">
+                      <ng-container *ngFor="let error of errorMessages.minValue">
+                        <div class="error-message"
+                          *ngIf="eggSaleForm.get('piece')?.hasError(error.type) && (eggSaleForm.get('piece')?.dirty || eggSaleForm.get('piece')?.touched)">
+                          {{ error.message }}
+                        </div>
+                      </ng-container>
+                    </div>
+                  </div>
+                  <div class="mt-1">
+                    <ion-input color="gunung-nago-survey" label="Price per piece" label-placement="floating"
+                      fill="outline" type="number" min="0" clear-input="true" formControlName="pricePerPiece"
+                      (ionChange)="calculateTotalPrice(); calculateRemainingEggs()"></ion-input>
+                    <div class="error-messages">
+                      <ng-container *ngFor="let error of errorMessages.minValue">
+                        <div class="error-message"
+                          *ngIf="eggSaleForm.get('pricePerPiece')?.hasError(error.type) && (eggSaleForm.get('pricePerPiece')?.dirty || eggSaleForm.get('pricePerPiece')?.touched)">
+                          {{ error.message }}
+                        </div>
+                      </ng-container>
+                    </div>
+                  </div>
+                </div>
+                <div class="total-per">
+                  <strong>Total Price: {{eggCategory.get('piece')?.value *
+                    eggCategory.get('pricePerPiece')?.value}}</strong>
+                </div>
+              </ion-col>
+            </ion-row>
+          </span>
         </div>
-        <ion-row *ngIf="big">
-          <ion-col size-xs="12" size-md="4">
-            <div class="egg-form-section-right">
-              <ion-item-divider>
-                <ion-label>Tie</ion-label>
-              </ion-item-divider>
-              <div>
-                <ion-input color="gunung-nago-survey" label="Tie" label-placement="floating" fill="outline"
-                  type="number" min="0" clear-input="true" formControlName="bigGoodTie" [(ngModel)]="bigGoodTie"
-                  (ngModelChange)="calculateTotalCost()"></ion-input>
-                <div class="error-messages">
-                  <ng-container *ngFor="let error of errorMessages.minValue">
-                    <div class="error-message"
-                      *ngIf="eggSaleForm.get('bigGoodTie')?.hasError(error.type) && (eggSaleForm.get('bigGoodTie')?.dirty || eggSaleForm.get('bigGoodTie')?.touched)">
-                      {{ error.message }}
-                    </div>
-                  </ng-container>
-                </div>
-              </div>
-              <div class="mt-1">
-                <ion-input color="gunung-nago-survey" label="Price per Tie" label-placement="floating" fill="outline"
-                  type="number" min="0" clear-input="true" formControlName="bigGoodPricePerTie"
-                  [(ngModel)]="bigGoodPricePerTie" (ngModelChange)="calculateTotalCost()"></ion-input>
-                <div class="error-messages">
-                  <ng-container *ngFor="let error of errorMessages.minValue">
-                    <div class="error-message"
-                      *ngIf="eggSaleForm.get('bigGoodPricePerTie')?.hasError(error.type) && (eggSaleForm.get('bigGoodPricePerTie')?.dirty || eggSaleForm.get('bigGoodPricePerTie')?.touched)">
-                      {{ error.message }}
-                    </div>
-                  </ng-container>
-                </div>
-              </div>
-            </div>
-            <div class="total-per ml-1">
-              <strong>Total Price: {{bigGoodTie * bigGoodPricePerTie}}</strong>
-            </div>
-          </ion-col>
-          <ion-col size-xs="12" size-md="4">
-            <div class="egg-form-section-middle">
-              <ion-item-divider>
-                <ion-label>Tray</ion-label>
-              </ion-item-divider>
-              <div>
-                <ion-input color="gunung-nago-survey" label="Tray" label-placement="floating" fill="outline"
-                  type="number" min="0" clear-input="true" formControlName="bigGoodTray" [(ngModel)]="bigGoodTray"
-                  (ngModelChange)="calculateTotalCost()"></ion-input>
-                <div class="error-messages">
-                  <ng-container *ngFor="let error of errorMessages.minValue">
-                    <div class="error-message"
-                      *ngIf="eggSaleForm.get('bigGoodTray')?.hasError(error.type) && (eggSaleForm.get('bigGoodTray')?.dirty || eggSaleForm.get('bigGoodTray')?.touched)">
-                      {{ error.message }}
-                    </div>
-                  </ng-container>
-                </div>
-              </div>
-              <div class="mt-1">
-                <ion-input color="gunung-nago-survey" label="Price per tray" label-placement="floating" fill="outline"
-                  type="number" min="0" clear-input="true" formControlName="bigGoodPricePerTray"
-                  [(ngModel)]="bigGoodPricePerTray" (ngModelChange)="calculateTotalCost()"></ion-input>
-                <div class="error-messages">
-                  <ng-container *ngFor="let error of errorMessages.minValue">
-                    <div class="error-message"
-                      *ngIf="eggSaleForm.get('bigGoodPricePerTray')?.hasError(error.type) && (eggSaleForm.get('bigGoodPricePerTray')?.dirty || eggSaleForm.get('bigGoodPricePerTray')?.touched)">
-                      {{ error.message }}
-                    </div>
-                  </ng-container>
-                </div>
-              </div>
-            </div>
-            <div class="total-per ml-05">
-              <strong>Total Price: {{bigGoodTray * bigGoodPricePerTray}}</strong>
-            </div>
-          </ion-col>
-          <ion-col size-xs="12" size-md="4">
-            <div class="egg-form-section-left">
-              <ion-item-divider>
-                <ion-label>Piece</ion-label>
-              </ion-item-divider>
-              <div>
-                <ion-input color="gunung-nago-survey" label="Piece" label-placement="floating" fill="outline"
-                  type="number" min="0" clear-input="true" formControlName="bigGoodPiece" [(ngModel)]="bigGoodPiece"
-                  (ngModelChange)="calculateTotalCost()"></ion-input>
-                <div class="error-messages">
-                  <ng-container *ngFor="let error of errorMessages.minValue">
-                    <div class="error-message"
-                      *ngIf="eggSaleForm.get('bigGoodPiece')?.hasError(error.type) && (eggSaleForm.get('bigGoodPiece')?.dirty || eggSaleForm.get('bigGoodPiece')?.touched)">
-                      {{ error.message }}
-                    </div>
-                  </ng-container>
-                </div>
-              </div>
-              <div class="mt-1">
-                <ion-input color="gunung-nago-survey" label="Price per piece" label-placement="floating" fill="outline"
-                  type="number" min="0" clear-input="true" formControlName="bigGoodPricePerPiece"
-                  [(ngModel)]="bigGoodPricePerPiece" (ngModelChange)="calculateTotalCost()"></ion-input>
-                <div class="error-messages">
-                  <ng-container *ngFor="let error of errorMessages.minValue">
-                    <div class="error-message"
-                      *ngIf="eggSaleForm.get('bigGoodPricePerPiece')?.hasError(error.type) && (eggSaleForm.get('bigGoodPricePerPiece')?.dirty || eggSaleForm.get('bigGoodPricePerPiece')?.touched)">
-                      {{ error.message }}
-                    </div>
-                  </ng-container>
-                </div>
-              </div>
-            </div>
-            <div class="total-per">
-              <strong>Total Price: {{bigGoodPiece * bigGoodPricePerPiece}}</strong>
-            </div>
-          </ion-col>
-        </ion-row>
-
-        <div class="divider-wrapper" *ngIf="medium">
-          <div>
-            <img class="medium-eggs-form" src='./assets/flaticon/medium-eggs.png'>
-          </div>
-          <div class="divider-text">
-            <ion-item-divider>
-              <ion-label>Medium Eggs</ion-label>
-            </ion-item-divider>
-          </div>
-        </div>
-        <ion-row *ngIf="medium">
-          <ion-col size-xs="12" size-md="4">
-            <div class="egg-form-section-right">
-              <ion-item-divider>
-                <ion-label>Tie</ion-label>
-              </ion-item-divider>
-              <div>
-                <ion-input color="gunung-nago-survey" label="Tie" label-placement="floating" fill="outline"
-                  type="number" min="0" clear-input="true" formControlName="mediumGoodTie" [(ngModel)]="mediumGoodTie"
-                  (ngModelChange)="calculateTotalCost()"></ion-input>
-                <div class="error-messages">
-                  <ng-container *ngFor="let error of errorMessages.minValue">
-                    <div class="error-message"
-                      *ngIf="eggSaleForm.get('mediumGoodTie')?.hasError(error.type) && (eggSaleForm.get('mediumGoodTie')?.dirty || eggSaleForm.get('mediumGoodTie')?.touched)">
-                      {{ error.message }}
-                    </div>
-                  </ng-container>
-                </div>
-              </div>
-              <div class="mt-1">
-                <ion-input color="gunung-nago-survey" label="Price per Tie" label-placement="floating" fill="outline"
-                  type="number" min="0" clear-input="true" formControlName="mediumGoodPricePerTie"
-                  [(ngModel)]="mediumGoodPricePerTie" (ngModelChange)="calculateTotalCost()"></ion-input>
-                <div class="error-messages">
-                  <ng-container *ngFor="let error of errorMessages.minValue">
-                    <div class="error-message"
-                      *ngIf="eggSaleForm.get('mediumGoodPricePerTie')?.hasError(error.type) && (eggSaleForm.get('mediumGoodPricePerTie')?.dirty || eggSaleForm.get('mediumGoodPricePerTie')?.touched)">
-                      {{ error.message }}
-                    </div>
-                  </ng-container>
-                </div>
-              </div>
-            </div>
-            <div class="total-per ml-1">
-              <strong>Total Price: {{mediumGoodTie * mediumGoodPricePerTie}}</strong>
-            </div>
-          </ion-col>
-          <ion-col size-xs="12" size-md="4">
-            <div class="egg-form-section-middle">
-              <ion-item-divider>
-                <ion-label>Tray</ion-label>
-              </ion-item-divider>
-              <div>
-                <ion-input color="gunung-nago-survey" label="Tray" label-placement="floating" fill="outline"
-                  type="number" min="0" clear-input="true" formControlName="mediumGoodTray" [(ngModel)]="mediumGoodTray"
-                  (ngModelChange)="calculateTotalCost()"></ion-input>
-                <div class="error-messages">
-                  <ng-container *ngFor="let error of errorMessages.minValue">
-                    <div class="error-message"
-                      *ngIf="eggSaleForm.get('mediumGoodTray')?.hasError(error.type) && (eggSaleForm.get('mediumGoodTray')?.dirty || eggSaleForm.get('mediumGoodTray')?.touched)">
-                      {{ error.message }}
-                    </div>
-                  </ng-container>
-                </div>
-              </div>
-              <div class="mt-1">
-                <ion-input color="gunung-nago-survey" label="Price per tray" label-placement="floating" fill="outline"
-                  type="number" min="0" clear-input="true" formControlName="mediumGoodPricePerTray"
-                  [(ngModel)]="mediumGoodPricePerTray" (ngModelChange)="calculateTotalCost()"></ion-input>
-                <div class="error-messages">
-                  <ng-container *ngFor="let error of errorMessages.minValue">
-                    <div class="error-message"
-                      *ngIf="eggSaleForm.get('mediumGoodPricePerTray')?.hasError(error.type) && (eggSaleForm.get('mediumGoodPricePerTray')?.dirty || eggSaleForm.get('mediumGoodPricePerTray')?.touched)">
-                      {{ error.message }}
-                    </div>
-                  </ng-container>
-                </div>
-              </div>
-            </div>
-            <div class="total-per ml-05">
-              <strong>Total Price: {{mediumGoodTray * mediumGoodPricePerTray}}</strong>
-            </div>
-          </ion-col>
-          <ion-col size-xs="12" size-md="4">
-            <div class="egg-form-section-left">
-              <ion-item-divider>
-                <ion-label>Piece</ion-label>
-              </ion-item-divider>
-              <div>
-                <ion-input color="gunung-nago-survey" label="Piece" label-placement="floating" fill="outline"
-                  type="number" min="0" clear-input="true" formControlName="mediumGoodPiece"
-                  [(ngModel)]="mediumGoodPiece" (ngModelChange)="calculateTotalCost()"></ion-input>
-                <div class="error-messages">
-                  <ng-container *ngFor="let error of errorMessages.minValue">
-                    <div class="error-message"
-                      *ngIf="eggSaleForm.get('mediumGoodPiece')?.hasError(error.type) && (eggSaleForm.get('mediumGoodPiece')?.dirty || eggSaleForm.get('mediumGoodPiece')?.touched)">
-                      {{ error.message }}
-                    </div>
-                  </ng-container>
-                </div>
-              </div>
-              <div class="mt-1">
-                <ion-input color="gunung-nago-survey" label="Price per piece" label-placement="floating" fill="outline"
-                  type="number" min="0" clear-input="true" formControlName="mediumGoodPricePerPiece"
-                  [(ngModel)]="mediumGoodPricePerPiece" (ngModelChange)="calculateTotalCost()"></ion-input>
-                <div class="error-messages">
-                  <ng-container *ngFor="let error of errorMessages.minValue">
-                    <div class="error-message"
-                      *ngIf="eggSaleForm.get('mediumGoodPricePerPiece')?.hasError(error.type) && (eggSaleForm.get('mediumGoodPricePerPiece')?.dirty || eggSaleForm.get('mediumGoodPricePerPiece')?.touched)">
-                      {{ error.message }}
-                    </div>
-                  </ng-container>
-                </div>
-              </div>
-            </div>
-            <div class="total-per">
-              <strong>Total Price: {{mediumGoodPiece * mediumGoodPricePerPiece}}</strong>
-            </div>
-          </ion-col>
-        </ion-row>
-
-        <div class="divider-wrapper" *ngIf="small">
-          <div>
-            <img class="small-eggs-form" src='./assets/flaticon/small-eggs.png'>
-          </div>
-          <div class="divider-text">
-            <ion-item-divider>
-              <ion-label>Small Eggs</ion-label>
-            </ion-item-divider>
-          </div>
-        </div>
-        <ion-row *ngIf="small">
-          <ion-col size-xs="12" size-md="4">
-            <div class="egg-form-section-right">
-              <ion-item-divider>
-                <ion-label>Tie</ion-label>
-              </ion-item-divider>
-              <div>
-                <ion-input color="gunung-nago-survey" label="Tie" label-placement="floating" fill="outline"
-                  type="number" min="0" clear-input="true" formControlName="smallGoodTie" [(ngModel)]="smallGoodTie"
-                  (ngModelChange)="calculateTotalCost()"></ion-input>
-                <div class="error-messages">
-                  <ng-container *ngFor="let error of errorMessages.minValue">
-                    <div class="error-message"
-                      *ngIf="eggSaleForm.get('smallGoodTie')?.hasError(error.type) && (eggSaleForm.get('smallGoodTie')?.dirty || eggSaleForm.get('smallGoodTie')?.touched)">
-                      {{ error.message }}
-                    </div>
-                  </ng-container>
-                </div>
-              </div>
-              <div class="mt-1">
-                <ion-input color="gunung-nago-survey" label="Price per Tie" label-placement="floating" fill="outline"
-                  type="number" min="0" clear-input="true" formControlName="smallGoodPricePerTie"
-                  [(ngModel)]="smallGoodPricePerTie" (ngModelChange)="calculateTotalCost()"></ion-input>
-                <div class="error-messages">
-                  <ng-container *ngFor="let error of errorMessages.minValue">
-                    <div class="error-message"
-                      *ngIf="eggSaleForm.get('smallGoodPricePerTie')?.hasError(error.type) && (eggSaleForm.get('smallGoodPricePerTie')?.dirty || eggSaleForm.get('smallGoodPricePerTie')?.touched)">
-                      {{ error.message }}
-                    </div>
-                  </ng-container>
-                </div>
-              </div>
-            </div>
-            <div class="total-per ml-1">
-              <strong>Total Price: {{smallGoodTie * smallGoodPricePerTie}}</strong>
-            </div>
-          </ion-col>
-          <ion-col size-xs="12" size-md="4">
-            <div class="egg-form-section-middle">
-              <ion-item-divider>
-                <ion-label>Tray</ion-label>
-              </ion-item-divider>
-              <div>
-                <ion-input color="gunung-nago-survey" label="Tray" label-placement="floating" fill="outline"
-                  type="number" min="0" clear-input="true" formControlName="smallGoodTray" [(ngModel)]="smallGoodTray"
-                  (ngModelChange)="calculateTotalCost()"></ion-input>
-                <div class="error-messages">
-                  <ng-container *ngFor="let error of errorMessages.minValue">
-                    <div class="error-message"
-                      *ngIf="eggSaleForm.get('smallGoodTray')?.hasError(error.type) && (eggSaleForm.get('smallGoodTray')?.dirty || eggSaleForm.get('smallGoodTray')?.touched)">
-                      {{ error.message }}
-                    </div>
-                  </ng-container>
-                </div>
-              </div>
-              <div class="mt-1">
-                <ion-input color="gunung-nago-survey" label="Price per tray" label-placement="floating" fill="outline"
-                  type="number" min="0" clear-input="true" formControlName="smallGoodPricePerTray"
-                  [(ngModel)]="smallGoodPricePerTray" (ngModelChange)="calculateTotalCost()"></ion-input>
-                <div class="error-messages">
-                  <ng-container *ngFor="let error of errorMessages.minValue">
-                    <div class="error-message"
-                      *ngIf="eggSaleForm.get('smallGoodPricePerTray')?.hasError(error.type) && (eggSaleForm.get('smallGoodPricePerTray')?.dirty || eggSaleForm.get('smallGoodPricePerTray')?.touched)">
-                      {{ error.message }}
-                    </div>
-                  </ng-container>
-                </div>
-              </div>
-            </div>
-            <div class="total-per ml-05">
-              <strong>Total Price: {{smallGoodTray * smallGoodPricePerTray}}</strong>
-            </div>
-          </ion-col>
-          <ion-col size-xs="12" size-md="4">
-            <div class="egg-form-section-left">
-              <ion-item-divider>
-                <ion-label>Piece</ion-label>
-              </ion-item-divider>
-              <div>
-                <ion-input color="gunung-nago-survey" label="Piece" label-placement="floating" fill="outline"
-                  type="number" min="0" clear-input="true" formControlName="smallGoodPiece" [(ngModel)]="smallGoodPiece"
-                  (ngModelChange)="calculateTotalCost()"></ion-input>
-                <div class="error-messages">
-                  <ng-container *ngFor="let error of errorMessages.minValue">
-                    <div class="error-message"
-                      *ngIf="eggSaleForm.get('smallGoodPiece')?.hasError(error.type) && (eggSaleForm.get('smallGoodPiece')?.dirty || eggSaleForm.get('smallGoodPiece')?.touched)">
-                      {{ error.message }}
-                    </div>
-                  </ng-container>
-                </div>
-              </div>
-              <div class="mt-1">
-                <ion-input color="gunung-nago-survey" label="Price per piece" label-placement="floating" fill="outline"
-                  type="number" min="0" clear-input="true" formControlName="smallGoodPricePerPiece"
-                  [(ngModel)]="smallGoodPricePerPiece" (ngModelChange)="calculateTotalCost()"></ion-input>
-                <div class="error-messages">
-                  <ng-container *ngFor="let error of errorMessages.minValue">
-                    <div class="error-message"
-                      *ngIf="eggSaleForm.get('smallGoodPricePerPiece')?.hasError(error.type) && (eggSaleForm.get('smallGoodPricePerPiece')?.dirty || eggSaleForm.get('smallGoodPricePerPiece')?.touched)">
-                      {{ error.message }}
-                    </div>
-                  </ng-container>
-                </div>
-              </div>
-            </div>
-            <div class="total-per">
-              <strong>Total Price: {{smallGoodPiece * smallGoodPricePerPiece}}</strong>
-            </div>
-          </ion-col>
-        </ion-row>
       </ion-card-content>
     </ion-card>
 
-    <div class="divider-wrapper" *ngIf="bad">
-      <div>
-        <img class="eggs-form" src='./assets/flaticon/bad-eggs.png'>
-      </div>
-      <div class="divider-text">
-        <ion-item-divider>
-          <ion-label>Bad Eggs</ion-label>
-        </ion-item-divider>
-      </div>
-    </div>
-    <ion-card *ngIf="bad">
-      <ion-card-content>
-        <ion-row>
-          <ion-col size-xs="12" size-md="4">
-            <div class="egg-form-section-right">
-              <ion-item-divider>
-                <ion-label>Tie</ion-label>
-              </ion-item-divider>
-              <div>
-                <ion-input color="gunung-nago-survey" label="Tie" label-placement="floating" fill="outline"
-                  type="number" min="0" clear-input="true" formControlName="badTie" [(ngModel)]="badTie"
-                  (ngModelChange)="calculateTotalCost()"></ion-input>
-                <div class="error-messages">
-                  <ng-container *ngFor="let error of errorMessages.minValue">
-                    <div class="error-message"
-                      *ngIf="eggSaleForm.get('badTie')?.hasError(error.type) && (eggSaleForm.get('badTie')?.dirty || eggSaleForm.get('badTie')?.touched)">
-                      {{ error.message }}
-                    </div>
-                  </ng-container>
-                </div>
-              </div>
-              <div class="mt-1">
-                <ion-input color="gunung-nago-survey" label="Price per Tie" label-placement="floating" fill="outline"
-                  type="number" min="0" clear-input="true" formControlName="badPricePerTie" [(ngModel)]="badPricePerTie"
-                  (ngModelChange)="calculateTotalCost()"></ion-input>
-                <div class="error-messages">
-                  <ng-container *ngFor="let error of errorMessages.minValue">
-                    <div class="error-message"
-                      *ngIf="eggSaleForm.get('badPricePerTie')?.hasError(error.type) && (eggSaleForm.get('badPricePerTie')?.dirty || eggSaleForm.get('badPricePerTie')?.touched)">
-                      {{ error.message }}
-                    </div>
-                  </ng-container>
-                </div>
-              </div>
-            </div>
-            <div class="total-per ml-1">
-              <strong>Total Price: {{badTie * badPricePerTie}}</strong>
-            </div>
-          </ion-col>
-          <ion-col size-xs="12" size-md="4">
-            <div class="egg-form-section-middle">
-              <ion-item-divider>
-                <ion-label>Tray</ion-label>
-              </ion-item-divider>
-              <div>
-                <ion-input color="gunung-nago-survey" label="Tray" label-placement="floating" fill="outline"
-                  type="number" min="0" clear-input="true" formControlName="badTray" [(ngModel)]="badTray"
-                  (ngModelChange)="calculateTotalCost()"></ion-input>
-                <div class="error-messages">
-                  <ng-container *ngFor="let error of errorMessages.minValue">
-                    <div class="error-message"
-                      *ngIf="eggSaleForm.get('badTray')?.hasError(error.type) && (eggSaleForm.get('badTray')?.dirty || eggSaleForm.get('badTray')?.touched)">
-                      {{ error.message }}
-                    </div>
-                  </ng-container>
-                </div>
-              </div>
-              <div class="mt-1">
-                <ion-input color="gunung-nago-survey" label="Price per tray" label-placement="floating" fill="outline"
-                  type="number" min="0" clear-input="true" formControlName="badPricePerTray"
-                  [(ngModel)]="badPricePerTray" (ngModelChange)="calculateTotalCost()"></ion-input>
-                <div class="error-messages">
-                  <ng-container *ngFor="let error of errorMessages.minValue">
-                    <div class="error-message"
-                      *ngIf="eggSaleForm.get('badPricePerTray')?.hasError(error.type) && (eggSaleForm.get('badPricePerTray')?.dirty || eggSaleForm.get('badPricePerTray')?.touched)">
-                      {{ error.message }}
-                    </div>
-                  </ng-container>
-                </div>
-              </div>
-            </div>
-            <div class="total-per ml-05">
-              <strong>Total Price: {{badTray * badPricePerTray}}</strong>
-            </div>
-          </ion-col>
-          <ion-col size-xs="12" size-md="4">
-            <div class="egg-form-section-left">
-              <ion-item-divider>
-                <ion-label>Piece</ion-label>
-              </ion-item-divider>
-              <div>
-                <ion-input color="gunung-nago-survey" label="Piece" label-placement="floating" fill="outline"
-                  type="number" min="0" clear-input="true" formControlName="badPiece" [(ngModel)]="badPiece"
-                  (ngModelChange)="validatePiece($event);" (ngModelChange)="calculateTotalCost()"></ion-input>
-                <div class="error-messages">
-                  <ng-container *ngFor="let error of errorMessages.minValue">
-                    <div class="error-message"
-                      *ngIf="eggSaleForm.get('badPiece')?.hasError(error.type) && (eggSaleForm.get('badPiece')?.dirty || eggSaleForm.get('badPiece')?.touched)">
-                      {{ error.message }}
-                    </div>
-                  </ng-container>
-                </div>
-              </div>
-              <div class="mt-1">
-                <ion-input color="gunung-nago-survey" label="Price per piece" label-placement="floating" fill="outline"
-                  type="number" min="0" clear-input="true" formControlName="badPricePerPiece"
-                  [(ngModel)]="badPricePerPiece" (ngModelChange)="calculateTotalCost()"></ion-input>
-                <div class="error-messages">
-                  <ng-container *ngFor="let error of errorMessages.minValue">
-                    <div class="error-message"
-                      *ngIf="eggSaleForm.get('badPricePerPiece')?.hasError(error.type) && (eggSaleForm.get('badPricePerPiece')?.dirty || eggSaleForm.get('badPricePerPiece')?.touched)">
-                      {{ error.message }}
-                    </div>
-                  </ng-container>
-                </div>
-              </div>
-            </div>
-            <div class="total-per">
-              <strong>Total Price: {{badPiece * badPricePerPiece}}</strong>
-            </div>
-          </ion-col>
-        </ion-row>
-      </ion-card-content>
-    </ion-card>
     <div class="btn-container">
       <ion-button class="cancel-btn" (click)="reset()">Cancel</ion-button>
       <ion-button color="positive-btn" (click)="openModal()"
-        [disabled]="eggSaleForm.invalid || (
-        (eggStock.totalEggs - ((bigGoodPiece + (bigGoodTray * 30) + (bigGoodTie * 300)) +
-        (mediumGoodPiece + (mediumGoodTray * 30) + (mediumGoodTie * 300)) + (smallGoodPiece + (smallGoodTray
-        * 30) + (smallGoodTie * 300)) + (badPiece + (badTray * 30) + (badTie * 300)))) < 0) || 
-        (bad && ((eggStock.badEggs - (badPiece + (badTray * 30) + (badTie * 300))) < 0)) ||
-        (big && ((eggStock.bigEggs - (bigGoodPiece + (bigGoodTray * 30) + (bigGoodTie * 300))) < 0)) ||
-        (medium && ((eggStock.mediumEggs - (mediumGoodPiece + (mediumGoodTray * 30) + (mediumGoodTie * 300))) < 0)) ||
-        (small && ((eggStock.smallEggs - (smallGoodPiece + (smallGoodTray * 30) + (smallGoodTie * 300))) < 0))">Save</ion-button>
+        [disabled]="eggSaleForm.invalid || totalRemainingEggs < 0 || totalRemainingGoodEggs < 0 || totalRemainingBadEggs < 0 || disableSave">Save</ion-button>
     </div>
   </form>
 
 
-  <ion-row>
+  <ion-row *ngIf="totalPrice > 0">
     <ion-col size-lg="8" size-md="6" size-xs="12">
-      <ion-card class="invoice" *ngIf="totalCost > 0">
+      <ion-card class="invoice">
         <ion-card-content>
           <div class="subtitle">
             <img class="cart-logo" src='./assets/flaticon/official-documents.png'>
@@ -895,114 +417,47 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngIf="eggSaleForm.get('bigGoodTie')?.value > 0">
-                <td data-label="Product">EGG - <strong>BIG</strong></td>
-                <td data-label="Quantity">{{eggSaleForm.get('bigGoodTie')?.value}} - <strong>TIE</strong></td>
-                <td data-label="Unit Price">Rp {{eggSaleForm.get('bigGoodPricePerTie')?.value}}</td>
-                <td data-label="Amount">Rp {{ eggSaleForm.get('bigGoodTie')?.value *
-                  eggSaleForm.get('bigGoodPricePerTie')?.value | number
-                  :'1.2-2'}}
+              <tr *ngFor="let eggCategory of eggCategoriesFields?.controls; let i = index">
+                <td *ngIf="eggCategory.get('tie')?.value > 0" data-label="Product">EGG -
+                  <strong>{{eggCategory.get('name')?.value | uppercase}}</strong>
                 </td>
-              </tr>
-              <tr *ngIf="eggSaleForm.get('bigGoodTray')?.value > 0">
-                <td data-label="Product">EGG - <strong>BIG</strong></td>
-                <td data-label="Quantity">{{eggSaleForm.get('bigGoodTray')?.value}} - <strong>TRAY</strong></td>
-                <td data-label="Unit Price">Rp {{eggSaleForm.get('bigGoodPricePerTray')?.value}}</td>
-                <td data-label="Amount">Rp {{ eggSaleForm.get('bigGoodTray')?.value *
-                  eggSaleForm.get('bigGoodPricePerTray')?.value | number
-                  :'1.2-2'}}
+                <td *ngIf="eggCategory.get('tie')?.value > 0" data-label="Quantity">{{eggCategory.get('tie')?.value}} -
+                  <strong>TIE</strong>
                 </td>
-              </tr>
-              <tr *ngIf="eggSaleForm.get('bigGoodPiece')?.value > 0">
-                <td data-label="Product">EGG - <strong>BIG</strong></td>
-                <td data-label="Quantity">{{eggSaleForm.get('bigGoodPiece')?.value}} - <strong>PIECE</strong></td>
-                <td data-label="Unit Price">Rp {{eggSaleForm.get('bigGoodPricePerPiece')?.value}}</td>
-                <td data-label="Amount">Rp {{ eggSaleForm.get('bigGoodPiece')?.value *
-                  eggSaleForm.get('bigGoodPricePerPiece')?.value | number
+                <td *ngIf="eggCategory.get('tie')?.value > 0" data-label="Unit Price">Rp
+                  {{eggCategory.get('pricePerTie')?.value}}</td>
+                <td *ngIf="eggCategory.get('tie')?.value > 0" data-label="Amount">Rp {{ eggCategory.get('tie')?.value *
+                  eggCategory.get('pricePerTie')?.value | number
                   :'1.2-2'}}
                 </td>
               </tr>
 
-              <tr *ngIf="eggSaleForm.get('mediumGoodTie')?.value > 0">
-                <td data-label="Product">EGG - <strong>MEDIUM</strong></td>
-                <td data-label="Quantity">{{eggSaleForm.get('mediumGoodTie')?.value}} - <strong>TIE</strong></td>
-                <td data-label="Unit Price">Rp {{eggSaleForm.get('mediumGoodPricePerTie')?.value}}</td>
-                <td data-label="Amount">Rp {{ eggSaleForm.get('mediumGoodTie')?.value *
-                  eggSaleForm.get('mediumGoodPricePerTie')?.value | number
-                  :'1.2-2'}}
+              <tr *ngFor="let eggCategory of eggCategoriesFields?.controls; let i = index">
+                <td *ngIf="eggCategory.get('tray')?.value > 0" data-label="Product">EGG -
+                  <strong>{{eggCategory.get('name')?.value | uppercase}}</strong>
                 </td>
-              </tr>
-              <tr *ngIf="eggSaleForm.get('mediumGoodTray')?.value > 0">
-                <td data-label="Product">EGG - <strong>MEDIUM</strong></td>
-                <td data-label="Quantity">{{eggSaleForm.get('mediumGoodTray')?.value}} - <strong>TRAY</strong></td>
-                <td data-label="Unit Price">Rp {{eggSaleForm.get('mediumGoodPricePerTray')?.value}}</td>
-                <td data-label="Amount">Rp {{ eggSaleForm.get('mediumGoodTray')?.value *
-                  eggSaleForm.get('mediumGoodPricePerTray')?.value | number
-                  :'1.2-2'}}
-                </td>
-              </tr>
-              <tr *ngIf="eggSaleForm.get('mediumGoodPiece')?.value > 0">
-                <td data-label="Product">EGG - <strong>MEDIUM</strong></td>
-                <td data-label="Quantity">{{eggSaleForm.get('mediumGoodPiece')?.value}} - <strong>PIECE</strong></td>
-                <td data-label="Unit Price">Rp {{eggSaleForm.get('mediumGoodPricePerPiece')?.value}}</td>
-                <td data-label="Amount">Rp {{ eggSaleForm.get('mediumGoodPiece')?.value *
-                  eggSaleForm.get('mediumGoodPricePerPiece')?.value | number
+                <td *ngIf="eggCategory.get('tray')?.value > 0" data-label="Quantity">{{eggCategory.get('tray')?.value}}
+                  - <strong>TRAY</strong></td>
+                <td *ngIf="eggCategory.get('tray')?.value > 0" data-label="Unit Price">Rp
+                  {{eggCategory.get('pricePerTray')?.value}}</td>
+                <td *ngIf="eggCategory.get('tray')?.value > 0" data-label="Amount">Rp {{ eggCategory.get('tray')?.value
+                  *
+                  eggCategory.get('pricePerTray')?.value | number
                   :'1.2-2'}}
                 </td>
               </tr>
 
-              <tr *ngIf="eggSaleForm.get('smallGoodTie')?.value > 0">
-                <td data-label="Product">EGG - <strong>SMALL</strong></td>
-                <td data-label="Quantity">{{eggSaleForm.get('smallGoodTie')?.value}} - <strong>TIE</strong></td>
-                <td data-label="Unit Price">Rp {{eggSaleForm.get('smallGoodPricePerTie')?.value}}</td>
-                <td data-label="Amount">Rp {{ eggSaleForm.get('smallGoodTie')?.value *
-                  eggSaleForm.get('smallGoodPricePerTie')?.value | number
-                  :'1.2-2'}}
+              <tr *ngFor="let eggCategory of eggCategoriesFields?.controls; let i = index">
+                <td *ngIf="eggCategory.get('piece')?.value > 0" data-label="Product">EGG -
+                  <strong>{{eggCategory.get('name')?.value | uppercase}}</strong>
                 </td>
-              </tr>
-              <tr *ngIf="eggSaleForm.get('smallGoodTray')?.value > 0">
-                <td data-label="Product">EGG - <strong>SMALL</strong></td>
-                <td data-label="Quantity">{{eggSaleForm.get('smallGoodTray')?.value}} - <strong>TRAY</strong></td>
-                <td data-label="Unit Price">Rp {{eggSaleForm.get('smallGoodPricePerTray')?.value}}</td>
-                <td data-label="Amount">Rp {{ eggSaleForm.get('smallGoodTray')?.value *
-                  eggSaleForm.get('smallGoodPricePerTray')?.value | number
-                  :'1.2-2'}}
-                </td>
-              </tr>
-              <tr *ngIf="eggSaleForm.get('smallGoodPiece')?.value > 0">
-                <td data-label="Product">EGG - <strong>SMALL</strong></td>
-                <td data-label="Quantity">{{eggSaleForm.get('smallGoodPiece')?.value}} - <strong>PIECE</strong></td>
-                <td data-label="Unit Price">Rp {{eggSaleForm.get('smallGoodPricePerPiece')?.value}}</td>
-                <td data-label="Amount">Rp {{ eggSaleForm.get('smallGoodPiece')?.value *
-                  eggSaleForm.get('mediumGoodPricePerPiece')?.value | number
-                  :'1.2-2'}}
-                </td>
-              </tr>
-
-              <tr *ngIf="eggSaleForm.get('badTie')?.value > 0">
-                <td data-label="Product">EGG - <strong>BAD</strong></td>
-                <td data-label="Quantity">{{eggSaleForm.get('badTie')?.value}} - <strong>TIE</strong></td>
-                <td data-label="Unit Price">Rp {{eggSaleForm.get('badPricePerTie')?.value}}</td>
-                <td data-label="Amount">Rp {{ eggSaleForm.get('badTie')?.value *
-                  eggSaleForm.get('badPricePerTie')?.value | number
-                  :'1.2-2'}}
-                </td>
-              </tr>
-              <tr *ngIf="eggSaleForm.get('badTray')?.value > 0">
-                <td data-label="Product">EGG - <strong>BAD</strong></td>
-                <td data-label="Quantity">{{eggSaleForm.get('badTray')?.value}} - <strong>TRAY</strong></td>
-                <td data-label="Unit Price">Rp {{eggSaleForm.get('badPricePerTray')?.value}}</td>
-                <td data-label="Amount">Rp {{ eggSaleForm.get('badTray')?.value *
-                  eggSaleForm.get('badPricePerTray')?.value | number
-                  :'1.2-2'}}
-                </td>
-              </tr>
-              <tr *ngIf="eggSaleForm.get('badPiece')?.value > 0">
-                <td data-label="Product">EGG - <strong>BAD</strong></td>
-                <td data-label="Quantity">{{eggSaleForm.get('badPiece')?.value}} - <strong>PIECE</strong></td>
-                <td data-label="Unit Price">Rp {{eggSaleForm.get('badPricePerPiece')?.value}}</td>
-                <td data-label="Amount">Rp {{ eggSaleForm.get('badPiece')?.value *
-                  eggSaleForm.get('badPricePerPiece')?.value | number
+                <td *ngIf="eggCategory.get('piece')?.value > 0" data-label="Quantity">
+                  {{eggCategory.get('piece')?.value}} - <strong>PIECE</strong></td>
+                <td *ngIf="eggCategory.get('piece')?.value > 0" data-label="Unit Price">Rp
+                  {{eggCategory.get('pricePerPiece')?.value}}</td>
+                <td *ngIf="eggCategory.get('piece')?.value > 0" data-label="Amount">Rp {{
+                  eggCategory.get('piece')?.value *
+                  eggCategory.get('pricePerPiece')?.value | number
                   :'1.2-2'}}
                 </td>
               </tr>
@@ -1018,11 +473,11 @@
                   <tbody>
                     <tr>
                       <th id="total" colspan="1">SubTotal :</th>
-                      <td>Rp {{totalCost | number :'1.2-2'}}</td>
+                      <td>Rp {{totalPrice | number :'1.2-2'}}</td>
                     </tr>
                     <tr>
                       <th id="total" colspan="1">Total :</th>
-                      <td>Rp {{totalCost | number :'1.2-2'}}</td>
+                      <td>Rp {{totalPrice | number :'1.2-2'}}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -1092,7 +547,8 @@
             </ion-item-divider>
             <span [formGroupName]="i">
               <ion-button *ngIf="paymentsFields != null && paymentsFields.length > 1" (click)="removePayment(i)"
-                class="remove-payment-btn" color="danger"><span class="material-icons">delete</span></ion-button>
+                class="remove-payment-btn" color="gunung-nago-warehouse"><span
+                  class="material-icons">delete</span></ion-button>
               <ion-row>
                 <ion-col size="6" size-sm>
                   <ion-input color="gunung-nago-primary" label="Amount Paid*" label-placement="floating" fill="outline"

@@ -218,6 +218,7 @@ export class ReturnInvoiceComponent  implements OnInit {
           isQuantityAllowed = false;
         }
         const returnFormGroup = this.formBuilder.group({
+          id: sale.id,
           maxQuantity : sale.quantity,
           quantityReturned: sale.quantityReturned !== null ? sale.quantityReturned : 0,
           quantityAllowedForReturn: isQuantityAllowed,
@@ -279,17 +280,20 @@ export class ReturnInvoiceComponent  implements OnInit {
       telephoneNumber: this.salesInvoiceDetailsForReturnDto?.customerTelephoneNumber,
       totalAmountDue: null
     }
-    const saleDetailsDtoList : SaleDetailsDto[] = [];
+    const saleDetailsDtoList : SaleDetailsForReturnDto[] = [];
     this.returnFormGroupDetail.value.forEach((sale: any) =>{
-      const saleDetailsDto : SaleDetailsDto ={
+      const saleDetailsDto : SaleDetailsForReturnDto ={
         salesInvoiceType: sale.salesInvoiceType,
         quantity: sale.quantity,
-        price: sale.price,
+        price: sale.newPrice,
         eggType: sale.eggType,
         eggQuantityType: sale.eggQuantityType,
         cageId: sale.cageId,
         flockId: sale.flockId,
         flockType: sale.flockType,
+        eggCategoryId: 0,
+        id: sale.id,
+        quantityReturned: sale.quantityReturned
       }
       saleDetailsDtoList.push(saleDetailsDto);
     })
@@ -302,9 +306,10 @@ export class ReturnInvoiceComponent  implements OnInit {
       comment: this.salesInvoiceDetailsForReturnDto?.comment,
       saleDetailsDtos: saleDetailsDtoList,
       newCustomer: false,
-      soldAt: this.salesInvoiceDetailsForReturnDto?.soldAt,
+      soldAt: this.paymentForm?.get("soldAt")?.value,
       salesInvoiceId: this.salesInvoiceDetailsForReturnDto?.id
     }
+    console.log(saleSaveForm);
     this.utilsService.presentLoading();
     this.returnApiService.save(saleSaveForm).subscribe({
       next: (data: string) => {

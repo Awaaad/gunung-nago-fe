@@ -1,16 +1,17 @@
 import { formatDate } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { FeedSurveyDto, FlockCategory, FlockFeedLineDto, HealthProductDto, HealthSurveyDto, SurveyDto } from 'generated-src/model';
+import { EggCategoryDto, FeedSurveyDto, FlockCategory, FlockFeedLineDto, HealthProductDto, HealthSurveyDto, SurveyDto, SurveyEggCountDto } from 'generated-src/model';
 import { SurveyFrontDto } from 'generated-src/model-front';
 import { Subscription, debounceTime, distinctUntilChanged, filter, finalize, switchMap, tap } from 'rxjs';
 import { FlockFeedLineApiService } from 'src/app/shared/apis/flock-feed-line.api.service';
 import { HealthProductApiService } from 'src/app/shared/apis/health-product.api.service';
 import { UtilsService } from 'src/app/shared/utils/utils.service';
 import { SurveyApiService } from '../../../shared/apis/survey.api.service';
+import { EggCategoryApiService } from 'src/app/shared/apis/egg-category.api.service';
 
 @Component({
   selector: 'app-survery-details',
@@ -66,7 +67,11 @@ export class SurveryDetailsComponent implements OnInit {
   public selectedHealthProducts: HealthSurveyDto[] = [];
   private searchHealthProductSubscription!: Subscription;
 
-  // feedSection
+  //egg section
+  public eggCategories: EggCategoryDto[] = [];
+  public surveyEggCountDtos: SurveyEggCountDto[] = [];
+
+  // feed section
   public feedSurvey: FeedSurveyDto[] = [];
   public feedLines: FlockFeedLineDto[] = [];
 
@@ -76,11 +81,16 @@ export class SurveryDetailsComponent implements OnInit {
     ],
     item: [
       { type: 'max', message: 'Item cannot be more than 29' },
+    ],
+    eggCategory: [
+      { type: 'required', message: 'Egg category is required' },
     ]
   };
 
   constructor(
     private activatedRoute: ActivatedRoute,
+    private eggCategoryApiService: EggCategoryApiService,
+    private formBuilder: FormBuilder,
     private flockFeedLineApiService: FlockFeedLineApiService,
     private healthProductApiService: HealthProductApiService,
     private router: Router,
@@ -91,6 +101,7 @@ export class SurveryDetailsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.getAllEggCategories();
     this.initialiseFormGroup();
     this.findSurveyDtoForSelectedCage();
     this.getAllHealthProducts();
@@ -109,21 +120,17 @@ export class SurveryDetailsComponent implements OnInit {
     this.translateService.use(event.value);
   }
 
+  public getAllEggCategories() {
+    this.eggCategoryApiService.findAll().subscribe(eggCategories => {
+      this.eggCategories = eggCategories;
+    })
+  }
+
   private initialiseFormGroup(): void {
-    this.surveyForm = new FormGroup({
+    this.surveyForm = this.formBuilder.group({
       population: new FormControl({ value: this.population, disabled: false }, Validators.compose([])),
-      dead: new FormControl({ value: this.dead, disabled: false }, Validators.compose([])),
-      sterile: new FormControl({ value: this.sterile, disabled: false }, Validators.compose([])),
-      bigEggsTie: new FormControl({ value: this.bigEggsTie, disabled: false }, Validators.compose([])),
-      bigEggsTray: new FormControl({ value: this.bigEggsTray, disabled: false }, Validators.compose([Validators.max(9)])),
-      bigEggsItem: new FormControl({ value: this.bigEggsItem, disabled: false }, Validators.compose([Validators.max(29)])),
-      mediumEggsTie: new FormControl({ value: this.mediumEggsTie, disabled: false }, Validators.compose([])),
-      mediumEggsTray: new FormControl({ value: this.mediumEggsTray, disabled: false }, Validators.compose([Validators.max(9)])),
-      mediumEggsItem: new FormControl({ value: this.mediumEggsItem, disabled: false }, Validators.compose([Validators.max(29)])),
-      smallEggsTie: new FormControl({ value: this.smallEggsTie, disabled: false }, Validators.compose([])),
-      smallEggsTray: new FormControl({ value: this.smallEggsTray, disabled: false }, Validators.compose([Validators.max(9)])),
-      smallEggsItem: new FormControl({ value: this.smallEggsItem, disabled: false }, Validators.compose([Validators.max(29)])),
-      broken: new FormControl({ value: this.broken, disabled: false }, Validators.compose([])),
+      dead: new FormControl({ value: null, disabled: false }, Validators.compose([])),
+      sterile: new FormControl({ value: null, disabled: false }, Validators.compose([])),
       upDownProduction: new FormControl({ value: '', disabled: false }, Validators.compose([])),
       vaccineMedication: new FormControl({ value: '', disabled: false }, Validators.compose([])),
       standardFeed: new FormControl({ value: '', disabled: false }, Validators.compose([])),
@@ -134,12 +141,36 @@ export class SurveryDetailsComponent implements OnInit {
       flockStockId: new FormControl({ value: this.flockStockId, disabled: false }, Validators.compose([])),
       eggStockId: new FormControl({ value: this.eggStockId, disabled: false }, Validators.compose([])),
       comment: new FormControl({ value: '', disabled: false }, Validators.compose([])),
-      manureBags: new FormControl({ value: this.manureBags, disabled: false }, Validators.compose([])),
-      manureWeight: new FormControl({ value: this.manureWeight, disabled: false }, Validators.compose([])),
-      amountOfChickenWeighted: new FormControl({ value: this.amountOfChickenWeighted, disabled: false }, Validators.compose([])),
-      totalWeight: new FormControl({ value: this.totalWeight, disabled: false }, Validators.compose([])),
-      averageWeight: new FormControl({ value: this.averageWeight, disabled: false }, Validators.compose([]))
+      manureBags: new FormControl({ value: null, disabled: false }, Validators.compose([])),
+      manureWeight: new FormControl({ value: null, disabled: false }, Validators.compose([])),
+      amountOfChickenWeighted: new FormControl({ value: null, disabled: false }, Validators.compose([])),
+      totalWeight: new FormControl({ value: null, disabled: false }, Validators.compose([])),
+      averageWeight: new FormControl({ value: null, disabled: false }, Validators.compose([])),
+      eggCategories: this.formBuilder.array([
+        this.addEggCategoryFormGroup()
+      ]),
     });
+  }
+
+  addEggCategoryFormGroup() {
+    return this.formBuilder.group({
+      eggCategoryId: new FormControl({ value: null, disabled: false }, Validators.compose([Validators.required])),
+      tie: new FormControl(Validators.compose([])),
+      tray: new FormControl({ value: null, disabled: false }, Validators.compose([Validators.max(9)])),
+      item: new FormControl({ value: null, disabled: false }, Validators.compose([Validators.max(29)])),
+    })
+  }
+
+  addEggCategory(): void {
+    (this.surveyForm.get('eggCategories') as FormArray).push(this.addEggCategoryFormGroup());
+  }
+
+  removeEggCategory(eggCategoryGroupIndex: number): void {
+    (this.surveyForm.get('eggCategories') as FormArray).removeAt(eggCategoryGroupIndex);
+  }
+
+  get eggCategoryFields() {
+    return this.surveyForm ? this.surveyForm.get('eggCategories') as FormArray : null;
   }
 
   public searchHealthProduct(): void {
@@ -221,16 +252,10 @@ export class SurveryDetailsComponent implements OnInit {
   }
 
   public calculateTotalItem() {
-    this.totalItem = (this.bigEggsTie * 300) + (this.bigEggsTray * 30) + this.bigEggsItem + (this.mediumEggsTie * 300) + (this.mediumEggsTray * 30) + this.mediumEggsItem + (this.smallEggsTie * 300) + (this.smallEggsTray * 30) + this.smallEggsItem + this.broken;
-  }
-
-  public validateItem(event: any) {
-    // if (event > 300) {
-    //   this.item = 300
-    // }
-    // if (event < 0) {
-    //   this.item = 0;
-    // }
+    this.totalItem = 0;
+    (this.surveyForm.get('eggCategories') as FormArray).value.forEach((form: any) => {
+      this.totalItem = this.totalItem + (form.tie * 300) + (form.tray * 30) + form.item;
+    })
   }
 
   private getAllHealthProducts(): void {
@@ -255,16 +280,6 @@ export class SurveryDetailsComponent implements OnInit {
           population: surveyDetails.good,
           dead: this.dead,
           sterile: this.sterile,
-          bigEggsTie: this.bigEggsTie,
-          bigEggsTray: this.bigEggsTray,
-          bigEggsItem: this.bigEggsItem,
-          mediumEggsTie: this.mediumEggsTie,
-          mediumEggsTray: this.mediumEggsTray,
-          mediumEggsItem: this.mediumEggsItem,
-          smallEggsTie: this.smallEggsTie,
-          smallEggsTray: this.smallEggsTray,
-          smallEggsItem: this.smallEggsItem,
-          broken: this.broken,
           upDownProduction: '',
           vaccineMedication: '',
           standardFeed: '',
@@ -279,7 +294,14 @@ export class SurveryDetailsComponent implements OnInit {
           manureWeight: this.manureWeight,
           amountOfChickenWeighted: this.amountOfChickenWeighted,
           totalWeight: this.totalWeight,
-          averageWeight: this.averageWeight
+          averageWeight: this.averageWeight,
+          eggCategories:
+            [{
+              eggCategoryId: null,
+              tie: null,
+              tray: null,
+              item: null
+            }]
         })
         this.findAllActiveFlockLinesByFlockId(surveyDetails.flockId);
       });
@@ -293,13 +315,6 @@ export class SurveryDetailsComponent implements OnInit {
         this.eggStockId = surveyDetails.eggStockId;
         this.dead = surveyDetails.death;
         this.sterile = surveyDetails.sterile;
-        this.bigEggsTie = Math.floor(surveyDetails.bigEggs / 300);
-        this.bigEggsItem = surveyDetails.bigEggs % 300;
-        this.mediumEggsTie = Math.floor(surveyDetails.mediumEggs / 300);
-        this.mediumEggsItem = surveyDetails.mediumEggs % 300;
-        this.smallEggsTie = Math.floor(surveyDetails.smallEggs / 300);
-        this.smallEggsItem = surveyDetails.smallEggs % 300;
-        this.broken = surveyDetails.badEggs;
         this.cageId = surveyDetails.cageId;
         this.flockId = surveyDetails.flockId;
 
@@ -384,12 +399,9 @@ export class SurveryDetailsComponent implements OnInit {
       death: null,
       sterile: null,
       good: null,
-      badEggs: null,
-      bigEggs: null,
-      mediumEggs: null,
-      smallEggs: null,
       healthSurveyDtos: [],
       feedSurveyDtos: [],
+      surveyEggCountDtos: [],
       comment: null,
       manureBags: null,
       manureWeight: null,
@@ -400,6 +412,14 @@ export class SurveryDetailsComponent implements OnInit {
   }
 
   private populateSurveyDtoWithFormValues(): void {
+    this.surveyEggCountDtos = [];
+    this.surveyEggCountDtos = (this.surveyForm.get('eggCategories') as FormArray).value.map((form: any) => {
+      const surveyEggCountDto: SurveyEggCountDto = {
+        eggCategoryId: form.eggCategoryId,
+        quantity: (form.tie * 300) + (form.tray * 30) + form.item
+      }
+      return surveyEggCountDto;
+    });
     this.surveyDto = {
       cageId: this.surveyForm.value.cageId,
       flockId: this.surveyForm.value.flockId,
@@ -413,12 +433,9 @@ export class SurveryDetailsComponent implements OnInit {
       death: this.surveyForm.value.dead,
       sterile: this.surveyForm.value.sterile,
       good: this.remaining,
-      badEggs: this.broken,
-      bigEggs: (this.bigEggsTie * 300) + (this.bigEggsTray * 30) + this.surveyForm.value.bigEggsItem,
-      mediumEggs: (this.mediumEggsTie * 300) + (this.mediumEggsTray * 30) + this.surveyForm.value.mediumEggsItem,
-      smallEggs: (this.smallEggsTie * 300) + (this.smallEggsTray * 30) + this.surveyForm.value.smallEggsItem,
       healthSurveyDtos: this.selectedHealthProducts,
       feedSurveyDtos: this.feedSurvey,
+      surveyEggCountDtos: this.surveyEggCountDtos,
       comment: this.surveyForm.value.comment,
       manureBags: this.surveyForm.value.manureBags,
       manureWeight: this.surveyForm.value.manureWeight,
