@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2023-11-21 16:23:43.
+// Generated using typescript-generator version 3.2.1263 on 2023-11-21 21:24:56.
 
 export class CageDto {
     id!: number;

@@ -445,6 +445,7 @@ export class EggSaleDetailsComponent implements OnInit {
     this.showFormArray = false;
     this.setCustomerNewValue(false);
     this.eggSaleForm.reset();
+    this.initialiseEggSaleSaveDto();
     this.resetFormValues();
     this.initialiseFormBuilder();
     if (this.paymentForm) {

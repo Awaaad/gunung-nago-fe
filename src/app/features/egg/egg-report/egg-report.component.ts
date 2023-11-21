@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDatepicker } from '@angular/material/datepicker';
 import { MatTableDataSource } from '@angular/material/table';
@@ -34,8 +34,7 @@ export const MY_FORMATS = {
       deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
     },
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
-  ],
-  encapsulation: ViewEncapsulation.None,
+  ]
 })
 export class EggReportComponent {
   public eggCategoryId!: number | null;
