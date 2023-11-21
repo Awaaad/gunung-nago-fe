@@ -121,7 +121,6 @@ export class ManureSaleDetailsComponent implements OnInit {
 
   public getManureStock() {
     this.manureStock = {
-      id: 0,
       weight: 0,
       bags: 0
     }

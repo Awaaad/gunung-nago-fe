@@ -42,7 +42,7 @@
               </div>
               <img class="eggs" src='./assets/flaticon/eggs.png'>
               <div class="egg-count">
-                <!-- <strong>{{eggStock.totalEggs}}</strong> -->
+                <strong>{{eggStock.totalEggs}}</strong>
               </div>
             </div>
 
@@ -52,7 +52,7 @@
               </div>
               <img class="eggs" src='./assets/flaticon/good-eggs.png'>
               <div class="egg-count">
-                <!-- <strong>{{eggStock.goodEggs}}</strong> -->
+                <strong>{{eggStock.goodEggs}}</strong>
               </div>
             </div>
 
@@ -62,40 +62,24 @@
               </div>
               <img class="eggs" src='./assets/flaticon/bad-eggs.png'>
               <div class="egg-count">
-                <!-- <strong>{{eggStock.badEggs}}</strong> -->
+                <strong>{{eggStock.badEggs}}</strong>
               </div>
             </div>
           </div>
 
-          <div class="good-bad-egg-section">
-            <div class="egg-section">
-              <div>
-                <strong>Big</strong>
+          <ion-row class="egg-stock-section">
+            <ion-col col-md-3 size="3" size-sm *ngFor="let eggCategory of eggStock.eggCategoryStockDtos">
+              <div class="egg-section">
+                <div>
+                  <strong>{{eggCategory.name | titlecase}}</strong>
+                </div>
+                <img class="eggs" src='./assets/flaticon/category-big.png'>
+                <div class="egg-count">
+                  <strong>{{eggCategory.quantity}}</strong>
+                </div>
               </div>
-              <img class="eggs" src='./assets/flaticon/category-big.png'>
-              <div class="egg-count">
-                <!-- <strong>{{eggStock.bigEggs}}</strong> -->
-              </div>
-            </div>
-            <div class="egg-section">
-              <div>
-                <strong>Medium</strong>
-              </div>
-              <img class="eggs medium-category" src='./assets/flaticon/category-medium.png'>
-              <div class="egg-count">
-                <!-- <strong>{{eggStock.mediumEggs}}</strong> -->
-              </div>
-            </div>
-            <div class="egg-section">
-              <div>
-                <strong>Small</strong>
-              </div>
-              <img class="eggs small-category" src='./assets/flaticon/category-small.png'>
-              <div class="egg-count">
-                <!-- <strong>{{eggStock.smallEggs}}</strong> -->
-              </div>
-            </div>
-          </div>
+            </ion-col>
+          </ion-row>
 
         </ion-card-content>
       </ion-card>
@@ -116,338 +100,55 @@
             <ion-label>Select Egg Category</ion-label>
           </ion-item-divider>
           <ion-list>
-            <ion-item>
-              <!-- <ion-checkbox justify="space-between" [disabled]="eggStock.bigEggs < 1" [(ngModel)]="big"
-                color="positive-btn" (ionChange)="bigCheckboxChange($event)">Big</ion-checkbox> -->
-            </ion-item>
-            <ion-item>
-              <!-- <ion-checkbox justify="space-between" [disabled]="eggStock.mediumEggs < 1" [(ngModel)]="medium"
-                color="positive-btn" (ionChange)="mediumCheckboxChange($event)">Medium</ion-checkbox> -->
-            </ion-item>
-            <ion-item>
-              <!-- <ion-checkbox justify="space-between" [disabled]="eggStock.smallEggs < 1" [(ngModel)]="small"
-                color="positive-btn" (ionChange)="smallCheckboxChange($event)">Small</ion-checkbox> -->
-            </ion-item>
-            <ion-item class="bad-checkbox-item">
-              <!-- <ion-checkbox justify="space-between" [disabled]="eggStock.badEggs < 1" [(ngModel)]="bad"
-                color="positive-btn" (ionChange)="badCheckboxChange($event)">Bad</ion-checkbox> -->
+            <ion-item *ngFor="let eggCategory of eggStock.eggCategoryStockDtos">
+              <ion-checkbox [disabled]="!(eggCategory.quantity > 0)" justify="space-between" color="positive-btn"
+                (ionChange)="addEggCategory($event, eggCategory)">{{eggCategory.name |
+                titlecase}}</ion-checkbox>
             </ion-item>
           </ion-list>
         </ion-card-content>
       </ion-card>
     </ion-col>
-    <ion-col col-md-6 size="6" size-sm *ngIf="!(big || medium || small || bad)"></ion-col>
-    <ion-col col-md-6 size="6" size-sm *ngIf="big || medium || small || bad">
-      <div class="subtitle">
-        <img class="cart-logo" src='./assets/flaticon/eggs.png'>
-        <div class="form-section-cart">Remaining Eggs</div>
-      </div>
-      <ion-card>
-        <ion-card-content>
-          <ion-item-divider>
-            <ion-label>Remaining Eggs Stock</ion-label>
-          </ion-item-divider>
-          <div class="good-bad-egg-section">
-            <div class="egg-section">
-              <div>
-                <strong>Total</strong>
-              </div>
-              <img class="eggs" src='./assets/flaticon/eggs.png'>
-              <div class="egg-count">
-                <!-- <strong>{{(eggStock.goodEggs - (((bigGoodPieceBad + (bigGoodTrayBad * 30) + (bigGoodTieBad * 300)) +
-                  (bigGoodPieceBroken + (bigGoodTrayBroken * 30) + (bigGoodTieBroken * 300))) +
-                  ((mediumGoodPieceBad + (mediumGoodTrayBad * 30) + (mediumGoodTieBad * 300)) + (mediumGoodPieceBroken +
-                  (mediumGoodTrayBroken * 30) + (mediumGoodTieBroken * 300))) +
-                  ((smallGoodPieceBad + (smallGoodTrayBad * 30) + (smallGoodTieBad * 300)) + (smallGoodPieceBroken +
-                  (smallGoodTrayBroken * 30) + (smallGoodTieBroken * 300))))) +
-                  (eggStock.badEggs + (((bigGoodPieceBad + (bigGoodTrayBad * 30) + (bigGoodTieBad * 300))) +
-                  ((mediumGoodPieceBad + (mediumGoodTrayBad * 30) + (mediumGoodTieBad * 300))) +
-                  ((smallGoodPieceBad + (smallGoodTrayBad * 30) + (smallGoodTieBad * 300))))) -
-                  (badPieceBroken + ((badTieBroken * 300) + (badTrayBroken * 30)))}}</strong> -->
-              </div>
-            </div>
-
-            <div class="egg-section">
-              <div>
-                <strong>Good</strong>
-              </div>
-              <img class="eggs" src='./assets/flaticon/good-eggs.png'>
-              <div class="egg-count">
-                <!-- <strong>{{eggStock.goodEggs - (((bigGoodPieceBad + (bigGoodTrayBad * 30) + (bigGoodTieBad * 300)) +
-                  (bigGoodPieceBroken + (bigGoodTrayBroken * 30) + (bigGoodTieBroken * 300))) +
-                  ((mediumGoodPieceBad + (mediumGoodTrayBad * 30) + (mediumGoodTieBad * 300)) + (mediumGoodPieceBroken +
-                  (mediumGoodTrayBroken * 30) + (mediumGoodTieBroken * 300))) +
-                  ((smallGoodPieceBad + (smallGoodTrayBad * 30) + (smallGoodTieBad * 300)) + (smallGoodPieceBroken +
-                  (smallGoodTrayBroken * 30) + (smallGoodTieBroken * 300))))}}</strong> -->
-              </div>
-            </div>
-
-            <div class="egg-section">
-              <div>
-                <strong>Bad</strong>
-              </div>
-              <img class="eggs" src='./assets/flaticon/bad-eggs.png'>
-              <div class="egg-count">
-                <!-- <strong>{{(eggStock.badEggs + (((bigGoodPieceBad + (bigGoodTrayBad * 30) + (bigGoodTieBad * 300))) +
-                  ((mediumGoodPieceBad + (mediumGoodTrayBad * 30) + (mediumGoodTieBad * 300))) +
-                  ((smallGoodPieceBad + (smallGoodTrayBad * 30) + (smallGoodTieBad * 300))))) -
-                  (badPieceBroken + ((badTieBroken * 300) + (badTrayBroken * 30)))}}</strong> -->
-              </div>
-            </div>
-          </div>
-
-          <div class="good-bad-egg-section">
-            <div class="egg-section">
-              <div>
-                <strong>Big</strong>
-              </div>
-              <img class="eggs" src='./assets/flaticon/category-big.png'>
-              <div class="egg-count">
-                <!-- <strong>{{eggStock.bigEggs - ((bigGoodPieceBad + (bigGoodTrayBad * 30) + (bigGoodTieBad * 300)) +
-                  (bigGoodPieceBroken + (bigGoodTrayBroken * 30) + (bigGoodTieBroken * 300)))}}</strong> -->
-              </div>
-            </div>
-            <div class="egg-section">
-              <div>
-                <strong>Medium</strong>
-              </div>
-              <img class="eggs medium-category" src='./assets/flaticon/category-medium.png'>
-              <div class="egg-count">
-                <!-- <strong>{{eggStock.mediumEggs - ((mediumGoodPieceBad + (mediumGoodTrayBad * 30) + (mediumGoodTieBad *
-                  300)) + (mediumGoodPieceBroken + (mediumGoodTrayBroken * 30) + (mediumGoodTieBroken *
-                  300)))}}</strong> -->
-              </div>
-            </div>
-            <div class="egg-section">
-              <div>
-                <strong>Small</strong>
-              </div>
-              <img class="eggs small-category" src='./assets/flaticon/category-small.png'>
-              <div class="egg-count">
-                <!-- <strong>{{eggStock.smallEggs - ((smallGoodPieceBad + (smallGoodTrayBad * 30) + (smallGoodTieBad * 300))
-                  + (smallGoodPieceBroken + (smallGoodTrayBroken * 30) + (smallGoodTieBroken * 300)))}}</strong> -->
-              </div>
-            </div>
-          </div>
-
-        </ion-card-content>
-      </ion-card>
-    </ion-col>
+    <ion-col col-md-6 size="6" size-sm></ion-col>
   </ion-row>
 
-  <div class="subtitle" *ngIf="big || medium || small">
+  <div class="subtitle" *ngIf="eggTransferAmountDtos.length > 0">
     <img class="cart-logo" src='./assets/flaticon/transfer.png'>
     <div class="form-section-cart">Transfer</div>
   </div>
-  <div class="divider-wrapper" *ngIf="big || medium || small">
-    <div>
-      <img class="eggs-form" src='./assets/flaticon/good-eggs.png'>
-    </div>
-    <div class="divider-text">
-      <ion-item-divider>
-        <ion-label>Good Eggs</ion-label>
-      </ion-item-divider>
-    </div>
-  </div>
-  <ion-card *ngIf="big || medium || small">
-    <ion-card-content>
-      <div class="divider-wrapper" *ngIf="big">
-        <div>
-          <img class="big-eggs-form" src='./assets/flaticon/big-eggs.png'>
+  <ion-card *ngIf="eggTransferAmountDtos.length > 0">
+    <ion-card-content *ngFor="let eggTransferAmountDto of eggTransferAmountDtos; let i = index">
+      <div class="divider-wrapper">
+        <div class="egg-section">
+          <img *ngIf="eggTransferAmountDto.eggType != 'BAD'"class="big-eggs-form" src='./assets/flaticon/good-category.png'>
+          <img *ngIf="eggTransferAmountDto.eggType == 'BAD'" class="big-eggs-form" src='./assets/flaticon/bad-category.png'>
+          <div class="egg-count">
+            <strong>{{eggTransferAmountDto.quantity - ((eggTransferAmountDto.tieBad * 300)+
+              (eggTransferAmountDto.trayBad * 30) + eggTransferAmountDto.pieceBad +
+              (eggTransferAmountDto.tieUnsellable * 300)+
+              (eggTransferAmountDto.trayUnsellable * 30) + eggTransferAmountDto.pieceUnsellable)}}</strong>
+          </div>
         </div>
         <div class="divider-text">
           <ion-item-divider>
-            <ion-label>Big Eggs</ion-label>
+            <ion-label>{{eggTransferAmountDto.name | titlecase}} Eggs</ion-label>
           </ion-item-divider>
         </div>
       </div>
-      <ion-row *ngIf="big">
-        <ion-col size-xs="12" size-md="4">
-          <div class="egg-form-section-left">
-            <ion-item-divider>
-              <ion-label>Tie</ion-label>
-            </ion-item-divider>
-            <div>
-              <ion-input color="gunung-nago-survey" label="Bad Tie" label-placement="floating" fill="outline"
-                type="number" min="0" clear-input="true" [(ngModel)]="bigGoodTieBad"></ion-input>
-            </div>
-            <div class="mt-1">
-              <ion-input color="gunung-nago-survey" label="Unsellable Tie" label-placement="floating" fill="outline"
-                type="number" min="0" clear-input="true" [(ngModel)]="bigGoodTieBroken"></ion-input>
-            </div>
-          </div>
-        </ion-col>
-        <ion-col size-xs="12" size-md="4">
-          <div class="egg-form-section-left">
-            <ion-item-divider>
-              <ion-label>Tray</ion-label>
-            </ion-item-divider>
-            <div>
-              <ion-input color="gunung-nago-survey" label="Bad Tray" label-placement="floating" fill="outline"
-                type="number" min="0" clear-input="true" [(ngModel)]="bigGoodTrayBad"></ion-input>
-            </div>
-            <div class="mt-1">
-              <ion-input color="gunung-nago-survey" label="Unsellable Tray" label-placement="floating" fill="outline"
-                type="number" min="0" clear-input="true" [(ngModel)]="bigGoodTrayBroken"></ion-input>
-            </div>
-          </div>
-        </ion-col>
-        <ion-col size-xs="12" size-md="4">
-          <div class="egg-form-section-left">
-            <ion-item-divider>
-              <ion-label>Piece</ion-label>
-            </ion-item-divider>
-            <div>
-              <ion-input color="gunung-nago-survey" label="Bad Piece" label-placement="floating" fill="outline"
-                type="number" min="0" clear-input="true" [(ngModel)]="bigGoodPieceBad"></ion-input>
-            </div>
-            <div class="mt-1">
-              <ion-input color="gunung-nago-survey" label="Unsellable Piece" label-placement="floating" fill="outline"
-                type="number" min="0" clear-input="true" [(ngModel)]="bigGoodPieceBroken"></ion-input>
-            </div>
-          </div>
-        </ion-col>
-      </ion-row>
-
-      <div class="divider-wrapper" *ngIf="medium">
-        <div>
-          <img class="medium-eggs-form" src='./assets/flaticon/medium-eggs.png'>
-        </div>
-        <div class="divider-text">
-          <ion-item-divider>
-            <ion-label>Medium Eggs</ion-label>
-          </ion-item-divider>
-        </div>
-      </div>
-      <ion-row *ngIf="medium">
-        <ion-col size-xs="12" size-md="4">
-          <div class="egg-form-section-left">
-            <ion-item-divider>
-              <ion-label>Tie</ion-label>
-            </ion-item-divider>
-            <div>
-              <ion-input color="gunung-nago-survey" label="Bad Tie" label-placement="floating" fill="outline"
-                type="number" min="0" clear-input="true" [(ngModel)]="mediumGoodTieBad"></ion-input>
-            </div>
-            <div class="mt-1">
-              <ion-input color="gunung-nago-survey" label="Unsellable Tie" label-placement="floating" fill="outline"
-                type="number" min="0" clear-input="true" [(ngModel)]="mediumGoodTieBroken"></ion-input>
-            </div>
-          </div>
-        </ion-col>
-        <ion-col size-xs="12" size-md="4">
-          <div class="egg-form-section-left">
-            <ion-item-divider>
-              <ion-label>Tray</ion-label>
-            </ion-item-divider>
-            <div>
-              <ion-input color="gunung-nago-survey" label="Bad Tray" label-placement="floating" fill="outline"
-                type="number" min="0" clear-input="true" [(ngModel)]="mediumGoodTrayBad"></ion-input>
-            </div>
-            <div class="mt-1">
-              <ion-input color="gunung-nago-survey" label="Unsellable Tray" label-placement="floating" fill="outline"
-                type="number" min="0" clear-input="true" [(ngModel)]="mediumGoodTrayBroken"></ion-input>
-            </div>
-          </div>
-        </ion-col>
-        <ion-col size-xs="12" size-md="4">
-          <div class="egg-form-section-left">
-            <ion-item-divider>
-              <ion-label>Piece</ion-label>
-            </ion-item-divider>
-            <div>
-              <ion-input color="gunung-nago-survey" label="Bad Piece" label-placement="floating" fill="outline"
-                type="number" min="0" clear-input="true" [(ngModel)]="mediumGoodPieceBad"></ion-input>
-            </div>
-            <div class="mt-1">
-              <ion-input color="gunung-nago-survey" label="Unsellable Piece" label-placement="floating" fill="outline"
-                type="number" min="0" clear-input="true" [(ngModel)]="mediumGoodPieceBroken"></ion-input>
-            </div>
-          </div>
-        </ion-col>
-      </ion-row>
-
-      <div class="divider-wrapper" *ngIf="small">
-        <div>
-          <img class="small-eggs-form" src='./assets/flaticon/small-eggs.png'>
-        </div>
-        <div class="divider-text">
-          <ion-item-divider>
-            <ion-label>Small Eggs</ion-label>
-          </ion-item-divider>
-        </div>
-      </div>
-      <ion-row *ngIf="small">
-        <ion-col size-xs="12" size-md="4">
-          <div class="egg-form-section-left">
-            <ion-item-divider>
-              <ion-label>Tie</ion-label>
-            </ion-item-divider>
-            <div>
-              <ion-input color="gunung-nago-survey" label="Bad Tie" label-placement="floating" fill="outline"
-                type="number" min="0" clear-input="true" [(ngModel)]="smallGoodTieBad"></ion-input>
-            </div>
-            <div class="mt-1">
-              <ion-input color="gunung-nago-survey" label="Unsellable Tie" label-placement="floating" fill="outline"
-                type="number" min="0" clear-input="true" [(ngModel)]="smallGoodTieBroken"></ion-input>
-            </div>
-          </div>
-        </ion-col>
-        <ion-col size-xs="12" size-md="4">
-          <div class="egg-form-section-left">
-            <ion-item-divider>
-              <ion-label>Tray</ion-label>
-            </ion-item-divider>
-            <div>
-              <ion-input color="gunung-nago-survey" label="Bad Tray" label-placement="floating" fill="outline"
-                type="number" min="0" clear-input="true" [(ngModel)]="smallGoodTrayBad"></ion-input>
-            </div>
-            <div class="mt-1">
-              <ion-input color="gunung-nago-survey" label="Unsellable Tray" label-placement="floating" fill="outline"
-                type="number" min="0" clear-input="true" [(ngModel)]="smallGoodTrayBroken"></ion-input>
-            </div>
-          </div>
-        </ion-col>
-        <ion-col size-xs="12" size-md="4">
-          <div class="egg-form-section-left">
-            <ion-item-divider>
-              <ion-label>Piece</ion-label>
-            </ion-item-divider>
-            <div>
-              <ion-input color="gunung-nago-survey" label="Bad Piece" label-placement="floating" fill="outline"
-                type="number" min="0" clear-input="true" [(ngModel)]="smallGoodPieceBad"></ion-input>
-            </div>
-            <div class="mt-1">
-              <ion-input color="gunung-nago-survey" label="Unsellable Piece" label-placement="floating" fill="outline"
-                type="number" min="0" clear-input="true" [(ngModel)]="smallGoodPieceBroken"></ion-input>
-            </div>
-          </div>
-        </ion-col>
-      </ion-row>
-    </ion-card-content>
-  </ion-card>
-
-  <div class="divider-wrapper" *ngIf="bad">
-    <div>
-      <img class="eggs-form" src='./assets/flaticon/bad-eggs.png'>
-    </div>
-    <div class="divider-text">
-      <ion-item-divider>
-        <ion-label>Bad Eggs</ion-label>
-      </ion-item-divider>
-    </div>
-  </div>
-  <ion-card *ngIf="bad">
-    <ion-card-content>
       <ion-row>
         <ion-col size-xs="12" size-md="4">
           <div class="egg-form-section-left">
             <ion-item-divider>
               <ion-label>Tie</ion-label>
             </ion-item-divider>
+            <div *ngIf="eggTransferAmountDto.eggType != 'BAD'">
+              <ion-input color="gunung-nago-survey" label="Bad Tie" label-placement="floating" fill="outline"
+                type="number" min="0" clear-input="true" [(ngModel)]="eggTransferAmountDto.tieBad"></ion-input>
+            </div>
             <div class="mt-1">
               <ion-input color="gunung-nago-survey" label="Unsellable Tie" label-placement="floating" fill="outline"
-                type="number" min="0" clear-input="true" [(ngModel)]="badTieBroken"></ion-input>
+                type="number" min="0" clear-input="true"
+                [(ngModel)]="eggTransferAmountDto.tieUnsellable"></ion-input>
             </div>
           </div>
         </ion-col>
@@ -456,9 +157,14 @@
             <ion-item-divider>
               <ion-label>Tray</ion-label>
             </ion-item-divider>
+            <div *ngIf="eggTransferAmountDto.eggType != 'BAD'">
+              <ion-input color="gunung-nago-survey" label="Bad Tray" label-placement="floating" fill="outline"
+                type="number" min="0" clear-input="true" [(ngModel)]="eggTransferAmountDto.trayBad"></ion-input>
+            </div>
             <div class="mt-1">
               <ion-input color="gunung-nago-survey" label="Unsellable Tray" label-placement="floating" fill="outline"
-                type="number" min="0" clear-input="true" [(ngModel)]="badTrayBroken"></ion-input>
+                type="number" min="0" clear-input="true"
+                [(ngModel)]="eggTransferAmountDto.trayUnsellable"></ion-input>
             </div>
           </div>
         </ion-col>
@@ -467,13 +173,19 @@
             <ion-item-divider>
               <ion-label>Piece</ion-label>
             </ion-item-divider>
+            <div *ngIf="eggTransferAmountDto.eggType != 'BAD'">
+              <ion-input color="gunung-nago-survey" label="Bad Piece" label-placement="floating" fill="outline"
+                type="number" min="0" clear-input="true" [(ngModel)]="eggTransferAmountDto.pieceBad"></ion-input>
+            </div>
             <div class="mt-1">
               <ion-input color="gunung-nago-survey" label="Unsellable Piece" label-placement="floating" fill="outline"
-                type="number" min="0" clear-input="true" [(ngModel)]="badPieceBroken"></ion-input>
+                type="number" min="0" clear-input="true"
+                [(ngModel)]="eggTransferAmountDto.pieceUnsellable"></ion-input>
             </div>
           </div>
         </ion-col>
       </ion-row>
+
     </ion-card-content>
   </ion-card>
 

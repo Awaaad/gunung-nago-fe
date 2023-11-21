@@ -104,6 +104,7 @@ export class SalesInvoiceListComponent {
   }
 
   ionViewWillEnter(): void {
+    this.isStatusModalOpen = false;
     this.salesInvoiceTypes = Object.keys(SalesInvoiceType);
     this.salesInvoiceStatuses = Object.keys(SalesInvoiceStatus);
     this.salesInvoiceCategories = Object.keys(SalesInvoiceCategory);

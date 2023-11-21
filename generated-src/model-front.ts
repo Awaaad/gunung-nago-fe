@@ -240,16 +240,6 @@ export class PurchaseInvoiceDetailsFrontDto {
     purchaseDetailsDtos!: PurchaseDetailsDto[] | [] | null | undefined;
 }
 
-export class EggTransferFrontDto {
-    bigGoodToBadEggs: number | null | undefined | any;
-    bigGoodBrokenEggs: number | null | undefined | any;
-    mediumGoodToBadEggs: number | null | undefined | any;
-    mediumGoodBrokenEggs: number | null | undefined | any;
-    smallGoodToBadEggs: number | null | undefined | any;
-    smallGoodBrokenEggs: number | null | undefined | any;
-    badBrokenEggs: number | null | undefined | any;
-}
-
 export class FlockToCage {
     cageId: number | null | undefined | any;
     flockId: number | null | undefined | any;
@@ -317,4 +307,22 @@ export class SettleCustomerCreditPaymentFrontDto {
     soldAtForUnlockedCreditPayments!: number | null | undefined | any;
     paymentDtos!: PaymentSaveFrontDto[] | [] | null | undefined;
     paymentDeadline!: Date | any;
+}
+
+export class EggTransferFrontDto {
+    eggCategoryId: number | null | undefined | any;
+    bad: number | null | undefined | any;
+    unsellable: number | null | undefined | any;
+}
+export class EggTransferAmountFrontDto {
+    eggCategoryId: number | null | undefined | any;
+    name: string | null | undefined | any;
+    eggType: EggType | null | undefined | any;
+    quantity: number | null | undefined | any;
+    pieceBad: number | null | undefined | any;
+    pieceUnsellable: number | null | undefined | any;
+    tieBad: number | null | undefined | any;
+    tieUnsellable: number | null | undefined | any;
+    trayBad: number | null | undefined | any;
+    trayUnsellable: number | null | undefined | any;
 }

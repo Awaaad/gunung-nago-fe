@@ -214,7 +214,8 @@
           *ngFor="let eggCategory of eggCategoriesFields?.controls; let i = index">
           <div class="divider-wrapper">
             <div class="egg-section">
-              <img class="big-eggs-form" src='./assets/flaticon/big-eggs.png'>
+              <img *ngIf="eggCategory.get('eggType')?.value != 'BAD'" class="big-eggs-form" src='./assets/flaticon/good-category.png'>
+              <img *ngIf="eggCategory.get('eggType')?.value == 'BAD'" class="big-eggs-form" src='./assets/flaticon/bad-category.png'>
               <div class="egg-count">
                 <strong>{{eggCategory.get('quantity')?.value - ((eggCategory.get('tie')?.value * 300)+
                   (eggCategory.get('tray')?.value * 30) + eggCategory.get('piece')?.value)}}</strong>
