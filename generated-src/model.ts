@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2023-11-16 23:41:15.
+// Generated using typescript-generator version 3.2.1263 on 2023-11-21 16:23:43.
 
 export class CageDto {
     id!: number;
@@ -44,6 +44,14 @@ export class EggCategoryDto {
     eggType!: EggType;
 }
 
+export class EggCategoryReportDto {
+    eggCategoryId!: number;
+    name!: string;
+}
+
+export class EggCategoryReportDtoBuilder {
+}
+
 export class EggCategorySaleDto {
     eggCategoryId!: number;
     piece!: number;
@@ -62,6 +70,36 @@ export class EggCategoryStockDto {
     name!: string;
     eggType!: EggType;
     quantity!: number;
+}
+
+export class EggReportDto {
+    name!: string;
+    date!: Date;
+    yesterdayTie!: number;
+    yesterdayPiece!: number;
+    yesterdayBad!: number;
+    todayInTie!: number;
+    todayInPiece!: number;
+    todayInBad!: number;
+    todayOutTie!: number;
+    todayOutPiece!: number;
+    todayOutBad!: number;
+    todayRemainingTie!: number;
+    todayRemainingPiece!: number;
+    todayRemainingBad!: number;
+    eggTransactionInGoodTodayDetailsDtos!: EggTransactionTodayDetailsDto[];
+    eggTransactionInBadTodayDetailsDtos!: EggTransactionTodayDetailsDto[];
+    eggTransactionOutGoodTodayDetailsDtos!: EggTransactionTodayDetailsDto[];
+    eggTransactionOutBadTodayDetailsDtos!: EggTransactionTodayDetailsDto[];
+}
+
+export class EggReportDtoBuilder {
+}
+
+export class EggReportSearchCriteriaDto {
+    detailed!: boolean;
+    date!: Date;
+    eggCategoryId!: number;
 }
 
 export class EggSaleSaveDto {
@@ -93,14 +131,26 @@ export class EggStockDto {
 export class EggStockDtoBuilder {
 }
 
+export class EggTransactionTodayDetailsDto {
+    customerFirstName!: string;
+    customerLastName!: string;
+    comment!: string;
+    quantity!: number;
+    tie!: number;
+    piece!: number;
+    eggRecordType!: EggRecordType;
+}
+
+export class EggTransactionTodayDetailsDtoBuilder {
+}
+
 export class EggTransferDto {
-    bigGoodToBadEggs!: number;
-    bigGoodBrokenEggs!: number;
-    mediumGoodToBadEggs!: number;
-    mediumGoodBrokenEggs!: number;
-    smallGoodToBadEggs!: number;
-    smallGoodBrokenEggs!: number;
-    badBrokenEggs!: number;
+    eggCategoryId!: number;
+    bad!: number;
+    unsellable!: number;
+}
+
+export class EggTransferDtoBuilder {
 }
 
 export class FarmDto {
@@ -370,7 +420,6 @@ export class ManureSaleSaveDtoBuilder {
 }
 
 export class ManureStockDto {
-    id!: number;
     weight!: number;
     bags!: number;
 }
@@ -597,7 +646,6 @@ export class DailyProductionReportDto {
 
 export class SalesInvoiceDetailsDto {
     id!: number;
-    receiptId!: number;
     totalPrice!: number;
     soldAt!: number;
     createdBy!: string;
@@ -617,7 +665,6 @@ export class SalesInvoiceDetailsDto {
 
 export class SalesInvoiceDto {
     id!: number;
-    receiptId!: number;
     salesInvoiceType!: SalesInvoiceType;
     totalPrice!: number;
     soldAt!: number;
@@ -765,6 +812,13 @@ export enum EggType {
 export enum SalesInvoiceCategory {
     IN_STORE = 'IN_STORE',
     DELIVERY = 'DELIVERY',
+}
+
+export enum EggRecordType {
+    SURVEY = 'SURVEY',
+    SALE = 'SALE',
+    TRANSFER = 'TRANSFER',
+    BURDEN_TRANSFER_BAD_DESTROYED = 'BURDEN_TRANSFER_BAD_DESTROYED',
 }
 
 export enum FeedCategory {

@@ -275,7 +275,6 @@ export class PointOfSaleComponent implements OnInit {
 
   private getManureStock(): void {
     this.manureStock = {
-      id: 0,
       weight: 0,
       bags: 0
     }
