@@ -52,10 +52,6 @@ export class SalesInvoiceDetailsComponent implements OnInit {
   ngOnInit() {
     this.initialiseSalesInvoices();
     this.findSalesInvoiceDetailsById();
-
-    // this.receiptApiService.findFlockReceiptDetailsById(this.salesInvoiceId).subscribe(data => {
-    //   console.log(data);
-    // })
   }
 
   public generateSaleInvoicePdf(): void {

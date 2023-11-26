@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2023-11-26 13:52:01.
+// Generated using typescript-generator version 3.2.1263 on 2023-11-26 17:02:28.
 
 export class BankAccountDto {
     id!: number;

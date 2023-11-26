@@ -17,6 +17,7 @@ export class SideNavComponent  implements OnInit {
   public pos = 'assets/flaticon/point-of-sale-icon.svg';
   public transfer = 'assets/flaticon/transfer-icon.svg';
   public customer = 'assets/flaticon/customer-icon.svg';
+  public bankAccount = 'assets/flaticon/bank-account-icon.svg';
   constructor() { }
 
   ngOnInit() {}

@@ -1,0 +1,152 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      <div class="router-links">
+        <div class="title">
+          <img class="header-logo" src='./assets/flaticon/bank-account.png'>
+          <h3 class="header-nav-products">Bank Accounts</h3>
+        </div>
+        <div>
+          <ion-item class="language-selection">
+            <ion-select aria-label="language" interface="popover" placeholder="Select language" [(ngModel)]="language"
+              (ionChange)="ionChangeLanguage($event)">
+              <ion-select-option value="en">English</ion-select-option>
+              <ion-select-option value="id">Indonesian</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </div>
+      </div>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="false" class="ion-padding" [scrollEvents]="true" (ionScroll)="onScroll($event)">
+  <div class="btn-container">
+    <ion-button color="neutral-btn" routerLink="/bank-account/bank-account-details"><ion-icon
+        name="add"></ion-icon></ion-button>
+  </div>
+  <ion-card>
+    <ion-card-content>
+      <ion-row>
+        <ion-col size-xs="12" size-md="6">
+          <ion-searchbar placeholder="Search by account holder..." type="text" #accountHolder
+            (ionInput)="searchByAccountHolder(accountHolder.value)"></ion-searchbar>
+        </ion-col>
+        <ion-col size-xs="12" size-md="6">
+          <div class="filters">
+            <div>
+
+            </div>
+            <div>
+              <ion-button class="reset" (click)="reset()">Reset Filters</ion-button>
+            </div>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <div class="mat-elevation-z8 table-responsive">
+      <table mat-table matSort (matSortChange)="sortData($event)" matSortDisableClear="true"
+        [dataSource]="bankAccounts">
+
+        <ng-container matColumnDef="accountHolder">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="accountHolder"> Account Holder </th>
+          <td mat-cell *matCellDef="let element"> {{element.accountHolder | uppercase}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="accountNumber">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="accountNumber"> Account Number </th>
+          <td mat-cell *matCellDef="let element"> {{element.accountNumber}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="bankName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="bankName"> Bank Name </th>
+          <td mat-cell *matCellDef="let element"> {{element.bankName}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="edit">
+          <th mat-header-cell *matHeaderCellDef> </th>
+          <td mat-cell *matCellDef="let element">
+            <div class="table-btn">
+              <ion-icon class="table-edit-icon" color="neutral-btn" (click)="openModal(element)"
+                name="create"></ion-icon>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+  </ion-card>
+  <ion-infinite-scroll threshold="100px" position="bottom" (ionInfinite)="loadData($event)">
+    <ion-infinite-scroll-content loadingSpinner="crescent" loadingText="Loading more bank accounts...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+
+
+  <ion-modal (willDismiss)="onWillDismiss($event)" [isOpen]="isModalOpen" cssClass="cage-modal" backdropDismiss="true">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <div class="title">
+            <img class="header-logo ml-15" src='./assets/flaticon/edit.png'>
+            <h3 class="modal-header-text">Edit Bank Account</h3>
+          </div>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content [fullscreen]="false" class="ion-padding">
+        <form [formGroup]="bankAccountEditForm">
+          <ion-row>
+            <ion-col size-xs="12" size-md="6">
+              <ion-input color="gunung-nago-primary" label="Account Holder*" label-placement="floating" fill="outline"
+                type="text" clear-input="true" formControlName="accountHolder" required="true"></ion-input>
+              <div class="error-messages">
+                <ng-container *ngFor="let error of errorMessages.accountHolder">
+                  <div class="error-message"
+                    *ngIf="bankAccountEditForm.get('accountHolder')?.hasError(error.type) && (bankAccountEditForm.get('accountHolder')?.dirty || bankAccountEditForm.get('accountHolder')?.touched)">
+                    {{ error.message }}
+                  </div>
+                </ng-container>
+              </div>
+            </ion-col>
+            <ion-col size-xs="12" size-md="6">
+              <ion-input color="gunung-nago-primary" label="Account Number*" label-placement="floating" fill="outline"
+                type="text" clear-input="true" formControlName="accountNumber" required="true"></ion-input>
+              <div class="error-messages">
+                <ng-container *ngFor="let error of errorMessages.accountNumber">
+                  <div class="error-message"
+                    *ngIf="bankAccountEditForm.get('accountNumber')?.hasError(error.type) && (bankAccountEditForm.get('accountNumber')?.dirty || bankAccountEditForm.get('accountNumber')?.touched)">
+                    {{ error.message }}
+                  </div>
+                </ng-container>
+              </div>
+            </ion-col>
+            <ion-col size-xs="12" size-md="6">
+              <ion-input color="gunung-nago-primary" label="Bank Name*" label-placement="floating" fill="outline"
+                type="text" clear-input="true" formControlName="bankName" required="true"></ion-input>
+              <div class="error-messages">
+                <ng-container *ngFor="let error of errorMessages.bankName">
+                  <div class="error-message"
+                    *ngIf="bankAccountEditForm.get('bankName')?.hasError(error.type) && (bankAccountEditForm.get('bankName')?.dirty || bankAccountEditForm.get('bankName')?.touched)">
+                    {{ error.message }}
+                  </div>
+                </ng-container>
+              </div>
+            </ion-col>
+          </ion-row>
+        </form>
+        <div class="modal-btn-container ion-text-right">
+          <ion-button class="cancel-btn" (click)="cancel()">Cancel</ion-button>
+          <ion-button color="positive-btn" (click)="confirm()">Save</ion-button>
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+</ion-content>

@@ -1,6 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { EggCategoryDto } from "generated-src/model";
+import { PageResult } from "generated-src/model-front";
 import { Observable } from "rxjs";
 import { environment } from "src/environments/environment";
 
@@ -12,6 +13,14 @@ export class EggCategoryApiService {
 
   public save(eggCategories: any): Observable<any> {
     return this.http.post(`${this.baseUrl}`, eggCategories, { responseType: 'text' });
+  }
+
+  public search(searchValues: any): Observable<PageResult<EggCategoryDto>> {
+    return this.http.get<PageResult<EggCategoryDto>>(`${this.baseUrl}search`, { params: searchValues });
+  }
+
+  public edit(eggCategory: EggCategoryDto): Observable<any> {
+    return this.http.put(`${this.baseUrl}`, eggCategory);
   }
 
   public findAll(): Observable<EggCategoryDto[]> {

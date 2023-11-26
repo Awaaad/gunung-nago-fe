@@ -43,6 +43,14 @@ const routes: Routes = [
     loadChildren: () => import('./features/supplier/supplier.module').then(m => m.SupplierModule)
   },
   {
+    path: 'payment-mode',
+    loadChildren: () => import('./features/payment/payment.module').then(m => m.PaymentModule)
+  },
+  {
+    path: 'bank-account',
+    loadChildren: () => import('./features/bank-account/bank-account.module').then(m => m.BankAccountModule)
+  },
+  {
     path: 'customer',
     loadChildren: () => import('./features/customer/customer.module').then(m => m.CustomerModule)
   },

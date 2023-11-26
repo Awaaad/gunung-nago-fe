@@ -4,6 +4,8 @@ import { EggSaleDetailsComponent } from './egg-sale-details/egg-sale-details.com
 import { EggTransferComponent } from './egg-transfer/egg-transfer.component';
 import { EggStockComponent } from './egg-stock/egg-stock.component';
 import { EggReportComponent } from './egg-report/egg-report.component';
+import { EggCategoryDetailsComponent } from './egg-category-details/egg-category-details.component';
+import { EggCategoryListComponent } from './egg-category-list/egg-category-list.component';
 
 const routes: Routes = [
   {
@@ -21,6 +23,14 @@ const routes: Routes = [
   {
     path: 'egg-report',
     component: EggReportComponent
+  },
+  {
+    path: 'egg-category-list',
+    component: EggCategoryListComponent
+  },
+  {
+    path: 'egg-category-details',
+    component: EggCategoryDetailsComponent
   },
 ];
 
