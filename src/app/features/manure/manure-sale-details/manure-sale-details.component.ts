@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { IonModal } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { CustomerDto, ManureStockDto, PaymentType, SalesInvoiceCategory, UserDto } from 'generated-src/model';
+import { BankAccountDto, CustomerDto, ManureStockDto, PaymentModeDto, SalesInvoiceCategory, UserDto } from 'generated-src/model';
 import { CustomerFrontDto, ManureSaleSaveFrontDto } from 'generated-src/model-front';
 import { Subscription, debounceTime, distinctUntilChanged, filter, finalize, switchMap, tap } from 'rxjs';
 import { CustomerApiService } from 'src/app/shared/apis/customer.api.service';
@@ -14,6 +14,8 @@ import * as moment from 'moment';
 import { UtilsService } from 'src/app/shared/utils/utils.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { PaymentModeApiService } from 'src/app/shared/apis/payment-mode.api.service';
+import { BankAccountApiService } from 'src/app/shared/apis/bank-account.api.service';
 
 @Component({
   selector: 'app-manure-sale-details',
@@ -61,6 +63,10 @@ export class ManureSaleDetailsComponent implements OnInit {
   public regNo = environment.regNo;
   public yoe = environment.yoe;
 
+  public bankAccounts: BankAccountDto[] = [];
+  public paymentModes: PaymentModeDto[] = [];
+  public completePaymentModes: PaymentModeDto[] = [];
+
   public errorMessages = {
     firstName: [{ type: "required", message: "First name is required" }],
     lastName: [{ type: "required", message: "Last name is required" }],
@@ -81,7 +87,7 @@ export class ManureSaleDetailsComponent implements OnInit {
       { type: 'min', message: 'Sold at cannot be less than 0' },
       { type: 'max', message: 'Sold at cannot be more than Total Price' },
     ],
-    paymentType: [
+    paymentModeId: [
       { type: 'required', message: 'Payment mode is required' },
     ],
     minValue: [
@@ -89,6 +95,9 @@ export class ManureSaleDetailsComponent implements OnInit {
     ],
     maxValue: [
       { type: 'max', message: 'Value cannot be greater than quantity in stock' }
+    ],
+    bankAccountId: [
+      { type: 'required', message: 'Bank account is required' },
     ]
   };
 
@@ -99,7 +108,9 @@ export class ManureSaleDetailsComponent implements OnInit {
     private manureStockApiService: ManureStockApiService,
     private securityApiService: SecurityApiService,
     private translateService: TranslateService,
-    private utilsService: UtilsService
+    private utilsService: UtilsService,
+    private bankAccountApiService: BankAccountApiService,
+    private paymentModeApiService: PaymentModeApiService
   ) { }
 
   ngOnInit() {
@@ -107,12 +118,26 @@ export class ManureSaleDetailsComponent implements OnInit {
     this.initialiseFormBuilder();
     this.initialiseSelectedCustomer();
     this.searchCustomerAutoComplete();
-    this.paymentTypes = Object.keys(PaymentType);
     this.salesInvoiceCategories = Object.keys(SalesInvoiceCategory);
   }
 
   ionViewWillEnter(): void {
     this.getManureStock();
+    this.getAllPaymentModes();
+    this.getAllBankAccounts();
+  }
+
+  public getAllPaymentModes() {
+    this.paymentModeApiService.findAll().subscribe(paymentModes => {
+      this.paymentModes = paymentModes;
+      this.completePaymentModes = paymentModes;
+    })
+  }
+
+  public getAllBankAccounts() {
+    this.bankAccountApiService.findAll().subscribe(bankAccounts => {
+      this.bankAccounts = bankAccounts;
+    })
   }
 
   public ionChangeLanguage(event: any): void {
@@ -289,7 +314,10 @@ export class ManureSaleDetailsComponent implements OnInit {
         Validators.required,
         Validators.min(0)
       ])),
-      paymentType: new FormControl('CASH', Validators.compose([
+      paymentModeId: new FormControl(null, Validators.compose([
+        Validators.required
+      ])),
+      bankAccountId: new FormControl(1, Validators.compose([
         Validators.required
       ])),
       paymentDeadline: new FormControl(moment(new Date()).startOf('day').format(moment.HTML5_FMT.DATE), Validators.compose([
@@ -342,6 +370,7 @@ export class ManureSaleDetailsComponent implements OnInit {
     this.populateManureSaleSaveDtoWithFormValues();
     this.manureSaleSaveFrontDto.paymentSaveDtos?.forEach(payment => {
       payment.paymentDeadline = moment(payment.paymentDeadline).startOf('day').format(moment.HTML5_FMT.DATE)
+      payment.paymentModeId = payment.paymentModeId.id
     })
     this.manureSaleApiService.save(this.manureSaleSaveFrontDto).subscribe({
       next: (data: string) => {
@@ -391,9 +420,9 @@ export class ManureSaleDetailsComponent implements OnInit {
 
   public openModal(): void {
     if (!this.checkIfCreditAllowed()) {
-      this.paymentTypes = this.paymentTypes.filter(payment => payment != PaymentType.CREDIT);
+      this.paymentModes = this.completePaymentModes.filter(paymentMode => paymentMode.id != 1);
     } else {
-      this.paymentTypes = Object.keys(PaymentType);
+      this.paymentModes = this.completePaymentModes;
     }
     this.initialisePaymentFormBuilder();
     this.isModalOpen = true;

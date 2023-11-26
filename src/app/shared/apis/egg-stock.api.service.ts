@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { EggReportDto, EggStockDto } from 'generated-src/model';
+import { EggStockDto } from 'generated-src/model';
 import { EggStockFrontDto, EggTransferFrontDto } from 'generated-src/model-front';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -13,10 +13,6 @@ export class EggStockApiService {
 
   public findEggStockForSale(): Observable<EggStockDto> {
     return this.http.get<EggStockDto>(`${this.baseUrl}`);
-  }
-
-  public findEggCategoryStockTransactionsByEggStockAndDate(searchValues: any): Observable<EggReportDto[]> {
-    return this.http.get<EggReportDto[]>(`${this.baseUrl}report`, { params: searchValues });
   }
 
   public edit(eggStockDto: EggStockFrontDto): Observable<any> {

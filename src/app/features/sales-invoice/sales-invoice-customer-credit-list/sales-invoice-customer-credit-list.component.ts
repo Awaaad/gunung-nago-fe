@@ -7,7 +7,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IonInfiniteScroll, IonModal } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { SalesInvoiceDto, UserDto, SalesInvoiceType, SalesInvoiceStatus, SalesInvoiceCategory, PaymentType, PaymentDto, SettleCustomerCreditPaymentDto } from 'generated-src/model';
+import { SalesInvoiceDto, UserDto, SalesInvoiceType, SalesInvoiceStatus, SalesInvoiceCategory, PaymentDto, BankAccountDto, PaymentModeDto } from 'generated-src/model';
 import { SettleCustomerCreditPaymentFrontDto } from 'generated-src/model-front';
 import * as moment from 'moment';
 import { Subscription } from 'rxjs';
@@ -16,6 +16,8 @@ import { SalesInvoiceApiService } from 'src/app/shared/apis/sales-invoice.api.se
 import { SecurityApiService } from 'src/app/shared/apis/security.api.service';
 import { UtilsService } from 'src/app/shared/utils/utils.service';
 import { OverlayEventDetail } from '@ionic/core/components';
+import { PaymentModeApiService } from 'src/app/shared/apis/payment-mode.api.service';
+import { BankAccountApiService } from 'src/app/shared/apis/bank-account.api.service';
 
 @Component({
   selector: 'app-sales-invoice-customer-credit-list',
@@ -68,6 +70,9 @@ export class SalesInvoiceCustomerCreditListComponent {
   public discountOnTotalCredit!: number;
   public paymentDeadline = moment(this.today).startOf('day').format(moment.HTML5_FMT.DATE);
 
+  public bankAccounts: BankAccountDto[] = [];
+  public paymentModes: PaymentModeDto[] = [];
+
   public errorMessages = {
     name: [
       { type: 'required', message: 'Name is required' },
@@ -91,7 +96,7 @@ export class SalesInvoiceCustomerCreditListComponent {
       { type: 'min', message: 'Sold at cannot be less than 0' },
       { type: 'max', message: 'Sold at cannot be more than Total Price' },
     ],
-    paymentType: [
+    paymentModeId: [
       { type: 'required', message: 'Payment mode is required' },
     ],
     minValue: [
@@ -99,6 +104,9 @@ export class SalesInvoiceCustomerCreditListComponent {
     ],
     maxValue: [
       { type: 'max', message: 'Value cannot be greater than quantity in stock' }
+    ],
+    bankAccountId: [
+      { type: 'required', message: 'Bank account is required' },
     ]
   };
 
@@ -110,7 +118,9 @@ export class SalesInvoiceCustomerCreditListComponent {
     private router: Router,
     private securityApiService: SecurityApiService,
     private translateService: TranslateService,
-    private utilsService: UtilsService
+    private utilsService: UtilsService,
+    private bankAccountApiService: BankAccountApiService,
+    private paymentModeApiService: PaymentModeApiService
   ) {
   }
 
@@ -118,8 +128,8 @@ export class SalesInvoiceCustomerCreditListComponent {
     this.salesInvoiceTypes = Object.keys(SalesInvoiceType);
     this.salesInvoiceStatuses = Object.keys(SalesInvoiceStatus);
     this.salesInvoiceCategories = Object.keys(SalesInvoiceCategory);
-    this.paymentTypes = Object.keys(PaymentType);
-    this.paymentTypes = this.paymentTypes.filter(paymentType => paymentType != PaymentType.CREDIT);
+    this.getAllPaymentModes();
+    this.getAllBankAccounts();
     this.getRouteParams();
     this.getAllUsernames();
     this.getAllDrivers();
@@ -134,6 +144,19 @@ export class SalesInvoiceCustomerCreditListComponent {
       }
       );
   }
+
+  public getAllPaymentModes() {
+    this.paymentModeApiService.findAll().subscribe(paymentModes => {
+      this.paymentModes = paymentModes.filter(paymentMode => paymentMode.id != 1);
+    })
+  }
+
+  public getAllBankAccounts() {
+    this.bankAccountApiService.findAll().subscribe(bankAccounts => {
+      this.bankAccounts = bankAccounts;
+    })
+  }
+
 
   public ionChangeLanguage(event: any): void {
     this.translateService.use(event.detail.value);
@@ -267,7 +290,7 @@ export class SalesInvoiceCustomerCreditListComponent {
     this.salesInvoiceStatus = '';
     this.salesInvoiceCategory = '';
     this.username = '';
-    this.amountDue = 0;  
+    this.amountDue = 0;
     this.soldAt = 0;
     this.amountPaid = 0;
     this.totalAmountDue = 0;
@@ -277,7 +300,7 @@ export class SalesInvoiceCustomerCreditListComponent {
     this.discountOnTotalCredit = 0;
     this.getRouteParams();
     this.paymentDeadline = moment(this.today).startOf('day').format(moment.HTML5_FMT.DATE);
-    
+
     this.initialisePaymentFormBuilder();
     this.utilsService.presentLoadingDuration(500).then(() => {
       this.search();
@@ -307,7 +330,7 @@ export class SalesInvoiceCustomerCreditListComponent {
   public getTotalAmountPaid(paymentDto: PaymentDto[]): number {
     let sum = 0;
     paymentDto.forEach(payment => {
-      if (payment.paymentType !== PaymentType.CREDIT)
+      if (payment.paymentModeId !== 1)
         sum = sum + payment.amountPaid;
     })
     return sum;
@@ -373,7 +396,10 @@ export class SalesInvoiceCustomerCreditListComponent {
         Validators.required,
         Validators.min(0)
       ])),
-      paymentType: new FormControl('CASH', Validators.compose([
+      paymentModeId: new FormControl(null, Validators.compose([
+        Validators.required
+      ])),
+      bankAccountId: new FormControl(1, Validators.compose([
         Validators.required
       ])),
       paymentDeadline: new FormControl(moment(new Date()).startOf('day').format(moment.HTML5_FMT.DATE), Validators.compose([
@@ -427,6 +453,9 @@ export class SalesInvoiceCustomerCreditListComponent {
       paymentDtos: this.paymentForm.value.payments,
       paymentDeadline: moment(this.paymentDeadline).startOf('day').format(moment.HTML5_FMT.DATE)
     }
+    this.settleCustomerCreditPaymentDto.paymentDtos?.forEach(payment => {
+      payment.paymentModeId = payment.paymentModeId.id
+    })
   }
 
   public calculateTotalAmountDue(soldAt: number): void {

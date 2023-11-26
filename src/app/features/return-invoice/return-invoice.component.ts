@@ -5,7 +5,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
 import { IonModal } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { PaymentType, SaleDetailsDto, SalesInvoiceDto } from 'generated-src/model';
+import { SaleDetailsDto, SalesInvoiceDto } from 'generated-src/model';
 import { SaleSaveFrontDto, SalesInvoiceDetailsForReturnFrontDto, SaleDetailsForReturnFrontDto, SalesInvoiceDetailsFrontDto, SalesInvoiceDetailsFrontForReturnDto } from 'generated-src/model-front';
 import * as moment from 'moment';
 import { ReturnApiService } from 'src/app/shared/apis/return.api.service';
@@ -240,11 +240,11 @@ export class ReturnInvoiceComponent  implements OnInit {
 
   public openModal(): void {
     this.calculateTotalPrice();
-    if (!this.checkIfCreditAllowed()) {
-      this.paymentTypes = this.paymentTypes.filter(payment => payment != PaymentType.CREDIT);
-    } else {
-      this.paymentTypes = Object.keys(PaymentType);
-    }
+    // if (!this.checkIfCreditAllowed()) {
+    //   this.paymentTypes = this.paymentTypes.filter(payment => payment != PaymentType.CREDIT);
+    // } else {
+    //   this.paymentTypes = Object.keys(PaymentType);
+    // }
     this.initialisePaymentFormBuilder();
     this.isModalOpen = true;
   }

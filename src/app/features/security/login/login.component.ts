@@ -56,6 +56,9 @@ export class LoginComponent implements OnInit {
       password: this.formLogin.get('password')?.value,
       farmId: 1
     }
+    if (loginParam.username === 'enggi') {
+      loginParam.farmId = 2
+    }
     this.submitted = true;
     if (this.formLogin.invalid) {
       this.utilService.unsuccessMsg('Invalid Username or Password', 'danger');
@@ -68,12 +71,22 @@ export class LoginComponent implements OnInit {
           localStorage.setItem('cashier', data.userDto.firstName);
           localStorage.setItem('role', data.userDto.roles[0].role);
           localStorage.setItem('token', data.token);
-          const user = {
-            username: data.userDto.username,
-            role: ['ADMIN'],
-            farmId: 1
+          if (data.userDto.username === 'enggi') {
+            const user = {
+              username: data.userDto.username,
+              role: ['ADMIN'],
+              farmId: 2
+            }
+            this.loginLogoutService.loginUser(user);
+          } else {
+            const user = {
+              username: data.userDto.username,
+              role: ['ADMIN'],
+              farmId: 1
+            }
+            this.loginLogoutService.loginUser(user);
           }
-          this.loginLogoutService.loginUser(user);
+
           if (localStorage.getItem('role') === 'ADMIN') {
             this.router.navigateByUrl('/home');
           } else if (localStorage.getItem('role') === 'CASHIER') {
