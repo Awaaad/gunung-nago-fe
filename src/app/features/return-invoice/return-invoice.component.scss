@@ -75,6 +75,15 @@ tbody {
     color: white;
 }
 
+.show-return{
+    background-color: var(--ion-color-neutral-btn);
+}
+
+.divider-stock-img {
+    margin: 4px 0px 0 10px;
+    width: 2.5em;
+}
+
 .mdc-data-table__header-cell {
     color: white;
 }
@@ -84,6 +93,9 @@ h5 {
     margin-bottom: 0;
 }
 
+.customer-input{
+    border-bottom: none;
+}
 ion-card-content {
     .main {
         color: black;
