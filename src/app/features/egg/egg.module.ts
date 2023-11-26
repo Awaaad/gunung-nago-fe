@@ -23,6 +23,7 @@ import { EggStockComponent } from './egg-stock/egg-stock.component';
 import { EggReportComponent } from './egg-report/egg-report.component';
 import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter } from '@angular/material-moment-adapter';
 import { MY_FORMATS } from '../report/report.module';
+import { ReportApiService } from 'src/app/shared/apis/report.api.service';
 
 
 @NgModule({
@@ -43,6 +44,6 @@ import { MY_FORMATS } from '../report/report.module';
     MatDatepickerModule,
     MatNativeDateModule,
   ],
-  providers: [CustomerApiService, EggStockApiService, EggSaleApiService, SecurityApiService]
+  providers: [CustomerApiService, EggStockApiService, EggSaleApiService, SecurityApiService, ReportApiService]
 })
 export class EggModule { }

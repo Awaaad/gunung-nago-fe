@@ -4,7 +4,7 @@ import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { IonInfiniteScroll, IonModal } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { PaymentDto, PaymentType, SalesInvoiceCategory, SalesInvoiceDto, SalesInvoiceStatus, SalesInvoiceType, UserDto } from 'generated-src/model';
+import { BankAccountDto, PaymentDto, PaymentModeDto, SalesInvoiceCategory, SalesInvoiceDto, SalesInvoiceStatus, SalesInvoiceType, UserDto } from 'generated-src/model';
 import { Subscription } from 'rxjs';
 import { UtilsService } from 'src/app/shared/utils/utils.service';
 import { SalesInvoiceApiService } from 'src/app/shared/apis/sales-invoice.api.service';
@@ -16,6 +16,8 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@ang
 import * as moment from 'moment';
 import { SalesInvoiceSettleCreditPaymentFrontDto } from 'generated-src/model-front';
 import { PaymentApiService } from 'src/app/shared/apis/payment.api.service';
+import { PaymentModeApiService } from 'src/app/shared/apis/payment-mode.api.service';
+import { BankAccountApiService } from 'src/app/shared/apis/bank-account.api.service';
 
 @Component({
   selector: 'app-sales-invoice-list',
@@ -55,9 +57,12 @@ export class SalesInvoiceListComponent {
   public selectedStatus!: SalesInvoiceStatus | null;
   public today: Date = new Date();
   public paymentForm!: FormGroup;
-  public paymentTypes: string[] = [];
   private salesInvoiceSettleCreditPaymentFrontDto!: SalesInvoiceSettleCreditPaymentFrontDto;
   public amountDue!: number;
+
+  public bankAccounts: BankAccountDto[] = [];
+  public paymentModes: PaymentModeDto[] = [];
+
   public errorMessages = {
     name: [
       { type: 'required', message: 'Name is required' },
@@ -81,7 +86,7 @@ export class SalesInvoiceListComponent {
       { type: 'min', message: 'Sold at cannot be less than 0' },
       { type: 'max', message: 'Sold at cannot be more than Total Price' },
     ],
-    paymentType: [
+    paymentModeId: [
       { type: 'required', message: 'Payment mode is required' },
     ],
     minValue: [
@@ -89,6 +94,9 @@ export class SalesInvoiceListComponent {
     ],
     maxValue: [
       { type: 'max', message: 'Value cannot be greater than quantity in stock' }
+    ],
+    bankAccountId: [
+      { type: 'required', message: 'Bank account is required' },
     ]
   };
 
@@ -99,7 +107,9 @@ export class SalesInvoiceListComponent {
     private router: Router,
     private securityApiService: SecurityApiService,
     private translateService: TranslateService,
-    private utilsService: UtilsService
+    private utilsService: UtilsService,
+    private bankAccountApiService: BankAccountApiService,
+    private paymentModeApiService: PaymentModeApiService
   ) {
   }
 
@@ -108,11 +118,25 @@ export class SalesInvoiceListComponent {
     this.salesInvoiceTypes = Object.keys(SalesInvoiceType);
     this.salesInvoiceStatuses = Object.keys(SalesInvoiceStatus);
     this.salesInvoiceCategories = Object.keys(SalesInvoiceCategory);
-    this.paymentTypes = Object.keys(PaymentType);
+    this.getAllPaymentModes();
+    this.getAllBankAccounts();
     this.getAllUsernames();
     this.getAllDrivers();
     this.search();
   }
+
+  public getAllPaymentModes() {
+    this.paymentModeApiService.findAll().subscribe(paymentModes => {
+      this.paymentModes = paymentModes;
+    })
+  }
+
+  public getAllBankAccounts() {
+    this.bankAccountApiService.findAll().subscribe(bankAccounts => {
+      this.bankAccounts = bankAccounts;
+    })
+  }
+
 
   public ionChangeLanguage(event: any): void {
     this.translateService.use(event.detail.value);
@@ -219,7 +243,6 @@ export class SalesInvoiceListComponent {
       dateFrom: this.dateFrom === null ? '' : this.dateFrom,
       dateTo: this.dateTo === null ? '' : this.dateTo,
       customerName: this.customerName,
-      salesInvoiceType: this.salesInvoiceType,
       salesInvoiceStatus: this.salesInvoiceStatus,
       salesInvoiceCategory: this.salesInvoiceCategory,
 
@@ -242,6 +265,30 @@ export class SalesInvoiceListComponent {
         event.returnValue = false;
       }
     })
+
+    const x: any = {
+      salesInvoiceType: SalesInvoiceType.EGG,
+      createdBy: this.username === '' || this.username === null ? null : this.username,
+      driverId: this.selectedDriverId === '0' || this.selectedDriverId === null ? '' : this.selectedDriverId,
+      dateFrom: this.dateFrom === null ? '' : this.dateFrom,
+      dateTo: this.dateTo === null ? '' : this.dateTo,
+      customerName: this.customerName,
+      salesInvoiceStatus: this.salesInvoiceStatus,
+      salesInvoiceCategory: this.salesInvoiceCategory,
+
+      page: this.page,
+      size: this.size,
+      sortBy: this.sortBy,
+      sortOrder: this.sortOrder.toUpperCase(),
+    }
+
+    if (x.createdBy === null) {
+      delete x.createdBy;
+    }
+
+    this.salesInvoiceSearchSubscription = this.salesInvoiceApiService.searchForType(x).subscribe(salesInvoices => {
+      console.log(salesInvoices)
+    });
   }
 
   public reset(): void {
@@ -284,7 +331,7 @@ export class SalesInvoiceListComponent {
   public getTotalAmountPaid(paymentDto: PaymentDto[]): number {
     let sum = 0;
     paymentDto.forEach(payment => {
-      if (payment.paymentType !== PaymentType.CREDIT)
+      if (payment.paymentModeId !== 1)
         sum = sum + payment.amountPaid;
     })
     return sum;
@@ -377,7 +424,7 @@ export class SalesInvoiceListComponent {
   }
 
   private initialisePaymentFormBuilder(): void {
-    const amountDue = this.selectedInvoice.paymentDtos.filter(payment => payment.paymentType === PaymentType.CREDIT && payment.settled === false).map(payment => payment.amountPaid).reduce((acc, value) => {
+    const amountDue = this.selectedInvoice.paymentDtos.filter(payment => payment.paymentModeId === 1 && payment.settled === false).map(payment => payment.amountPaid).reduce((acc, value) => {
       return acc + value;
     }, 0);
     this.amountDue = amountDue;
@@ -400,7 +447,10 @@ export class SalesInvoiceListComponent {
         Validators.required,
         Validators.min(0)
       ])),
-      paymentType: new FormControl('CASH', Validators.compose([
+      paymentModeId: new FormControl(null, Validators.compose([
+        Validators.required
+      ])),
+      bankAccountId: new FormControl(1, Validators.compose([
         Validators.required
       ])),
       paymentDeadline: new FormControl(moment(new Date()).startOf('day').format(moment.HTML5_FMT.DATE), Validators.compose([
@@ -454,6 +504,9 @@ export class SalesInvoiceListComponent {
       discount: null,
       paymentSaveDtos: this.paymentForm.value.payments,
     }
+    this.salesInvoiceSettleCreditPaymentFrontDto.paymentSaveDtos?.forEach(payment => {
+      payment.paymentModeId = payment.paymentModeId.id
+    })
   }
 }
 

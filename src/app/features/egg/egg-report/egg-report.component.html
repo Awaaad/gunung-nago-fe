@@ -170,7 +170,7 @@
           *matHeaderRowDef="['header-row-first-group', 'header-row-second-group', 'header-row-third-group', 'header-row-forth-group', 'header-row-fifth-group']">
         </tr>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
 
@@ -285,7 +285,7 @@
           *matHeaderRowDef="['header-row-first-group', 'header-row-second-group', 'header-row-third-group', 'header-row-forth-group', 'header-row-fifth-group']">
         </tr>
 
-        <tr mat-header-row *matHeaderRowDef="displayedDetailedColumns"></tr>
+        <tr mat-header-row *matHeaderRowDef="displayedDetailedColumns; sticky: true"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedDetailedColumns;"></tr>
         <tr mat-footer-row *matFooterRowDef="displayedDetailedColumns"></tr>
       </table>

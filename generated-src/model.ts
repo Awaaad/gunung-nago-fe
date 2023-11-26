@@ -1,6 +1,13 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2023-11-21 21:24:56.
+// Generated using typescript-generator version 3.2.1263 on 2023-11-26 13:52:01.
+
+export class BankAccountDto {
+    id!: number;
+    bankName!: string;
+    accountHolder!: string;
+    accountNumber!: string;
+}
 
 export class CageDto {
     id!: number;
@@ -36,6 +43,7 @@ export class CustomerSearchCriteriaDto {
     name!: string;
     address!: string;
     telephoneNumber!: number;
+    credit!: boolean;
 }
 
 export class EggCategoryDto {
@@ -429,17 +437,25 @@ export class ManureStockDtoBuilder {
 
 export class PaymentDto {
     id!: number;
+    paymentModeId!: number;
+    paymentModeName!: string;
+    bankAccountId!: number;
     amountPaid!: number;
     paymentDeadline!: Date;
-    paymentType!: PaymentType;
     settled!: boolean;
 }
 
+export class PaymentModeDto {
+    id!: number;
+    name!: string;
+    requireBankAccount!: boolean;
+}
+
 export class PaymentSaveDto {
+    paymentModeId!: number;
+    bankAccountId!: number;
     amountPaid!: number;
     paymentDeadline!: Date;
-    previousPaymentType!: PaymentType;
-    paymentType!: PaymentType;
 }
 
 export class SalesInvoiceSettleCreditPaymentDto {
@@ -594,6 +610,27 @@ export class ReceiptDetailsDto {
     paymentDtos!: PaymentDto[];
 }
 
+export class DailyFlockReportDto {
+    flockId!: number;
+    flockStockId!: number;
+    cageName!: string;
+    age!: number;
+    alive!: number;
+    good!: number;
+    sterile!: number;
+    death!: number;
+    amountOfChickenWeighted!: number;
+    totalWeight!: number;
+    averageWeight!: number;
+    surveyDate!: Date;
+    createdDate!: Date;
+    flockType!: FlockType;
+    quantity!: number;
+    remainingAlive!: number;
+    remainingGood!: number;
+    remainingSterile!: number;
+}
+
 export class DailyProductionReportDto {
     configurationEggTie!: number;
     configurationEggTray!: number;
@@ -671,6 +708,7 @@ export class SalesInvoiceDto {
 }
 
 export class SalesInvoiceSearchCriteriaDto {
+    salesInvoiceType!: SalesInvoiceType;
     customerName!: string;
     createdBy!: string;
     driverId!: number;
@@ -684,12 +722,29 @@ export class SalesInvoiceSearchCriteriaDto {
 }
 
 export class SalesInvoiceLineDto {
-    id!: number;
     salesInvoiceId!: number;
-    feedStockId!: number;
-    boxesOrdered!: number;
-    unitsOrdered!: number;
+    salesInvoiceLineId!: number;
+    salesInvoiceCategory!: SalesInvoiceCategory;
+    salesInvoiceStatus!: SalesInvoiceStatus;
+    salesInvoiceType!: SalesInvoiceType;
+    flockType!: FlockType;
+    eggCategoryName!: string;
+    eggType!: EggType;
+    eggQuantityType!: EggQuantityType;
+    quantity!: number;
+    price!: number;
     totalPrice!: number;
+    soldAt!: number;
+    invoiceTotalPrice!: number;
+    invoiceSoldAt!: number;
+    discount!: number;
+    paymentDtos!: PaymentDto[];
+    customerFirstName!: string;
+    customerLastName!: string;
+    driverFirstName!: string;
+    driverLastName!: string;
+    createdBy!: string;
+    createdDate!: Date;
 }
 
 export class AuthenticatedUserDetailsDto {
@@ -827,14 +882,6 @@ export enum AquisitionType {
 export enum HealthType {
     MEDICINE = 'MEDICINE',
     VACCINE = 'VACCINE',
-}
-
-export enum PaymentType {
-    CASH = 'CASH',
-    CREDIT = 'CREDIT',
-    CARD = 'CARD',
-    CHEQUE = 'CHEQUE',
-    ELECTRONIC = 'ELECTRONIC',
 }
 
 export enum SalesInvoiceType {

@@ -1,15 +1,14 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { IonInfiniteScroll, IonModal } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { SalesInvoiceDto, PaymentDto, PaymentType, SupplierDto, PurchaseInvoiceDto, PurchaseInvoiceType } from 'generated-src/model';
+import { SupplierDto, PurchaseInvoiceDto, PurchaseInvoiceType } from 'generated-src/model';
 import { Subscription, debounceTime, distinctUntilChanged, filter, finalize, switchMap, tap } from 'rxjs';
 import { PurchaseInvoiceApiService } from 'src/app/shared/apis/purchase-invoice.api.service';
 import { UtilsService } from 'src/app/shared/utils/utils.service';
-import { OverlayEventDetail } from '@ionic/core/components';
 import { Router } from '@angular/router';
 import { SupplierApiService } from 'src/app/shared/apis/supplier.api.service';
 import { SecurityApiService } from 'src/app/shared/apis/security.api.service';
@@ -256,15 +255,6 @@ export class PurchaseInvoiceListComponent {
     this.utilsService.presentLoadingDuration(500).then(() => {
       this.search();
     })
-  }
-
-  public getTotalAmountPaid(paymentDto: PaymentDto[]): number {
-    let sum = 0;
-    paymentDto.forEach(payment => {
-      if (payment.paymentType !== PaymentType.CREDIT)
-        sum = sum + payment.amountPaid;
-    })
-    return sum;
   }
 
   public initialiseSupplierEditForm(supplierDetails: SupplierDto): void {

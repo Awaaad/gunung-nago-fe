@@ -3,7 +3,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { IonModal } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { ManureStockDto, SalesInvoiceCategory, UserDto, PaymentType, CustomerDto, SalesInvoiceType, EggQuantityType, FlockType, EggType, CageCategory, CageDto, SurveyDto, FlockStockCountDto, EggCategoryStockDto } from 'generated-src/model';
+import { ManureStockDto, SalesInvoiceCategory, UserDto, CustomerDto, SalesInvoiceType, EggQuantityType, FlockType, EggType, CageCategory, CageDto, SurveyDto, FlockStockCountDto, EggCategoryStockDto, BankAccountDto, PaymentModeDto } from 'generated-src/model';
 import { CustomerFrontDto, SaleDetailsFrontDto, SaleSaveFrontDto, EggStockFrontDto, SalesInvoiceDetailsFrontDto } from 'generated-src/model-front';
 import * as moment from 'moment';
 import { Subscription, filter, distinctUntilChanged, debounceTime, tap, switchMap, finalize } from 'rxjs';
@@ -16,11 +16,12 @@ import { OverlayEventDetail } from '@ionic/core/components';
 import { CageApiService } from 'src/app/shared/apis/cage.api.service';
 import { SurveyApiService } from 'src/app/shared/apis/survey.api.service';
 import { EggStockApiService } from 'src/app/shared/apis/egg-stock.api.service';
-import { FlockStockApiService } from 'src/app/shared/apis/flock-stock.api.service';
 import { PointOfSaleApiService } from 'src/app/shared/apis/point-of-sale.api.service';
 import { ActivatedRoute } from '@angular/router';
 import { SalesInvoiceApiService } from 'src/app/shared/apis/sales-invoice.api.service';
 import { FlockApiService } from 'src/app/shared/apis/flock.api.service';
+import { BankAccountApiService } from 'src/app/shared/apis/bank-account.api.service';
+import { PaymentModeApiService } from 'src/app/shared/apis/payment-mode.api.service';
 
 @Component({
   selector: 'app-point-of-sale',
@@ -52,7 +53,6 @@ export class PointOfSaleComponent implements OnInit {
   public sortBy: string = 'name';
 
   public paymentForm!: FormGroup;
-  public paymentTypes: string[] = [];
   public totalPrice: number = 0;
   public today: Date = new Date();
   public salesInvoiceCategories: string[] = [];
@@ -85,6 +85,10 @@ export class PointOfSaleComponent implements OnInit {
   public flockTypes: string[] = [];
   public eggTypes: string[] = [];
 
+  public bankAccounts: BankAccountDto[] = [];
+  public paymentModes: PaymentModeDto[] = [];
+  public completePaymentModes: PaymentModeDto[] = [];
+
   public errorMessages = {
     firstName: [{ type: "required", message: "First name is required" }],
     lastName: [{ type: "required", message: "Last name is required" }],
@@ -105,7 +109,7 @@ export class PointOfSaleComponent implements OnInit {
       { type: 'min', message: 'Sold at cannot be less than 0' },
       { type: 'max', message: 'Sold at cannot be more than Total Price' },
     ],
-    paymentType: [
+    paymentModeId: [
       { type: 'required', message: 'Payment mode is required' },
     ],
     minValue: [
@@ -113,6 +117,9 @@ export class PointOfSaleComponent implements OnInit {
     ],
     maxValue: [
       { type: 'max', message: 'Value cannot be greater than quantity in stock' }
+    ],
+    bankAccountId: [
+      { type: 'required', message: 'Bank account is required' },
     ]
   };
 
@@ -130,6 +137,8 @@ export class PointOfSaleComponent implements OnInit {
     private utilsService: UtilsService,
     private readonly activatedRoute: ActivatedRoute,
     private salesInvoiceApiService: SalesInvoiceApiService,
+    private bankAccountApiService: BankAccountApiService,
+    private paymentModeApiService: PaymentModeApiService
   ) { }
 
   async ngOnInit() {
@@ -142,7 +151,6 @@ export class PointOfSaleComponent implements OnInit {
     }
 
     this.searchCustomerAutoComplete();
-    this.paymentTypes = Object.keys(PaymentType);
     this.salesInvoiceCategories = Object.keys(SalesInvoiceCategory);
     this.eggQuantityTypes = Object.keys(EggQuantityType);
     this.flockTypes = Object.keys(FlockType);
@@ -152,7 +160,21 @@ export class PointOfSaleComponent implements OnInit {
     this.getEggStock();
     this.getManureStock();
     this.findTotalFlockStockCount();
+    this.getAllPaymentModes();
+    this.getAllBankAccounts();
+  }
 
+  public getAllPaymentModes() {
+    this.paymentModeApiService.findAll().subscribe(paymentModes => {
+      this.paymentModes = paymentModes;
+      this.completePaymentModes = paymentModes;
+    })
+  }
+
+  public getAllBankAccounts() {
+    this.bankAccountApiService.findAll().subscribe(bankAccounts => {
+      this.bankAccounts = bankAccounts;
+    })
   }
 
   public findSalesInvoiceDetailsById(): void {
@@ -431,7 +453,10 @@ export class PointOfSaleComponent implements OnInit {
         Validators.required,
         Validators.min(0)
       ])),
-      paymentType: new FormControl('CASH', Validators.compose([
+      paymentModeId: new FormControl(null, Validators.compose([
+        Validators.required
+      ])),
+      bankAccountId: new FormControl(1, Validators.compose([
         Validators.required
       ])),
       paymentDeadline: new FormControl(moment(new Date()).startOf('day').format(moment.HTML5_FMT.DATE), Validators.compose([
@@ -527,6 +552,7 @@ export class PointOfSaleComponent implements OnInit {
     this.populateSaleSaveDtoWithValues();
     this.saleSaveDto.paymentSaveDtos?.forEach(payment => {
       payment.paymentDeadline = moment(payment.paymentDeadline).startOf('day').format(moment.HTML5_FMT.DATE)
+      payment.paymentModeId = payment.paymentModeId.id
     })
     this.pointOfSaleApiService.save(this.saleSaveDto).subscribe({
       next: (data: string) => {
@@ -579,9 +605,9 @@ export class PointOfSaleComponent implements OnInit {
 
   public openModal(): void {
     if (!this.checkIfCreditAllowed()) {
-      this.paymentTypes = this.paymentTypes.filter(payment => payment != PaymentType.CREDIT);
+      this.paymentModes = this.completePaymentModes.filter(paymentMode => paymentMode.id != 1);
     } else {
-      this.paymentTypes = Object.keys(PaymentType);
+      this.paymentModes = this.completePaymentModes;
     }
     this.initialisePaymentFormBuilder();
     this.isModalOpen = true;

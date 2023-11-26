@@ -10,6 +10,7 @@ import { default as _rollupMoment, Moment } from 'moment';
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material/core';
 import { EggStockFrontDto } from 'generated-src/model-front';
+import { ReportApiService } from 'src/app/shared/apis/report.api.service';
 
 const moment = _rollupMoment || _moment;
 export const MY_FORMATS = {
@@ -50,6 +51,7 @@ export class EggReportComponent {
 
   constructor(
     private eggStockApiService: EggStockApiService,
+    private reportApiService: ReportApiService,
     private translateService: TranslateService,
   ) { }
 
@@ -117,7 +119,7 @@ export class EggReportComponent {
         detailed: detailed,
         eggCategoryId: eggCategoryId
       }
-      this.eggStockApiService.findEggCategoryStockTransactionsByEggStockAndDate(eggReportSearchCriteriaDto).subscribe(eggReport => {
+      this.reportApiService.findEggCategoryStockTransactionsByEggStockAndDate(eggReportSearchCriteriaDto).subscribe(eggReport => {
         this.eggReport = new MatTableDataSource<EggReportDto>(eggReport);
       })
     } else {
@@ -125,7 +127,7 @@ export class EggReportComponent {
         date: date,
         detailed: detailed
       }
-      this.eggStockApiService.findEggCategoryStockTransactionsByEggStockAndDate(eggReportSearchCriteriaDto).subscribe(eggReport => {
+      this.reportApiService.findEggCategoryStockTransactionsByEggStockAndDate(eggReportSearchCriteriaDto).subscribe(eggReport => {
         this.eggReport = new MatTableDataSource<EggReportDto>(eggReport);
       })
     }
