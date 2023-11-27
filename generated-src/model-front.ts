@@ -1,4 +1,4 @@
-import { AquisitionType, CageCategory, EggCategoryStockDto, EggQuantityType, EggType, FarmDto, FeedCategory, FeedSurveyDto, FlockCategory, FlockSaleDetailsDto, FlockType, HealthSurveyDto, HealthType, PaymentType, PurchaseDetailsDto, PurchaseInvoiceType, RoleDto, SaleDetailsDto, SalesInvoiceCategory, SalesInvoiceStatus, SalesInvoiceType, SurveyEggCountDto } from "./model";
+import { AquisitionType, CageCategory, EggCategoryStockDto, EggQuantityType, EggType, FarmDto, FeedCategory, FeedSurveyDto, FlockCategory, FlockSaleDetailsDto, FlockType, HealthSurveyDto, HealthType, PurchaseDetailsDto, PurchaseInvoiceType, RoleDto, SaleDetailsDto, SalesInvoiceCategory, SalesInvoiceStatus, SalesInvoiceType, SurveyEggCountDto } from "./model";
 
 export class PageResult<T> {
     public content!: Array<T>;
@@ -71,8 +71,8 @@ export class EggCategorySaleFrontDto {
 export class PaymentSaveFrontDto {
     amountPaid!: number;
     paymentDeadline!: Date | any;
-    previousPaymentType!: PaymentType;
-    paymentType!: PaymentType;
+    paymentModeId!: any;
+    bankAccountId!: number;
 }
 
 

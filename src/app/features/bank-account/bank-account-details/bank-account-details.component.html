@@ -1,0 +1,86 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      <div class="router-links">
+        <div class="title">
+          <img class="header-logo" src='./assets/flaticon/add-bank-account.png'>
+          <h3 class="header-nav-products">Add Bank Account</h3>
+        </div>
+        <div>
+          <ion-item class="language-selection">
+            <ion-select aria-label="language" interface="popover" placeholder="Select language" [(ngModel)]="language"
+              (ionChange)="ionChangeLanguage($event)">
+              <ion-select-option value="en">English</ion-select-option>
+              <ion-select-option value="id">Indonesian</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </div>
+      </div>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="false" class="ion-padding">
+  <form [formGroup]="bankAccountDetailsForm">
+    <div formArrayName="bankAccountDetails"
+      *ngFor="let bankAccountDetails of bankAccountDetailsFields?.controls; let i = index">
+      <div [formGroupName]="i">
+        <ion-card>
+          <ion-card-content>
+            <div class="form-array-index">
+              <h6>Bank Account {{i + 1}}</h6>
+              <ion-button *ngIf="bankAccountDetailsFields != null && bankAccountDetailsFields.length > 1"
+                (click)="removeBankAccountDetails(i)" class="delete-product-btn" color="gunung-nago-warehouse"><span
+                  class="material-icons">delete</span></ion-button>
+            </div>
+            <ion-row>
+              <ion-col size-xs="12" size-md="3">
+                <ion-input color="gunung-nago-primary" label="Account Holder*" label-placement="floating" fill="outline"
+                  type="text" clear-input="true" formControlName="accountHolder" required="true"></ion-input>
+                <div class="error-messages">
+                  <ng-container *ngFor="let error of errorMessages.accountHolder">
+                    <div class="error-message"
+                      *ngIf="bankAccountDetails.get('accountHolder')?.hasError(error.type) && (bankAccountDetails.get('accountHolder')?.dirty || bankAccountDetails.get('accountHolder')?.touched)">
+                      {{ error.message }}
+                    </div>
+                  </ng-container>
+                </div>
+              </ion-col>
+              <ion-col size-xs="12" size-md="3">
+                <ion-input color="gunung-nago-primary" label="Account Number*" label-placement="floating" fill="outline"
+                  type="text" clear-input="true" formControlName="accountNumber" required="true"></ion-input>
+                <div class="error-messages">
+                  <ng-container *ngFor="let error of errorMessages.accountNumber">
+                    <div class="error-message"
+                      *ngIf="bankAccountDetails.get('accountNumber')?.hasError(error.type) && (bankAccountDetails.get('accountNumber')?.dirty || bankAccountDetails.get('accountNumber')?.touched)">
+                      {{ error.message }}
+                    </div>
+                  </ng-container>
+                </div>
+              </ion-col>
+              <ion-col size-xs="12" size-md="3">
+                <ion-input color="gunung-nago-primary" label="Bank Name*" label-placement="floating" fill="outline"
+                  type="text" clear-input="true" formControlName="bankName" required="true"></ion-input>
+                <div class="error-messages">
+                  <ng-container *ngFor="let error of errorMessages.bankName">
+                    <div class="error-message"
+                      *ngIf="bankAccountDetails.get('bankName')?.hasError(error.type) && (bankAccountDetails.get('bankName')?.dirty || bankAccountDetails.get('bankName')?.touched)">
+                      {{ error.message }}
+                    </div>
+                  </ng-container>
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </div>
+    <div class="btn-container">
+      <ion-button color="neutral-btn mr-05" (click)="addBankAccountDetails()">Add Bank Account</ion-button>
+      <ion-button color="positive-btn" [disabled]="bankAccountDetailsForm.invalid" (click)="save()">Save</ion-button>
+    </div>
+  </form>
+</ion-content>

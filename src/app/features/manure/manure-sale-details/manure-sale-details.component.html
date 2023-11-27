@@ -365,7 +365,8 @@
             </ion-item-divider>
             <span [formGroupName]="i">
               <ion-button *ngIf="paymentsFields != null && paymentsFields.length > 1" (click)="removePayment(i)"
-                class="remove-payment-btn" color="gunung-nago-warehouse"><span class="material-icons">delete</span></ion-button>
+                class="remove-payment-btn" color="gunung-nago-warehouse"><span
+                  class="material-icons">delete</span></ion-button>
               <ion-row>
                 <ion-col size="6" size-sm>
                   <ion-input color="gunung-nago-primary" label="Amount Paid" label-placement="floating" fill="outline"
@@ -382,14 +383,14 @@
 
                 <ion-col size="6">
                   <ion-select color="gunung-nago-primary" label="Payment Mode" label-placement="floating" fill="outline"
-                    interface="popover" placeholder="Payment Mode" formControlName="paymentType">
-                    <ion-select-option *ngFor="let paymentType of paymentTypes" [value]="paymentType">{{
-                      paymentType | titlecase}}</ion-select-option>
+                    interface="popover" placeholder="Payment Mode" formControlName="paymentModeId">
+                    <ion-select-option *ngFor="let paymentMode of paymentModes" [value]="paymentMode">{{
+                      paymentMode.name| titlecase}}</ion-select-option>
                   </ion-select>
                   <div class="error-messages">
-                    <ng-container *ngFor="let error of errorMessages.paymentType">
+                    <ng-container *ngFor="let error of errorMessages.paymentModeId">
                       <div class="error-message"
-                        *ngIf="payment.get('paymentType')?.hasError(error.type) && (payment.get('paymentType')?.dirty || payment.get('paymentType')?.touched)">
+                        *ngIf="payment.get('paymentModeId')?.hasError(error.type) && (payment.get('paymentModeId')?.dirty || payment.get('paymentModeId')?.touched)">
                         {{ error.message }}
                       </div>
                     </ng-container>
@@ -397,7 +398,7 @@
                 </ion-col>
               </ion-row>
 
-              <ion-row *ngIf="payment.get('paymentType')?.value === 'CREDIT'">
+              <ion-row *ngIf="payment.get('paymentModeId')?.value?.id === 1">
                 <ion-col size="6">
                   <mat-form-field class="date-full-width" appearance="outline">
                     <mat-label>Payment Deadline</mat-label>
@@ -406,6 +407,25 @@
                     <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
                     <mat-datepicker #picker></mat-datepicker>
                   </mat-form-field>
+                </ion-col>
+              </ion-row>
+
+              <ion-row *ngIf="payment.get('paymentModeId')?.value?.requireBankAccount">
+                <ion-col size="6">
+                  <ion-select color="gunung-nago-primary" label="Bank Account" label-placement="floating" fill="outline"
+                    interface="popover" placeholder="Bank account" formControlName="bankAccountId">
+                    <ion-select-option *ngFor="let bankAccount of bankAccounts" [value]="bankAccount.id">{{
+                      bankAccount.accountHolder| uppercase}} - {{bankAccount.accountNumber}} -
+                      {{bankAccount.bankName}}</ion-select-option>
+                  </ion-select>
+                  <div class="error-messages">
+                    <ng-container *ngFor="let error of errorMessages.bankAccountId">
+                      <div class="error-message"
+                        *ngIf="payment.get('bankAccountId')?.hasError(error.type) && (payment.get('bankAccountId')?.dirty || payment.get('bankAccountId')?.touched)">
+                        {{ error.message }}
+                      </div>
+                    </ng-container>
+                  </div>
                 </ion-col>
               </ion-row>
             </span>

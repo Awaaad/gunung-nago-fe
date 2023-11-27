@@ -1,11 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { UtilsService } from 'src/app/shared/utils/utils.service';
 import { FlockSaleApiService } from '../../../shared/apis/flock-sale.api.service';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { SurveyApiService } from '../../../shared/apis/survey.api.service';
-import { CageCategory, CageDto, CustomerDto, FlockStockCountDto, PaymentType, SalesInvoiceCategory, SurveyDto, UserDto } from 'generated-src/model';
+import { BankAccountDto, CageCategory, CageDto, CustomerDto, FlockStockCountDto, PaymentModeDto, SalesInvoiceCategory, SurveyDto, UserDto } from 'generated-src/model';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CageApiService } from '../../../shared/apis/cage.api.service';
 import { Subscription, debounceTime, distinctUntilChanged, filter, finalize, switchMap, tap } from 'rxjs';
@@ -16,8 +15,9 @@ import { OverlayEventDetail } from '@ionic/core/components';
 import * as moment from 'moment';
 import { SecurityApiService } from 'src/app/shared/apis/security.api.service';
 import { environment } from 'src/environments/environment';
-import { FlockStockApiService } from 'src/app/shared/apis/flock-stock.api.service';
 import { FlockApiService } from 'src/app/shared/apis/flock.api.service';
+import { PaymentModeApiService } from 'src/app/shared/apis/payment-mode.api.service';
+import { BankAccountApiService } from 'src/app/shared/apis/bank-account.api.service';
 
 @Component({
   selector: 'app-flock-sale-details',
@@ -51,7 +51,6 @@ export class FlockSaleDetailsComponent implements OnInit {
   public sortBy: string = 'name';
 
   public paymentForm!: FormGroup;
-  public paymentTypes: string[] = [];
   public totalPrice: number = 0;
   public today: Date = new Date();
 
@@ -68,6 +67,10 @@ export class FlockSaleDetailsComponent implements OnInit {
   public email = environment.email;
   public regNo = environment.regNo;
   public yoe = environment.yoe;
+
+  public bankAccounts: BankAccountDto[] = [];
+  public paymentModes: PaymentModeDto[] = [];
+  public completePaymentModes: PaymentModeDto[] = [];
 
   public errorMessages = {
     cage: [
@@ -106,8 +109,11 @@ export class FlockSaleDetailsComponent implements OnInit {
       { type: 'min', message: 'Sold at cannot be less than 0' },
       { type: 'max', message: 'Sold at cannot be more than Total Price' },
     ],
-    paymentType: [
+    paymentModeId: [
       { type: 'required', message: 'Payment mode is required' },
+    ],
+    bankAccountId: [
+      { type: 'required', message: 'Bank account is required' },
     ]
   };
 
@@ -120,7 +126,9 @@ export class FlockSaleDetailsComponent implements OnInit {
     private flockSaleApiService: FlockSaleApiService,
     private surveyApiService: SurveyApiService,
     private translateService: TranslateService,
-    private utilsService: UtilsService
+    private utilsService: UtilsService,
+    private bankAccountApiService: BankAccountApiService,
+    private paymentModeApiService: PaymentModeApiService
   ) { }
 
   ngOnInit() {
@@ -129,12 +137,26 @@ export class FlockSaleDetailsComponent implements OnInit {
     this.getAllActiveCages();
     this.initialiseSelectedCustomer();
     this.searchCustomerAutoComplete();
-    this.paymentTypes = Object.keys(PaymentType);
     this.salesInvoiceCategories = Object.keys(SalesInvoiceCategory);
   }
 
   ionViewWillEnter(): void {
     this.findTotalFlockStockCount();
+    this.getAllPaymentModes();
+    this.getAllBankAccounts();
+  }
+
+  public getAllPaymentModes() {
+    this.paymentModeApiService.findAll().subscribe(paymentModes => {
+      this.paymentModes = paymentModes;
+      this.completePaymentModes = paymentModes;
+    })
+  }
+
+  public getAllBankAccounts() {
+    this.bankAccountApiService.findAll().subscribe(bankAccounts => {
+      this.bankAccounts = bankAccounts;
+    })
   }
 
   public ionChangeLanguage(event: any): void {
@@ -415,7 +437,10 @@ export class FlockSaleDetailsComponent implements OnInit {
         Validators.required,
         Validators.min(0)
       ])),
-      paymentType: new FormControl('CASH', Validators.compose([
+      paymentModeId: new FormControl(null, Validators.compose([
+        Validators.required
+      ])),
+      bankAccountId: new FormControl(1, Validators.compose([
         Validators.required
       ])),
       paymentDeadline: new FormControl(moment(new Date()).startOf('day').format(moment.HTML5_FMT.DATE), Validators.compose([
@@ -468,6 +493,7 @@ export class FlockSaleDetailsComponent implements OnInit {
     this.populateFlockSaleSaveDtoWithFormValues();
     this.flockSaleSaveFrontDto.paymentSaveDtos?.forEach(payment => {
       payment.paymentDeadline = moment(payment.paymentDeadline).startOf('day').format(moment.HTML5_FMT.DATE)
+      payment.paymentModeId = payment.paymentModeId.id
     })
     this.flockSaleApiService.save(this.flockSaleSaveFrontDto).subscribe({
       next: (data: string) => {
@@ -516,9 +542,9 @@ export class FlockSaleDetailsComponent implements OnInit {
 
   public openModal(): void {
     if (!this.checkIfCreditAllowed()) {
-      this.paymentTypes = this.paymentTypes.filter(payment => payment != PaymentType.CREDIT);
+      this.paymentModes = this.completePaymentModes.filter(paymentMode => paymentMode.id != 1);
     } else {
-      this.paymentTypes = Object.keys(PaymentType);
+      this.paymentModes = this.completePaymentModes;
     }
     this.calculateTotalPrice();
     this.initialisePaymentFormBuilder();

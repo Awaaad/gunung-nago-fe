@@ -128,15 +128,21 @@
             <ion-icon [src]="egg" class="font-size-60"></ion-icon>Egg
           </ion-item>
           <div class="accordion-sub" slot="content">
+            <ion-item routerLink="/egg/egg-category-list">
+              <ion-icon name="list" color="dark"></ion-icon>Egg Category List
+            </ion-item>
+            <ion-item routerLink="/egg/egg-category-details">
+              <ion-icon name="add" color="dark"></ion-icon>Add Egg Category
+            </ion-item>
             <ion-item routerLink="/egg/egg-sale-details" routerDirection="forward">
               <ion-icon name="pricetag" color="dark"></ion-icon><span>Egg Sale</span>
             </ion-item>
             <ion-item routerLink="/egg/egg-transfer">
               <ion-icon [src]="transfer" class="font-size-60"></ion-icon>Egg Transfer
             </ion-item>
-            <ion-item routerLink="/egg/egg-stock">
+            <!-- <ion-item routerLink="/egg/egg-stock">
               <ion-icon [src]="stock" class="font-size-60"></ion-icon>Egg Stock
-            </ion-item>
+            </ion-item> -->
             <ion-item routerLink="/egg/egg-report">
               <ion-icon name="newspaper" color="dark"></ion-icon>Egg Report
             </ion-item>
@@ -206,6 +212,39 @@
             </ion-item>
           </div>
         </ion-accordion>
+
+        <ion-accordion-group>
+          <ion-accordion value="first">
+            <ion-item slot="header" color="light">
+              <ion-icon name="wallet" color="dark"></ion-icon>Payment Mode
+            </ion-item>
+            <div class="accordion-sub" slot="content">
+              <ion-item routerLink="/payment-mode/payment-mode-list">
+                <ion-icon name="list" color="dark"></ion-icon>Payment Mode List
+              </ion-item>
+              <ion-item routerLink="/payment-mode/payment-mode-details">
+                <ion-icon name="add" color="dark"></ion-icon>Add Payment Mode
+              </ion-item>
+            </div>
+          </ion-accordion>
+        </ion-accordion-group>
+
+        <ion-accordion-group>
+          <ion-accordion value="first">
+            <ion-item slot="header" color="light">
+              <ion-icon [src]="bankAccount" class="font-size-60"></ion-icon>Bank Account
+            </ion-item>
+            <div class="accordion-sub" slot="content">
+              <ion-item routerLink="/bank-account/bank-account-list">
+                <ion-icon name="list" color="dark"></ion-icon>Bank Account List
+              </ion-item>
+              <ion-item routerLink="/bank-account/bank-account-details">
+                <ion-icon name="add" color="dark"></ion-icon>Add Bank Account
+              </ion-item>
+            </div>
+          </ion-accordion>
+        </ion-accordion-group>
+
       </ion-accordion-group>
     </ion-content>
   </ion-menu>

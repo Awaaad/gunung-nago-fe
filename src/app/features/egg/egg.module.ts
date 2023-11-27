@@ -21,12 +21,14 @@ import { SecurityApiService } from 'src/app/shared/apis/security.api.service';
 import { EggTransferComponent } from './egg-transfer/egg-transfer.component';
 import { EggStockComponent } from './egg-stock/egg-stock.component';
 import { EggReportComponent } from './egg-report/egg-report.component';
-import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter } from '@angular/material-moment-adapter';
-import { MY_FORMATS } from '../report/report.module';
+import { ReportApiService } from 'src/app/shared/apis/report.api.service';
+import { EggCategoryDetailsComponent } from './egg-category-details/egg-category-details.component';
+import { EggCategoryListComponent } from './egg-category-list/egg-category-list.component';
+import { EggCategoryApiService } from 'src/app/shared/apis/egg-category.api.service';
 
 
 @NgModule({
-  declarations: [EggSaleDetailsComponent, EggTransferComponent, EggStockComponent, EggReportComponent],
+  declarations: [EggSaleDetailsComponent, EggTransferComponent, EggStockComponent, EggReportComponent, EggCategoryDetailsComponent, EggCategoryListComponent],
   imports: [
     CommonModule,
     EggRoutingModule,
@@ -43,6 +45,6 @@ import { MY_FORMATS } from '../report/report.module';
     MatDatepickerModule,
     MatNativeDateModule,
   ],
-  providers: [CustomerApiService, EggStockApiService, EggSaleApiService, SecurityApiService]
+  providers: [CustomerApiService, EggCategoryApiService, EggStockApiService, EggSaleApiService, SecurityApiService, ReportApiService]
 })
 export class EggModule { }

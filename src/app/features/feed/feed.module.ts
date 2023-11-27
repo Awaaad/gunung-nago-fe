@@ -27,10 +27,11 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
 import { MaskitoModule } from '@maskito/angular';
+import { FeedSaleDetailsComponent } from './feed-sale-details/feed-sale-details.component';
 
 
 @NgModule({
-  declarations: [FeedDetailsComponent, FeedListComponent, FeedStockComponent, FeedAllocationComponent],
+  declarations: [FeedDetailsComponent, FeedListComponent, FeedStockComponent, FeedAllocationComponent, FeedSaleDetailsComponent],
   imports: [
     MaskitoModule,
     CommonModule,

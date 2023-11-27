@@ -1,0 +1,66 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      <div class="router-links">
+        <div class="title">
+          <img class="header-logo" src='./assets/flaticon/add-payment-mode.png'>
+          <h3 class="header-nav-products">Add Payment Mode</h3>
+        </div>
+        <div>
+          <ion-item class="language-selection">
+            <ion-select aria-label="language" interface="popover" placeholder="Select language" [(ngModel)]="language"
+              (ionChange)="ionChangeLanguage($event)">
+              <ion-select-option value="en">English</ion-select-option>
+              <ion-select-option value="id">Indonesian</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </div>
+      </div>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="false" class="ion-padding">
+  <form [formGroup]="paymentModeDetailsForm">
+    <div formArrayName="paymentModeDetails"
+      *ngFor="let paymentModeDetails of paymentModeDetailsFields?.controls; let i = index">
+      <div [formGroupName]="i">
+        <ion-card>
+          <ion-card-content>
+            <div class="form-array-index">
+              <h6>Payment Mode {{i + 1}}</h6>
+              <ion-button *ngIf="paymentModeDetailsFields != null && paymentModeDetailsFields.length > 1"
+                (click)="removePaymentModeDetails(i)" class="delete-product-btn" color="gunung-nago-warehouse"><span
+                  class="material-icons">delete</span></ion-button>
+            </div>
+            <ion-row>
+              <ion-col size-xs="12" size-md="3">
+                <ion-input color="gunung-nago-primary" label="Payment Mode*" label-placement="floating" fill="outline"
+                  type="text" clear-input="true" formControlName="name" required="true"></ion-input>
+                <div class="error-messages">
+                  <ng-container *ngFor="let error of errorMessages.name">
+                    <div class="error-message"
+                      *ngIf="paymentModeDetails.get('name')?.hasError(error.type) && (paymentModeDetails.get('name')?.dirty || paymentModeDetails.get('name')?.touched)">
+                      {{ error.message }}
+                    </div>
+                  </ng-container>
+                </div>
+              </ion-col>
+              <ion-col size-xs="12" size-md="3">
+                <ion-toggle labelPlacement="start" class="toggle" formControlName="requireBankAccount"
+                  color="gunung-nago-report">Require Bank Account*</ion-toggle>
+              </ion-col>
+            </ion-row>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </div>
+    <div class="btn-container">
+      <ion-button color="neutral-btn mr-05" (click)="addPaymentModeDetails()">Add Bank Account</ion-button>
+      <ion-button color="positive-btn" [disabled]="paymentModeDetailsForm.invalid" (click)="save()">Save</ion-button>
+    </div>
+  </form>
+</ion-content>
