@@ -6,7 +6,7 @@ import { environment } from "src/environments/environment";
 
 @Injectable()
 export class ReturnApiService {
-  baseUrl = `${environment.apiPath}return/`;
+  baseUrl = `${environment.apiPath}return`;
 
   constructor(private http: HttpClient) { }
 
@@ -15,6 +15,6 @@ export class ReturnApiService {
   }
 
   public getReturnDetailsBySalesInvoiceId(id:number): Observable<ReturnInvoiceFrontDto[]> {
-    return this.http.get<any>(`${this.baseUrl}${id}`);
+    return this.http.get<any>(`${this.baseUrl}/${id}`);
   }
 }

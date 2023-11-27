@@ -6,7 +6,7 @@ import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class PointOfSaleApiService {
-  baseUrl = `${environment.apiPath}point-of-sales/`;
+  baseUrl = `${environment.apiPath}point-of-sales`;
 
   constructor(private http: HttpClient) { }
 

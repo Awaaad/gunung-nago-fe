@@ -7,7 +7,7 @@ import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class FlockApiService {
-  baseUrl = `${environment.apiPath}flocks/`;
+  baseUrl = `${environment.apiPath}flocks`;
 
   constructor(private http: HttpClient) { }
 
@@ -16,26 +16,26 @@ export class FlockApiService {
   }
 
   public search(searchValues: any): Observable<PageResult<FlockDto>> {
-    return this.http.get<PageResult<FlockDto>>(`${this.baseUrl}search`, { params: searchValues });
+    return this.http.get<PageResult<FlockDto>>(`${this.baseUrl}/search`, { params: searchValues });
   }
 
   public findTotalFlockStockCount(): Observable<FlockStockCountDto> {
-    return this.http.get<FlockStockCountDto>(`${this.baseUrl}count`);
+    return this.http.get<FlockStockCountDto>(`${this.baseUrl}/count`);
   }
 
   public findAllActiveFlocksWithoutCage(): Observable<FlockFrontDto[]> {
-    return this.http.get<FlockFrontDto[]>(`${this.baseUrl}no-cage`);
+    return this.http.get<FlockFrontDto[]>(`${this.baseUrl}/no-cage`);
   }
 
   public findFlocksWithIncompatibleCages(): Observable<FlockCageIncompatibleFrontDto[]> {
-    return this.http.get<FlockCageIncompatibleFrontDto[]>(`${this.baseUrl}incompatible`);
+    return this.http.get<FlockCageIncompatibleFrontDto[]>(`${this.baseUrl}/incompatible`);
   }
 
   public updateFlockStock(flockPurchaseDto: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}stock`, flockPurchaseDto, { responseType: 'text' });
+    return this.http.post(`${this.baseUrl}/stock`, flockPurchaseDto, { responseType: 'text' });
   }
 
   public transferFlockToCage(flockCageTransferDtos: FlockCageTransferDto[]): Observable<any> {
-    return this.http.put(`${this.baseUrl}transfer`, flockCageTransferDtos, { responseType: 'text' });
+    return this.http.put(`${this.baseUrl}/transfer`, flockCageTransferDtos, { responseType: 'text' });
   }
 }

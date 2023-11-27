@@ -9,19 +9,19 @@ import { AuthenticatedUserDto, LoginParamDto, UserDto } from 'generated-src/mode
 })
 export class SecurityApiService {
 
-    baseUrl = `${environment.apiPath}users/`;
+    baseUrl = `${environment.apiPath}users`;
 
     constructor(private http: HttpClient) { }
 
     public authenticateUser(loginParam: LoginParamDto): Observable<AuthenticatedUserDto> {
-        return this.http.post<AuthenticatedUserDto>(`${this.baseUrl}authenticate`, loginParam);
+        return this.http.post<AuthenticatedUserDto>(`${this.baseUrl}/authenticate`, loginParam);
     }
 
     public getAllUsernames(): Observable<string[]> {
-        return this.http.get<string[]>(`${this.baseUrl}usernames`);
+        return this.http.get<string[]>(`${this.baseUrl}/usernames`);
     }
 
     public getAllDrivers(): Observable<UserDto[]> {
-        return this.http.get<UserDto[]>(`${this.baseUrl}drivers`);
+        return this.http.get<UserDto[]>(`${this.baseUrl}/drivers`);
     }
 }

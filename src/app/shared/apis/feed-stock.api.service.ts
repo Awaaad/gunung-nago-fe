@@ -5,7 +5,7 @@ import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class FeedStockApiService {
-  baseUrl = `${environment.apiPath}feed-stocks/`;
+  baseUrl = `${environment.apiPath}feed-stocks`;
 
   constructor(private http: HttpClient) { }
 

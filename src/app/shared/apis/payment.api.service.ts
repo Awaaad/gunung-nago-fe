@@ -5,15 +5,15 @@ import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class PaymentApiService {
-    baseUrl = `${environment.apiPath}payments/`;
+    baseUrl = `${environment.apiPath}payments`;
 
     constructor(private http: HttpClient) { }
 
     public settleInvoicePayment(salesInvoiceSettleCreditPaymentDto: any): Observable<any> {
-        return this.http.post(`${this.baseUrl}settle-invoice`, salesInvoiceSettleCreditPaymentDto, { responseType: 'text' });
+        return this.http.post(`${this.baseUrl}/settle-invoice`, salesInvoiceSettleCreditPaymentDto, { responseType: 'text' });
     }
 
     public settleAccount(settleCustomerCreditPaymentDto: any): Observable<any> {
-        return this.http.post(`${this.baseUrl}settle-account`, settleCustomerCreditPaymentDto, { responseType: 'text' });
+        return this.http.post(`${this.baseUrl}/settle-account`, settleCustomerCreditPaymentDto, { responseType: 'text' });
     }
 }

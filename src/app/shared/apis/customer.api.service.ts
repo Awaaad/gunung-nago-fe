@@ -8,7 +8,7 @@ import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class CustomerApiService {
-    baseUrl = `${environment.apiPath}customers/`;
+    baseUrl = `${environment.apiPath}customers`;
 
     constructor(private http: HttpClient) { }
 
@@ -21,6 +21,6 @@ export class CustomerApiService {
     }
 
     public search(searchValues: any): Observable<PageResult<CustomerDto>> {
-        return this.http.get<PageResult<CustomerDto>>(`${this.baseUrl}search`, { params: searchValues });
+        return this.http.get<PageResult<CustomerDto>>(`${this.baseUrl}/search`, { params: searchValues });
     }
 }

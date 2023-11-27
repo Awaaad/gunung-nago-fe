@@ -7,7 +7,7 @@ import { CageCategory, CageDto } from 'generated-src/model';
 
 @Injectable()
 export class CageApiService {
-  baseUrl = `${environment.apiPath}cages/`;
+  baseUrl = `${environment.apiPath}cages`;
 
   constructor(private http: HttpClient) { }
 
@@ -24,11 +24,11 @@ export class CageApiService {
   }
 
   public search(searchValues: any): Observable<PageResult<CageDto>> {
-    return this.http.get<PageResult<CageDto>>(`${this.baseUrl}search`, { params: searchValues });
+    return this.http.get<PageResult<CageDto>>(`${this.baseUrl}/search`, { params: searchValues });
   }
 
   public getAllActiveCages(): Observable<CageDto[]> {
-    return this.http.get<CageDto[]>(`${this.baseUrl}all`);
+    return this.http.get<CageDto[]>(`${this.baseUrl}/all`);
   }
 
   public getAllInactiveCages(): Observable<CageDto[]> {

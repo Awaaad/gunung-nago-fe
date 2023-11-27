@@ -9,7 +9,7 @@ import { environment } from "src/environments/environment";
     providedIn: 'root',
 })
 export class BankAccountApiService {
-    baseUrl = `${environment.apiPath}bank-accounts/`;
+    baseUrl = `${environment.apiPath}bank-accounts`;
 
     constructor(private http: HttpClient) { }
 
@@ -18,7 +18,7 @@ export class BankAccountApiService {
     }
 
     public search(searchValues: any): Observable<PageResult<BankAccountDto>> {
-        return this.http.get<PageResult<BankAccountDto>>(`${this.baseUrl}search`, { params: searchValues });
+        return this.http.get<PageResult<BankAccountDto>>(`${this.baseUrl}/search`, { params: searchValues });
     }
 
     public edit(bankAccountDto: BankAccountDto): Observable<any> {
@@ -26,6 +26,6 @@ export class BankAccountApiService {
     }
 
     public findAll(): Observable<BankAccountDto[]> {
-        return this.http.get<BankAccountDto[]>(`${this.baseUrl}all`);
+        return this.http.get<BankAccountDto[]>(`${this.baseUrl}/all`);
     }
 }

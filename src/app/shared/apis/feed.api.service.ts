@@ -7,7 +7,7 @@ import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class FeedApiService {
-  baseUrl = `${environment.apiPath}feeds/`;
+  baseUrl = `${environment.apiPath}feeds`;
 
   constructor(private http: HttpClient) { }
 
@@ -20,22 +20,22 @@ export class FeedApiService {
   }
 
   public search(searchValues: any): Observable<PageResult<FeedDto>> {
-    return this.http.get<PageResult<FeedDto>>(`${this.baseUrl}search`, { params: searchValues });
+    return this.http.get<PageResult<FeedDto>>(`${this.baseUrl}/search`, { params: searchValues });
   }
 
   public findFeedStockByFeedId(id: number): Observable<FeedStockSaveDto> {
-    return this.http.get<FeedStockSaveDto>(`${this.baseUrl}stock/${id}`);
+    return this.http.get<FeedStockSaveDto>(`${this.baseUrl}/stock/${id}`);
   }
 
   public findFeedStockForAllocationByFeedCategory(category: FeedCategory): Observable<FeedStockDto> {
-    return this.http.get<FeedStockDto>(`${this.baseUrl}allocation?feedCategory=${category}`);
+    return this.http.get<FeedStockDto>(`${this.baseUrl}/allocation?feedCategory=${category}`);
   }
 
   public findAllFeedStockForAllocation(): Observable<FeedStockDto[]> {
-    return this.http.get<FeedStockDto[]>(`${this.baseUrl}allocation`);
+    return this.http.get<FeedStockDto[]>(`${this.baseUrl}/allocation`);
   }
 
   public findFeedFormAllocation(feedStockId: number, cageCategory: string): Observable<FeedStockAllocationDto[]> {
-    return this.http.get<FeedStockAllocationDto[]>(`${this.baseUrl}allocation/form/${feedStockId}/${cageCategory}`);
+    return this.http.get<FeedStockAllocationDto[]>(`${this.baseUrl}/allocation/form/${feedStockId}/${cageCategory}`);
   }
 }

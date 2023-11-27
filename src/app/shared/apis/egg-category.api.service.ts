@@ -7,7 +7,7 @@ import { environment } from "src/environments/environment";
 
 @Injectable()
 export class EggCategoryApiService {
-  baseUrl = `${environment.apiPath}egg-categories/`;
+  baseUrl = `${environment.apiPath}egg-categories`;
 
   constructor(private http: HttpClient) { }
 
@@ -16,7 +16,7 @@ export class EggCategoryApiService {
   }
 
   public search(searchValues: any): Observable<PageResult<EggCategoryDto>> {
-    return this.http.get<PageResult<EggCategoryDto>>(`${this.baseUrl}search`, { params: searchValues });
+    return this.http.get<PageResult<EggCategoryDto>>(`${this.baseUrl}/search`, { params: searchValues });
   }
 
   public edit(eggCategory: EggCategoryDto): Observable<any> {
@@ -24,6 +24,6 @@ export class EggCategoryApiService {
   }
 
   public findAll(): Observable<EggCategoryDto[]> {
-    return this.http.get<EggCategoryDto[]>(`${this.baseUrl}all`);
+    return this.http.get<EggCategoryDto[]>(`${this.baseUrl}/all`);
   }
 }

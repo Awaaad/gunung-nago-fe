@@ -6,7 +6,7 @@ import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class FlockStockApiService {
-  baseUrl = `${environment.apiPath}flock-stocks/`;
+  baseUrl = `${environment.apiPath}flock-stocks`;
 
   constructor(private http: HttpClient) { }
 

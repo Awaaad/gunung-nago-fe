@@ -5,7 +5,7 @@ import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class FileApiService {
-    baseUrl = `${environment.apiPath}files/`;
+    baseUrl = `${environment.apiPath}files`;
 
     constructor(private http: HttpClient) { }
 
@@ -18,15 +18,15 @@ export class FileApiService {
 
     public generatePurchaseInvoicePdf(purchaseInvoiceId: number): Observable<any> {
         const headers = this.setHeaders();
-        return this.http.get<any>(`${this.baseUrl}purchase-invoice/${purchaseInvoiceId}`, { headers, responseType: 'blob' as 'json' });
+        return this.http.get<any>(`${this.baseUrl}/purchase-invoice/${purchaseInvoiceId}`, { headers, responseType: 'blob' as 'json' });
     }
 
     public generateEggSaleInvoicePdf(salesInvoiceId: number): Observable<any> {
-        return this.http.get<any>(`${this.baseUrl}egg-sale-invoice/${salesInvoiceId}`);
+        return this.http.get<any>(`${this.baseUrl}/egg-sale-invoice/${salesInvoiceId}`);
     }
 
     public generateSaleInvoicePdf(salesInvoiceId: number): Observable<any> {
         const headers = this.setHeaders();
-        return this.http.get<any>(`${this.baseUrl}sale-invoice/${salesInvoiceId}`, { headers, responseType: 'blob' as 'json' });
+        return this.http.get<any>(`${this.baseUrl}/sale-invoice/${salesInvoiceId}`, { headers, responseType: 'blob' as 'json' });
     }
 }

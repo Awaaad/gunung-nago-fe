@@ -6,12 +6,12 @@ import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class FlockFeedLineApiService {
-    baseUrl = `${environment.apiPath}feed-lines/`;
+    baseUrl = `${environment.apiPath}feed-lines`;
 
     constructor(private http: HttpClient) { }
 
     public allocateFeedStockToFlock(feeds: any): Observable<any> {
-        return this.http.post(`${this.baseUrl}allocate`, feeds, { responseType: 'text' });
+        return this.http.post(`${this.baseUrl}/allocate`, feeds, { responseType: 'text' });
     }
 
     public findAllActiveFlockFeedLinesByFlockId(id: number): Observable<FlockFeedLineDto[]> {

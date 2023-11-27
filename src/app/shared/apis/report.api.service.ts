@@ -6,15 +6,15 @@ import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class ReportApiService {
-  baseUrl = `${environment.apiPath}reports/`;
+  baseUrl = `${environment.apiPath}reports`;
 
   constructor(private http: HttpClient) { }
 
   public findDailyProductionReport(date: any): Observable<DailyProductionReportDto[]> {
-    return this.http.get<DailyProductionReportDto[]>(`${this.baseUrl}daily?date=${date}`);
+    return this.http.get<DailyProductionReportDto[]>(`${this.baseUrl}/daily?date=${date}`);
   }
 
   public findEggCategoryStockTransactionsByEggStockAndDate(searchValues: any): Observable<EggReportDto[]> {
-    return this.http.get<EggReportDto[]>(`${this.baseUrl}egg`, { params: searchValues });
+    return this.http.get<EggReportDto[]>(`${this.baseUrl}/egg`, { params: searchValues });
   }
 }

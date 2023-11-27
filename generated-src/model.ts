@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2023-11-26 17:02:28.
+// Generated using typescript-generator version 3.2.1263 on 2023-11-27 12:35:16.
 
 export class BankAccountDto {
     id!: number;
@@ -8,29 +8,8 @@ export class BankAccountDto {
     accountHolder!: string;
     accountNumber!: string;
 }
-// Generated using typescript-generator version 3.2.1263 on 2023-11-21 22:12:50.
 
-export class ReturnInvoiceDto {
-    returnNumber!: string;
-    comment!: string;
-    totalPrice!: number;
-    returnInvoiceLineDtos!: ReturnInvoiceLineDto[];
-}
-
-export class ReturnInvoiceLineDto {
-    returnInvoiceType!: ReturnInvoiceType;
-    pricePerBox!: number;
-    totalPrice!: number;
-    feedStockId!: number;
-    flockId!: number;
-    manureStockId!: number;
-    quantity!: number;
-    salesInvoiceLineId!: number;
-}
-// Generated using typescript-generator version 3.2.1263 on 2023-11-26 13:52:01.
-
-export class BankAccountDto {
-    id!: number;
+export class BankAccountSearchCriteriaDto {
     bankName!: string;
     accountHolder!: string;
     accountNumber!: string;
@@ -98,6 +77,11 @@ export class EggCategorySaleDto {
 }
 
 export class EggCategorySaleDtoBuilder {
+}
+
+export class EggCategorySearchCriteriaDto {
+    name!: string;
+    eggType!: EggType;
 }
 
 export class EggCategoryStockDto {
@@ -478,6 +462,11 @@ export class PaymentModeDto {
     requireBankAccount!: boolean;
 }
 
+export class PaymentModeSearchCriteriaDto {
+    name!: string;
+    requireBankAccount!: boolean;
+}
+
 export class PaymentSaveDto {
     paymentModeId!: number;
     bankAccountId!: number;
@@ -507,6 +496,7 @@ export class SaleDetailsDto {
     eggCategoryId!: number;
     eggType!: string;
     eggQuantityType!: EggQuantityType;
+    transferToBad!: boolean;
     cageId!: number;
     flockId!: number;
     flockType!: FlockType;
@@ -696,6 +686,29 @@ export class DailyProductionReportDto {
     eggCategoryStocks!: EggCategoryStockDto[];
 }
 
+export class ReturnInvoiceDto {
+    returnNumber!: number;
+    comment!: string;
+    totalPrice!: number;
+    createdDate!: Date;
+    returnInvoiceLineDtos!: ReturnInvoiceLineDto[];
+}
+
+export class ReturnInvoiceLineDto {
+    returnInvoiceType!: ReturnInvoiceType;
+    pricePerBox!: number;
+    totalPrice!: number;
+    feedStockId!: number;
+    flockId!: number;
+    manureStockId!: number;
+    quantity!: number;
+    salesInvoiceLineId!: number;
+    eggQuantityType!: EggQuantityType;
+    eggCategory!: string;
+    eggType!: EggType;
+    flockType!: FlockType;
+}
+
 export class SalesInvoiceDetailsDto {
     id!: number;
     totalPrice!: number;
@@ -717,7 +730,6 @@ export class SalesInvoiceDetailsDto {
 
 export class SalesInvoiceDetailsForReturnDto {
     id!: number;
-    receiptId!: number;
     totalPrice!: number;
     soldAt!: number;
     createdBy!: string;
@@ -731,6 +743,7 @@ export class SalesInvoiceDetailsForReturnDto {
     salesPerson!: string;
     salesInvoiceCategory!: SalesInvoiceCategory;
     salesInvoiceStatus!: SalesInvoiceStatus;
+    discount!: number;
     comment!: string;
     salesInvoiceLineForReturnDtos!: SalesInvoiceLineForReturnDto[];
 }
@@ -802,6 +815,7 @@ export class SalesInvoiceLineForReturnDto {
     quantity!: number;
     price!: number;
     eggQuantityType!: EggQuantityType;
+    eggCategoryId!: number;
     cageId!: number;
     flockId!: number;
     flockType!: FlockType;
@@ -895,13 +909,6 @@ export class SurveyEggCountDto {
     quantity!: number;
 }
 
-export enum ReturnInvoiceType {
-    FLOCK = 'FLOCK',
-    FEED = 'FEED',
-    EGG = 'EGG',
-    MANURE = 'MANURE',
-}
-
 export enum CageCategory {
     DOC = 'DOC',
     DARA = 'DARA',
@@ -928,6 +935,7 @@ export enum EggRecordType {
     SALE = 'SALE',
     TRANSFER = 'TRANSFER',
     BURDEN_TRANSFER_BAD_DESTROYED = 'BURDEN_TRANSFER_BAD_DESTROYED',
+    RETURN = 'RETURN',
 }
 
 export enum FeedCategory {
@@ -986,4 +994,11 @@ export enum SalesInvoiceStatus {
     PAID = 'PAID',
     PARTLY_PAID = 'PARTLY_PAID',
     RETURNED = 'RETURNED',
+}
+
+export enum ReturnInvoiceType {
+    FLOCK = 'FLOCK',
+    FEED = 'FEED',
+    EGG = 'EGG',
+    MANURE = 'MANURE',
 }

@@ -7,7 +7,7 @@ import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class SurveyApiService {
-  baseUrl = `${environment.apiPath}surveys/`;
+  baseUrl = `${environment.apiPath}surveys`;
 
   constructor(private http: HttpClient) { }
 
@@ -20,18 +20,18 @@ export class SurveyApiService {
   }
 
   public findSurveyByCageId(cageId: number): Observable<SurveyDto> {
-    return this.http.get<SurveyDto>(`${this.baseUrl}${cageId}`);
+    return this.http.get<SurveyDto>(`${this.baseUrl}/${cageId}`);
   }
 
   public findMostRecentSurveyDtoForCage(cageId: number): Observable<SurveyDto> {
-    return this.http.get<SurveyDto>(`${this.baseUrl}recent/${cageId}`);
+    return this.http.get<SurveyDto>(`${this.baseUrl}/recent/${cageId}`);
   }
 
   public findIfSurveyHasBeenRegisteredForCage(cageId: number): Observable<string> {
-    return this.http.get<string>(`${this.baseUrl}surveyed/${cageId}`);
+    return this.http.get<string>(`${this.baseUrl}/surveyed/${cageId}`);
   }
 
   public flockStockExistsForSelectedCageByCageId(cageId: number): Observable<boolean> {
-    return this.http.get<boolean>(`${this.baseUrl}flock-stock/${cageId}`);
+    return this.http.get<boolean>(`${this.baseUrl}/flock-stock/${cageId}`);
   }
 }

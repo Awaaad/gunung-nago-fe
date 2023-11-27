@@ -8,24 +8,24 @@ import { environment } from 'src/environments/environment';
 @Injectable()
 export class UserApiService {
 
-    baseUrl = `${environment.apiPath}users/`;
+    baseUrl = `${environment.apiPath}users`;
 
     constructor(private http: HttpClient) { }
 
     // user
     public getAllUsers(): Observable<UserDto[]> {
-        return this.http.get<UserDto[]>(this.baseUrl + 'all');
+        return this.http.get<UserDto[]>(this.baseUrl + '/all');
     }
 
     public search(searchValues: any): Observable<PageResult<UserDto>> {
-        return this.http.get<PageResult<UserDto>>(`${this.baseUrl}search`, { params: searchValues });
+        return this.http.get<PageResult<UserDto>>(`${this.baseUrl}/search`, { params: searchValues });
     }
 
     public edit(userDto: UserDto): Observable<string> {
-        return this.http.put<string>(this.baseUrl + 'edit-user', userDto);
+        return this.http.put<string>(this.baseUrl + '/edit-user', userDto);
     }
 
     public save(usersDto: UserDto[]): Observable<string> {
-        return this.http.post<string>(this.baseUrl + 'save-users', usersDto);
+        return this.http.post<string>(this.baseUrl + '/save-users', usersDto);
     }
 }

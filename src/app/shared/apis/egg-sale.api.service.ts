@@ -5,7 +5,7 @@ import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class EggSaleApiService {
-  baseUrl = `${environment.apiPath}egg-sales/`;
+  baseUrl = `${environment.apiPath}egg-sales`;
 
   constructor(private http: HttpClient) { }
 

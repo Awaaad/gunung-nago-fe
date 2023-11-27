@@ -9,7 +9,7 @@ import { environment } from "src/environments/environment";
     providedIn: 'root',
 })
 export class PaymentModeApiService {
-    baseUrl = `${environment.apiPath}payment-modes/`;
+    baseUrl = `${environment.apiPath}payment-modes`;
 
     constructor(private http: HttpClient) { }
 
@@ -18,7 +18,7 @@ export class PaymentModeApiService {
     }
 
     public search(searchValues: any): Observable<PageResult<PaymentModeDto>> {
-        return this.http.get<PageResult<PaymentModeDto>>(`${this.baseUrl}search`, { params: searchValues });
+        return this.http.get<PageResult<PaymentModeDto>>(`${this.baseUrl}/search`, { params: searchValues });
     }
 
     public edit(paymentModeDto: PaymentModeDto): Observable<any> {
@@ -26,6 +26,6 @@ export class PaymentModeApiService {
     }
 
     public findAll(): Observable<PaymentModeDto[]> {
-        return this.http.get<PaymentModeDto[]>(`${this.baseUrl}all`);
+        return this.http.get<PaymentModeDto[]>(`${this.baseUrl}/all`);
     }
 }

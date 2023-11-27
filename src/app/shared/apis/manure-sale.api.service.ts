@@ -5,7 +5,7 @@ import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class ManureSaleApiService {
-    baseUrl = `${environment.apiPath}manure-sales/`;
+    baseUrl = `${environment.apiPath}manure-sales`;
 
     constructor(private http: HttpClient) { }
 

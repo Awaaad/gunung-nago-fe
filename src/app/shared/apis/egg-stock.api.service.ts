@@ -7,7 +7,7 @@ import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class EggStockApiService {
-  baseUrl = `${environment.apiPath}eggs/`;
+  baseUrl = `${environment.apiPath}eggs`;
 
   constructor(private http: HttpClient) { }
 
@@ -20,6 +20,6 @@ export class EggStockApiService {
   }
 
   public transfer(eggTransferDtos: EggTransferFrontDto[]): Observable<any> {
-    return this.http.post(`${this.baseUrl}transfer`, eggTransferDtos, { responseType: 'text' });
+    return this.http.post(`${this.baseUrl}/transfer`, eggTransferDtos, { responseType: 'text' });
   }
 }
