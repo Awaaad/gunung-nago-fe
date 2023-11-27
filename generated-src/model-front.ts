@@ -218,6 +218,7 @@ export class SalesInvoiceDetailsForReturnFrontDto {
     salesPerson!: string | null | undefined | any;
     salesInvoiceCategory!: SalesInvoiceCategory | null | undefined | any;
     salesInvoiceStatus!: SalesInvoiceStatus | null | undefined | any;
+    discount!: number | null | undefined | any;
     comment: string | null | undefined | any;
     salesInvoiceLineForReturnDtos!: SaleDetailsForReturnFrontDto[] | [] | null | undefined;
 }
@@ -382,4 +383,29 @@ export class SaleDetailsForReturnFrontDto {
     flockType!: FlockType;
     quantityReturned!: number;
     eggCategoryId!:number;
+    transferToBad!: boolean;
+}
+
+export class ReturnInvoiceFrontDto {
+    returnNumber!: number | null | undefined;
+    comment!: String | null | undefined;
+    totalPrice!: number | null | undefined;
+    returnInvoiceLineDtos!: ReturnInvoiceLineFrontDto[] | [] | null | undefined;
+    createdDate!: Date | null | undefined | any;
+    
+}
+
+export class ReturnInvoiceLineFrontDto {
+    returnInvoiceType!: ReturnInvoiceType | null | undefined;
+    pricePerBox!: number | null | undefined;
+    totalPrice!: number | null | undefined;
+    feedStockId!: number | null | undefined;
+    flockId!: number | null | undefined;
+    manureStockId!: number | null | undefined;
+    quantity!: number | null | undefined;
+    salesInvoiceLineId!: number | null | undefined;
+
+    eggQuantityType!: EggQuantityType | null | undefined;
+    eggCategory!:string | null | undefined;
+    eggType!: EggType | null | undefined;
 }

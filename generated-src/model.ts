@@ -27,6 +27,14 @@ export class ReturnInvoiceLineDto {
     quantity!: number;
     salesInvoiceLineId!: number;
 }
+// Generated using typescript-generator version 3.2.1263 on 2023-11-26 13:52:01.
+
+export class BankAccountDto {
+    id!: number;
+    bankName!: string;
+    accountHolder!: string;
+    accountNumber!: string;
+}
 
 export class CageDto {
     id!: number;

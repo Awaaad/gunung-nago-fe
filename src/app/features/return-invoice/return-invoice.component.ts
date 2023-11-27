@@ -5,14 +5,16 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
 import { IonModal } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { PaymentType, SaleDetailsDto, SalesInvoiceDto } from 'generated-src/model';
-import { SaleSaveFrontDto, SalesInvoiceDetailsForReturnFrontDto, SaleDetailsForReturnFrontDto, SalesInvoiceDetailsFrontDto, SalesInvoiceDetailsFrontForReturnDto } from 'generated-src/model-front';
+import { BankAccountDto, PaymentModeDto, SaleDetailsDto, SalesInvoiceDto } from 'generated-src/model';
+import { SaleSaveFrontDto, SalesInvoiceDetailsForReturnFrontDto, SaleDetailsForReturnFrontDto, SalesInvoiceDetailsFrontDto, SalesInvoiceDetailsFrontForReturnDto, ReturnInvoiceFrontDto } from 'generated-src/model-front';
 import * as moment from 'moment';
 import { ReturnApiService } from 'src/app/shared/apis/return.api.service';
 import { SalesInvoiceApiService } from 'src/app/shared/apis/sales-invoice.api.service';
 import { UtilsService } from 'src/app/shared/utils/utils.service';
 import { OverlayEventDetail } from '@ionic/core/components';
 import { environment } from 'src/environments/environment';
+import { PaymentModeApiService } from 'src/app/shared/apis/payment-mode.api.service';
+import { BankAccountApiService } from 'src/app/shared/apis/bank-account.api.service';
 
 
 @Component({
@@ -32,8 +34,9 @@ export class ReturnInvoiceComponent  implements OnInit {
   @ViewChild(IonModal) modal!: IonModal;
   public today: Date = new Date();
   public quantityAllowed: boolean = false;
-  public salesInvoiceDetailsFrontDto!: SalesInvoiceDetailsFrontForReturnDto | null | undefined;
+  public salesInvoiceDetailsFrontDtoForSalesInvoice!: SalesInvoiceDetailsFrontDto | null | undefined;
   public salesInvoiceDetailsForReturnDto!: SalesInvoiceDetailsForReturnFrontDto  | null | undefined;
+  public returnInvoiceDetails: ReturnInvoiceFrontDto[] = [] ;
   public totalPiece: number = 0;
   public totalTray: number = 0;
   public totalTie: number = 0;
@@ -49,6 +52,11 @@ export class ReturnInvoiceComponent  implements OnInit {
   public totalPriceManure: number = 0;
   public totalPriceReturn:number = 0;
   public totalPriceForReturnSummary: number = 0;
+  public showReturnInvoices:boolean = false;
+  public bankAccounts: BankAccountDto[] = [];
+  public paymentModes: PaymentModeDto[] = [];
+  public completePaymentModes: PaymentModeDto[] = [];
+  public comment!: string | null;
   public company = environment.company;
   public address = environment.address;
   public phone = environment.phone;
@@ -59,7 +67,7 @@ export class ReturnInvoiceComponent  implements OnInit {
 
   public salesDetails: SaleDetailsDto[] | null | undefined = [];
   public salesDetailsCopy: SaleDetailsDto | null | undefined ;
-  public displayedColumnsReturn: string[] = ['no.', 'product', 'quantity', 'original price', 'new price', 'amount'];
+  public displayedColumnsReturn: string[] = ['no.', 'product', 'quantity returned', 'quantity to return', 'original price', 'discount', 'unit sold at', 'new price', 'amount', 'actions'];
   public language = "en";
   public salesInvoiceId: any = this.activatedRoute.snapshot.paramMap.get('id');
 
@@ -86,6 +94,9 @@ export class ReturnInvoiceComponent  implements OnInit {
     paymentType: [
       { type: 'required', message: 'Payment mode is required' },
     ],
+    paymentModeId: [
+      { type: 'required', message: 'Payment mode is required' },
+    ],
     minValue: [
       { type: 'min', message: 'Value cannot be less than 0' }
     ],
@@ -94,6 +105,9 @@ export class ReturnInvoiceComponent  implements OnInit {
     ],
     maxQuantity: [
       { type: 'max', message: 'Quantity entered is not allowed for this return' }
+    ],
+    bankAccountId: [
+      { type: 'required', message: 'Bank account is required' },
     ]
   };
 
@@ -102,21 +116,47 @@ export class ReturnInvoiceComponent  implements OnInit {
     private readonly activatedRoute: ActivatedRoute,
     private translateService: TranslateService,
     private utilsService: UtilsService,
-    private returnApiService: ReturnApiService) { }
+    private returnApiService: ReturnApiService,
+    private paymentModeApiService: PaymentModeApiService,
+    private bankAccountApiService: BankAccountApiService,) { }
 
   async ngOnInit() {
     this.returnFormGroup = this.formBuilder.group({
+      customerFirstName: new FormControl(''),
+      customerLastName: new FormControl(''),
+      customerAddress: new FormControl(''),
+      customerTelephoneNumber: new FormControl(''),
       formDetail: this.formBuilder.array([])
     })
     if (this.salesInvoiceId != null){
+      this.findSalesInvoiceDetailsById();
       this.findSalesInvoiceDetailsForReturnById();
+      this.findReturnInvoiceDetailsForReturnById();
     }
     this.initialiseSalesInvoices();
-    
+    this.getAllPaymentModes();
+    this.getAllBankAccounts();
   }
 
   private checkIfCreditAllowed(): boolean {
     return false;
+  }
+
+  public getAllPaymentModes() {
+    this.paymentModeApiService.findAll().subscribe(paymentModes => {
+      
+      paymentModes.forEach(paymentMode =>{
+        if(paymentMode.name !== "CREDIT"){
+          this.paymentModes.push(paymentMode)
+        }
+      })
+    })
+  }
+
+  public getAllBankAccounts() {
+    this.bankAccountApiService.findAll().subscribe(bankAccounts => {
+      this.bankAccounts = bankAccounts;
+    })
   }
 
   initialiseQuantityForReturn(){
@@ -127,13 +167,17 @@ export class ReturnInvoiceComponent  implements OnInit {
       ]))
     })
   }
+
   addPaymentFormGroup() {
     return this.formBuilder.group({
       amountPaid: new FormControl(0, Validators.compose([
         Validators.required,
         Validators.min(0)
       ])),
-      paymentType: new FormControl('CASH', Validators.compose([
+      paymentModeId: new FormControl(null, Validators.compose([
+        Validators.required
+      ])),
+      bankAccountId: new FormControl(1, Validators.compose([
         Validators.required
       ])),
       paymentDeadline: new FormControl(moment(new Date()).startOf('day').format(moment.HTML5_FMT.DATE), Validators.compose([
@@ -142,11 +186,6 @@ export class ReturnInvoiceComponent  implements OnInit {
     })
   }
 
-  addPayment(): void {
-    if ((this.paymentForm.get('payments') as FormArray).length < 2) {
-      (this.paymentForm.get('payments') as FormArray).push(this.addPaymentFormGroup());
-    }
-  }
 
   removePayment(paymentGroupIndex: number): void {
     (this.paymentForm.get('payments') as FormArray).removeAt(paymentGroupIndex);
@@ -180,13 +219,80 @@ export class ReturnInvoiceComponent  implements OnInit {
     }
   }
 
+  addPayment(): void {
+    console.log(this.paymentForm.get('payments'));
+    if ((this.paymentForm.get('payments') as FormArray).length < 2) {
+      (this.paymentForm.get('payments') as FormArray).push(this.addPaymentFormGroup());
+    }
+  }
+
+  public findSalesInvoiceDetailsById(): void {
+    this.salesInvoiceApiService.findSalesInvoiceDetailsById(this.salesInvoiceId).subscribe(salesInvoiceDetailsFrontDto => {
+      console.log(salesInvoiceDetailsFrontDto);
+      this.salesInvoiceDetailsFrontDtoForSalesInvoice = salesInvoiceDetailsFrontDto;
+      //this.totalPrice = this.salesInvoiceDetailsFrontDtoForSalesInvoice.totalPrice;
+    })
+  }
+
   public findSalesInvoiceDetailsForReturnById() {
     this.salesInvoiceApiService.findSalesInvoiceDetailsForReturnById(this.salesInvoiceId).subscribe(res=>{
     this.salesInvoiceDetailsForReturnDto = res;
-    res.salesInvoiceLineForReturnDtos?.forEach(saleDetail => {
-      this.salesInStock.push(saleDetail);
-    })
+    console.log(res);
+    let invoiceId = null;
+    let totalQuantityReturned = 0;
+    this.returnFormGroup.get('customerFirstName')?.setValue(res.customerFirstName);
+    this.returnFormGroup.get('customerLastName')?.setValue(res.customerLastName);
+    this.returnFormGroup.get('customerTelephoneNumber')?.setValue(res.customerTelephoneNumber);
+    this.returnFormGroup.get('customerAddress')?.setValue(res.customerAddress);
+
+    res.salesInvoiceLineForReturnDtos?.forEach(x => {
+      const obj = this.salesInStock.find(o => o.id === x.id);
+      if (obj) {
+        obj.quantityReturned = obj.quantityReturned + x.quantityReturned;
+      } else {
+        this.salesInStock.push(x);
+      }
+    });
+    console.log(this.salesInStock)
+
+    // res.salesInvoiceLineForReturnDtos?.forEach(saleDetail => {
+    //   invoiceId = saleDetail.id;
+      
+    //   if (saleDetail.id === invoiceId){
+    //     totalQuantityReturned = totalQuantityReturned + saleDetail.quantityReturned;
+    //     // let saleDetailsForReturnObject :SaleDetailsForReturnFrontDto = {
+    //     //   id: saleDetail.id,
+    //     //   salesInvoiceType: saleDetail.salesInvoiceType,
+    //     //   quantity: saleDetail.quantity,
+    //     //   price: saleDetail.price,
+    //     //   eggType: saleDetail.eggType,
+    //     //   eggQuantityType: saleDetail.eggQuantityType,
+    //     //   cageId: saleDetail.cageId,
+    //     //   flockId: saleDetail.flockId,
+    //     //   quantityReturned: saleDetail.quantityReturned + totalQuantityReturned,
+    //     //   eggCategoryId: saleDetail.eggCategoryId,
+    //     //   transferToBad: saleDetail.transferToBad,
+    //     //   flockType: saleDetail.flockType
+    //     // }
+    //     saleDetail.quantityReturned = totalQuantityReturned;
+        
+    //     console.log("detas ", saleDetail);
+    //   }
+    //   this.salesInStock.push(saleDetail);
+    //   // this.salesInStock.push(saleDetail);
+      
+    // })
     this.initialiseReturnFormBuilder();
+  })
+}
+
+public findReturnInvoiceDetailsForReturnById() {
+  this.returnApiService.getReturnDetailsBySalesInvoiceId(this.salesInvoiceId).subscribe(res=>{
+  
+  res.forEach((element: ReturnInvoiceFrontDto) => {
+    this.returnInvoiceDetails.push(element);
+    console.log("kjkl ", res);
+  });
   })
 }
 
@@ -224,27 +330,32 @@ export class ReturnInvoiceComponent  implements OnInit {
           cageId :sale.cageId,
           eggQuantityType: sale.eggQuantityType,
           eggType: sale.eggType,
+          eggCategoryId: sale.eggCategoryId,
           flockId: sale.flockId,
           flockType: sale.flockType,
           price: sale.price,
-          newPrice: new FormControl({ value: null, disabled: false }),
+          discount: this.salesInvoiceDetailsForReturnDto?.discount,
+          unitSoldAt: this.salesInvoiceDetailsForReturnDto?.discount !== 0 ? (this.salesInvoiceDetailsForReturnDto?.discount * sale.price) : (sale.price),
+          newPrice: new FormControl({ value: sale.price, disabled: false }),
           quantity: new FormControl({ value: sale.quantity, disabled: false }, Validators.compose([Validators.max(maxQuantity), Validators.min(1)])),
           totalPricePerItem: sale.quantity,
-          salesInvoiceType: sale.salesInvoiceType
+          salesInvoiceType: sale.salesInvoiceType,
+          transferToBad: new FormControl({ value: false, disabled: false }),
         })
         formDetail.push(returnFormGroup);
       })
     
     this.salesDetailsTable = new MatTableDataSource<SaleDetailsForReturnFrontDto>(this.returnFormGroupDetail.value);
+    console.log(this.salesDetailsTable);
   }
 
   public openModal(): void {
     this.calculateTotalPrice();
-    if (!this.checkIfCreditAllowed()) {
-      this.paymentTypes = this.paymentTypes.filter(payment => payment != PaymentType.CREDIT);
-    } else {
-      this.paymentTypes = Object.keys(PaymentType);
-    }
+    // if (!this.checkIfCreditAllowed()) {
+    //   this.paymentTypes = this.paymentTypes.filter(payment => payment != PaymentType.CREDIT);
+    // } else {
+    //   this.paymentTypes = Object.keys(PaymentType);
+    // }
     this.initialisePaymentFormBuilder();
     this.isModalOpen = true;
   }
@@ -256,6 +367,7 @@ export class ReturnInvoiceComponent  implements OnInit {
   }
 
   public confirm(): void {
+    console.log("pay",this.paymentForm)
     this.modal.dismiss(null, 'confirm');
   }
 
@@ -266,11 +378,13 @@ export class ReturnInvoiceComponent  implements OnInit {
     }
     if (ev.detail.role === 'confirm') {
       this.isModalOpen = false;
+      console.log(this.paymentForm.value.payments);
       this.save();
     }
   }
 
   public save(): void {
+    console.log(this.paymentForm.value.payments);
     const customerDto = {
       id: "",
       firstName:  this.salesInvoiceDetailsForReturnDto?.customerFirstName,
@@ -290,13 +404,19 @@ export class ReturnInvoiceComponent  implements OnInit {
         cageId: sale.cageId,
         flockId: sale.flockId,
         flockType: sale.flockType,
-        eggCategoryId: 0,
+        eggCategoryId: sale.eggCategoryId,
         id: sale.id,
-        quantityReturned: sale.quantityReturned
+        quantityReturned: sale.quantityReturned,
+        transferToBad: sale.transferToBad
       }
       saleDetailsDtoList.push(saleDetailsDto);
     })
     
+    this.paymentForm.value.payments?.forEach((payment: { paymentDeadline: moment.MomentInput; paymentModeId: { id: any; }; }) => {
+      payment.paymentDeadline = moment(payment.paymentDeadline).startOf('day').format(moment.HTML5_FMT.DATE)
+      payment.paymentModeId = payment.paymentModeId.id
+    })
+
     const saleSaveForm : any = {
       customerDto: customerDto,
       paymentSaveDtos: this.paymentForm.value.payments,
@@ -308,6 +428,7 @@ export class ReturnInvoiceComponent  implements OnInit {
       soldAt: this.paymentForm?.get("soldAt")?.value,
       salesInvoiceId: this.salesInvoiceDetailsForReturnDto?.id
     }
+    
     console.log(saleSaveForm);
     this.utilsService.presentLoading();
     this.returnApiService.save(saleSaveForm).subscribe({
@@ -353,9 +474,20 @@ export class ReturnInvoiceComponent  implements OnInit {
     }
     this.calculateTotalPriceForReturnSummary();
     this.quantityAllowed = formGroupDetail.value.every((element: any) => element.quantityAllowedForReturn === true);
-    
   }
 
+  public transferToBad(event : any, index:number) : void{
+    this.returnFormGroupDetail.at(index).get('transferToBad')?.setValue(event.detail.checked);
+  }
+
+  public viewReturnInvoices():void{
+    if(this.showReturnInvoices){
+      this.showReturnInvoices = false;
+    }else{
+      this.showReturnInvoices = true;
+    }
+    
+  }
   public initialiseSalesInvoices(): void {
     this.salesInvoiceDetailsForReturnDto = {
       id: null,
@@ -374,6 +506,7 @@ export class ReturnInvoiceComponent  implements OnInit {
       salesPerson: null,
       salesInvoiceCategory: null,
       salesInvoiceStatus: null,
+      discount: null,
       comment: null,
       salesInvoiceLineForReturnDtos: []
     }
