@@ -251,10 +251,10 @@
                         </tr>
                         <tr *ngIf="invoiceDetail.returnInvoiceType === 'FLOCK'">
                           <td data-label="No.">{{i + 1}}</td>
-                          <!-- <td data-label="Product">CHICKEN - <strong>{{invoiceDetail.flockType | uppercase}}</strong></td> -->
+                          <td data-label="Product">CHICKEN - <strong>{{invoiceDetail?.flockType | uppercase}}</strong></td>
                           <td data-label="Quantity">{{invoiceDetail?.quantity}}</td>
                           <td data-label="Unit Price">Rp {{invoiceDetail?.pricePerBox | number : '1.2-2'}}</td>
-                          <!-- <td data-label="Amount">Rp {{invoiceDetail?.quantity * invoiceDetail?.pricePerBox | number : '1.2-2'}} -->
+                          <td data-label="Amount">Rp {{ invoiceDetail?.totalPrice | number : '1.2-2'}}
                           <!-- </td> -->
                         </tr>
                       </tbody>

@@ -32,7 +32,7 @@ export class CageApiService {
   }
 
   public getAllInactiveCages(): Observable<CageDto[]> {
-    return this.http.get<CageDto[]>(`${this.baseUrl}all/inactive`);
+    return this.http.get<CageDto[]>(`${this.baseUrl}/all/inactive`);
   }
 
   public getAllInactiveCagesByCategory(cageCategory: string): Observable<CageDto[]> {
