@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2023-11-27 12:35:16.
+// Generated using typescript-generator version 3.2.1263 on 2023-11-30 21:41:03.
 
 export class BankAccountDto {
     id!: number;
@@ -696,7 +696,7 @@ export class ReturnInvoiceDto {
 
 export class ReturnInvoiceLineDto {
     returnInvoiceType!: ReturnInvoiceType;
-    pricePerBox!: number;
+    price!: number;
     totalPrice!: number;
     feedStockId!: number;
     flockId!: number;
@@ -814,6 +814,7 @@ export class SalesInvoiceLineForReturnDto {
     salesInvoiceType!: SalesInvoiceType;
     quantity!: number;
     price!: number;
+    eggCategoryName!: string;
     eggQuantityType!: EggQuantityType;
     eggCategoryId!: number;
     cageId!: number;

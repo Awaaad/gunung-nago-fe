@@ -238,7 +238,8 @@
               <!-- <ion-icon *ngIf="element.salesInvoiceStatus !== 'PAID'" color="gunung-nago-warehouse"
                 class="table-credit-icon" name="card"></ion-icon> -->
 
-              <ion-icon class="table-credit-icon" name="arrow-undo" color="gunung-nago-warehouse"  (click)="routeToReturnInvoice(element)"></ion-icon>
+              <ion-icon class="table-credit-icon" name="arrow-undo" color="gunung-nago-warehouse"
+                (click)="routeToReturnInvoice(element)"></ion-icon>
 
               <ion-icon
                 *ngIf="getTotalAmountPaid(element.paymentDtos) === 0 && element.salesInvoiceStatus === 'OUTSTANDING'"

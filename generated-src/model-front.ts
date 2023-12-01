@@ -144,6 +144,7 @@ export class SaleSaveFrontDto {
 }
 
 export class SaleDetailsFrontDto {
+    id: number | null | undefined | any;
     salesInvoiceType!: SalesInvoiceType | null | undefined | any;
     quantity!: number | null | undefined | any;
     price!: number | null | undefined | any;
@@ -377,12 +378,14 @@ export class SaleDetailsForReturnFrontDto {
     quantity!: number;
     price!: number;
     eggType!: EggType;
-    eggQuantityType!: EggQuantityType;
+    eggCategoryName!: string;
+    returnedEggQuantityType!: EggQuantityType;
+    salesEggQuantityType!: EggQuantityType;
     cageId!: number;
     flockId!: number;
     flockType!: FlockType;
     quantityReturned!: number;
-    eggCategoryId!:number;
+    eggCategoryId!: number;
     transferToBad!: boolean;
 }
 
@@ -392,20 +395,21 @@ export class ReturnInvoiceFrontDto {
     totalPrice!: number | null | undefined;
     returnInvoiceLineDtos!: ReturnInvoiceLineFrontDto[] | [] | null | undefined;
     createdDate!: Date | null | undefined | any;
-    
+
 }
 
 export class ReturnInvoiceLineFrontDto {
     returnInvoiceType!: ReturnInvoiceType | null | undefined;
-    pricePerBox!: number | null | undefined;
+    price!: number | null | undefined;
     totalPrice!: number | null | undefined;
     feedStockId!: number | null | undefined;
     flockId!: number | null | undefined;
+    flockType!: FlockType | null | undefined;
     manureStockId!: number | null | undefined;
     quantity!: number | null | undefined;
     salesInvoiceLineId!: number | null | undefined;
-
+    eggCategoryName!: string | null | undefined;
     eggQuantityType!: EggQuantityType | null | undefined;
-    eggCategory!:string | null | undefined;
+    eggCategory!: string | null | undefined;
     eggType!: EggType | null | undefined;
 }

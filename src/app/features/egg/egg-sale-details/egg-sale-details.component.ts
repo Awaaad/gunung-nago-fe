@@ -16,6 +16,7 @@ import { SecurityApiService } from 'src/app/shared/apis/security.api.service';
 import { environment } from 'src/environments/environment';
 import { BankAccountApiService } from 'src/app/shared/apis/bank-account.api.service';
 import { PaymentModeApiService } from 'src/app/shared/apis/payment-mode.api.service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-egg-sale-details',
   templateUrl: './egg-sale-details.component.html',
@@ -110,7 +111,8 @@ export class EggSaleDetailsComponent implements OnInit {
     private translateService: TranslateService,
     private utilsService: UtilsService,
     private bankAccountApiService: BankAccountApiService,
-    private paymentModeApiService: PaymentModeApiService
+    private paymentModeApiService: PaymentModeApiService,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -161,6 +163,14 @@ export class EggSaleDetailsComponent implements OnInit {
       this.totalRemainingGoodEggs = this.eggStock.goodEggs;
       this.totalRemainingBadEggs = this.eggStock.badEggs;
     })
+  }
+
+  public routeToSalesInvoiceCustomerCreditList(): void {
+    const url = this.router.serializeUrl(
+      this.router.createUrlTree([`sales-invoice/sales-invoice-customer-credit-list/${this.selectedCustomer.id}`], { queryParams: { lastName: this.selectedCustomer.lastName, firstName: this.selectedCustomer.firstName } })
+    );
+  
+    window.open(url, '_blank');
   }
 
   public newCustomerChange(event: any): void {

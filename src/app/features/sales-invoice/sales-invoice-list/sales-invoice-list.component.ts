@@ -343,7 +343,6 @@ export class SalesInvoiceListComponent {
   }
 
   public openStatusModal(salesInvoiceDto: SalesInvoiceDto): void {
-    console.log("here")
     this.selectedInvoice = salesInvoiceDto;
     this.initialisePaymentFormBuilder();
     this.isStatusModalOpen = true;

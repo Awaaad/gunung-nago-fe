@@ -43,6 +43,10 @@
                     (ionChange)="newCustomerChange($event)" color="gunung-nago-report">New
                     Customer*</ion-toggle>
                 </ion-col>
+                <span *ngIf="selectedCustomer.totalAmountDue" class="ion-text-rigt red amount-due-customer-sale"
+                  (click)="routeToSalesInvoiceCustomerCreditList()">
+                  <strong>Total Credit Amount: Rp {{selectedCustomer.totalAmountDue}}</strong>
+                </span>
               </ion-row>
               <ion-row *ngIf="!isNewCustomer">
                 <ion-col size="12">

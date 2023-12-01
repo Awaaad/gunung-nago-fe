@@ -24,7 +24,7 @@
 </ion-header>
 
 <ion-content [fullscreen]="false" class="ion-padding">
-  <ion-row>
+  <ion-row *ngIf="salesInvoiceDetailsFrontDtoForSalesInvoice?.customerFirstName != 'anonymous'">
     <ion-col size-xs="12" size-md="6" size-lg="6" size-xl="6">
       <ion-card *ngIf="returnFormGroup" [formGroup]="returnFormGroup">
         <ion-card-content>
@@ -34,31 +34,32 @@
           <div>
             <ion-row>
               <ion-col size-xs="12" size-md="6" size-lg="6" size-xl="6">
-                <ion-input color="gunung-nago-primary" label="First Name" label-placement="floating" fill="outline" class="customer-input" formControlName="customerFirstName"
-                  type="text" readonly required="true"></ion-input>
+                <ion-input color="gunung-nago-primary" label="First Name" label-placement="floating" fill="outline"
+                  class="customer-input" formControlName="customerFirstName" type="text" readonly></ion-input>
               </ion-col>
               <ion-col size-xs="12" size-md="6" size-lg="6" size-xl="6">
-                <ion-input color="gunung-nago-primary" label="Last Name" label-placement="floating" fill="outline" class="customer-input" formControlName="customerLastName"
-                  type="text" readonly required="true"></ion-input>
+                <ion-input color="gunung-nago-primary" label="Last Name" label-placement="floating" fill="outline"
+                  class="customer-input" formControlName="customerLastName" type="text" readonly></ion-input>
               </ion-col>
             </ion-row>
             <ion-row>
               <ion-col size-xs="12" size-md="6" size-lg="6" size-xl="6">
-                <ion-input color="gunung-nago-primary" label="Address" label-placement="floating" fill="outline" class="customer-input" formControlName="customerAddress"
-                  type="text" readonly required="true"></ion-input>
+                <ion-input color="gunung-nago-primary" label="Address" label-placement="floating" fill="outline"
+                  class="customer-input" formControlName="customerAddress" type="text" readonly></ion-input>
               </ion-col>
               <ion-col size-xs="12" size-md="6" size-lg="6" size-xl="6">
-                <ion-input color="gunung-nago-primary" label="Telephone Number" label-placement="floating" fill="outline" class="customer-input" formControlName="customerTelephoneNumber"
-                  type="text" readonly required="true"></ion-input>
+                <ion-input color="gunung-nago-primary" label="Telephone Number" label-placement="floating"
+                  fill="outline" class="customer-input" formControlName="customerTelephoneNumber" type="text"
+                  readonly></ion-input>
               </ion-col>
             </ion-row>
           </div>
         </ion-card-content>
       </ion-card>
     </ion-col>
-      
+
   </ion-row>
- 
+
   <div class="divider-wrapper">
     <div>
       <img class="divider-stock-img" src='./assets/flaticon/return-box.png'>
@@ -70,233 +71,255 @@
     </div>
   </div>
   <div class="mat-elevation-z8 table-responsive" *ngIf="returnFormGroup" [formGroup]="returnFormGroup">
-    
-      <table mat-table [dataSource]="salesDetailsTable" class="return-table" formArrayName="formDetail">
 
-        <ng-container matColumnDef="no.">
-          <th mat-header-cell *matHeaderCellDef> No. </th>
-          <td mat-cell *matCellDef="let element; let i = index;">
-            <span>{{i}}</span>
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="product">
-          <th mat-header-cell *matHeaderCellDef> Product </th>
-          <td mat-cell *matCellDef="let element">
-            <span>{{element.salesInvoiceType | titlecase}}</span>
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="quantity returned">
-          <th mat-header-cell *matHeaderCellDef> Quantity Returned </th>
-          <td mat-cell *matCellDef="let element">
-            <span>{{element.quantityReturned}}</span>
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="quantity to return">
-          <th mat-header-cell *matHeaderCellDef> Quantity </th>
-          <td mat-cell *matCellDef="let element; let i =index;" formGroupName={{i}}>
-            <span><ion-input color="gunung-nago-primary" clear-input="true" required="true" formControlName="quantity"
-                (input)="onQuantityChange($event, element, i)" min="1"></ion-input>
-              <div class="error-messages">
-                <ng-container *ngFor="let error of errorMessages.maxQuantity">
-                  <div class="error-message" *ngIf="!returnFormGroupDetail.at(i).get('quantityAllowedForReturn')?.value">
-                    {{error.message}}
-                  </div>
-                </ng-container>
-              </div>
-            </span>
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="original price">
-          <th mat-header-cell *matHeaderCellDef> Original Unit Price </th>
-          <td mat-cell *matCellDef="let element">
-            <span>{{element.price}}</span>
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="discount">
-          <th mat-header-cell *matHeaderCellDef> Discount </th>
-          <td mat-cell *matCellDef="let element">
-            <span>{{element.discount}}</span>
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="unit sold at">
-          <th mat-header-cell *matHeaderCellDef> Unit Sold At </th>
-          <td mat-cell *matCellDef="let element">
-            <span>{{element.unitSoldAt}}</span>
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="new price">
-          <th mat-header-cell *matHeaderCellDef> New Unit Price </th>
-          <td mat-cell *matCellDef="let element; let i=index;" formGroupName={{i}}>
-            <span><ion-input color="gunung-nago-primary" clear-input="true" formControlName="newPrice"
-                (input)="calculateTotalPriceForReturnSummary()"></ion-input>
-  
-            </span>
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="amount">
-          <th mat-header-cell *matHeaderCellDef> Amount </th>
-          <td mat-cell *matCellDef="let element;let i=index;">
-            <span>{{returnFormGroupDetail.at(i).get('quantity')?.value *
-              returnFormGroupDetail.at(i).get('newPrice')?.value }}</span>
-          </td>
-        </ng-container>
-  
-        <ng-container matColumnDef="actions">
-          <th mat-header-cell *matHeaderCellDef> Actions </th>
-          <td mat-cell *matCellDef="let element; let i =index;" formGroupName={{i}}>
-            <tr *ngIf="element.salesInvoiceType === 'EGG'">
-              <ion-toggle labelPlacement="start" class="toggle" formControlName="transferToBad"
-                    (ionChange)="transferToBad($event, i)" color="gunung-nago-report">Transfer eggs
-              </ion-toggle>
-            </tr>
-          </td>
-        </ng-container>
-  
-        <tr mat-header-row *matHeaderRowDef="displayedColumnsReturn"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumnsReturn;"></tr>
-      </table>
-    
-    
+    <table mat-table [dataSource]="salesDetailsTable" class="return-table" formArrayName="formDetail">
+
+      <ng-container matColumnDef="no.">
+        <th mat-header-cell *matHeaderCellDef> No. </th>
+        <td mat-cell *matCellDef="let element; let i = index;">
+          <span>{{i + 1}}</span>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="product">
+        <th mat-header-cell *matHeaderCellDef> Product </th>
+        <td mat-cell *matCellDef="let element">
+          <span>{{element.salesInvoiceType | titlecase}}
+            <span *ngIf="element.eggCategoryName"> - <strong>{{element.eggCategoryName}}</strong> </span>
+          </span>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="quantity returned">
+        <th mat-header-cell *matHeaderCellDef> Previous Quantity Returned </th>
+        <td mat-cell *matCellDef="let element">
+          <span>{{element.quantityReturned}}</span><span *ngIf="element.salesInvoiceType === 'EGG'"> - Piece</span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="quantity type">
+        <th mat-header-cell *matHeaderCellDef> Quantity </th>
+        <td mat-cell *matCellDef="let element">
+          <span
+            *ngIf="element.salesInvoiceType === 'EGG' && element.eggQuantityType === 'TIE'">{{element.originalQuantity}}
+            - <strong>{{element.eggQuantityType}}</strong> <br><span class="red">({{element.originalQuantity *
+              300}} - <strong>Piece)</strong></span></span>
+          <span
+            *ngIf="element.salesInvoiceType === 'EGG' && element.eggQuantityType === 'TRAY'">{{element.originalQuantity}}
+            - <strong>{{element.eggQuantityType}}</strong> <br><span class="red">({{element.originalQuantity *
+              30}} - <strong>Piece)</strong></span></span>
+          <span
+            *ngIf="element.salesInvoiceType === 'EGG' && element.eggQuantityType === 'PIECE'">{{element.originalQuantity}}
+            - <strong>{{element.eggQuantityType}}</strong></span>
+          <span *ngIf="element.salesInvoiceType !== 'EGG'">{{element.originalQuantity}}</span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="quantity to return">
+        <th mat-header-cell *matHeaderCellDef> Quantity Returned <span class="red">(Piece)</span></th>
+        <td mat-cell *matCellDef="let element; let i =index;" formGroupName={{i}}>
+          <span><ion-input color="gunung-nago-primary" clear-input="true" required="true" formControlName="quantity"
+              (input)="onQuantityChange($event, element, i)" min="1"></ion-input>
+            <div class="error-messages">
+              <ng-container *ngFor="let error of errorMessages.maxQuantity">
+                <div class="error-message" *ngIf="!returnFormGroupDetail.at(i).get('quantityAllowedForReturn')?.value">
+                  {{error.message}}
+                </div>
+              </ng-container>
+            </div>
+          </span>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="original price">
+        <th mat-header-cell *matHeaderCellDef> Original Unit Price </th>
+        <td mat-cell *matCellDef="let element; let i =index;" formGroupName={{i}}>
+          <span>{{returnFormGroupDetail.at(i).get('price')?.value | number : '1.2-2'}}</span>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="discount">
+        <th mat-header-cell *matHeaderCellDef> Discount </th>
+        <td mat-cell *matCellDef="let element">
+          <span>{{element.discount}}</span>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="unit sold at">
+        <th mat-header-cell *matHeaderCellDef> Unit Sold At </th>
+        <td mat-cell *matCellDef="let element; let i =index;" formGroupName={{i}}>
+          <span>{{returnFormGroupDetail.at(i).get('unitSoldAt')?.value | number : '1.2-2'}}</span>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="new price">
+        <th mat-header-cell *matHeaderCellDef> Returned Unit Price </th>
+        <td mat-cell *matCellDef="let element; let i=index;" formGroupName={{i}}>
+          <span>{{returnFormGroupDetail.at(i).get('newPrice')?.value | number : '1.2-2'}}
+          </span>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="amount">
+        <th mat-header-cell *matHeaderCellDef> Amount </th>
+        <td mat-cell *matCellDef="let element;let i=index;">
+          <span>{{returnFormGroupDetail.at(i).get('quantity')?.value *
+            returnFormGroupDetail.at(i).get('newPrice')?.value | number : '1.2-2'}}</span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef> Actions </th>
+        <td mat-cell *matCellDef="let element; let i =index;" formGroupName={{i}}>
+          <tr *ngIf="element.salesInvoiceType === 'EGG' && element.eggType != 'BAD'">
+            <ion-toggle labelPlacement="start" class="toggle" formControlName="transferToBad"
+              (ionChange)="transferToBad($event, i)" color="gunung-nago-report">Transfer To Bad
+            </ion-toggle>
+          </tr>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumnsReturn"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumnsReturn;"></tr>
+    </table>
+
+
   </div>
 
   <div class="btn-container">
-    <ion-button color="neutral-btn mr-05" (click)="viewReturnInvoices()" *ngIf="!showReturnInvoices">Show Return</ion-button>
-    <ion-button color="neutral-btn mr-05" (click)="viewReturnInvoices()" *ngIf="showReturnInvoices">Hide Return</ion-button>
     <ion-button color="positive-btn" [disabled]="!quantityAllowed" (click)="openModal()">Save</ion-button>
   </div>
 
+  <div class="ion-text-left existing-invoices" *ngIf="returnInvoiceDetails.length > 0">
+    <ion-toggle labelPlacement="start" class="toggle" [(ngModel)]="showReturnInvoices" color="gunung-nago-report">Show
+      Previous Return Invoices
+    </ion-toggle>
+  </div>
+
   <ion-row *ngIf="showReturnInvoices">
-    <ion-col size-lg="12" size-md="" size-xs="12" >
+    <ion-col size-lg="12" size-md="" size-xs="12">
       <div class="divider-wrapper">
         <div>
-          <img class="divider-stock-img" src='./assets/flaticon/stock.png'>
+          <img class="divider-stock-img" src='./assets/flaticon/return-invoice.png'>
         </div>
         <div class="divider-text">
           <ion-item-divider class="stock-divider">
-            <ion-label>List of Return Invoices</ion-label>
+            <ion-label>Previous Return Invoices</ion-label>
           </ion-item-divider>
         </div>
       </div>
     </ion-col>
-    
+
     <ion-col size-lg="6" size-md="6" size-xs="12" *ngFor="let returnInvoiceData of returnInvoiceDetails">
       <ion-card class="invoice">
         <ion-card-content>
           <div>
-            
+
             <ion-row>
-              
-                <ion-col size-lg="12" size-md="12" size-xs="12">
-                  <div class="invoice-margin">
-                    <div>
-                      <span class="main"><strong>Invoice No: {{returnInvoiceData?.returnNumber}}</strong></span>
-                      <div class="sub"><strong>Date Issued:</strong> </div>
-                      <div class="sub">{{returnInvoiceData?.createdDate | date:'EEEE, MMMM d, y HH:mm'}}
-                      </div>
+
+              <ion-col size-lg="12" size-md="12" size-xs="12">
+                <div class="invoice-margin">
+                  <div>
+                    <span class="main"><strong>Return Invoice No: {{returnInvoiceData?.returnNumber}}</strong></span>
+                    <div class="sub"><strong>Date Issued:</strong> </div>
+                    <div class="sub">{{returnInvoiceData?.createdDate | date:'EEEE, MMMM d, y HH:mm'}}
                     </div>
-                    
-                    <div class="invoice-subtitle">
-                      <div *ngIf="salesInvoiceDetailsForReturnDto?.customerFirstName != 'anonymous'">
-                        <div class="sub"><strong>Invoice To:</strong></div>
-                        <span class="sub"><strong>Name:
-                          </strong> {{salesInvoiceDetailsForReturnDto?.customerFirstName}}
-                          {{salesInvoiceDetailsForReturnDto?.customerLastName}}</span>
-                        <div class="sub">
-                          <strong>Address:</strong> {{salesInvoiceDetailsForReturnDto?.customerAddress}}
-                        </div>
-                        <div class="sub"><strong>Telephone
-                            Number:</strong> {{salesInvoiceDetailsForReturnDto?.customerTelephoneNumber}}</div>
+                  </div>
+
+                  <div class="invoice-subtitle">
+                    <div *ngIf="salesInvoiceDetailsForReturnDto?.customerFirstName != 'anonymous'">
+                      <div class="sub"><strong>Invoice To:</strong></div>
+                      <span class="sub"><strong>Name:
+                        </strong> {{salesInvoiceDetailsForReturnDto?.customerFirstName}}
+                        {{salesInvoiceDetailsForReturnDto?.customerLastName}}</span>
+                      <div class="sub">
+                        <strong>Address:</strong> {{salesInvoiceDetailsForReturnDto?.customerAddress}}
                       </div>
-                      <div>
-                        <div *ngIf="salesInvoiceDetailsForReturnDto?.salesPerson != null" class="salesperson">
-                          <div class="sub"><strong>Salesperson:</strong> {{salesInvoiceDetailsForReturnDto?.salesPerson}}
-                          </div>
+                      <div class="sub"><strong>Telephone
+                          Number:</strong> {{salesInvoiceDetailsForReturnDto?.customerTelephoneNumber}}</div>
+                    </div>
+                    <div>
+                      <div *ngIf="salesInvoiceDetailsForReturnDto?.salesPerson != null" class="salesperson">
+                        <div class="sub"><strong>Salesperson:</strong> {{salesInvoiceDetailsForReturnDto?.salesPerson}}
                         </div>
-                        <!-- <div *ngIf="salesInvoiceDetailsFrontDto?.driverFirstName != null">
+                      </div>
+                      <div *ngIf="salesInvoiceDetailsForReturnDto?.driverFirstName != null">
                           <div class="sub"><strong>Driver:</strong> {{salesInvoiceDetailsForReturnDto?.driverFirstName}}
                             {{salesInvoiceDetailsForReturnDto?.driverLastName}}</div>
-                        </div> -->
-                      </div>
-                    </div>
-  
-                    <table class="invoice-table">
-                      <thead>
-                        <tr>
-                          <th scope="col">No.</th>
-                          <th scope="col">Product</th>
-                          <th scope="col">Quantity</th>
-                          <th scope="col">Unit Price</th>
-                          <th scope="col">Amount</th>
-                        </tr>
-                      </thead>
-                      <tbody
-                        *ngFor="let invoiceDetail of returnInvoiceData?.returnInvoiceLineDtos let i = index">
-                        <tr *ngIf="invoiceDetail.returnInvoiceType === 'MANURE'">
-                          <td data-label="No.">{{i + 1}}</td>
-                          <td data-label="Product">MANURE</td>
-                          <td data-label="Quantity">{{invoiceDetail?.quantity}} - <strong>BAG(S)</strong></td>
-                          <td data-label="Unit Price">Rp {{invoiceDetail?.pricePerBox | number : '1.2-2'}}</td>
-                          <!-- <td data-label="Amount">Rp {{invoiceDetail?.quantity * invoiceDetail?.pricePerBox | number : '1.2-2'}}
-                          </td> -->
-                        </tr>
-                        <tr *ngIf="invoiceDetail.returnInvoiceType === 'EGG'">
-                          <td data-label="No.">{{i + 1}}</td>
-                          <td data-label="Product">EGG - <strong>{{invoiceDetail?.eggCategory | uppercase}}</strong></td>
-                          <td data-label="Quantity">{{invoiceDetail?.quantity}} - <strong>{{invoiceDetail.eggQuantityType
-                              |
-                              uppercase}}</strong></td>
-                          <td data-label="Unit Price">Rp {{invoiceDetail?.pricePerBox | number : '1.2-2'}}</td>
-                          <td data-label="Amount">Rp {{invoiceDetail?.totalPrice | number : '1.2-2'}}
-                          </td>
-                        </tr>
-                        <tr *ngIf="invoiceDetail.returnInvoiceType === 'FLOCK'">
-                          <td data-label="No.">{{i + 1}}</td>
-                          <!-- <td data-label="Product">CHICKEN - <strong>{{invoiceDetail.flockType | uppercase}}</strong></td> -->
-                          <td data-label="Quantity">{{invoiceDetail?.quantity}}</td>
-                          <td data-label="Unit Price">Rp {{invoiceDetail?.pricePerBox | number : '1.2-2'}}</td>
-                          <!-- <td data-label="Amount">Rp {{invoiceDetail?.quantity * invoiceDetail?.pricePerBox | number : '1.2-2'}} -->
-                          <!-- </td> -->
-                        </tr>
-                      </tbody>
-                    </table>
-  
-                    <div class="invoice-footer">
-                      <div>
-                      </div>
-                      <div>
-                        <div class="invoice-date-title">
-                          <table class="summary-table">
-                            <tbody>
-                              <tr>
-                                <th id="total" colspan="1">SubTotal :</th>
-                                <td>Rp {{returnInvoiceData?.totalPrice | number :'1.2-2'}}</td>
-                              </tr>
-                              <tr>
-                                <th id="total" colspan="1">Discount :</th>
-                                <td></td>
-                              </tr>
-                              <tr>
-                                <th id="total" colspan="1">Tax :</th>
-                                <td></td>
-                              </tr>
-                              <tr>
-                                <th id="total" colspan="1">Total :</th>
-                                <td>Rp {{returnInvoiceData?.totalPrice | number :'1.2-2'}}</td>
-                              </tr>
-                            </tbody>
-                          </table>
                         </div>
+                    </div>
+                  </div>
+
+                  <table class="invoice-table">
+                    <thead>
+                      <tr>
+                        <th scope="col">No.</th>
+                        <th scope="col">Product</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Unit Price</th>
+                        <th scope="col">Amount</th>
+                      </tr>
+                    </thead>
+                    <tbody *ngFor="let invoiceDetail of returnInvoiceData?.returnInvoiceLineDtos let i = index">
+                      <tr *ngIf="invoiceDetail.returnInvoiceType === 'MANURE'">
+                        <td data-label="No.">{{i + 1}}</td>
+                        <td data-label="Product">MANURE</td>
+                        <td data-label="Quantity">{{invoiceDetail?.quantity}} - <strong>BAG(S)</strong></td>
+                        <td data-label="Unit Price">Rp {{invoiceDetail?.price | number : '1.2-2'}}</td>
+                        <td data-label="Amount">Rp {{invoiceDetail?.totalPrice | number : '1.2-2'}}
+                          </td>
+                      </tr>
+                      <tr *ngIf="invoiceDetail.returnInvoiceType === 'EGG'">
+                        <td data-label="No.">{{i + 1}}</td>
+                        <td data-label="Product">EGG - <strong>{{invoiceDetail?.eggCategory | uppercase}}</strong></td>
+                        <td data-label="Quantity">{{invoiceDetail?.quantity}} - <strong>{{invoiceDetail.eggQuantityType
+                            |
+                            uppercase}}</strong></td>
+                        <td data-label="Unit Price">Rp {{invoiceDetail?.price | number : '1.2-2'}}</td>
+                        <td data-label="Amount">Rp {{invoiceDetail?.totalPrice | number : '1.2-2'}}
+                        </td>
+                      </tr>
+                      <tr *ngIf="invoiceDetail.returnInvoiceType === 'FLOCK'">
+                        <td data-label="No.">{{i + 1}}</td>
+                        <td data-label="Product">CHICKEN - <strong>{{invoiceDetail.flockType | uppercase}}</strong></td>
+                        <td data-label="Quantity">{{invoiceDetail?.quantity}}</td>
+                        <td data-label="Unit Price">Rp {{invoiceDetail?.price | number : '1.2-2'}}</td>
+                        <td data-label="Amount">Rp {{invoiceDetail?.totalPrice | number : '1.2-2'}}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+
+                  <div class="invoice-footer">
+                    <div>
+                    </div>
+                    <div>
+                      <div class="invoice-date-title">
+                        <table class="summary-table">
+                          <tbody>
+                            <tr>
+                              <th id="total" colspan="1">SubTotal :</th>
+                              <td>Rp {{returnInvoiceData?.totalPrice | number :'1.2-2'}}</td>
+                            </tr>
+                            <tr>
+                              <th id="total" colspan="1">Discount :</th>
+                              <td></td>
+                            </tr>
+                            <tr>
+                              <th id="total" colspan="1">Tax :</th>
+                              <td></td>
+                            </tr>
+                            <tr>
+                              <th id="total" colspan="1">Total :</th>
+                              <td>Rp {{returnInvoiceData?.totalPrice | number :'1.2-2'}}</td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </div>
                   </div>
-                </ion-col>
-              
-              
+                </div>
+              </ion-col>
+
+
             </ion-row>
           </div>
         </ion-card-content>
-        </ion-card>
-    </ion-col>      
+      </ion-card>
+    </ion-col>
   </ion-row>
 
   <div class="divider-wrapper">
@@ -326,9 +349,11 @@
               <ion-col size-lg="12" size-md="12" size-xs="12">
                 <div class="invoice-margin">
                   <div>
-                    <span class="main"><strong>Invoice No: {{salesInvoiceDetailsFrontDtoForSalesInvoice?.id}}</strong></span>
+                    <span class="main"><strong>Invoice No:
+                        {{salesInvoiceDetailsFrontDtoForSalesInvoice?.id}}</strong></span>
                     <div class="sub"><strong>Date Issued:</strong> </div>
-                    <div class="sub">{{salesInvoiceDetailsFrontDtoForSalesInvoice?.createdDate | date:'EEEE, MMMM d, y HH:mm'}}
+                    <div class="sub">
+                      {{salesInvoiceDetailsFrontDtoForSalesInvoice?.createdDate | date:'EEEE, MMMM d, y HH:mm'}}
                     </div>
                   </div>
                   <div class="invoice-subtitle">
@@ -345,11 +370,13 @@
                     </div>
                     <div>
                       <div *ngIf="salesInvoiceDetailsFrontDtoForSalesInvoice?.salesPerson != null" class="salesperson">
-                        <div class="sub"><strong>Salesperson:</strong> {{salesInvoiceDetailsFrontDtoForSalesInvoice?.salesPerson}}
+                        <div class="sub"><strong>Salesperson:</strong>
+                          {{salesInvoiceDetailsFrontDtoForSalesInvoice?.salesPerson}}
                         </div>
                       </div>
                       <div *ngIf="salesInvoiceDetailsFrontDtoForSalesInvoice?.driverFirstName != null">
-                        <div class="sub"><strong>Driver:</strong> {{salesInvoiceDetailsFrontDtoForSalesInvoice?.driverFirstName}}
+                        <div class="sub"><strong>Driver:</strong>
+                          {{salesInvoiceDetailsFrontDtoForSalesInvoice?.driverFirstName}}
                           {{salesInvoiceDetailsFrontDtoForSalesInvoice?.driverLastName}}</div>
                       </div>
                     </div>
@@ -430,125 +457,6 @@
           </div>
         </ion-card-content>
       </ion-card>
-      <!-- <ion-card class="invoice">
-        <ion-card-content>
-          <div>
-            <ion-item-divider class="doc">
-              <ion-col size-lg="6" size-md="6" size-xs="12">
-                <div class="title">
-                  <img class="header-logo" src='./assets/flaticon/sales-invoice.png'>
-                  <h3 class="header-nav-products sales-invoice-return" color="gunung-nago-warehouse">Sales Invoice</h3>
-                </div>
-              </ion-col>
-            </ion-item-divider>
-            <ion-row>
-              <ion-col size-lg="12" size-md="12" size-xs="12">
-                <div class="invoice-margin">
-                  <div>
-                    <span class="main"><strong>Invoice No: {{salesInvoiceDetailsForReturnDto?.id}}</strong></span>
-                    <div class="sub"><strong>Date Issued:</strong> </div>
-                    <div class="sub">{{salesInvoiceDetailsForReturnDto?.createdDate | date:'EEEE, MMMM d, y HH:mm'}}
-                    </div>
-                  </div>
-                  <div class="invoice-subtitle">
-                    <div *ngIf="salesInvoiceDetailsForReturnDto?.customerFirstName != 'anonymous'">
-                      <div class="sub"><strong>Invoice To:</strong></div>
-                      <span class="sub"><strong>Name:
-                        </strong> {{salesInvoiceDetailsForReturnDto?.customerFirstName}}
-                        {{salesInvoiceDetailsForReturnDto?.customerLastName}}</span>
-                      <div class="sub">
-                        <strong>Address:</strong> {{salesInvoiceDetailsForReturnDto?.customerAddress}}
-                      </div>
-                      <div class="sub"><strong>Telephone
-                          Number:</strong> {{salesInvoiceDetailsForReturnDto?.customerTelephoneNumber}}</div>
-                    </div>
-                    <div>
-                      <div *ngIf="salesInvoiceDetailsForReturnDto?.salesPerson != null" class="salesperson">
-                        <div class="sub"><strong>Salesperson:</strong> {{salesInvoiceDetailsForReturnDto?.salesPerson}}
-                        </div>
-                      </div>
-                      <div *ngIf="salesInvoiceDetailsFrontDto?.driverFirstName != null">
-                        <div class="sub"><strong>Driver:</strong> {{salesInvoiceDetailsForReturnDto?.driverFirstName}}
-                          {{salesInvoiceDetailsForReturnDto?.driverLastName}}</div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <table class="invoice-table">
-                    <thead>
-                      <tr>
-                        <th scope="col">No.</th>
-                        <th scope="col">Product</th>
-                        <th scope="col">Quantity</th>
-                        <th scope="col">Unit Price</th>
-                        <th scope="col">Amount</th>
-                      </tr>
-                    </thead>
-                    <tbody
-                      *ngFor="let invoiceDetail of salesInvoiceDetailsForReturnDto?.salesInvoiceLineForReturnDtos let i = index">
-                      <tr *ngIf="invoiceDetail.salesInvoiceType === 'MANURE'">
-                        <td data-label="No.">{{i + 1}}</td>
-                        <td data-label="Product">MANURE</td>
-                        <td data-label="Quantity">{{invoiceDetail?.quantity}} - <strong>BAG(S)</strong></td>
-                        <td data-label="Unit Price">Rp {{invoiceDetail?.price | number : '1.2-2'}}</td>
-                        <td data-label="Amount">Rp {{invoiceDetail.quantity * invoiceDetail.price | number : '1.2-2'}}
-                        </td>
-                      </tr>
-                      <tr *ngIf="invoiceDetail.salesInvoiceType === 'EGG'">
-                        <td data-label="No.">{{i + 1}}</td>
-                        <td data-label="Product">EGG - <strong>{{invoiceDetail?.eggType | uppercase}}</strong></td>
-                        <td data-label="Quantity">{{invoiceDetail?.quantity}} - <strong>{{invoiceDetail.eggQuantityType
-                            |
-                            uppercase}}</strong></td>
-                        <td data-label="Unit Price">Rp {{invoiceDetail?.price | number : '1.2-2'}}</td>
-                        <td data-label="Amount">Rp {{invoiceDetail.quantity * invoiceDetail.price | number : '1.2-2'}}
-                        </td>
-                      </tr>
-                      <tr *ngIf="invoiceDetail.salesInvoiceType === 'FLOCK'">
-                        <td data-label="No.">{{i + 1}}</td>
-                        <td data-label="Product">CHICKEN - <strong>{{invoiceDetail.flockType | uppercase}}</strong></td>
-                        <td data-label="Quantity">{{invoiceDetail?.quantity}}</td>
-                        <td data-label="Unit Price">Rp {{invoiceDetail?.price | number : '1.2-2'}}</td>
-                        <td data-label="Amount">Rp {{invoiceDetail.quantity * invoiceDetail.price | number : '1.2-2'}}
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-
-                  <div class="invoice-footer">
-                    <div>
-                    </div>
-                    <div>
-                      <div class="invoice-date-title">
-                        <table class="summary-table">
-                          <tbody>
-                            <tr>
-                              <th id="total" colspan="1">SubTotal :</th>
-                              <td>Rp {{salesInvoiceDetailsForReturnDto?.totalPrice | number :'1.2-2'}}</td>
-                            </tr>
-                            <tr>
-                              <th id="total" colspan="1">Discount :</th>
-                              <td></td>
-                            </tr>
-                            <tr>
-                              <th id="total" colspan="1">Tax :</th>
-                              <td></td>
-                            </tr>
-                            <tr>
-                              <th id="total" colspan="1">Total :</th>
-                              <td>Rp {{salesInvoiceDetailsForReturnDto?.totalPrice | number :'1.2-2'}}</td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </ion-col>
-            </ion-row>
-          </div>
-        </ion-card-content>
-      </ion-card> -->
     </ion-col>
     <ion-col size-lg="6" size-md="6" size-xs="12">
       <ion-card class="invoice">
@@ -566,7 +474,7 @@
               <ion-col size-lg="12" size-md="12" size-xs="12">
                 <div class="invoice-margin">
                   <div>
-                    <span class="main"><strong>Invoice No: ...</strong></span>
+                    <span class="main"><strong>Return Invoice No: ...</strong></span>
                     <div class="sub"><strong>Date Issued:</strong> </div>
                     <div class="sub">{{today | date:'EEEE, MMMM d, y HH:mm'}}
                     </div>
@@ -611,27 +519,31 @@
                         <td data-label="Product">MANURE</td>
                         <td data-label="Quantity">{{invoiceDetail?.get('quantity')?.value}} - <strong>BAG(S)</strong>
                         </td>
-                        <td data-label="Unit Price">Rp {{invoiceDetail?.get('newPrice')?.value}} </td>
-                        <td data-label="Amount">Rp {{invoiceDetail?.get('newPrice')?.value *
-                          invoiceDetail?.get('quantity')?.value}}</td>
+                        <td data-label="Unit Price">Rp {{invoiceDetail?.get('newPrice')?.value | number : '1.2-2'}}
+                        </td>
+                        <td data-label="Amount">Rp {{(invoiceDetail?.get('newPrice')?.value *
+                          invoiceDetail?.get('quantity')?.value) | number : '1.2-2'}}</td>
                       </tr>
                       <tr *ngIf="invoiceDetail.get('salesInvoiceType')?.value === 'EGG'">
-                          <td data-label="No.">{{i + 1}}</td>
-                          <td data-label="Product">EGG - <strong>{{invoiceDetail?.get('eggType')?.value | uppercase}}</strong></td>
-                          <td data-label="Quantity">{{invoiceDetail?.get('quantity')?.value}} - <strong>{{invoiceDetail.get('eggQuantityType')?.value |
-                              uppercase}}</strong></td>
-                          <td data-label="Unit Price">Rp {{invoiceDetail?.get('newPrice')?.value}}</td>
-                          <td data-label="Amount">Rp {{invoiceDetail?.get('newPrice')?.value *
-                            invoiceDetail?.get('quantity')?.value}}</td>
-                        </tr>
-                        <tr *ngIf="invoiceDetail.get('salesInvoiceType')?.value === 'FLOCK'">
-                          <td data-label="No.">{{i + 1}}</td>
-                          <td data-label="Product">CHICKEN - <strong>{{invoiceDetail.get('flockType')?.value | uppercase}}</strong></td>
-                          <td data-label="Quantity">{{invoiceDetail?.get('quantity')?.value}}</td>
-                          <td data-label="Unit Price">Rp {{invoiceDetail?.get('newPrice')?.value}}</td>
-                          <td data-label="Amount">Rp {{invoiceDetail?.get('newPrice')?.value *
-                            invoiceDetail?.get('quantity')?.value}}</td>
-                        </tr> 
+                        <td data-label="No.">{{i + 1}}</td>
+                        <td data-label="Product">EGG - <strong>{{invoiceDetail?.get('eggCategoryName')?.value |
+                            uppercase}}</strong></td>
+                        <td data-label="Quantity">{{invoiceDetail?.get('quantity')?.value}} -
+                          <strong>PIECE</strong>
+                        </td>
+                        <td data-label="Unit Price">Rp {{invoiceDetail?.get('newPrice')?.value | number : '1.2-2'}}</td>
+                        <td data-label="Amount">Rp {{(invoiceDetail?.get('newPrice')?.value *
+                          invoiceDetail?.get('quantity')?.value) | number : '1.2-2'}}</td>
+                      </tr>
+                      <tr *ngIf="invoiceDetail.get('salesInvoiceType')?.value === 'FLOCK'">
+                        <td data-label="No.">{{i + 1}}</td>
+                        <td data-label="Product">CHICKEN - <strong>{{invoiceDetail.get('flockType')?.value |
+                            uppercase}}</strong></td>
+                        <td data-label="Quantity">{{invoiceDetail?.get('quantity')?.value}}</td>
+                        <td data-label="Unit Price">Rp {{invoiceDetail?.get('newPrice')?.value | number : '1.2-2'}}</td>
+                        <td data-label="Amount">Rp {{(invoiceDetail?.get('newPrice')?.value *
+                          invoiceDetail?.get('quantity')?.value) | number : '1.2-2'}}</td>
+                      </tr>
                     </tbody>
                   </table>
 
@@ -672,109 +584,6 @@
     </ion-col>
   </ion-row>
 
-  <!-- <ion-modal (willDismiss)="onWillDismiss($event)" [isOpen]="isModalOpen" cssClass="payment-modal"
-    backdropDismiss="false">
-    <ng-template>
-      <ion-header>
-        <ion-toolbar>
-          <div class="title">
-            <img class="header-logo ml-15" src='./assets/flaticon/confirmation.png'>
-            <h3 class="modal-header-text">Payment Confirmation</h3>
-          </div>
-        </ion-toolbar>
-      </ion-header>
-      <ion-content [fullscreen]="false" class="ion-padding">
-        <form [formGroup]="paymentForm">
-          <ion-row>
-            <ion-col size-xs="6" size-md="6">
-              <ion-input color="gunung-nago-primary" label="Total Price" label-placement="floating" fill="outline" 
-                type="number" formControlName="totalPrice"></ion-input>
-            </ion-col>
-            <ion-col size-xs="6" size-md="6">
-              <ion-input color="gunung-nago-primary" label="Sold at*" label-placement="floating" fill="outline"
-                type="number" formControlName="soldAt"></ion-input>
-              <div class="error-messages">
-                <ng-container *ngFor="let error of errorMessages.soldAt">
-                  <div class="error-message"
-                    *ngIf="paymentForm.get('soldAt')?.hasError(error.type) && (paymentForm.get('soldAt')?.dirty || paymentForm.get('soldAt')?.touched)">
-                    {{ error.message }}
-                  </div>
-                </ng-container>
-              </div>
-            </ion-col>
-          </ion-row>
-
-          <ion-row>
-            <ion-col size-xs="6" size-md="6">
-              <ion-input color="gunung-nago-primary" label="Discount (%)" label-placement="floating" fill="outline"
-                [disabled]="true" type="number"
-                [value]="(((paymentForm.get('totalPrice')?.value - paymentForm.get('soldAt')?.value)) / paymentForm.get('totalPrice')?.value) * 100"></ion-input>
-            </ion-col>
-          </ion-row>
-
-          <div formArrayName="payments" *ngFor="let payment of paymentsFields?.controls; let i = index">
-            <ion-item-divider>
-              <ion-label>Payment</ion-label>
-            </ion-item-divider>
-            <span [formGroupName]="i">
-              <ion-button *ngIf="paymentsFields != null && paymentsFields.length > 1" (click)="removePayment(i)"
-                class="remove-payment-btn" color="danger"><span class="material-icons">delete</span></ion-button>
-              <ion-row>
-                <ion-col size="6" size-sm>
-                  <ion-input color="gunung-nago-primary" label="Amount Paid" label-placement="floating" fill="outline"
-                    type="number" formControlName="amountPaid"></ion-input>
-                  <div class="error-messages">
-                    <ng-container *ngFor="let error of errorMessages.amountPaid">
-                      <div class="error-message"
-                        *ngIf="payment.get('amountPaid')?.hasError(error.type) && (payment.get('amountPaid')?.dirty || payment.get('amountPaid')?.touched)">
-                        {{ error.message }}
-                      </div>
-                    </ng-container>
-                  </div>
-                </ion-col>
-
-                <ion-col size="6">
-                  <ion-select color="gunung-nago-primary" label="Payment Mode" label-placement="floating" fill="outline"
-                    interface="popover" placeholder="Payment Mode" formControlName="paymentType">
-                    <ion-select-option *ngFor="let paymentType of paymentTypes" [value]="paymentType">{{
-                      paymentType}}</ion-select-option>
-                  </ion-select>
-                  <div class="error-messages">
-                    <ng-container *ngFor="let error of errorMessages.paymentType">
-                      <div class="error-message"
-                        *ngIf="payment.get('paymentType')?.hasError(error.type) && (payment.get('paymentType')?.dirty || payment.get('paymentType')?.touched)">
-                        {{ error.message }}
-                      </div>
-                    </ng-container>
-                  </div>
-                </ion-col>
-              </ion-row>
-
-              <ion-row *ngIf="payment.get('paymentType')?.value === 'CREDIT'">
-                <ion-col size="6">
-                  <mat-form-field class="date-full-width" appearance="outline">
-                    <mat-label>Payment Deadline</mat-label>
-                    <input matInput [matDatepicker]="picker" [min]="today" formControlName="paymentDeadline">
-                    <mat-hint>DD/MM/YYYY</mat-hint>
-                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-                    <mat-datepicker #picker></mat-datepicker>
-                  </mat-form-field>
-                </ion-col>
-              </ion-row>
-            </span>
-          </div>
-        </form>
-
-        <div class="modal-btn-container ion-text-right">
-          <ion-button class="cancel-btn" (click)="cancel()">Cancel</ion-button>
-          <ion-button color="positive-btn"
-            [disabled]="!checkPaymentLessThanSoldAt() || paymentForm.invalid || totalPrice < 1 || !checkPaymentCompleted()"
-            (click)="confirm()">Save</ion-button>
-        </div>
-      </ion-content>
-    </ng-template>
-  </ion-modal> -->
-
   <ion-modal (willDismiss)="onWillDismiss($event)" [isOpen]="isModalOpen" cssClass="payment-modal"
     backdropDismiss="false">
     <ng-template>
@@ -782,7 +591,7 @@
         <ion-toolbar>
           <div class="title">
             <img class="header-logo ml-15" src='./assets/flaticon/confirmation.png'>
-            <h3 class="modal-header-text">Payment Confirmation</h3>
+            <h3 class="modal-header-text">Return Payment Confirmation</h3>
           </div>
         </ion-toolbar>
       </ion-header>
@@ -790,28 +599,8 @@
         <form [formGroup]="paymentForm">
           <ion-row>
             <ion-col size-xs="6" size-md="6">
-              <ion-input color="gunung-nago-primary" label="Total Price" label-placement="floating" fill="outline"
+              <ion-input color="gunung-nago-primary" label="Total Returned Price" label-placement="floating" fill="outline"
                 type="number" formControlName="totalPrice"></ion-input>
-            </ion-col>
-            <ion-col size-xs="6" size-md="6">
-              <ion-input color="gunung-nago-primary" label="Sold at*" label-placement="floating" fill="outline"
-                type="number" formControlName="soldAt"></ion-input>
-              <div class="error-messages">
-                <ng-container *ngFor="let error of errorMessages.soldAt">
-                  <div class="error-message"
-                    *ngIf="paymentForm.get('soldAt')?.hasError(error.type) && (paymentForm.get('soldAt')?.dirty || paymentForm.get('soldAt')?.touched)">
-                    {{ error.message }}
-                  </div>
-                </ng-container>
-              </div>
-            </ion-col>
-          </ion-row>
-
-          <ion-row>
-            <ion-col size-xs="6" size-md="6">
-              <ion-input color="gunung-nago-primary" label="Discount (%)" label-placement="floating" fill="outline"
-                [disabled]="true" type="number"
-                [value]="(((paymentForm.get('totalPrice')?.value - paymentForm.get('soldAt')?.value)) / paymentForm.get('totalPrice')?.value) * 100"></ion-input>
             </ion-col>
           </ion-row>
 
@@ -820,13 +609,13 @@
 
             </div>
             <div>
-              <ion-button color="neutral-btn" class="add-payment-btn" (click)="addPayment()">Add Payment</ion-button>
+              <ion-button color="neutral-btn" class="add-payment-btn" (click)="addPayment()">Add Return Payment</ion-button>
             </div>
           </div>
 
           <div formArrayName="payments" *ngFor="let payment of paymentsFields?.controls; let i = index">
             <ion-item-divider>
-              <ion-label>Payment</ion-label>
+              <ion-label>Return Payment</ion-label>
             </ion-item-divider>
             <span [formGroupName]="i">
               <ion-button *ngIf="paymentsFields != null && paymentsFields.length > 1" (click)="removePayment(i)"
@@ -834,7 +623,7 @@
                   class="material-icons">delete</span></ion-button>
               <ion-row>
                 <ion-col size="6" size-sm>
-                  <ion-input color="gunung-nago-primary" label="Amount Paid" label-placement="floating" fill="outline"
+                  <ion-input color="gunung-nago-primary" label="Amount Returned" label-placement="floating" fill="outline"
                     type="number" formControlName="amountPaid"></ion-input>
                   <div class="error-messages">
                     <ng-container *ngFor="let error of errorMessages.amountPaid">
@@ -847,7 +636,7 @@
                 </ion-col>
 
                 <ion-col size="6">
-                  <ion-select color="gunung-nago-primary" label="Payment Mode" label-placement="floating" fill="outline"
+                  <ion-select color="gunung-nago-primary" label="Return Payment Mode" label-placement="floating" fill="outline"
                     interface="popover" placeholder="Payment Mode" formControlName="paymentModeId">
                     <ion-select-option *ngFor="let paymentMode of paymentModes" [value]="paymentMode">{{
                       paymentMode.name| titlecase}}</ion-select-option>
@@ -896,7 +685,7 @@
             </span>
           </div>
         </form>
-        
+
         <ion-row>
           <ion-col size="12" size-sm>
             <ion-textarea class="comment" color="gunung-nago-primary" label="Comments" label-placement="floating"
@@ -906,7 +695,7 @@
         <div class="modal-btn-container ion-text-right">
           <ion-button class="cancel-btn" (click)="cancel()">Cancel</ion-button>
           <ion-button color="positive-btn"
-            [disabled]="!checkPaymentLessThanSoldAt() || totalPrice < 1 || !checkPaymentCompleted()"
+            [disabled]="!checkPaymentLessThanSoldAt() || paymentForm.get('totalPrice')?.value < 1 || !checkPaymentCompleted()"
             (click)="confirm()">Save</ion-button>
         </div>
       </ion-content>

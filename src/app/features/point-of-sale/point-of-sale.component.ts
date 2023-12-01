@@ -17,7 +17,7 @@ import { CageApiService } from 'src/app/shared/apis/cage.api.service';
 import { SurveyApiService } from 'src/app/shared/apis/survey.api.service';
 import { EggStockApiService } from 'src/app/shared/apis/egg-stock.api.service';
 import { PointOfSaleApiService } from 'src/app/shared/apis/point-of-sale.api.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SalesInvoiceApiService } from 'src/app/shared/apis/sales-invoice.api.service';
 import { FlockApiService } from 'src/app/shared/apis/flock.api.service';
 import { BankAccountApiService } from 'src/app/shared/apis/bank-account.api.service';
@@ -140,7 +140,8 @@ export class PointOfSaleComponent implements OnInit {
     private salesInvoiceApiService: SalesInvoiceApiService,
     private bankAccountApiService: BankAccountApiService,
     private paymentModeApiService: PaymentModeApiService,
-    private returnApiService: ReturnApiService
+    private returnApiService: ReturnApiService,
+    private router: Router,
   ) { }
 
   async ngOnInit() {
@@ -215,6 +216,7 @@ export class PointOfSaleComponent implements OnInit {
 
   private initialiseSaleDetailDto(): void {
     this.saleDetailDto = {
+      id: null,
       salesInvoiceType: null,
       quantity: 0,
       price: 0,
@@ -231,13 +233,21 @@ export class PointOfSaleComponent implements OnInit {
     }
   }
 
+  public routeToSalesInvoiceCustomerCreditList(): void {
+    const url = this.router.serializeUrl(
+      this.router.createUrlTree([`sales-invoice/sales-invoice-customer-credit-list/${this.selectedCustomer.id}`], { queryParams: { lastName: this.selectedCustomer.lastName, firstName: this.selectedCustomer.firstName } })
+    );
+  
+    window.open(url, '_blank');
+  }
+
   public getAllActiveCages() {
     this.cageApiService.getAllActiveCages().subscribe(cages => {
       this.cages = cages.filter((cage: { cageCategory: string; }) => cage.cageCategory === CageCategory.NORM || cage.cageCategory === CageCategory.DARA);
     })
   }
 
-  public resetInputsUponChange(index:any){
+  public resetInputsUponChange(index: any) {
     this.saleDetailsDto[index].price = null;
     this.saleDetailsDto[index].quantity = null;
     this.saleDetailsDto[index].amount = null;
@@ -250,7 +260,7 @@ export class PointOfSaleComponent implements OnInit {
     this.saleDetailsDto[index].sterileChicken = null;
   }
 
-  public ionSelectType(event: any, index:number) {
+  public ionSelectType(event: any, index: number) {
     this.resetInputsUponChange(index);
     if (event.detail.value === 'FLOCK') {
       this.showFlock = true;
@@ -557,7 +567,7 @@ export class PointOfSaleComponent implements OnInit {
       newCustomer: this.isNewCustomer,
       saleDetailsDtos: this.saleDetailsDto,
       soldAt: this.paymentForm?.get("soldAt")?.value,
-      salesInvoiceId: this.salesInvoiceId? this.salesInvoiceId : null
+      salesInvoiceId: this.salesInvoiceId ? this.salesInvoiceId : null
     }
   }
 
