@@ -1,12 +1,12 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { ChangeDetectionStrategy, Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { IonModal } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { BankAccountDto, EggQuantityType, PaymentModeDto, SaleDetailsDto, SalesInvoiceDto, SalesInvoiceType } from 'generated-src/model';
-import { SaleSaveFrontDto, SalesInvoiceDetailsForReturnFrontDto, SaleDetailsForReturnFrontDto, SalesInvoiceDetailsFrontDto, SalesInvoiceDetailsFrontForReturnDto, ReturnInvoiceFrontDto, SaleDetailsFrontDto } from 'generated-src/model-front';
+import { BankAccountDto, EggQuantityType, PaymentModeDto, SaleDetailsDto, SalesInvoiceType } from 'generated-src/model';
+import { SalesInvoiceDetailsForReturnFrontDto, SaleDetailsForReturnFrontDto, SalesInvoiceDetailsFrontDto, ReturnInvoiceFrontDto, SaleDetailsFrontDto } from 'generated-src/model-front';
 import * as moment from 'moment';
 import { ReturnApiService } from 'src/app/shared/apis/return.api.service';
 import { SalesInvoiceApiService } from 'src/app/shared/apis/sales-invoice.api.service';
@@ -15,6 +15,7 @@ import { OverlayEventDetail } from '@ionic/core/components';
 import { environment } from 'src/environments/environment';
 import { PaymentModeApiService } from 'src/app/shared/apis/payment-mode.api.service';
 import { BankAccountApiService } from 'src/app/shared/apis/bank-account.api.service';
+import { PaymentApiService } from 'src/app/shared/apis/payment.api.service';
 
 
 @Component({
@@ -70,6 +71,11 @@ export class ReturnInvoiceComponent implements OnInit {
   public language = "en";
   public salesInvoiceId: any = this.activatedRoute.snapshot.paramMap.get('id');
 
+  public amountDue: number = 0;
+  public customerId!: number;
+  public customerFirstName!: string;
+  public customerLastName!: string;
+
   public errorMessages = {
     firstName: [{ type: "required", message: "First name is required" }],
     lastName: [{ type: "required", message: "Last name is required" }],
@@ -116,8 +122,10 @@ export class ReturnInvoiceComponent implements OnInit {
     private translateService: TranslateService,
     private utilsService: UtilsService,
     private returnApiService: ReturnApiService,
+    private paymentApiService: PaymentApiService,
     private paymentModeApiService: PaymentModeApiService,
-    private bankAccountApiService: BankAccountApiService,) { }
+    private bankAccountApiService: BankAccountApiService,
+    private router: Router) { }
 
   async ngOnInit() {
     this.returnFormGroup = this.formBuilder.group({
@@ -139,12 +147,8 @@ export class ReturnInvoiceComponent implements OnInit {
 
   public getAllPaymentModes() {
     this.paymentModeApiService.findAll().subscribe(paymentModes => {
-
-      paymentModes.forEach(paymentMode => {
-        if (paymentMode.name !== "CREDIT") {
-          this.paymentModes.push(paymentMode)
-        }
-      })
+      this.paymentModes = paymentModes;
+      this.completePaymentModes = paymentModes;
     })
   }
 
@@ -213,6 +217,23 @@ export class ReturnInvoiceComponent implements OnInit {
     }
   }
 
+  public checkCreditCompleted(): boolean {
+    let totalAmountDue = 0;
+    this.paymentForm.get('payments')?.value.forEach((payment: any) => {
+      console.log(payment)
+      if (payment.paymentMode && payment.paymentModeId.id == 1) {
+        totalAmountDue += payment.amountPaid;
+      } else {
+        totalAmountDue += 0;
+      }
+    });
+    if (totalAmountDue > this.amountDue) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   addPayment(): void {
     if ((this.paymentForm.get('payments') as FormArray).length < 2) {
       (this.paymentForm.get('payments') as FormArray).push(this.addPaymentFormGroup());
@@ -228,6 +249,12 @@ export class ReturnInvoiceComponent implements OnInit {
   public findSalesInvoiceDetailsForReturnById() {
     this.salesInvoiceApiService.findSalesInvoiceDetailsForReturnById(this.salesInvoiceId).subscribe(returnInvoices => {
       this.salesInvoiceDetailsForReturnDto = returnInvoices;
+      this.customerId = returnInvoices.customerId;
+      this.customerFirstName = returnInvoices.customerFirstName;
+      this.customerLastName = returnInvoices.customerLastName;
+      this.paymentApiService.findTotalAmountDueByCustomerId(this.salesInvoiceDetailsForReturnDto.customerId).subscribe((amountDue: number) => {
+        this.amountDue = amountDue;
+      })
       this.returnFormGroup.get('customerFirstName')?.setValue(returnInvoices.customerFirstName);
       this.returnFormGroup.get('customerLastName')?.setValue(returnInvoices.customerLastName);
       this.returnFormGroup.get('customerTelephoneNumber')?.setValue(returnInvoices.customerTelephoneNumber);
@@ -321,6 +348,11 @@ export class ReturnInvoiceComponent implements OnInit {
   }
 
   public openModal(): void {
+    if (this.customerId == 1) {
+      this.paymentModes = this.completePaymentModes.filter(paymentMode => paymentMode.id != 1);
+    } else {
+      this.paymentModes = this.completePaymentModes;
+    }
     this.calculateTotalPrice();
     this.initialisePaymentFormBuilder();
     this.isModalOpen = true;
@@ -375,6 +407,14 @@ export class ReturnInvoiceComponent implements OnInit {
     })
 
     const saleSaveForm: any = {
+      customerDto: {
+        id: this.customerId,
+        firstName: null,
+        lastName: null,
+        address: null,
+        telephoneNumber: null,
+        totalAmountDue: null,
+      },
       paymentSaveDtos: this.paymentForm.value.payments,
       salesInvoiceCategory: this.salesInvoiceDetailsForReturnDto?.salesInvoiceCategory,
       driverId: null,
@@ -422,7 +462,7 @@ export class ReturnInvoiceComponent implements OnInit {
     formGroupDetail.at(index).get('totalPricePerItem')?.setValue(formGroupDetail.at(index).get('quantity')?.value * formGroupDetail.at(index).get('price')?.value);
     this.totalPriceReturn = formGroupDetail.at(index).get('price')?.value * formGroupDetail.at(index).get('quantity')?.value;
 
-    if (formGroupDetail.at(index).get('quantity')?.value > formGroupDetail.at(index).get('maxQuantity')?.value || (+formGroupDetail.at(index).get('quantityReturned')?.value + +formGroupDetail.at(index).get('quantity')?.value) > formGroupDetail.at(index).get('maxQuantity')?.value) {
+    if (formGroupDetail.at(index).get('quantity')?.value > formGroupDetail.at(index).get('maxQuantity')?.value || (formGroupDetail.at(index).get('quantityReturned')?.value + +formGroupDetail.at(index).get('quantity')?.value) > formGroupDetail.at(index).get('maxQuantity')?.value) {
       formGroupDetail.at(index).get('quantityAllowedForReturn')?.setValue(false);
     }
     else {
@@ -445,6 +485,7 @@ export class ReturnInvoiceComponent implements OnInit {
       soldAt: null,
       createdBy: null,
       createdDate: null,
+      customerId: null,
       customerFirstName: null,
       customerLastName: null,
       customerAddress: null,
@@ -458,5 +499,13 @@ export class ReturnInvoiceComponent implements OnInit {
       comment: null,
       salesInvoiceLineForReturnDtos: []
     }
+  }
+
+  public routeToSalesInvoiceCustomerCreditList(): void {
+    const url = this.router.serializeUrl(
+      this.router.createUrlTree([`sales-invoice/sales-invoice-customer-credit-list/${this.customerId}`], { queryParams: { lastName: this.customerLastName, firstName: this.customerFirstName } })
+    );
+
+    window.open(url, '_blank');
   }
 }

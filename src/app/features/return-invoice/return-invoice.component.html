@@ -33,6 +33,15 @@
           </ion-item-divider>
           <div>
             <ion-row>
+              <ion-col>
+              </ion-col>
+              <span *ngIf="amountDue && amountDue > 0" class="ion-text-right red amount-due-customer-sale mb-1"
+                (click)="routeToSalesInvoiceCustomerCreditList()">
+                <strong>Total Credit Amount: Rp {{amountDue}}</strong>
+              </span>
+            </ion-row>
+
+            <ion-row>
               <ion-col size-xs="12" size-md="6" size-lg="6" size-xl="6">
                 <ion-input color="gunung-nago-primary" label="First Name" label-placement="floating" fill="outline"
                   class="customer-input" formControlName="customerFirstName" type="text" readonly></ion-input>
@@ -237,9 +246,9 @@
                         </div>
                       </div>
                       <div *ngIf="salesInvoiceDetailsForReturnDto?.driverFirstName != null">
-                          <div class="sub"><strong>Driver:</strong> {{salesInvoiceDetailsForReturnDto?.driverFirstName}}
-                            {{salesInvoiceDetailsForReturnDto?.driverLastName}}</div>
-                        </div>
+                        <div class="sub"><strong>Driver:</strong> {{salesInvoiceDetailsForReturnDto?.driverFirstName}}
+                          {{salesInvoiceDetailsForReturnDto?.driverLastName}}</div>
+                      </div>
                     </div>
                   </div>
 
@@ -260,7 +269,7 @@
                         <td data-label="Quantity">{{invoiceDetail?.quantity}} - <strong>BAG(S)</strong></td>
                         <td data-label="Unit Price">Rp {{invoiceDetail?.price | number : '1.2-2'}}</td>
                         <td data-label="Amount">Rp {{invoiceDetail?.totalPrice | number : '1.2-2'}}
-                          </td>
+                        </td>
                       </tr>
                       <tr *ngIf="invoiceDetail.returnInvoiceType === 'EGG'">
                         <td data-label="No.">{{i + 1}}</td>
@@ -599,8 +608,15 @@
         <form [formGroup]="paymentForm">
           <ion-row>
             <ion-col size-xs="6" size-md="6">
-              <ion-input color="gunung-nago-primary" label="Total Returned Price" label-placement="floating" fill="outline"
-                type="number" formControlName="totalPrice"></ion-input>
+              <ion-input color="gunung-nago-primary" label="Total Returned Price" label-placement="floating"
+                fill="outline" type="number" formControlName="totalPrice"></ion-input>
+            </ion-col>
+            <ion-col>
+              <span *ngIf="amountDue && amountDue > 0"
+                class="ion-text-right red amount-due-customer-sale amount-due-for-model"
+                (click)="routeToSalesInvoiceCustomerCreditList()">
+                <strong>Total Credit Amount: Rp {{amountDue}}</strong>
+              </span>
             </ion-col>
           </ion-row>
 
@@ -609,7 +625,8 @@
 
             </div>
             <div>
-              <ion-button color="neutral-btn" class="add-payment-btn" (click)="addPayment()">Add Return Payment</ion-button>
+              <ion-button color="neutral-btn" class="add-payment-btn" (click)="addPayment()">Add Return
+                Payment</ion-button>
             </div>
           </div>
 
@@ -623,8 +640,8 @@
                   class="material-icons">delete</span></ion-button>
               <ion-row>
                 <ion-col size="6" size-sm>
-                  <ion-input color="gunung-nago-primary" label="Amount Returned" label-placement="floating" fill="outline"
-                    type="number" formControlName="amountPaid"></ion-input>
+                  <ion-input color="gunung-nago-primary" label="Amount Returned" label-placement="floating"
+                    fill="outline" type="number" formControlName="amountPaid"></ion-input>
                   <div class="error-messages">
                     <ng-container *ngFor="let error of errorMessages.amountPaid">
                       <div class="error-message"
@@ -636,8 +653,8 @@
                 </ion-col>
 
                 <ion-col size="6">
-                  <ion-select color="gunung-nago-primary" label="Return Payment Mode" label-placement="floating" fill="outline"
-                    interface="popover" placeholder="Payment Mode" formControlName="paymentModeId">
+                  <ion-select color="gunung-nago-primary" label="Return Payment Mode" label-placement="floating"
+                    fill="outline" interface="popover" placeholder="Payment Mode" formControlName="paymentModeId">
                     <ion-select-option *ngFor="let paymentMode of paymentModes" [value]="paymentMode">{{
                       paymentMode.name| titlecase}}</ion-select-option>
                   </ion-select>
@@ -649,18 +666,6 @@
                       </div>
                     </ng-container>
                   </div>
-                </ion-col>
-              </ion-row>
-
-              <ion-row *ngIf="payment.get('paymentModeId')?.value?.id === 1">
-                <ion-col size="6">
-                  <mat-form-field class="date-full-width" appearance="outline">
-                    <mat-label>Payment Deadline</mat-label>
-                    <input matInput [matDatepicker]="picker" [min]="today" formControlName="paymentDeadline">
-                    <mat-hint>DD/MM/YYYY</mat-hint>
-                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-                    <mat-datepicker #picker></mat-datepicker>
-                  </mat-form-field>
                 </ion-col>
               </ion-row>
 
@@ -695,7 +700,7 @@
         <div class="modal-btn-container ion-text-right">
           <ion-button class="cancel-btn" (click)="cancel()">Cancel</ion-button>
           <ion-button color="positive-btn"
-            [disabled]="!checkPaymentLessThanSoldAt() || paymentForm.get('totalPrice')?.value < 1 || !checkPaymentCompleted()"
+            [disabled]="!checkPaymentLessThanSoldAt() || paymentForm.get('totalPrice')?.value < 1 || !checkPaymentCompleted() || checkCreditCompleted()"
             (click)="confirm()">Save</ion-button>
         </div>
       </ion-content>

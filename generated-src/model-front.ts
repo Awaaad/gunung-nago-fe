@@ -181,27 +181,6 @@ export class SalesInvoiceDetailsFrontDto {
     saleDetailsDtos!: SaleDetailsDto[] | [] | null | undefined;
 }
 
-export class SalesInvoiceDetailsFrontForReturnDto {
-    id!: number | null | undefined | any;
-    receiptId!: number | null | undefined | any;
-    salesInvoiceType!: SalesInvoiceType | null | undefined | any;
-    totalPrice!: number | null | undefined | any;
-    soldAt!: number | null | undefined | any;
-    createdBy!: string | null | undefined | any;
-    createdDate!: Date | null | undefined | any;
-    customerFirstName!: string | null | undefined | any;
-    customerLastName!: string | null | undefined | any;
-    customerAddress!: string | null | undefined | any;
-    customerTelephoneNumber!: number | null | undefined | any;
-    driverFirstName!: string | null | undefined | any;
-    driverLastName!: string | null | undefined | any;
-    salesPerson!: string | null | undefined | any;
-    salesInvoiceCategory!: SalesInvoiceCategory | null | undefined | any;
-    salesInvoiceStatus!: SalesInvoiceStatus | null | undefined | any;
-    comment: string | null | undefined | any;
-    saleDetailsForReturnDtos!: SaleDetailsForReturnFrontDto[] | [] | null | undefined;
-}
-
 export class SalesInvoiceDetailsForReturnFrontDto {
     id!: number | null | undefined | any;
     receiptId!: number | null | undefined | any;
@@ -210,6 +189,7 @@ export class SalesInvoiceDetailsForReturnFrontDto {
     soldAt!: number | null | undefined | any;
     createdBy!: string | null | undefined | any;
     createdDate!: Date | null | undefined | any;
+    customerId!: number | null | undefined | any;
     customerFirstName!: string | null | undefined | any;
     customerLastName!: string | null | undefined | any;
     customerAddress!: string | null | undefined | any;

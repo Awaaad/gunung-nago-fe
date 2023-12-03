@@ -336,8 +336,11 @@ export class SalesInvoiceListComponent {
   public getTotalAmountPaid(paymentDto: PaymentDto[]): number {
     let sum = 0;
     paymentDto.forEach(payment => {
-      if (payment.paymentModeId !== 1)
+      if (payment.paymentModeId !== 1) {
         sum = sum + payment.amountPaid;
+      } else if (payment.paymentModeId == 1 && payment.amountPaid < 0) {
+        sum = sum + payment.amountPaid;
+      }
     })
     return sum;
   }

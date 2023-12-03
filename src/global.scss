@@ -386,6 +386,13 @@ ion-radio {
     color: red;
 }
 
+.gold {
+    color: gold;
+}
+
 .amount-due-customer-sale {
     text-decoration: underline;
+    &:hover {
+        cursor: pointer;
+    }
 }
