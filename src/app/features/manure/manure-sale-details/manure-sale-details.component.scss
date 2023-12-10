@@ -48,7 +48,7 @@
     width: 4em;
 }
 
-.manure-section {
+.manure-section-top {
     text-align: center;
     color: black;
 }
@@ -58,14 +58,15 @@
 }
 
 .manure-stock {
-    margin: 5em 0 4.12em 0;
-    display: flex;
-    justify-content: space-around;
+    text-align: center;
+    color: black;
+    margin-top: 4.7em;
+    margin-bottom: 4.7em;
 }
 
 .total-per {
     color: black;
-    margin-top: 1em;
+    margin-top: 2.7em;
 }
 
 .manure-section {
@@ -73,10 +74,15 @@
     margin: 0px;
     margin-bottom: 2em;
     text-align: center;
+    width: 5em;
+}
+
+.black {
+    color: black;
 }
 
 .manure-img {
-    width: 4em;
+    width: 3.5em;
 }
 
 .manure-count {
@@ -86,8 +92,6 @@
 .radio-class {
     margin: 10px;
 }
-
-
 
 h5 {
     font-size: 24px;

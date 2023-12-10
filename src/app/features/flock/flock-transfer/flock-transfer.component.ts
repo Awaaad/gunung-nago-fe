@@ -244,7 +244,7 @@ export class FlockTransferComponent {
       actualSterile: new FormControl({ value: this.actualSterile, disabled: false }, Validators.compose([Validators.required])),
       initialAge: new FormControl({ value: this.initialAge, disabled: false }, Validators.compose([Validators.required])),
       actualAge: new FormControl({ value: this.actualAge, disabled: false }, Validators.compose([Validators.required])),
-      aquisitionDate: new FormControl({ value: null, disabled: false }, Validators.compose([Validators.required])),
+      aquisitionDate: new FormControl({ value: new Date(), disabled: false }, Validators.compose([Validators.required])),
       aquisitionType: new FormControl({ value: 'PURCHASE', disabled: false }, Validators.compose([Validators.required])),
     });
   }

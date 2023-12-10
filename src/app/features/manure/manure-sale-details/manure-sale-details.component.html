@@ -7,7 +7,7 @@
       <div class="router-links">
         <div class="title">
           <img class="header-logo" src='./assets/flaticon/manure-sale.png'>
-          <h3 class="header-nav-products">Manure Sale Details</h3>
+          <h3 class="header-nav-products">Fertilizer Sale Details</h3>
         </div>
         <div>
           <ion-item class="language-selection">
@@ -43,7 +43,7 @@
                     (ionChange)="newCustomerChange($event)" color="gunung-nago-report">New
                     Customer*</ion-toggle>
                 </ion-col>
-                <span *ngIf="selectedCustomer.totalAmountDue" class="ion-text-right red amount-due-customer-sale"
+                <span *ngIf="selectedCustomer?.totalAmountDue" class="ion-text-right red amount-due-customer-sale"
                   (click)="routeToSalesInvoiceCustomerCreditList()">
                   <strong>Total Credit Amount: Rp {{selectedCustomer.totalAmountDue}}</strong>
                 </span>
@@ -125,43 +125,72 @@
       <ion-col col-md-6 size="6" size-sm>
         <div class="subtitle">
           <img class="cart-logo" src='./assets/flaticon/manure.png'>
-          <div class="form-section-cart">Manure</div>
+          <div class="form-section-cart">Fertilizer</div>
         </div>
         <ion-card>
           <ion-card-content>
             <ion-item-divider>
-              <ion-label>Manure Stock</ion-label>
+              <ion-label>Fertilizer Stock</ion-label>
             </ion-item-divider>
-            <div class="manure-stock">
-              <div class="manure-section">
-                <div>
-                  <strong>Bags</strong>
+            <ion-row>
+              <ion-col col-md-3 size="3" size-sm *ngFor="let manure of manures">
+                <div class="manure-stock">
+                  <div class="manure-section-top">
+                    <strong>{{manure.weight}} (KG)</strong>
+                  </div>
+                  <img class="manures" src='./assets/flaticon/manure-bag.png'>
+                  <div class="manure-count">
+                    <strong>{{manure.bags}}</strong>
+                  </div>
                 </div>
-                <img class="manures" src='./assets/flaticon/manure-bag.png'>
-                <div class="manure-count">
-                  <strong>{{manureStock.bags}}</strong>
-                </div>
-              </div>
-            </div>
+              </ion-col>
+            </ion-row>
           </ion-card-content>
         </ion-card>
       </ion-col>
     </ion-row>
 
-    <div class="subtitle">
+    <ion-row>
+      <ion-col col-md-6 size="6" size-sm>
+        <div class="subtitle">
+          <img class="cart-logo" src='./assets/flaticon/category.png'>
+          <div class="form-section-cart">Weight Category</div>
+        </div>
+        <ion-card>
+          <ion-card-content>
+            <ion-item-divider>
+              <ion-label>Select Weight Category</ion-label>
+            </ion-item-divider>
+            <ion-list>
+              <ion-item *ngFor="let manure of manures">
+                <ion-checkbox [disabled]="!(manure.bags > 0)" justify="space-between" color="positive-btn"
+                  (ionChange)="addManureCategory($event, manure)">{{manure.weight}} (KG)</ion-checkbox>
+              </ion-item>
+            </ion-list>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col col-md-6 size="6" size-sm></ion-col>
+    </ion-row>
+
+    <div class="subtitle" *ngIf="showFormArray">
       <img class="cart-logo" src='./assets/flaticon/manure-bag.png'>
       <div class="form-section-cart">Quantity and Price</div>
     </div>
 
-    <ion-card>
+    <ion-card *ngIf="showFormArray">
       <ion-card-content>
-        <ion-row>
-          <ion-col size-xs="12" size-md="4">
+        <div formArrayName="manureSaleDetailsDtos"
+          *ngFor="let manureCategory of manureCategoriesFields?.controls; let i = index">
+          <div size-xs="12" size-md="4">
             <div class="divider-wrapper">
               <div class="manure-section">
+                <div class="manure-section-top">
+                  <strong>{{manureCategory.get('weight')?.value}} (KG)</strong>
+                </div>
                 <img class="manure-img" src='./assets/flaticon/manure-bag.png'>
                 <div class="manure-count">
-                  <strong>{{manureStock.bags - quantity}}</strong>
+                  <strong>{{manureCategory.get('bags')?.value - manureCategory.get('quantity')?.value}}</strong>
                 </div>
               </div>
               <div class="divider-text">
@@ -171,50 +200,65 @@
               </div>
             </div>
 
-            <div>
-              <ion-input color="gunung-nago-survey" label="Quantity" label-placement="floating" fill="outline"
-                type="number" min="0" clear-input="true" formControlName="quantity" [(ngModel)]="quantity"></ion-input>
-              <div class="error-messages">
-                <ng-container *ngFor="let error of errorMessages.minValue">
-                  <div class="error-message"
-                    *ngIf="manureSaleForm.get('quantity')?.hasError(error.type) && (manureSaleForm.get('quantity')?.dirty || manureSaleForm.get('quantity')?.touched)">
-                    {{ error.message }}
-                  </div>
-                </ng-container>
-              </div>
+            <div class="black">
+              <span><strong>Collected On: </strong>{{manureCategory.get('collectedDate')?.value |
+                date:'dd-MM-yyyy'}}</span>
             </div>
-            <div class="mt-1">
-              <ion-input color="gunung-nago-survey" label="Price" label-placement="floating" fill="outline"
-                type="number" min="0" clear-input="true" formControlName="price" [(ngModel)]="price"></ion-input>
-              <div class="error-messages">
-                <ng-container *ngFor="let error of errorMessages.minValue">
-                  <div class="error-message"
-                    *ngIf="manureSaleForm.get('price')?.hasError(error.type) && (manureSaleForm.get('price')?.dirty || manureSaleForm.get('price')?.touched)">
-                    {{ error.message }}
-                  </div>
-                </ng-container>
-              </div>
+            <div class="black">
+              <span><strong>Collected By: </strong>{{manureCategory.get('collectedByFirstName')?.value}}
+                {{manureCategory.get('collectedByLastName')?.value}}</span>
             </div>
 
-            <div class="total-per">
-              <strong>Total Price: {{quantity * price}}</strong>
-            </div>
-          </ion-col>
-        </ion-row>
+            <span [formGroupName]="i">
+              <ion-row>
+                <ion-col size-xs="12" size-md="3">
+                  <ion-input color="gunung-nago-survey" label="Quantity" label-placement="floating" fill="outline"
+                    type="number" min="0" clear-input="true" formControlName="quantity"
+                    (change)="calculateTotalPrice()"></ion-input>
+                  <div class="error-messages">
+                    <ng-container *ngFor="let error of errorMessages.minValue">
+                      <div class="error-message"
+                        *ngIf="manureCategory.get('quantity')?.hasError(error.type) && (manureCategory.get('quantity')?.dirty || manureCategory.get('quantity')?.touched)">
+                        {{ error.message }}
+                      </div>
+                    </ng-container>
+                  </div>
+                </ion-col>
+                <ion-col size-xs="12" size-md="3">
+                  <ion-input color="gunung-nago-survey" label="Price" label-placement="floating" fill="outline"
+                    type="number" min="0" clear-input="true" formControlName="price"
+                    (change)="calculateTotalPrice()"></ion-input>
+                  <div class="error-messages">
+                    <ng-container *ngFor="let error of errorMessages.minValue">
+                      <div class="error-message"
+                        *ngIf="manureCategory.get('price')?.hasError(error.type) && (manureCategory.get('price')?.dirty || manureCategory.get('price')?.touched)">
+                        {{ error.message }}
+                      </div>
+                    </ng-container>
+                  </div>
+                </ion-col>
+
+                <span class="total-per ml-05">
+                  <strong>Amount: {{manureCategory.get('quantity')?.value *
+                    manureCategory.get('price')?.value}}</strong>
+                </span>
+
+              </ion-row>
+            </span>
+          </div>
+        </div>
       </ion-card-content>
     </ion-card>
 
     <div class="btn-container">
       <ion-button class="cancel-btn" (click)="reset()">Cancel</ion-button>
-      <ion-button color="positive-btn"
-        [disabled]="manureSaleForm.invalid || (quantity > manureStock.bags) || (quantity < 1) || price < 1"
-        (click)="openModal()">Save</ion-button>
+      <ion-button color="positive-btn" [disabled]="manureSaleForm.invalid" (click)="openModal()">Save</ion-button>
     </div>
   </form>
 
   <ion-row>
     <ion-col size-lg="8" size-md="6" size-xs="12">
-      <ion-card class="invoice" *ngIf="(quantity * price > 1) && !(quantity > manureStock.bags)">
+      <ion-card class="invoice" *ngIf="totalPrice > 0">
         <ion-card-content>
           <div class="subtitle">
             <img class="cart-logo" src='./assets/flaticon/official-documents.png'>
@@ -276,11 +320,14 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td data-label="Product">MANURE</td>
-                <td data-label="Quantity">{{quantity}} - <strong>BAG(S)</strong></td>
-                <td data-label="Unit Price">Rp {{price | number : '1.2-2'}}</td>
-                <td data-label="Amount">Rp {{quantity * price | number : '1.2-2'}}</td>
+              <tr *ngFor="let invoiceDetail of manureSaleForm.get('manureSaleDetailsDtos')?.value let i = index">
+                <td data-label="Product" *ngIf="invoiceDetail.quantity && invoiceDetail.quantity > 0">FERTILIZER</td>
+                <td data-label="Quantity" *ngIf="invoiceDetail.quantity && invoiceDetail.quantity > 0">
+                  {{invoiceDetail.quantity}} - <strong>BAG(S)</strong> - {{invoiceDetail.weight}} KG</td>
+                <td data-label="Unit Price" *ngIf="invoiceDetail.quantity && invoiceDetail.quantity > 0">Rp
+                  {{invoiceDetail.price | number : '1.2-2'}}</td>
+                <td data-label="Amount" *ngIf="invoiceDetail.quantity && invoiceDetail.quantity > 0">Rp
+                  {{invoiceDetail.quantity * invoiceDetail.price | number : '1.2-2'}}</td>
               </tr>
             </tbody>
           </table>
@@ -294,11 +341,11 @@
                   <tbody>
                     <tr>
                       <th id="total" colspan="1">SubTotal :</th>
-                      <td>Rp {{quantity * price | number :'1.2-2'}}</td>
+                      <td>Rp {{totalPrice | number :'1.2-2'}}</td>
                     </tr>
                     <tr>
                       <th id="total" colspan="1">Total :</th>
-                      <td>Rp {{quantity * price | number :'1.2-2'}}</td>
+                      <td>Rp {{totalPrice | number :'1.2-2'}}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -387,7 +434,7 @@
 
                 <ion-col size="6">
                   <ion-select color="gunung-nago-primary" label="Payment Mode" label-placement="floating" fill="outline"
-                    interface="popover" placeholder="Payment Mode" formControlName="paymentModeId">
+                    interface="popover" formControlName="paymentModeId">
                     <ion-select-option *ngFor="let paymentMode of paymentModes" [value]="paymentMode">{{
                       paymentMode.name| titlecase}}</ion-select-option>
                   </ion-select>
@@ -417,7 +464,7 @@
               <ion-row *ngIf="payment.get('paymentModeId')?.value?.requireBankAccount">
                 <ion-col size="6">
                   <ion-select color="gunung-nago-primary" label="Bank Account" label-placement="floating" fill="outline"
-                    interface="popover" placeholder="Bank account" formControlName="bankAccountId">
+                    interface="popover" formControlName="bankAccountId">
                     <ion-select-option *ngFor="let bankAccount of bankAccounts" [value]="bankAccount.id">{{
                       bankAccount.accountHolder| uppercase}} - {{bankAccount.accountNumber}} -
                       {{bankAccount.bankName}}</ion-select-option>
@@ -452,7 +499,7 @@
               <ion-label>Driver</ion-label>
             </ion-item-divider>
             <ion-select color="gunung-nago-primary" label="Driver" label-placement="floating" fill="outline"
-              interface="popover" placeholder="Driver" [(ngModel)]="selectedDriver">
+              interface="popover" [(ngModel)]="selectedDriver">
               <ion-select-option *ngFor="let driver of drivers" [value]="driver">{{driver.firstName}}
                 {{driver.lastName}}</ion-select-option>
             </ion-select>

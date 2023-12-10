@@ -522,6 +522,7 @@ export class FlockSaleDetailsComponent implements OnInit {
   }
 
   public reset(): void {
+    this.initialiseSelectedCustomer();
     this.flockSaleForm.reset();
     (this.flockSaleForm.get('flockSaleDetails') as FormArray).clear();
     if (this.paymentForm) {

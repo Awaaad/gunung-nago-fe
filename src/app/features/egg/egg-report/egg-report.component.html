@@ -56,7 +56,7 @@
       <ion-row>
         <ion-col size-lg="2" size-md="3" size-xs="12" *ngIf="showDetailedReport">
           <ion-select color="gunung-nago-primary" label="Egg Type" label-placement="floating" fill="outline"
-            interface="popover" clear-input="true" placeholder="Egg Type"
+            interface="popover" clear-input="true"
             (ionChange)="ionSelectEggCategory($event)">
             <ion-select-option *ngFor="let eggType of eggStock.eggCategoryStockDtos"
               [value]="eggType.eggCategoryId">{{

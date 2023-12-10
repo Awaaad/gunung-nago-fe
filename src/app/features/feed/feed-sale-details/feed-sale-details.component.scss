@@ -1,0 +1,421 @@
+.subtitle {
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    padding-left: 10px;
+
+    .cart-logo {
+        width: 23px;
+    }
+
+    .cart-text {
+        font-size: 24px;
+        padding-top: 8px;
+        margin-top: 5px;
+        padding-left: 5px;
+    }
+}
+
+.form-section-cart {
+    font-weight: 500;
+    padding-top: 9px;
+    padding-left: 7px;
+    color: black;
+    font-size: 18px;
+}
+
+.add-payment-btn {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    margin-right: 5px;
+}
+
+.remove-payment-btn {
+    font-size: 12px;
+    float: right;
+    height: 30px;
+    width: 40px;
+    margin-top: 23px;
+    margin-right: 5px;
+}
+
+.add-payment-area {
+    display: flex;
+    justify-content: space-between;
+}
+
+.radio-class {
+    margin: 10px;
+}
+
+.feed-section {
+    color: black;
+    margin: 0px;
+    margin-bottom: 2em;
+    text-align: center;
+}
+
+.feed-img {
+    width: 4em;
+}
+
+.feed-count {
+    font-size: 18px;
+}
+
+.total-per {
+    color: black;
+    margin-top: 1em;
+}
+
+.feed-form-section-left {
+    margin-right: 1em;
+}
+
+.feed-form-section-middle {
+    margin-right: 0.5em;
+    margin-left: 0.5em;
+}
+
+.feed-form-section-right {
+    margin-left: 1em;
+}
+
+
+h5 {
+    font-size: 24px;
+    margin-bottom: 0;
+}
+
+ion-card-content {
+    .main {
+        color: black;
+        font-size: 24px;
+    }
+
+    .sub {
+        color: black;
+        font-size: 15px;
+    }
+}
+
+.invoice-title {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 15px;
+    border-bottom: 1px solid lightgray;
+}
+
+.invoice {
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
+.print {
+    float: right;
+    margin-right: 7px;
+}
+
+.invoice-subtitle {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.invoice-footer {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+
+.invoice-logo {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+
+    .logo-img {
+        width: 40px;
+        padding-right: 10px;
+
+        &:hover {
+            cursor: pointer;
+        }
+
+        &:focus {
+            outline: none;
+        }
+    }
+
+    .logo-text {
+        color: black;
+        text-decoration: none;
+
+        &:hover {
+            cursor: pointer;
+        }
+
+        &:focus {
+            outline: none;
+        }
+    }
+}
+
+.preview-receipt-sale {
+    table {
+        border-collapse: collapse;
+        margin: 0;
+        padding: 0;
+        table-layout: fixed;
+        margin-top: 2em;
+        color: black;
+    }
+
+    .invoice-table {
+        width: 100%;
+    }
+
+    .summary-table {
+        margin-top: 0;
+    }
+
+    table caption {
+        font-size: 1.5em;
+        margin: .5em 0 .75em;
+    }
+
+    table tr {
+        padding: .35em;
+    }
+
+    table th,
+    table td {
+        padding: .625em;
+        text-align: center;
+        border: 1px solid #ddd;
+    }
+
+    table th {
+        font-size: .85em;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+    }
+
+    @media screen and (max-width: 600px) {
+        table {
+            border: 0;
+        }
+
+        table caption {
+            font-size: 1.3em;
+        }
+
+        table thead {
+            border: none;
+            clip: rect(0 0 0 0);
+            height: 1px;
+            margin: -1px;
+            overflow: hidden;
+            padding: 0;
+            position: absolute;
+            width: 1px;
+        }
+
+        table tr {
+            border-bottom: 3px solid #ddd;
+            display: block;
+            margin-bottom: .625em;
+        }
+
+        table td {
+            border-bottom: 1px solid #ddd;
+            display: block;
+            font-size: .8em;
+            text-align: right;
+        }
+
+        table td::before {
+            content: attr(data-label);
+            float: left;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        table td:last-child {
+            border-bottom: 0;
+        }
+    }
+
+}
+
+textarea {
+    width: 100%;
+    margin-top: 1.5em;
+    background-color: white;
+    border-color: #ddd;
+    color: black;
+}
+
+.salesperson {
+    margin-bottom: 10px;
+}
+
+.feed-section {
+    text-align: center;
+    color: black;
+}
+
+.feed-count-section {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 6em;
+    margin-bottom: 3.1em;
+}
+
+.feeds {
+    width: 4em;
+}
+
+.feed-count {
+    font-size: 18px;
+}
+
+.search-table {
+    table {
+        width: 100%;
+    }
+
+    th.mat-header-cell,
+    td.mat-cell {
+        text-align: center;
+        border: 1px solid #CCC;
+        padding: 0 !important;
+    }
+
+    .table-responsive {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    tbody {
+        overflow-x: scroll;
+    }
+
+    // .mat-mdc-table tbody,
+    // .mat-mdc-table tfoot,
+    .mat-mdc-table thead,
+    .mat-mdc-cell,
+    // .mat-mdc-footer-cell,
+    // .mat-mdc-header-row,
+    // .mat-mdc-row,
+    // .mat-mdc-footer-row,
+    // .mat-mdc-table 
+    .mat-mdc-header-cell {
+        border: 1px solid #CCC;
+    }
+
+    .mat-mdc-cell:first-child {
+        border-left: 0;
+    }
+
+    .mat-mdc-cell:last-child {
+        border-right: 0;
+    }
+
+    .mdc-data-table__header-cell {
+        border-top: 0;
+    }
+
+    .mdc-data-table__header-cell:first-child {
+        border-left: 0;
+    }
+
+    .mdc-data-table__header-cell:last-child {
+        border-right: 0;
+    }
+
+    .mat-mdc-table .mdc-data-table__header-row {
+        background: var(--ion-color-gunung-nago-feed);
+        color: white;
+    }
+
+    .mdc-data-table__header-cell {
+        color: white;
+    }
+
+    .feed-modal {
+        --height: 27em;
+    }
+
+    .mat-mdc-row:hover .mat-mdc-cell {
+        background-color: #ececec;
+    }
+
+    ion-button {
+        width: 45px;
+        height: 20px;
+    }
+}
+
+.card-margin {
+    margin: 4px;
+}
+
+.divider-stock-img {
+    margin: 4px 0px 0 10px;
+    width: 2.5em;
+}
+
+.feeds {
+    width: 4em;
+}
+
+.feed-section-design {
+    text-align: center;
+    color: black;
+}
+
+.feed-count {
+    font-size: 18px;
+}
+
+.feed-stock {
+    // margin: 5em 0 4.12em 0;
+    margin-top: 1em;
+    display: flex;
+    // justify-content: space-around;
+}
+
+.enter-amount-design {
+    color: black;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    padding: 15px;
+    // border-bottom: 1px solid var(--ion-color-gunung-nago-survey);
+
+    .em-row {
+        margin-bottom: 1em;
+    }
+
+    .em-title {
+        font-size: 17px;
+        font-weight: 500;
+    }
+
+    .em-body-title {
+        font-size: 13px;
+        font-weight: 500;
+    }
+}
+
+.enter-amount-scroll {
+    max-height: 52em;
+    overflow: auto;
+}
+
+.input-section {
+    margin-top: 1em;
+    margin-left: 1em;
+}

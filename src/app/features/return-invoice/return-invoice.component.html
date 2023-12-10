@@ -94,6 +94,8 @@
         <td mat-cell *matCellDef="let element">
           <span>{{element.salesInvoiceType | titlecase}}
             <span *ngIf="element.eggCategoryName"> - <strong>{{element.eggCategoryName}}</strong> </span>
+            <span *ngIf="element.salesInvoiceType === 'MANURE'"> - {{element.manureWeightPerBag}} (KG)</span>
+            <span *ngIf="element.salesInvoiceType === 'FEED'"> - <strong>{{element.feedName}}</strong> - {{element.feedWeightPerBag}} (KG)</span>
           </span>
         </td>
       </ng-container>
@@ -265,8 +267,9 @@
                     <tbody *ngFor="let invoiceDetail of returnInvoiceData?.returnInvoiceLineDtos let i = index">
                       <tr *ngIf="invoiceDetail.returnInvoiceType === 'MANURE'">
                         <td data-label="No.">{{i + 1}}</td>
-                        <td data-label="Product">MANURE</td>
-                        <td data-label="Quantity">{{invoiceDetail?.quantity}} - <strong>BAG(S)</strong></td>
+                        <td data-label="Product">FERTILIZER</td>
+                        <td data-label="Quantity">{{invoiceDetail?.quantity}} - <strong>BAG(S)</strong> -
+                          {{invoiceDetail.manureWeightPerBag}} KG</td>
                         <td data-label="Unit Price">Rp {{invoiceDetail?.price | number : '1.2-2'}}</td>
                         <td data-label="Amount">Rp {{invoiceDetail?.totalPrice | number : '1.2-2'}}
                         </td>
@@ -287,6 +290,16 @@
                         <td data-label="Quantity">{{invoiceDetail?.quantity}}</td>
                         <td data-label="Unit Price">Rp {{invoiceDetail?.price | number : '1.2-2'}}</td>
                         <td data-label="Amount">Rp {{invoiceDetail?.totalPrice | number : '1.2-2'}}
+                        </td>
+                      </tr>
+                      <tr *ngIf="invoiceDetail.returnInvoiceType === 'FEED'">
+                        <td data-label="No.">{{i + 1}}</td>
+                        <td data-label="Product">FEED - <strong>{{invoiceDetail.feedName | uppercase}}</strong></td>
+                        <td data-label="Quantity">{{invoiceDetail?.quantity}} - <strong>BAG(S)</strong> -
+                          {{invoiceDetail.feedWeightPerBag}} KG</td>
+                        <td data-label="Unit Price">Rp {{invoiceDetail?.price | number : '1.2-2'}}</td>
+                        <td data-label="Amount">Rp {{(invoiceDetail.quantity ? invoiceDetail.quantity : 0) *
+                          (invoiceDetail.price ? invoiceDetail.price : 0) | number : '1.2-2'}}
                         </td>
                       </tr>
                     </tbody>
@@ -405,8 +418,9 @@
                       *ngFor="let invoiceDetail of salesInvoiceDetailsFrontDtoForSalesInvoice?.saleDetailsDtos let i = index">
                       <tr *ngIf="invoiceDetail.salesInvoiceType === 'MANURE'">
                         <td data-label="No.">{{i + 1}}</td>
-                        <td data-label="Product">MANURE</td>
-                        <td data-label="Quantity">{{invoiceDetail?.quantity}} - <strong>BAG(S)</strong></td>
+                        <td data-label="Product">FERTILIZER</td>
+                        <td data-label="Quantity">{{invoiceDetail?.quantity}} - <strong>BAG(S)</strong> -
+                          {{invoiceDetail.manureWeightPerBag}} KG</td>
                         <td data-label="Unit Price">Rp {{invoiceDetail?.price | number : '1.2-2'}}</td>
                         <td data-label="Amount">Rp {{invoiceDetail.quantity * invoiceDetail.price | number : '1.2-2'}}
                         </td>
@@ -425,6 +439,15 @@
                         <td data-label="No.">{{i + 1}}</td>
                         <td data-label="Product">CHICKEN - <strong>{{invoiceDetail.flockType | uppercase}}</strong></td>
                         <td data-label="Quantity">{{invoiceDetail?.quantity}}</td>
+                        <td data-label="Unit Price">Rp {{invoiceDetail?.price | number : '1.2-2'}}</td>
+                        <td data-label="Amount">Rp {{invoiceDetail.quantity * invoiceDetail.price | number : '1.2-2'}}
+                        </td>
+                      </tr>
+                      <tr *ngIf="invoiceDetail.salesInvoiceType === 'FEED'">
+                        <td data-label="No.">{{i + 1}}</td>
+                        <td data-label="Product">FEED - <strong>{{invoiceDetail.feedName | uppercase}}</strong></td>
+                        <td data-label="Quantity">{{invoiceDetail?.quantity}} - <strong>BAG(S)</strong> -
+                          {{invoiceDetail.feedWeightPerBag}} KG</td>
                         <td data-label="Unit Price">Rp {{invoiceDetail?.price | number : '1.2-2'}}</td>
                         <td data-label="Amount">Rp {{invoiceDetail.quantity * invoiceDetail.price | number : '1.2-2'}}
                         </td>
@@ -525,9 +548,9 @@
                     <tbody *ngFor="let invoiceDetail of returnFormGroupDetail?.controls let i = index">
                       <tr *ngIf="invoiceDetail.get('salesInvoiceType')?.value === 'MANURE'">
                         <td data-label="No.">{{i + 1}}</td>
-                        <td data-label="Product">MANURE</td>
-                        <td data-label="Quantity">{{invoiceDetail?.get('quantity')?.value}} - <strong>BAG(S)</strong>
-                        </td>
+                        <td data-label="Product">FERTILIZER</td>
+                        <td data-label="Quantity">{{invoiceDetail?.get('quantity')?.value}} - <strong>BAG(S)</strong> -
+                          {{invoiceDetail?.get('manureWeightPerBag')?.value}} KG</td>
                         <td data-label="Unit Price">Rp {{invoiceDetail?.get('newPrice')?.value | number : '1.2-2'}}
                         </td>
                         <td data-label="Amount">Rp {{(invoiceDetail?.get('newPrice')?.value *
@@ -552,6 +575,17 @@
                         <td data-label="Unit Price">Rp {{invoiceDetail?.get('newPrice')?.value | number : '1.2-2'}}</td>
                         <td data-label="Amount">Rp {{(invoiceDetail?.get('newPrice')?.value *
                           invoiceDetail?.get('quantity')?.value) | number : '1.2-2'}}</td>
+                      </tr>
+                      <tr *ngIf="invoiceDetail.get('salesInvoiceType')?.value === 'FEED'">
+                        <td data-label="No.">{{i + 1}}</td>
+                        <td data-label="Product">FEED - <strong>{{invoiceDetail.get('feedName')?.value |
+                            uppercase}}</strong></td>
+                        <td data-label="Quantity">{{invoiceDetail.get('quantity')?.value}} - <strong>BAG(S)</strong> -
+                          {{invoiceDetail.get('feedWeightPerBag')?.value}} KG</td>
+                        <td data-label="Unit Price">Rp {{invoiceDetail.get('newPrice')?.value | number : '1.2-2'}}</td>
+                        <td data-label="Amount">Rp {{invoiceDetail.get('quantity')?.value *
+                          invoiceDetail.get('newPrice')?.value | number : '1.2-2'}}
+                        </td>
                       </tr>
                     </tbody>
                   </table>
@@ -654,7 +688,7 @@
 
                 <ion-col size="6">
                   <ion-select color="gunung-nago-primary" label="Return Payment Mode" label-placement="floating"
-                    fill="outline" interface="popover" placeholder="Payment Mode" formControlName="paymentModeId">
+                    fill="outline" interface="popover" formControlName="paymentModeId">
                     <ion-select-option *ngFor="let paymentMode of paymentModes" [value]="paymentMode">{{
                       paymentMode.name| titlecase}}</ion-select-option>
                   </ion-select>
@@ -672,7 +706,7 @@
               <ion-row *ngIf="payment.get('paymentModeId')?.value?.requireBankAccount">
                 <ion-col size="6">
                   <ion-select color="gunung-nago-primary" label="Bank Account" label-placement="floating" fill="outline"
-                    interface="popover" placeholder="Bank account" formControlName="bankAccountId">
+                    interface="popover" formControlName="bankAccountId">
                     <ion-select-option *ngFor="let bankAccount of bankAccounts" [value]="bankAccount.id">{{
                       bankAccount.accountHolder| uppercase}} - {{bankAccount.accountNumber}} -
                       {{bankAccount.bankName}}</ion-select-option>

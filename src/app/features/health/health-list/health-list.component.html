@@ -57,8 +57,7 @@
       <ion-row>
         <ion-col size-xs="12" size-md="3">
           <ion-select color="gunung-nago-primary" label="{{ 'cage.cage-details.cage-category' | translate }}"
-            label-placement="floating" fill="outline" interface="popover"
-            placeholder="{{ 'cage.cage-details.cage-category' | translate }}" (ionChange)="ionChangeHealthType($event)">
+            label-placement="floating" fill="outline" interface="popover" (ionChange)="ionChangeHealthType($event)">
             <ion-select-option *ngFor="let healthType of healthTypes" [value]="healthType">{{ healthType
               }}</ion-select-option>
           </ion-select>
@@ -104,7 +103,8 @@
           <th mat-header-cell *matHeaderCellDef> </th>
           <td mat-cell *matCellDef="let element">
             <div class="table-btn">
-              <ion-icon class="table-edit-icon" color="neutral-btn" (click)="openModal(element)" name="create"></ion-icon>
+              <ion-icon class="table-edit-icon" color="neutral-btn" (click)="openModal(element)"
+                name="create"></ion-icon>
             </div>
           </td>
         </ng-container>
@@ -208,7 +208,7 @@
             </ion-col>
             <ion-col size-xs="12" size-md="6">
               <ion-select color="gunung-nago-primary" label="Health type" label-placement="floating" fill="outline"
-                interface="popover" required="true" placeholder="Health type" formControlName="healthType">
+                interface="popover" required="true" FformControlName="healthType">
                 <ion-select-option *ngFor="let healthType of healthTypes" [value]="healthType">{{ healthType
                   }}</ion-select-option>
               </ion-select>
@@ -243,7 +243,7 @@
           <ion-row>
             <ion-col size-xs="12" size-md="6">
               <ion-select color="gunung-nago-primary" label="Supplier*" label-placement="floating" fill="outline"
-                interface="popover" required="true" placeholder="Supplier" formControlName="supplierId">
+                interface="popover" required="true" formControlName="supplierId">
                 <ion-select-option *ngFor="let supplier of suppliers" [value]="supplier.id"
                   selected="supplier.supplierId === supplierId" color="secondary">{{ supplier.name }}
                 </ion-select-option>

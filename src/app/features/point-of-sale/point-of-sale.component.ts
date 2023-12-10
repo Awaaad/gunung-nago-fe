@@ -3,7 +3,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { IonModal } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { ManureStockDto, SalesInvoiceCategory, UserDto, CustomerDto, SalesInvoiceType, EggQuantityType, FlockType, EggType, CageCategory, CageDto, SurveyDto, FlockStockCountDto, EggCategoryStockDto, BankAccountDto, PaymentModeDto } from 'generated-src/model';
+import { ManureStockDto, SalesInvoiceCategory, UserDto, CustomerDto, SalesInvoiceType, EggQuantityType, FlockType, EggType, CageCategory, CageDto, SurveyDto, FlockStockCountDto, EggCategoryStockDto, BankAccountDto, PaymentModeDto, ManureDto } from 'generated-src/model';
 import { CustomerFrontDto, SaleDetailsFrontDto, SaleSaveFrontDto, EggStockFrontDto, SalesInvoiceDetailsFrontDto } from 'generated-src/model-front';
 import * as moment from 'moment';
 import { Subscription, filter, distinctUntilChanged, debounceTime, tap, switchMap, finalize } from 'rxjs';
@@ -76,6 +76,7 @@ export class PointOfSaleComponent implements OnInit {
 
   public cages: CageDto[] = [];
   public eggStock!: EggStockFrontDto;
+  public manures: ManureDto[] = [];
   public manureStock!: ManureStockDto;
   public flockStockCountDto!: FlockStockCountDto;
   public saleSaveDto!: SaleSaveFrontDto;
@@ -161,7 +162,7 @@ export class PointOfSaleComponent implements OnInit {
     this.getAllActiveCages();
     this.addSaleDetailsToStock();
     this.getEggStock();
-    this.getManureStock();
+    this.getManures();
     this.findTotalFlockStockCount();
     this.getAllPaymentModes();
     this.getAllBankAccounts();
@@ -229,7 +230,14 @@ export class PointOfSaleComponent implements OnInit {
       sterileChicken: null,
       goodChicken: null,
       flockId: null,
-      eggInitialQuantity: null
+      eggInitialQuantity: null,
+      feedStockId: null,
+      feedName: null,
+      feedWeightPerBag: null,
+      manureStockId: null,
+      manureWeightPerBag: null,
+      manureStocks: [],
+      manureBags: null
     }
   }
 
@@ -237,7 +245,7 @@ export class PointOfSaleComponent implements OnInit {
     const url = this.router.serializeUrl(
       this.router.createUrlTree([`sales-invoice/sales-invoice-customer-credit-list/${this.selectedCustomer.id}`], { queryParams: { lastName: this.selectedCustomer.lastName, firstName: this.selectedCustomer.firstName } })
     );
-  
+
     window.open(url, '_blank');
   }
 
@@ -282,6 +290,20 @@ export class PointOfSaleComponent implements OnInit {
     this.findMostRecentSurveyDtoForCage(cageId, index);
   }
 
+  public ionSelectManure(event: any, index: number) {
+    console.log(event);
+    const manureId = event.detail.value.id;
+    this.saleDetailsDto[index].manureBags = event.detail.value.bags;
+    this.saleDetailsDto[index].manureWeightPerBag = event.detail.value.weight;
+    const manureStock = this.manureStockApiService.findManureStockByManureId(manureId).subscribe(manureStocks => {
+      this.saleDetailsDto[index].manureStocks = manureStocks;
+    })
+  }
+
+  public ionSelectManureStock(event: any, index: number) {
+
+  }
+
   public ionSelectEggCategory(event: any, index: number) {
     const eggCategoryId = event.detail.value;
     const eggStock = this.eggStock.eggCategoryStockDtos.find((eggCategoryStock: EggCategoryStockDto) => eggCategoryStock.eggCategoryId === eggCategoryId);
@@ -305,13 +327,9 @@ export class PointOfSaleComponent implements OnInit {
     })
   }
 
-  private getManureStock(): void {
-    this.manureStock = {
-      weight: 0,
-      bags: 0
-    }
-    this.manureStockApiService.findManureStockForSale().subscribe(manureStock => {
-      this.manureStock = manureStock;
+  private getManures(): void {
+    this.manureStockApiService.findManures().subscribe(manures => {
+      this.manures = manures;
     })
   }
 
@@ -339,6 +357,11 @@ export class PointOfSaleComponent implements OnInit {
   public addSaleDetailsToStock(): void {
     this.initialiseSaleDetailDto();
     this.saleDetailsDto.push(this.saleDetailDto);
+  }
+
+  removeSaleDetails(index: number): void {
+    this.saleDetailsDto.splice(index, 1);
+    this.calculateTotalPrice();
   }
 
   public calculateTotalPrice(): void {
@@ -612,7 +635,7 @@ export class PointOfSaleComponent implements OnInit {
         this.comment = null;
         this.reset();
         this.utilsService.dismissLoading();
-        this.utilsService.successMsg('Flock sold successfully');
+        this.utilsService.successMsg('Product(s) sold successfully');
       },
       error: (error: HttpErrorResponse) => {
         this.utilsService.dismissLoading();
@@ -622,6 +645,7 @@ export class PointOfSaleComponent implements OnInit {
   }
 
   public reset(): void {
+    this.initialiseSelectedCustomer();
     this.isNewCustomer = false;
     this.setCustomerNewValue(false);
     this.saleForm.reset();

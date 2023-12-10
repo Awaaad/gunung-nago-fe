@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { IonModal } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { BankAccountDto, CustomerDto, ManureStockDto, PaymentModeDto, SalesInvoiceCategory, UserDto } from 'generated-src/model';
+import { BankAccountDto, CustomerDto, ManureDto, ManureStockDto, PaymentModeDto, SalesInvoiceCategory, UserDto } from 'generated-src/model';
 import { CustomerFrontDto, ManureSaleSaveFrontDto } from 'generated-src/model-front';
 import { Subscription, debounceTime, distinctUntilChanged, filter, finalize, switchMap, tap } from 'rxjs';
 import { CustomerApiService } from 'src/app/shared/apis/customer.api.service';
@@ -27,11 +27,10 @@ export class ManureSaleDetailsComponent implements OnInit {
   @ViewChild(IonModal) modal!: IonModal;
   public isModalOpen: boolean = false;
   public language = "en";
+  public manures: ManureDto[] = [];
   public manureStock!: ManureStockDto;
   public manureSaleSaveFrontDto!: ManureSaleSaveFrontDto;
   public manureSaleForm!: FormGroup;
-  public quantity: number = 0;
-  public price: number = 0;
 
   public isNewCustomer: boolean = false;
   private searchCustomerSubscription!: Subscription;
@@ -67,6 +66,7 @@ export class ManureSaleDetailsComponent implements OnInit {
   public bankAccounts: BankAccountDto[] = [];
   public paymentModes: PaymentModeDto[] = [];
   public completePaymentModes: PaymentModeDto[] = [];
+  public showFormArray: boolean = false;
 
   public errorMessages = {
     firstName: [{ type: "required", message: "First name is required" }],
@@ -109,14 +109,14 @@ export class ManureSaleDetailsComponent implements OnInit {
     private manureStockApiService: ManureStockApiService,
     private securityApiService: SecurityApiService,
     private translateService: TranslateService,
-    private utilsService: UtilsService,
     private bankAccountApiService: BankAccountApiService,
+    private utilsService: UtilsService,
     private paymentModeApiService: PaymentModeApiService,
     private router: Router
   ) { }
 
   ngOnInit() {
-    this.getManureStock();
+    this.getManures();
     this.initialiseFormBuilder();
     this.initialiseSelectedCustomer();
     this.searchCustomerAutoComplete();
@@ -124,7 +124,7 @@ export class ManureSaleDetailsComponent implements OnInit {
   }
 
   ionViewWillEnter(): void {
-    this.getManureStock();
+    this.getManures();
     this.getAllPaymentModes();
     this.getAllBankAccounts();
   }
@@ -136,6 +136,12 @@ export class ManureSaleDetailsComponent implements OnInit {
     })
   }
 
+  public getAllBankAccounts() {
+    this.bankAccountApiService.findAll().subscribe(bankAccounts => {
+      this.bankAccounts = bankAccounts;
+    })
+  }
+
   public routeToSalesInvoiceCustomerCreditList(): void {
     const url = this.router.serializeUrl(
       this.router.createUrlTree([`sales-invoice/sales-invoice-customer-credit-list/${this.selectedCustomer.id}`], { queryParams: { lastName: this.selectedCustomer.lastName, firstName: this.selectedCustomer.firstName } })
@@ -144,23 +150,13 @@ export class ManureSaleDetailsComponent implements OnInit {
     window.open(url, '_blank');
   }
 
-  public getAllBankAccounts() {
-    this.bankAccountApiService.findAll().subscribe(bankAccounts => {
-      this.bankAccounts = bankAccounts;
-    })
-  }
-
   public ionChangeLanguage(event: any): void {
     this.translateService.use(event.detail.value);
   }
 
-  public getManureStock() {
-    this.manureStock = {
-      weight: 0,
-      bags: 0
-    }
-    this.manureStockApiService.findManureStockForSale().subscribe(manureStock => {
-      this.manureStock = manureStock;
+  public getManures() {
+    this.manureStockApiService.findManures().subscribe(manures => {
+      this.manures = manures;
     })
   }
 
@@ -192,9 +188,62 @@ export class ManureSaleDetailsComponent implements OnInit {
         address: new FormControl({ value: '', disabled: !this.isNewCustomer }),
         telephoneNumber: new FormControl({ value: '', disabled: !this.isNewCustomer }, Validators.compose([Validators.required, Validators.pattern("^[0-9]*$"),]))
       }),
-      quantity: new FormControl(this.quantity, Validators.compose([Validators.min(0)])),
-      price: new FormControl(this.price, Validators.compose([Validators.min(0)])),
+      manureSaleDetailsDtos: this.formBuilder.array([
+      ])
     });
+  }
+
+  addManureStockFormGroup(manureStock: ManureStockDto) {
+    return this.formBuilder.group({
+      manureStockId: new FormControl(manureStock.id, Validators.compose([Validators.required])),
+      manureId: new FormControl(manureStock.manureId, Validators.compose([])),
+      bags: new FormControl(manureStock.bags, Validators.compose([])),
+      weight: new FormControl(manureStock.weight, Validators.compose([])),
+      collectedById: new FormControl(manureStock.collectedById, Validators.compose([])),
+      collectedByFirstName: new FormControl(manureStock.collectedByFirstName, Validators.compose([])),
+      collectedByLastName: new FormControl(manureStock.collectedByLastName, Validators.compose([])),
+      collectedDate: new FormControl(manureStock.collectedDate, Validators.compose([])),
+      quantity: new FormControl(null, Validators.compose([Validators.max(manureStock.bags)])),
+      price: new FormControl(null, Validators.compose([Validators.min(0)]))
+    })
+  }
+
+  private findIndexes(array: any[], targetValue: number): number[] {
+    return array.map((element: any, index: any) => element.manureId === targetValue ? index : undefined)
+      .filter((index: undefined) => index !== undefined)
+      .sort((a, b) => b - a);
+  }
+
+  addManureCategory(event: any, manure: ManureDto): void {
+    this.manureStockApiService.findManureStockByManureId(manure.id).subscribe(manureStocks => {
+      if (!((this.manureSaleForm.get('manureSaleDetailsDtos') as FormArray).value.find((form: any) => form.manureId == manure.id))) {
+        manureStocks.forEach(manureStock => {
+          (this.manureSaleForm.get('manureSaleDetailsDtos') as FormArray).push(this.addManureStockFormGroup(manureStock));
+        })
+      } else {
+        this.findIndexes((this.manureSaleForm.get('manureSaleDetailsDtos') as FormArray).value, manure.id).forEach(index => {
+          this.removeManureCategory(index);
+        });
+      }
+      this.calculateTotalPrice();
+      this.showFormArray = (this.manureSaleForm.get('manureSaleDetailsDtos') as FormArray).length > 0;
+    })
+  }
+
+  removeManureCategory(manureCategoryGroupIndex: number): void {
+    this.calculateTotalPrice();
+    (this.manureSaleForm.get('manureSaleDetailsDtos') as FormArray).removeAt(manureCategoryGroupIndex);
+  }
+
+  get manureCategoriesFields() {
+    return this.manureSaleForm ? this.manureSaleForm.get('manureSaleDetailsDtos') as FormArray : null;
+  }
+
+  public calculateTotalPrice(): void {
+    this.totalPrice = 0;
+    (this.manureSaleForm.get('manureSaleDetailsDtos') as FormArray).value.forEach((form: any) => {
+      this.totalPrice = this.totalPrice + (form.quantity * form.price);
+    })
   }
 
   public searchCustomerAutoComplete(): void {
@@ -282,8 +331,7 @@ export class ManureSaleDetailsComponent implements OnInit {
         telephoneNumber: null,
         totalAmountDue: null,
       },
-      quantity: null,
-      price: null,
+      manureSaleDetailsDtos: [],
       paymentSaveDtos: [],
       newCustomer: false,
       driverId: null,
@@ -303,12 +351,11 @@ export class ManureSaleDetailsComponent implements OnInit {
         telephoneNumber: this.manureSaleForm?.get("customer.telephoneNumber")?.value,
         totalAmountDue: null,
       },
+      manureSaleDetailsDtos: this.manureSaleForm?.get("manureSaleDetailsDtos")?.value.filter((manure: any) => manure.quantity != null && manure.quantity > 0),
       paymentSaveDtos: this.paymentForm.value.payments,
       newCustomer: this.isNewCustomer,
       driverId: this.selectedDriver?.id,
       salesInvoiceCategory: this.salesInvoiceCategory,
-      quantity: this.quantity,
-      price: this.price,
       comment: this.comment,
       soldAt: this.paymentForm?.get("soldAt")?.value
     }
@@ -399,22 +446,21 @@ export class ManureSaleDetailsComponent implements OnInit {
   }
 
   public reset(): void {
+    this.initialiseSelectedCustomer();
     this.isNewCustomer = false;
     this.setCustomerNewValue(false);
     this.manureSaleForm.reset();
-    this.quantity = 0;
-    this.price = 0;
+    this.showFormArray = false;
     this.totalPrice = 0;
     this.initialiseFormBuilder();
     this.setCustomerNewValue(this.isNewCustomer);
     if (this.searchCustomerCtrl) {
       this.searchCustomerCtrl.setValue(null);
     }
-    this.getManureStock();
+    this.getManures();
   }
 
   private initialisePaymentFormBuilder(): void {
-    this.totalPrice = this.quantity * this.price;
     this.paymentForm = this.formBuilder.group({
       totalPrice: new FormControl({ value: this.totalPrice, disabled: true }, Validators.compose([Validators.required])),
       soldAt: new FormControl({ value: this.totalPrice, disabled: false }, Validators.compose([

@@ -1,3 +1,593 @@
-<p>
-  feed-sale-details works!
-</p>
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      <div class="router-links">
+        <div class="title">
+          <img class="header-logo" src='./assets/flaticon/feed-sale.png'>
+          <h3 class="header-nav-products">Feed Sale Details</h3>
+        </div>
+        <div>
+          <ion-item class="language-selection">
+            <ion-select aria-label="language" interface="popover" placeholder="Select language" [(ngModel)]="language"
+              (ionChange)="ionChangeLanguage($event)">
+              <ion-select-option value="en">English</ion-select-option>
+              <ion-select-option value="id">Indonesian</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </div>
+      </div>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="false" class="ion-padding">
+  <form [formGroup]="feedSaleForm">
+    <ion-row>
+      <ion-col col-md-6 size="6" size-sm>
+        <div class="subtitle">
+          <img class="cart-logo" src='./assets/flaticon/customer.png'>
+          <div class="form-section-cart">Customer</div>
+        </div>
+        <ion-card>
+          <ion-card-content>
+            <ion-item-divider>
+              <ion-label>Customer Details</ion-label>
+            </ion-item-divider>
+            <div>
+              <ion-row>
+                <ion-col>
+                  <ion-toggle labelPlacement="start" class="toggle" formControlName="newCustomer"
+                    (ionChange)="newCustomerChange($event)" color="gunung-nago-report">New
+                    Customer*</ion-toggle>
+                </ion-col>
+                <span *ngIf="selectedCustomer?.totalAmountDue" class="ion-text-right red amount-due-customer-sale"
+                  (click)="routeToSalesInvoiceCustomerCreditList()">
+                  <strong>Total Credit Amount: Rp {{selectedCustomer.totalAmountDue}}</strong>
+                </span>
+              </ion-row>
+              <ion-row *ngIf="!isNewCustomer">
+                <ion-col size="12">
+                  <mat-form-field class="autocomplete-full-width" appearance="outline">
+                    <input matInput placeholder="Search customer..." [(ngModel)]="selectedCustomer"
+                      [matAutocomplete]="auto" [formControl]="searchCustomerCtrl" placeholder="Seach customer...">
+                    <button *ngIf="selectedCustomer" matSuffix mat-icon-button aria-label="Clear"
+                      (click)="clearCustomer(searchCustomerCtrl)">
+                      <ion-icon name="close-outline"></ion-icon>
+                    </button>
+                    <mat-autocomplete [panelWidth]="400" #auto="matAutocomplete"
+                      (optionSelected)="setSelectedCustomer($event)" [displayWith]="displayWith">
+                      <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                      <ng-container *ngIf="!isLoading">
+                        <mat-option *ngFor="let customer of filteredCustomers" [value]="customer">
+                          <span>{{customer.lastName}} {{customer.firstName}}</span>
+                        </mat-option>
+                      </ng-container>
+                    </mat-autocomplete>
+                  </mat-form-field>
+                </ion-col>
+              </ion-row>
+
+              <ion-row formGroupName="customer">
+                <ion-col col-md-6 size="6" size-sm>
+                  <ion-input formControlName="firstName" label="First Name*" label-placement="floating" fill="outline"
+                    type="text" clear-input="true" required="true">
+                  </ion-input>
+                  <div class="error-messages">
+                    <ng-container *ngFor="let error of errorMessages.firstName">
+                      <div class="error-message"
+                        *ngIf="feedSaleForm.get('customer.firstName')?.hasError(error.type) && (feedSaleForm.get('customer.firstName')?.dirty || feedSaleForm.get('customer.firstName')?.touched)">
+                        {{ error.message }}
+                      </div>
+                    </ng-container>
+                  </div>
+                </ion-col>
+                <ion-col col-md-6 size="6" size-sm>
+                  <ion-input formControlName="lastName" label="Last Name*" label-placement="floating" fill="outline"
+                    type="text" clear-input="true" required="true">
+                  </ion-input>
+                  <div class="error-messages">
+                    <ng-container *ngFor="let error of errorMessages.lastName">
+                      <div class="error-message"
+                        *ngIf="feedSaleForm.get('customer.lastName')?.hasError(error.type) && (feedSaleForm.get('customer.lastName')?.dirty || feedSaleForm.get('customer.lastName')?.touched)">
+                        {{ error.message }}
+                      </div>
+                    </ng-container>
+                  </div>
+                </ion-col>
+              </ion-row>
+              <ion-row formGroupName="customer">
+                <ion-col col-md-6 size="6" size-sm>
+                  <ion-input formControlName="address" label="Address" label-placement="floating" fill="outline"
+                    type="text" clear-input="true">
+                  </ion-input>
+                </ion-col>
+                <ion-col col-md-6 size="6" size-sm>
+                  <ion-input formControlName="telephoneNumber" label="Telephone*" label-placement="floating"
+                    fill="outline" type="text" clear-input="true" required="true">
+                  </ion-input>
+                  <div class="error-messages">
+                    <ng-container *ngFor="let error of errorMessages.telephoneNumber">
+                      <div class="error-message"
+                        *ngIf="feedSaleForm.get('customer.telephoneNumber')?.hasError(error.type) && (feedSaleForm.get('customer.telephoneNumber')?.dirty || feedSaleForm.get('customer.telephoneNumber')?.touched)">
+                        {{ error.message }}
+                      </div>
+                    </ng-container>
+                  </div>
+                </ion-col>
+              </ion-row>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col col-md-6 size="6" size-sm>
+
+      </ion-col>
+    </ion-row>
+  </form>
+
+  <ion-card>
+    <ion-card-content>
+      <ion-row>
+        <ion-col size-xs="12" size-md="6">
+          <ion-searchbar placeholder="Search by feed name..." type="text" #feedName
+            (ionInput)="searchByFeedName(feedName.value)"></ion-searchbar>
+        </ion-col>
+        <ion-col size-xs="12" size-md="6">
+          <div class="filters">
+            <div>
+
+            </div>
+            <div>
+              <ion-button class="reset" (click)="resetFilters()">Reset Filters</ion-button>
+            </div>
+          </div>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size-xs="12" size-md="3">
+          <ion-select color="gunung-nago-primary" label="Feed Category" label-placement="floating" fill="outline"
+            interface="popover" placeholder="Feed Category" (ionChange)="ionChangeFeedCategory($event)">
+            <ion-select-option *ngFor="let feedCategory of feedCategories" [value]="feedCategory">{{ feedCategory
+              }}</ion-select-option>
+          </ion-select>
+        </ion-col>
+      </ion-row>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card class="search-table" *ngIf="feeds.data.length > 0">
+    <div class="mat-elevation-z8 table-responsive">
+      <table mat-table [dataSource]="feeds">
+
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef> Name </th>
+          <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="feedCategory">
+          <th mat-header-cell *matHeaderCellDef> Feed category </th>
+          <td mat-cell *matCellDef="let element"> {{element.feedCategory}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="recommendedWeight">
+          <th mat-header-cell *matHeaderCellDef> Weight (KG) </th>
+          <td mat-cell *matCellDef="let element"> {{element.recommendedWeight}} </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="quantity">
+          <th mat-header-cell *matHeaderCellDef> Quantity in Stock (BAGS) </th>
+          <td mat-cell *matCellDef="let element"> {{element.bags}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="supplier">
+          <th mat-header-cell *matHeaderCellDef> Supplier </th>
+          <td mat-cell *matCellDef="let element"> {{element.supplierName}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row (click)="addFeedToStock(row)" [hidden]="checkIfPresent(row.id)"
+          *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+  </ion-card>
+
+
+  <ion-row>
+    <ion-col size-xs="12" size-md="6">
+      <div class="divider-wrapper">
+        <div>
+          <img class="divider-stock-img" src='./assets/flaticon/cart.png'>
+        </div>
+        <div class="divider-text">
+          <ion-item-divider class="stock-divider">
+            <ion-label>Cart</ion-label>
+          </ion-item-divider>
+        </div>
+      </div>
+      <ion-card class="search-table card-margin">
+        <div class="mat-elevation-z8 table-responsive">
+          <table mat-table [dataSource]="feedsInCartTable">
+
+            <ng-container matColumnDef="index">
+              <th mat-header-cell *matHeaderCellDef> No. </th>
+              <td mat-cell *matCellDef="let element; let i = index"
+                [style.backgroundColor]="element.focused ? 'rgb(226, 226, 226)' : '#ffffff'"> {{i+1}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef> Name </th>
+              <td mat-cell *matCellDef="let element"
+                [style.backgroundColor]="element.focused ? 'rgb(226, 226, 226)' : '#ffffff'"> {{element.name}} </td>
+            </ng-container>
+
+
+            <ng-container matColumnDef="feedCategory">
+              <th mat-header-cell *matHeaderCellDef> Category </th>
+              <td mat-cell *matCellDef="let element"
+                [style.backgroundColor]="element.focused ? 'rgb(226, 226, 226)' : '#ffffff'"> {{element.feedCategory}}
+              </td>
+            </ng-container>
+
+
+            <ng-container matColumnDef="recommendedWeight">
+              <th mat-header-cell *matHeaderCellDef> Weight (KG) </th>
+              <td mat-cell *matCellDef="let element"
+                [style.backgroundColor]="element.focused ? 'rgb(226, 226, 226)' : '#ffffff'"> {{element.weight}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="remove">
+              <th mat-header-cell *matHeaderCellDef> </th>
+              <td mat-cell *matCellDef="let element"
+                [style.backgroundColor]="element.focused ? 'rgb(226, 226, 226)' : '#ffffff'">
+                <div class="table-btn">
+                  <ion-button color="gunung-nago-warehouse" class="mr-05" (click)="removeFeedInStock(element)"><span
+                      class="material-icons">delete</span></ion-button>
+                </div>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedCartColumns"></tr>
+            <tr mat-row (click)="updateCartDetails(i)"
+              *matRowDef="let row; columns: displayedCartColumns; let i = index;">
+            </tr>
+          </table>
+        </div>
+      </ion-card>
+    </ion-col>
+    <ion-col size-xs="12" size-md="6">
+      <div class="divider-wrapper">
+        <div>
+          <img class="divider-stock-img" src='./assets/flaticon/abacus.png'>
+        </div>
+        <div class="divider-text">
+          <ion-item-divider class="stock-divider">
+            <ion-label>Enter Amount</ion-label>
+          </ion-item-divider>
+        </div>
+      </div>
+
+      <ion-card>
+        <div class="enter-amount-scroll">
+          <div class="enter-amount-design"
+            *ngFor="let productInCart of feedsInCart[indexProductInCart]?.feedStockDto; let i = index;">
+            <div class="em-title" [style.color]="i === 0 ? 'green' : 'red'">{{i === 0 ? 'New Stock' : 'Old Stock'}}
+            </div>
+            <div class="d-flex">
+              <div class="feed-stock">
+                <div class="feed-section-design">
+                  <img class="feeds" src='./assets/flaticon/feed.png'>
+                  <div class="feed-count">
+                    <strong>{{productInCart.bags}}</strong>
+                  </div>
+                </div>
+              </div>
+
+              <ion-row class="input-section">
+                <ion-col size-xs="12" size-md="4">
+                  <ion-input color="gunung-nago-primary" label="Recommended Price" label-placement="floating"
+                    fill="outline" type="number" clear-input="true" required="true"
+                    [(ngModel)]="productInCart.recommendedPrice" [disabled]="true"></ion-input>
+                </ion-col>
+                <ion-col size-xs="12" size-md="4">
+                  <ion-input color="gunung-nago-primary" label="Quantity" label-placement="floating" fill="outline"
+                    type="number" clear-input="true" required="true" [(ngModel)]="productInCart.quantity"
+                    (ngModelChange)="calculateSubTotal()"></ion-input>
+                </ion-col>
+                <ion-col size-xs="12" size-md="4">
+                  <ion-input color="gunung-nago-primary" label="Price" label-placement="floating" fill="outline"
+                    type="number" clear-input="true" required="true" [(ngModel)]="productInCart.price"
+                    (ngModelChange)="calculateSubTotal()"></ion-input>
+                </ion-col>
+                <div class="total-per ml-05">
+                  <strong>Amount: {{(productInCart.quantity? productInCart.quantity : 0) * (productInCart.price?
+                    productInCart.price : 0)}}</strong>
+                </div>
+              </ion-row>
+            </div>
+            <ion-item-divider></ion-item-divider>
+          </div>
+        </div>
+      </ion-card>
+
+      <div class="btn-container">
+        <ion-button class="cancel-btn" (click)="reset()">Cancel</ion-button>
+        <ion-button color="positive-btn" [disabled]="feedSaleForm.invalid || subTotal < 0"
+          (click)="openModal()">Save</ion-button>
+      </div>
+    </ion-col>
+  </ion-row>
+
+  <ion-row class="preview-receipt-sale" *ngIf="subTotal > 0">
+    <ion-col size-lg="8" size-md="6" size-xs="12">
+      <ion-card class="invoice">
+        <ion-card-content>
+          <div class="subtitle">
+            <img class="cart-logo" src='./assets/flaticon/official-documents.png'>
+            <div class="form-section-cart">Preview Sales Invoice</div>
+          </div>
+          <div class="invoice-title">
+            <div>
+              <div class="invoice-logo">
+                <img class="logo-img" src='./assets/icon/chicken/icons8-chicken-64.png'>
+                <h5 class="logo-text"><strong>{{company}}</strong></h5>
+              </div>
+              <div>
+                <div class="sub"><strong>Address:</strong> {{address}} </div>
+                <div class="sub"><strong>Telephone Number(s):</strong> {{phone}}</div>
+                <div class="sub"><strong>Email:</strong> {{email}}</div>
+                <!-- <div class="sub"><strong>Registration Number (SIUP):</strong> {{regNo}}</div> -->
+                <div class="sub"><strong>Year of Establishment:</strong> {{yoe}}</div>
+              </div>
+            </div>
+
+            <div>
+              <span class="main"><strong>Invoice No: ...</strong></span>
+              <div class="sub"><strong>Date Issued:</strong> </div>
+              <div class="sub">{{today | date:'EEEE, MMMM d, y HH:mm'}}
+              </div>
+            </div>
+          </div>
+          <div class="invoice-subtitle">
+            <div
+              *ngIf="feedSaleForm.get('customer.firstName')?.value != 'anonymous' && feedSaleForm.get('customer.firstName')?.value != null && feedSaleForm.get('customer.firstName')?.value != ''">
+              <div class="sub"><strong>Invoice To:</strong></div>
+              <span class="sub"><strong>Name:
+                </strong> {{feedSaleForm.get('customer.firstName')?.value}}
+                {{feedSaleForm.get('customer.lastName')?.value}}</span>
+              <div class="sub">
+                <strong>Address:</strong> {{feedSaleForm.get('customer.address')?.value}}
+              </div>
+              <div class="sub"><strong>Telephone
+                  Number:</strong> {{feedSaleForm.get('customer.telephoneNumber')?.value}}</div>
+            </div>
+            <div>
+              <!-- <div *ngIf="manureSalesInvoiceDetailsFrontDto.salesPerson != null" class="salesperson">
+                <div class="sub"><strong>Salesperson:</strong> {{manureSalesInvoiceDetailsFrontDto.salesPerson}}</div>
+              </div>
+              <div *ngIf="manureSalesInvoiceDetailsFrontDto.driverFirstName != null">
+                <div class="sub"><strong>Driver:</strong> {{manureSalesInvoiceDetailsFrontDto.driverFirstName}}
+                  {{manureSalesInvoiceDetailsFrontDto.driverLastName}}</div>
+              </div> -->
+            </div>
+          </div>
+
+          <table class="invoice-table">
+            <thead>
+              <tr>
+                <th scope="col">Product</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Unit Price</th>
+                <th scope="col">Amount</th>
+              </tr>
+            </thead>
+            <tbody *ngFor="let feed of feedsInCart">
+              <tr *ngFor="let feedInCart of feed.feedStockDto">
+                <td data-label="Product" *ngIf="(feedInCart.quantity? feedInCart.quantity : 0) > 0">FEED -
+                  <strong>{{feed.name}}</strong>
+                </td>
+                <td data-label="Quantity" *ngIf="(feedInCart.quantity? feedInCart.quantity : 0) > 0">
+                  {{feedInCart.quantity}} - <strong>BAG(S)</strong> - {{feed.weight}} KG</td>
+                <td data-label="Unit Price" *ngIf="(feedInCart.quantity? feedInCart.quantity : 0) > 0">Rp
+                  {{feedInCart.price | number : '1.2-2'}}</td>
+                <td data-label="Amount" *ngIf="(feedInCart.quantity? feedInCart.quantity : 0) > 0">Rp
+                  {{(feedInCart.quantity? feedInCart.quantity : 0) *
+                  (feedInCart.price?
+                  feedInCart.price : 0) | number : '1.2-2'}}</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="invoice-footer">
+            <div>
+            </div>
+            <div>
+              <div class="invoice-date-title">
+                <table class="summary-table">
+                  <tbody>
+                    <tr>
+                      <th id="total" colspan="1">SubTotal :</th>
+                      <td>Rp {{subTotal | number :'1.2-2'}}</td>
+                    </tr>
+                    <tr>
+                      <th id="total" colspan="1">Total :</th>
+                      <td>Rp {{subTotal | number :'1.2-2'}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </ion-col>
+
+    <ion-col size-lg="4" size-md="6" size-xs="12">
+
+    </ion-col>
+  </ion-row>
+
+  <ion-modal (willDismiss)="onWillDismiss($event)" [isOpen]="isModalOpen" cssClass="payment-modal"
+    backdropDismiss="false">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <div class="title">
+            <img class="header-logo ml-15" src='./assets/flaticon/confirmation.png'>
+            <h3 class="modal-header-text">Payment Confirmation</h3>
+          </div>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content [fullscreen]="false" class="ion-padding">
+        <form [formGroup]="paymentForm">
+          <ion-row>
+            <ion-col size-xs="6" size-md="6">
+              <ion-input color="gunung-nago-primary" label="Total Price" label-placement="floating" fill="outline"
+                type="number" formControlName="totalPrice"></ion-input>
+            </ion-col>
+            <ion-col size-xs="6" size-md="6">
+              <ion-input color="gunung-nago-primary" label="Sold at*" label-placement="floating" fill="outline"
+                type="number" formControlName="soldAt"></ion-input>
+              <div class="error-messages">
+                <ng-container *ngFor="let error of errorMessages.soldAt">
+                  <div class="error-message"
+                    *ngIf="paymentForm.get('soldAt')?.hasError(error.type) && (paymentForm.get('soldAt')?.dirty || paymentForm.get('soldAt')?.touched)">
+                    {{ error.message }}
+                  </div>
+                </ng-container>
+              </div>
+            </ion-col>
+          </ion-row>
+
+          <ion-row>
+            <ion-col size-xs="6" size-md="6">
+              <ion-input color="gunung-nago-primary" label="Discount (%)" label-placement="floating" fill="outline"
+                [disabled]="true" type="number"
+                [value]="(((paymentForm.get('totalPrice')?.value - paymentForm.get('soldAt')?.value)) / paymentForm.get('totalPrice')?.value) * 100"></ion-input>
+            </ion-col>
+          </ion-row>
+
+          <div class="add-payment-area">
+            <div>
+
+            </div>
+            <div>
+              <ion-button color="neutral-btn" class="add-payment-btn" (click)="addPayment()">Add Payment</ion-button>
+            </div>
+          </div>
+
+          <div formArrayName="payments" *ngFor="let payment of paymentsFields?.controls; let i = index">
+            <ion-item-divider>
+              <ion-label>Payment</ion-label>
+            </ion-item-divider>
+            <span [formGroupName]="i">
+              <ion-button *ngIf="paymentsFields != null && paymentsFields.length > 1" (click)="removePayment(i)"
+                class="remove-payment-btn" color="gunung-nago-warehouse"><span
+                  class="material-icons">delete</span></ion-button>
+              <ion-row>
+                <ion-col size="6" size-sm>
+                  <ion-input color="gunung-nago-primary" label="Amount Paid" label-placement="floating" fill="outline"
+                    type="number" formControlName="amountPaid"></ion-input>
+                  <div class="error-messages">
+                    <ng-container *ngFor="let error of errorMessages.amountPaid">
+                      <div class="error-message"
+                        *ngIf="payment.get('amountPaid')?.hasError(error.type) && (payment.get('amountPaid')?.dirty || payment.get('amountPaid')?.touched)">
+                        {{ error.message }}
+                      </div>
+                    </ng-container>
+                  </div>
+                </ion-col>
+
+                <ion-col size="6">
+                  <ion-select color="gunung-nago-primary" label="Payment Mode" label-placement="floating" fill="outline"
+                    interface="popover" formControlName="paymentModeId">
+                    <ion-select-option *ngFor="let paymentMode of paymentModes" [value]="paymentMode">{{
+                      paymentMode.name| titlecase}}</ion-select-option>
+                  </ion-select>
+                  <div class="error-messages">
+                    <ng-container *ngFor="let error of errorMessages.paymentModeId">
+                      <div class="error-message"
+                        *ngIf="payment.get('paymentModeId')?.hasError(error.type) && (payment.get('paymentModeId')?.dirty || payment.get('paymentModeId')?.touched)">
+                        {{ error.message }}
+                      </div>
+                    </ng-container>
+                  </div>
+                </ion-col>
+              </ion-row>
+
+              <ion-row *ngIf="payment.get('paymentModeId')?.value?.id === 1">
+                <ion-col size="6">
+                  <mat-form-field class="date-full-width" appearance="outline">
+                    <mat-label>Payment Deadline</mat-label>
+                    <input matInput [matDatepicker]="picker" [min]="today" formControlName="paymentDeadline">
+                    <mat-hint>DD/MM/YYYY</mat-hint>
+                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                  </mat-form-field>
+                </ion-col>
+              </ion-row>
+
+              <ion-row *ngIf="payment.get('paymentModeId')?.value?.requireBankAccount">
+                <ion-col size="6">
+                  <ion-select color="gunung-nago-primary" label="Bank Account" label-placement="floating" fill="outline"
+                    interface="popover" formControlName="bankAccountId">
+                    <ion-select-option *ngFor="let bankAccount of bankAccounts" [value]="bankAccount.id">{{
+                      bankAccount.accountHolder| uppercase}} - {{bankAccount.accountNumber}} -
+                      {{bankAccount.bankName}}</ion-select-option>
+                  </ion-select>
+                  <div class="error-messages">
+                    <ng-container *ngFor="let error of errorMessages.bankAccountId">
+                      <div class="error-message"
+                        *ngIf="payment.get('bankAccountId')?.hasError(error.type) && (payment.get('bankAccountId')?.dirty || payment.get('bankAccountId')?.touched)">
+                        {{ error.message }}
+                      </div>
+                    </ng-container>
+                  </div>
+                </ion-col>
+              </ion-row>
+            </span>
+          </div>
+        </form>
+        <ion-row>
+          <ion-col size="3">
+            <ion-item-divider>
+              <ion-label>Option</ion-label>
+            </ion-item-divider>
+            <ion-radio-group [(ngModel)]="salesInvoiceCategory" (ionChange)="selectSalesInvoiceCategory($event)">
+              <div *ngFor="let salesInvoiceCategory of salesInvoiceCategories" class="radio-class">
+                <ion-radio color="positive-btn" [value]="salesInvoiceCategory">{{salesInvoiceCategory === 'IN_STORE'?
+                  'In Store' : 'Delivery'}}</ion-radio><br />
+              </div>
+            </ion-radio-group>
+          </ion-col>
+          <ion-col size="9" *ngIf="showDriver">
+            <ion-item-divider>
+              <ion-label>Driver</ion-label>
+            </ion-item-divider>
+            <ion-select color="gunung-nago-primary" label="Driver" label-placement="floating" fill="outline"
+              interface="popover" [(ngModel)]="selectedDriver">
+              <ion-select-option *ngFor="let driver of drivers" [value]="driver">{{driver.firstName}}
+                {{driver.lastName}}</ion-select-option>
+            </ion-select>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="12" size-sm>
+            <ion-textarea class="comment" color="gunung-nago-primary" label="Comments" label-placement="floating"
+              fill="outline" type="text" clear-input="true" [(ngModel)]="comment" [autoGrow]="true"></ion-textarea>
+          </ion-col>
+        </ion-row>
+        <div class="modal-btn-container ion-text-right">
+          <ion-button class="cancel-btn" (click)="cancel()">Cancel</ion-button>
+          <ion-button color="positive-btn"
+            [disabled]="!checkPaymentLessThanSoldAt() || paymentForm.invalid || subTotal < 1 || !checkPaymentCompleted()"
+            (click)="confirm()">Save</ion-button>
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+</ion-content>

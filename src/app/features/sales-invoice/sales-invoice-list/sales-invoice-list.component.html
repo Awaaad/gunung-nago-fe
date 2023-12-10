@@ -46,7 +46,7 @@
       <ion-row>
         <ion-col size-xs="12" size-md="3">
           <ion-select color="gunung-nago-primary" label="Salesperson" label-placement="floating" fill="outline"
-            interface="popover" placeholder="" [(ngModel)]="username" (ionChange)="ionChangeUsername($event)">
+            interface="popover" [(ngModel)]="username" (ionChange)="ionChangeUsername($event)">
             <ion-select-option value='' selected="true">All</ion-select-option>
             <ion-select-option *ngFor="let username of usernames" [value]="username">{{username |
               titlecase}}</ion-select-option>
@@ -55,7 +55,7 @@
 
         <ion-col size-xs="12" size-md="3">
           <ion-select color="gunung-nago-primary" label="Driver" label-placement="floating" fill="outline"
-            interface="popover" placeholder="Driver" [(ngModel)]="selectedDriverId"
+            interface="popover" [(ngModel)]="selectedDriverId"
             (ionChange)="ionChangeDriver($event)">
             <ion-select-option value='0' selected="true">All</ion-select-option>
             <ion-select-option *ngFor="let driver of drivers" [value]="driver.id">{{driver.firstName}}
@@ -235,20 +235,11 @@
               <ion-icon color="positive-btn" class="table-view-details-icon" name="eye"
                 (click)="routeToSalesInvoiceDetails(element)"></ion-icon>
 
-              <!-- <ion-icon *ngIf="element.salesInvoiceStatus !== 'PAID'" color="gunung-nago-warehouse"
-                class="table-credit-icon" name="card"></ion-icon> -->
+              <ion-icon  class="table-credit-icon" name="arrow-undo"
+                color="gunung-nago-warehouse" (click)="routeToReturnInvoice(element)"></ion-icon>
 
-              <ion-icon class="table-credit-icon" name="arrow-undo" color="gunung-nago-warehouse"
-                (click)="routeToReturnInvoice(element)"></ion-icon>
-
-              <!-- <ion-icon
-                *ngIf="getTotalAmountPaid(element.paymentDtos) === 0 && element.salesInvoiceStatus === 'OUTSTANDING'"
-                class="table-edit-icon" color="neutral-btn" (click)="routeToPointOfSalesEdit(element)"
-                name="create"></ion-icon> -->
-              <!-- <ion-icon class="table-edit-icon mr-05" color="neutral-btn" (click)="routeToPointOfSalesEdit(element)"
-              name="create"></ion-icon> -->
-
-              <ion-icon class="table-view-more-icon" name="list" (click)="openStatusModal(element)"></ion-icon>
+              <ion-icon *ngIf="element.salesInvoiceStatus !== 'RETURNED' && element.salesInvoiceStatus !== 'PAID'"
+                class="table-view-more-icon" name="list" (click)="openStatusModal(element)"></ion-icon>
 
             </div>
           </td>
@@ -468,7 +459,7 @@
 
                 <ion-col size="6">
                   <ion-select color="gunung-nago-primary" label="Payment Mode" label-placement="floating" fill="outline"
-                    interface="popover" placeholder="Payment Mode" formControlName="paymentModeId">
+                    interface="popover" formControlName="paymentModeId">
                     <ion-select-option *ngFor="let paymentMode of paymentModes" [value]="paymentMode">{{
                       paymentMode.name| titlecase}}</ion-select-option>
                   </ion-select>
@@ -498,7 +489,7 @@
               <ion-row *ngIf="payment.get('paymentModeId')?.value?.requireBankAccount">
                 <ion-col size="6">
                   <ion-select color="gunung-nago-primary" label="Bank Account" label-placement="floating" fill="outline"
-                    interface="popover" placeholder="Bank account" formControlName="bankAccountId">
+                    interface="popover" formControlName="bankAccountId">
                     <ion-select-option *ngFor="let bankAccount of bankAccounts" [value]="bankAccount.id">{{
                       bankAccount.accountHolder| uppercase}} - {{bankAccount.accountNumber}} -
                       {{bankAccount.bankName}}</ion-select-option>
@@ -525,7 +516,6 @@
           <ion-button color="positive-btn" *ngIf="selectedStatus === 'PAID'"
             [disabled]="!checkPaymentLessThanSoldAt() || paymentForm.invalid || selectedInvoice.totalPrice < 1 || !checkPaymentCompleted()"
             (click)="confirmStatusChange()">Save</ion-button>
-          <ion-button color="neutral-btn" (click)="routeToReturnInvoice(selectedInvoice)">Return Invoice</ion-button>
         </div>
       </ion-content>
     </ng-template>

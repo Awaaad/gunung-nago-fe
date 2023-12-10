@@ -32,9 +32,7 @@
       <ion-row>
         <ion-col size-xs="12" size-md="3">
           <ion-select color="gunung-nago-primary" label="{{ 'cage.cage-details.cage-category' | translate }}"
-            label-placement="floating" fill="outline" interface="popover"
-            placeholder="{{ 'cage.cage-details.cage-category' | translate }}"
-            (ionChange)="ionChangeCageCategory($event)">
+            label-placement="floating" fill="outline" interface="popover" (ionChange)="ionChangeCageCategory($event)">
             <ion-select-option *ngFor="let category of cageCategories" [value]="category">{{ category | titlecase
               }}</ion-select-option>
           </ion-select>
@@ -85,7 +83,8 @@
           <th mat-header-cell *matHeaderCellDef> </th>
           <td mat-cell *matCellDef="let element">
             <div class="table-btn">
-              <ion-icon class="table-edit-icon" color="neutral-btn" (click)="openModal(element)" name="create"></ion-icon>
+              <ion-icon class="table-edit-icon" color="neutral-btn" (click)="openModal(element)"
+                name="create"></ion-icon>
             </div>
           </td>
         </ng-container>
@@ -136,7 +135,7 @@
             <ion-col size-xs="12" size-md="6">
               <ion-select color="gunung-nago-primary" label="{{ 'cage.cage-details.cage-category' | translate }}"
                 label-placement="floating" fill="outline" interface="popover" required="true"
-                placeholder="{{ 'cage.cage-details.cage-category' | translate }}" formControlName="cageCategory">
+                formControlName="cageCategory">
                 <ion-select-option *ngFor="let category of cageCategories" [value]="category">{{ category
                   }}</ion-select-option>
               </ion-select>

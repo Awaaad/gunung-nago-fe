@@ -2,25 +2,20 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators, FormArray } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
-import { ManureDto } from 'generated-src/model';
 import { ManureStockApiService } from 'src/app/shared/apis/manure-stock.api.service';
 import { UtilsService } from 'src/app/shared/utils/utils.service';
 
 @Component({
-  selector: 'app-manure-stock',
-  templateUrl: './manure-stock.component.html',
-  styleUrls: ['./manure-stock.component.scss'],
+  selector: 'app-manure-details',
+  templateUrl: './manure-details.component.html',
+  styleUrls: ['./manure-details.component.scss'],
 })
-export class ManureStockComponent implements OnInit {
-  public manureStockUpdateForm!: FormGroup;
+export class ManureDetailsComponent implements OnInit {
+  public manureDetailsForm!: FormGroup;
   public language = "en";
-  public manures: ManureDto[] = [];
   public errorMessages = {
     weight: [
       { type: 'required', message: 'Weight is required' },
-    ],
-    bags: [
-      { type: 'required', message: 'Bags collected is required' },
     ]
   };
 
@@ -34,7 +29,6 @@ export class ManureStockComponent implements OnInit {
 
   ngOnInit(): void {
     this.initialiseFormBuilder();
-    this.getManures();
   }
 
   public ionChangeLanguage(event: any): void {
@@ -45,50 +39,42 @@ export class ManureStockComponent implements OnInit {
     this.translateService.use(event.value);
   }
 
-  public getManures() {
-    this.manures = [];
-    this.manureStockApiService.findManures().subscribe(manures => {
-      this.manures = manures;
-    })
-  }
-
   private initialiseFormBuilder(): void {
-    this.manureStockUpdateForm = this.formBuilder.group({
+    this.manureDetailsForm = this.formBuilder.group({
       manureDetails: this.formBuilder.array([
-        this.addManureStockUpdateFormGroup()
+        this.addManureDetailsFormGroup()
       ])
     });
   }
 
-  public addManureStockUpdateFormGroup(): any {
+  public addManureDetailsFormGroup(): any {
     return this.formBuilder.group({
       id: null,
-      manureId: new FormControl({ value: null, disabled: false }, Validators.compose([Validators.required])),
-      bags: new FormControl({ value: null, disabled: false }, Validators.compose([Validators.required])),
+      weight: new FormControl({ value: null, disabled: false }, Validators.compose([Validators.required])),
     });
   }
 
   addManureDetails(): void {
-    (this.manureStockUpdateForm.get('manureDetails') as FormArray).push(this.addManureStockUpdateFormGroup());
+    (this.manureDetailsForm.get('manureDetails') as FormArray).push(this.addManureDetailsFormGroup());
   }
 
   removeManureDetails(manureDetailsGroupIndex: number): void {
-    (this.manureStockUpdateForm.get('manureDetails') as FormArray).removeAt(manureDetailsGroupIndex);
+    (this.manureDetailsForm.get('manureDetails') as FormArray).removeAt(manureDetailsGroupIndex);
   }
 
   get manureDetailsFields() {
-    return this.manureStockUpdateForm ? this.manureStockUpdateForm.get('manureDetails') as FormArray : null;
+    return this.manureDetailsForm ? this.manureDetailsForm.get('manureDetails') as FormArray : null;
   }
 
   public save(): void {
     this.utilsService.presentLoading();
-    this.manureStockApiService.saveManureStockTrace(this.manureStockUpdateForm.value.manureDetails).subscribe({
+    this.manureStockApiService.save(this.manureDetailsForm.value.manureDetails).subscribe({
       next: (data: string) => {
-        this.manureStockUpdateForm.reset();
-        (this.manureStockUpdateForm.get('manureDetails') as FormArray).clear();
+        this.manureDetailsForm.reset();
+        (this.manureDetailsForm.get('manureDetails') as FormArray).clear();
         this.addManureDetails();
         this.utilsService.dismissLoading();
-        this.utilsService.successMsg('Manure stock successfully updated');
+        this.utilsService.successMsg('Manure(s) successfully updated');
       },
       error: (error: HttpErrorResponse) => {
         this.utilsService.dismissLoading();

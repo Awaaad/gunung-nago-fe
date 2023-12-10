@@ -32,7 +32,8 @@
             <div class="form-array-index">
               <h6>Cage {{i + 1}}</h6>
               <ion-button *ngIf="cageDetailsFields != null && cageDetailsFields.length > 1"
-                (click)="removeCageDetails(i)" class="delete-product-btn" color="gunung-nago-warehouse"><span class="material-icons">delete</span></ion-button>
+                (click)="removeCageDetails(i)" class="delete-product-btn" color="gunung-nago-warehouse"><span
+                  class="material-icons">delete</span></ion-button>
             </div>
             <ion-row>
               <ion-col size-xs="12" size-md="3">
@@ -51,7 +52,7 @@
               <ion-col size-xs="12" size-md="3">
                 <ion-select color="gunung-nago-primary" label="{{ 'cage.cage-details.cage-category' | translate }}"
                   label-placement="floating" fill="outline" interface="popover" required="true"
-                  placeholder="{{ 'cage.cage-details.cage-category' | translate }}" formControlName="cageCategory">
+                  formControlName="cageCategory">
                   <ion-select-option *ngFor="let category of cageCategories" [value]="category">{{ category
                     }}</ion-select-option>
                 </ion-select>

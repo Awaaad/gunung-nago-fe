@@ -28,6 +28,8 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
 import { MaskitoModule } from '@maskito/angular';
 import { FeedSaleDetailsComponent } from './feed-sale-details/feed-sale-details.component';
+import { CustomerApiService } from 'src/app/shared/apis/customer.api.service';
+import { FeedSaleApiService } from 'src/app/shared/apis/feed-sale.api.service';
 
 
 @NgModule({
@@ -54,6 +56,6 @@ import { FeedSaleDetailsComponent } from './feed-sale-details/feed-sale-details.
     MatNativeDateModule,
     MatDatepickerModule,
   ],
-  providers: [FeedApiService, FeedStockApiService, FlockFeedLineApiService, SupplierApiService]
+  providers: [FeedApiService, FeedStockApiService, FlockFeedLineApiService, SupplierApiService, CustomerApiService, FeedSaleApiService]
 })
 export class FeedModule { }

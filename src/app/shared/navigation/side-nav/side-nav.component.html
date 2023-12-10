@@ -84,6 +84,9 @@
             <ion-item routerLink="/feed/feed-details">
               <ion-icon name="add" color="dark"></ion-icon>Add Feed
             </ion-item>
+            <ion-item routerLink="/feed/feed-sale-details" routerDirection="forward">
+              <ion-icon name="pricetag" color="dark"></ion-icon><span>Feed Sale</span>
+            </ion-item>
             <ion-item routerLink="/feed/feed-stock">
               <ion-icon [src]="stock" class="font-size-60"></ion-icon>Update Feed Stock
             </ion-item>
@@ -153,14 +156,20 @@
       <ion-accordion-group>
         <ion-accordion value="first">
           <ion-item slot="header" color="light">
-            <ion-icon [src]="manure" class="font-size-60"></ion-icon>Manure
+            <ion-icon [src]="manure" class="font-size-60"></ion-icon>Fertilizer
           </ion-item>
           <div class="accordion-sub" slot="content">
+            <ion-item routerLink="/manure/manure-list">
+              <ion-icon name="list" color="dark"></ion-icon>Fertilizer List
+            </ion-item>
+            <ion-item routerLink="/manure/manure-details">
+              <ion-icon name="add" color="dark"></ion-icon>Add Fertilizer
+            </ion-item>
             <ion-item routerLink="/manure/manure-sale-details" routerDirection="forward">
-              <ion-icon name="pricetag" color="dark"></ion-icon><span>Manure Sale</span>
+              <ion-icon name="pricetag" color="dark"></ion-icon><span>Fertilizer Sale</span>
             </ion-item>
             <ion-item routerLink="/manure/manure-stock">
-              <ion-icon [src]="stock" class="font-size-60"></ion-icon>Update Manure Stock
+              <ion-icon [src]="stock" class="font-size-60"></ion-icon>Update Fertilizer Stock
             </ion-item>
           </div>
         </ion-accordion>

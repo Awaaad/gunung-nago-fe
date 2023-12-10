@@ -58,9 +58,15 @@
 }
 
 .manure-stock {
-    margin: 5em 0 4.12em 0;
-    display: flex;
-    justify-content: space-around;
+    text-align: center;
+    color: black;
+    margin-top: 4.7em;
+    margin-bottom: 4.7em;
+}
+
+.manure-section-top {
+    text-align: center;
+    color: black;
 }
 
 .total-per {
@@ -321,12 +327,6 @@ textarea {
 
 .manure-count {
     font-size: 18px;
-}
-
-.manure-stock {
-    margin: 5em 0 4.12em 0;
-    display: flex;
-    justify-content: space-around;
 }
 
 .eggs {
