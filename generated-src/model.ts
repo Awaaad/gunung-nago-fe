@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2023-11-27 12:35:16.
+// Generated using typescript-generator version 3.2.1263 on 2023-12-10 13:02:24.
 
 export class BankAccountDto {
     id!: number;
@@ -686,6 +686,21 @@ export class DailyProductionReportDto {
     eggCategoryStocks!: EggCategoryStockDto[];
 }
 
+export class ReturnInvoiceDetailsDto {
+    id!: number;
+    totalPrice!: number;
+    comment!: string;
+    createdBy!: string;
+    createdDate!: Date;
+    customerFirstName!: string;
+    customerLastName!: string;
+    customerAddress!: string;
+    customerTelephoneNumber!: number;
+    driverFirstName!: string;
+    driverLastName!: string;
+    returnDetailsDtos!: ReturnInvoiceLineDetailsDto[];
+}
+
 export class ReturnInvoiceDto {
     returnNumber!: number;
     comment!: string;
@@ -694,9 +709,24 @@ export class ReturnInvoiceDto {
     returnInvoiceLineDtos!: ReturnInvoiceLineDto[];
 }
 
+export class ReturnInvoiceLineDetailsDto {
+    returnInvoiceType!: ReturnInvoiceType;
+    price!: number;
+    totalPrice!: number;
+    feedStockId!: number;
+    flockId!: number;
+    manureStockId!: number;
+    quantity!: number;
+    salesInvoiceLineId!: number;
+    eggQuantityType!: EggQuantityType;
+    eggCategory!: number;
+    eggType!: string;
+    flockType!: FlockType;
+}
+
 export class ReturnInvoiceLineDto {
     returnInvoiceType!: ReturnInvoiceType;
-    pricePerBox!: number;
+    price!: number;
     totalPrice!: number;
     feedStockId!: number;
     flockId!: number;
@@ -707,6 +737,33 @@ export class ReturnInvoiceLineDto {
     eggCategory!: string;
     eggType!: EggType;
     flockType!: FlockType;
+}
+
+export class ReturnInvoiceListDto {
+    id!: number;
+    returnInvoiceType!: ReturnInvoiceType;
+    totalPrice!: number;
+    discount!: number;
+    createdBy!: string;
+    createdDate!: Date;
+    customerFirstName!: string;
+    customerLastName!: string;
+    driverFirstName!: string;
+    driverLastName!: string;
+    salesInvoiceStatus!: SalesInvoiceStatus;
+    salesInvoiceId!: number;
+}
+
+export class ReturnInvoiceSearchCriteriaDto {
+    returnInvoiceType!: ReturnInvoiceType;
+    customerName!: string;
+    createdBy!: string;
+    driverId!: number;
+    dateFrom!: Date;
+    dateTo!: Date;
+    salesInvoiceStatus!: SalesInvoiceStatus;
+    farmId!: number;
+    customerId!: number;
 }
 
 export class SalesInvoiceDetailsDto {
@@ -734,6 +791,7 @@ export class SalesInvoiceDetailsForReturnDto {
     soldAt!: number;
     createdBy!: string;
     createdDate!: Date;
+    customerId!: number;
     customerFirstName!: string;
     customerLastName!: string;
     customerAddress!: string;
@@ -767,6 +825,7 @@ export class SalesInvoiceDto {
     totalAmountDue!: number;
     totalLockedAmountDue!: number;
     totalUnlockedAmountDue!: number;
+    containsReturn!: boolean;
 }
 
 export class SalesInvoiceSearchCriteriaDto {
@@ -814,7 +873,9 @@ export class SalesInvoiceLineForReturnDto {
     salesInvoiceType!: SalesInvoiceType;
     quantity!: number;
     price!: number;
-    eggQuantityType!: EggQuantityType;
+    eggCategoryName!: string;
+    returnedEggQuantityType!: EggQuantityType;
+    salesEggQuantityType!: EggQuantityType;
     eggCategoryId!: number;
     cageId!: number;
     flockId!: number;

@@ -20,7 +20,7 @@ export class CageApiService {
   }
 
   public findById(id: number): Observable<CageDto> {
-    return this.http.get<CageDto>(`${this.baseUrl}${id}`);
+    return this.http.get<CageDto>(`${this.baseUrl}/${id}`);
   }
 
   public search(searchValues: any): Observable<PageResult<CageDto>> {
@@ -36,6 +36,6 @@ export class CageApiService {
   }
 
   public getAllInactiveCagesByCategory(cageCategory: string): Observable<CageDto[]> {
-    return this.http.get<CageDto[]>(`${this.baseUrl}all/inactive/${cageCategory}`);
+    return this.http.get<CageDto[]>(`${this.baseUrl}/all/inactive/${cageCategory}`);
   }
 }

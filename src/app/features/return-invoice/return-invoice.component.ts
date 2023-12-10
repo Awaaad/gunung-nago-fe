@@ -1,12 +1,12 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { ChangeDetectionStrategy, Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { IonModal } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { BankAccountDto, PaymentModeDto, SaleDetailsDto, SalesInvoiceDto } from 'generated-src/model';
-import { SaleSaveFrontDto, SalesInvoiceDetailsForReturnFrontDto, SaleDetailsForReturnFrontDto, SalesInvoiceDetailsFrontDto, SalesInvoiceDetailsFrontForReturnDto, ReturnInvoiceFrontDto } from 'generated-src/model-front';
+import { BankAccountDto, EggQuantityType, PaymentModeDto, SaleDetailsDto, SalesInvoiceType } from 'generated-src/model';
+import { SalesInvoiceDetailsForReturnFrontDto, SaleDetailsForReturnFrontDto, SalesInvoiceDetailsFrontDto, ReturnInvoiceFrontDto, SaleDetailsFrontDto } from 'generated-src/model-front';
 import * as moment from 'moment';
 import { ReturnApiService } from 'src/app/shared/apis/return.api.service';
 import { SalesInvoiceApiService } from 'src/app/shared/apis/sales-invoice.api.service';
@@ -15,6 +15,7 @@ import { OverlayEventDetail } from '@ionic/core/components';
 import { environment } from 'src/environments/environment';
 import { PaymentModeApiService } from 'src/app/shared/apis/payment-mode.api.service';
 import { BankAccountApiService } from 'src/app/shared/apis/bank-account.api.service';
+import { PaymentApiService } from 'src/app/shared/apis/payment.api.service';
 
 
 @Component({
@@ -22,7 +23,7 @@ import { BankAccountApiService } from 'src/app/shared/apis/bank-account.api.serv
   templateUrl: './return-invoice.component.html',
   styleUrls: ['./return-invoice.component.scss'],
 })
-export class ReturnInvoiceComponent  implements OnInit {
+export class ReturnInvoiceComponent implements OnInit {
   public salesDetailsTable = new MatTableDataSource<SaleDetailsForReturnFrontDto>();
   public salesInStock: SaleDetailsForReturnFrontDto[] = [];
   public paymentForm!: FormGroup;
@@ -33,10 +34,10 @@ export class ReturnInvoiceComponent  implements OnInit {
   public isModalOpen: boolean = false;
   @ViewChild(IonModal) modal!: IonModal;
   public today: Date = new Date();
-  public quantityAllowed: boolean = false;
+  public quantityAllowed: boolean = true;
   public salesInvoiceDetailsFrontDtoForSalesInvoice!: SalesInvoiceDetailsFrontDto | null | undefined;
-  public salesInvoiceDetailsForReturnDto!: SalesInvoiceDetailsForReturnFrontDto  | null | undefined;
-  public returnInvoiceDetails: ReturnInvoiceFrontDto[] = [] ;
+  public salesInvoiceDetailsForReturnDto!: SalesInvoiceDetailsForReturnFrontDto | null | undefined;
+  public returnInvoiceDetails: ReturnInvoiceFrontDto[] = [];
   public totalPiece: number = 0;
   public totalTray: number = 0;
   public totalTie: number = 0;
@@ -50,9 +51,9 @@ export class ReturnInvoiceComponent  implements OnInit {
   public totalPriceForSterileChicken: number = 0;
   public totalQuantityManure: number = 0;
   public totalPriceManure: number = 0;
-  public totalPriceReturn:number = 0;
+  public totalPriceReturn: number = 0;
   public totalPriceForReturnSummary: number = 0;
-  public showReturnInvoices:boolean = false;
+  public showReturnInvoices: boolean = false;
   public bankAccounts: BankAccountDto[] = [];
   public paymentModes: PaymentModeDto[] = [];
   public completePaymentModes: PaymentModeDto[] = [];
@@ -64,12 +65,16 @@ export class ReturnInvoiceComponent  implements OnInit {
   public regNo = environment.regNo;
   public yoe = environment.yoe;
 
-
   public salesDetails: SaleDetailsDto[] | null | undefined = [];
-  public salesDetailsCopy: SaleDetailsDto | null | undefined ;
-  public displayedColumnsReturn: string[] = ['no.', 'product', 'quantity returned', 'quantity to return', 'original price', 'discount', 'unit sold at', 'new price', 'amount', 'actions'];
+  public salesDetailsCopy: SaleDetailsDto | null | undefined;
+  public displayedColumnsReturn: string[] = ['no.', 'product', 'quantity type', 'quantity returned', 'quantity to return', 'original price', 'discount', 'unit sold at', 'new price', 'amount', 'actions'];
   public language = "en";
   public salesInvoiceId: any = this.activatedRoute.snapshot.paramMap.get('id');
+
+  public amountDue: number = 0;
+  public customerId!: number;
+  public customerFirstName!: string;
+  public customerLastName!: string;
 
   public errorMessages = {
     firstName: [{ type: "required", message: "First name is required" }],
@@ -117,8 +122,10 @@ export class ReturnInvoiceComponent  implements OnInit {
     private translateService: TranslateService,
     private utilsService: UtilsService,
     private returnApiService: ReturnApiService,
+    private paymentApiService: PaymentApiService,
     private paymentModeApiService: PaymentModeApiService,
-    private bankAccountApiService: BankAccountApiService,) { }
+    private bankAccountApiService: BankAccountApiService,
+    private router: Router) { }
 
   async ngOnInit() {
     this.returnFormGroup = this.formBuilder.group({
@@ -128,7 +135,7 @@ export class ReturnInvoiceComponent  implements OnInit {
       customerTelephoneNumber: new FormControl(''),
       formDetail: this.formBuilder.array([])
     })
-    if (this.salesInvoiceId != null){
+    if (this.salesInvoiceId != null) {
       this.findSalesInvoiceDetailsById();
       this.findSalesInvoiceDetailsForReturnById();
       this.findReturnInvoiceDetailsForReturnById();
@@ -138,18 +145,10 @@ export class ReturnInvoiceComponent  implements OnInit {
     this.getAllBankAccounts();
   }
 
-  private checkIfCreditAllowed(): boolean {
-    return false;
-  }
-
   public getAllPaymentModes() {
     this.paymentModeApiService.findAll().subscribe(paymentModes => {
-      
-      paymentModes.forEach(paymentMode =>{
-        if(paymentMode.name !== "CREDIT"){
-          this.paymentModes.push(paymentMode)
-        }
-      })
+      this.paymentModes = paymentModes;
+      this.completePaymentModes = paymentModes;
     })
   }
 
@@ -159,7 +158,7 @@ export class ReturnInvoiceComponent  implements OnInit {
     })
   }
 
-  initialiseQuantityForReturn(){
+  initialiseQuantityForReturn() {
     return this.formBuilder.group({
       quantity: new FormControl(0, Validators.compose([
         Validators.required,
@@ -186,7 +185,6 @@ export class ReturnInvoiceComponent  implements OnInit {
     })
   }
 
-
   removePayment(paymentGroupIndex: number): void {
     (this.paymentForm.get('payments') as FormArray).removeAt(paymentGroupIndex);
   }
@@ -200,7 +198,7 @@ export class ReturnInvoiceComponent  implements OnInit {
     this.paymentForm.get('payments')?.value.forEach((payment: any) => {
       totalAmountPaid += payment.amountPaid;
     });
-    if (totalAmountPaid <= this.paymentForm.get('soldAt')?.value) {
+    if (totalAmountPaid <= JSON.parse(this.paymentForm.get('totalPrice')?.value)) {
       return true;
     } else {
       return false;
@@ -212,7 +210,24 @@ export class ReturnInvoiceComponent  implements OnInit {
     this.paymentForm.get('payments')?.value.forEach((payment: any) => {
       totalAmountPaid += payment.amountPaid;
     });
-    if (totalAmountPaid === this.paymentForm.get('soldAt')?.value) {
+    if (totalAmountPaid === JSON.parse(this.paymentForm.get('totalPrice')?.value)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public checkCreditCompleted(): boolean {
+    let totalAmountDue = 0;
+    this.paymentForm.get('payments')?.value.forEach((payment: any) => {
+      console.log(payment)
+      if (payment.paymentMode && payment.paymentModeId.id == 1) {
+        totalAmountDue += payment.amountPaid;
+      } else {
+        totalAmountDue += 0;
+      }
+    });
+    if (totalAmountDue > this.amountDue) {
       return true;
     } else {
       return false;
@@ -220,7 +235,6 @@ export class ReturnInvoiceComponent  implements OnInit {
   }
 
   addPayment(): void {
-    console.log(this.paymentForm.get('payments'));
     if ((this.paymentForm.get('payments') as FormArray).length < 2) {
       (this.paymentForm.get('payments') as FormArray).push(this.addPaymentFormGroup());
     }
@@ -228,73 +242,43 @@ export class ReturnInvoiceComponent  implements OnInit {
 
   public findSalesInvoiceDetailsById(): void {
     this.salesInvoiceApiService.findSalesInvoiceDetailsById(this.salesInvoiceId).subscribe(salesInvoiceDetailsFrontDto => {
-      console.log(salesInvoiceDetailsFrontDto);
       this.salesInvoiceDetailsFrontDtoForSalesInvoice = salesInvoiceDetailsFrontDto;
-      //this.totalPrice = this.salesInvoiceDetailsFrontDtoForSalesInvoice.totalPrice;
     })
   }
 
   public findSalesInvoiceDetailsForReturnById() {
-    this.salesInvoiceApiService.findSalesInvoiceDetailsForReturnById(this.salesInvoiceId).subscribe(res=>{
-    this.salesInvoiceDetailsForReturnDto = res;
-    console.log(res);
-    let invoiceId = null;
-    let totalQuantityReturned = 0;
-    this.returnFormGroup.get('customerFirstName')?.setValue(res.customerFirstName);
-    this.returnFormGroup.get('customerLastName')?.setValue(res.customerLastName);
-    this.returnFormGroup.get('customerTelephoneNumber')?.setValue(res.customerTelephoneNumber);
-    this.returnFormGroup.get('customerAddress')?.setValue(res.customerAddress);
+    this.salesInvoiceApiService.findSalesInvoiceDetailsForReturnById(this.salesInvoiceId).subscribe(returnInvoices => {
+      this.salesInvoiceDetailsForReturnDto = returnInvoices;
+      this.customerId = returnInvoices.customerId;
+      this.customerFirstName = returnInvoices.customerFirstName;
+      this.customerLastName = returnInvoices.customerLastName;
+      this.paymentApiService.findTotalAmountDueByCustomerId(this.salesInvoiceDetailsForReturnDto.customerId).subscribe((amountDue: number) => {
+        this.amountDue = amountDue;
+      })
+      this.returnFormGroup.get('customerFirstName')?.setValue(returnInvoices.customerFirstName);
+      this.returnFormGroup.get('customerLastName')?.setValue(returnInvoices.customerLastName);
+      this.returnFormGroup.get('customerTelephoneNumber')?.setValue(returnInvoices.customerTelephoneNumber);
+      this.returnFormGroup.get('customerAddress')?.setValue(returnInvoices.customerAddress);
 
-    res.salesInvoiceLineForReturnDtos?.forEach(x => {
-      const obj = this.salesInStock.find(o => o.id === x.id);
-      if (obj) {
-        obj.quantityReturned = obj.quantityReturned + x.quantityReturned;
-      } else {
-        this.salesInStock.push(x);
-      }
-    });
-    console.log(this.salesInStock)
+      returnInvoices.salesInvoiceLineForReturnDtos?.forEach(returnInvoice => {
+        const matchingReturnInvoice = this.salesInStock.find(invoice => invoice.id === returnInvoice.id);
+        if (matchingReturnInvoice) {
+          matchingReturnInvoice.quantityReturned = matchingReturnInvoice.quantityReturned + returnInvoice.quantityReturned;
+        } else {
+          this.salesInStock.push(returnInvoice);
+        }
+      });
+      this.initialiseReturnFormBuilder();
+    })
+  }
 
-    // res.salesInvoiceLineForReturnDtos?.forEach(saleDetail => {
-    //   invoiceId = saleDetail.id;
-      
-    //   if (saleDetail.id === invoiceId){
-    //     totalQuantityReturned = totalQuantityReturned + saleDetail.quantityReturned;
-    //     // let saleDetailsForReturnObject :SaleDetailsForReturnFrontDto = {
-    //     //   id: saleDetail.id,
-    //     //   salesInvoiceType: saleDetail.salesInvoiceType,
-    //     //   quantity: saleDetail.quantity,
-    //     //   price: saleDetail.price,
-    //     //   eggType: saleDetail.eggType,
-    //     //   eggQuantityType: saleDetail.eggQuantityType,
-    //     //   cageId: saleDetail.cageId,
-    //     //   flockId: saleDetail.flockId,
-    //     //   quantityReturned: saleDetail.quantityReturned + totalQuantityReturned,
-    //     //   eggCategoryId: saleDetail.eggCategoryId,
-    //     //   transferToBad: saleDetail.transferToBad,
-    //     //   flockType: saleDetail.flockType
-    //     // }
-    //     saleDetail.quantityReturned = totalQuantityReturned;
-        
-    //     console.log("detas ", saleDetail);
-    //   }
-    //   this.salesInStock.push(saleDetail);
-    //   // this.salesInStock.push(saleDetail);
-      
-    // })
-    this.initialiseReturnFormBuilder();
-  })
-}
-
-public findReturnInvoiceDetailsForReturnById() {
-  this.returnApiService.getReturnDetailsBySalesInvoiceId(this.salesInvoiceId).subscribe(res=>{
-  
-  res.forEach((element: ReturnInvoiceFrontDto) => {
-    this.returnInvoiceDetails.push(element);
-    console.log("kjkl ", res);
-  });
-  })
-}
+  public findReturnInvoiceDetailsForReturnById() {
+    this.returnApiService.getReturnDetailsBySalesInvoiceId(this.salesInvoiceId).subscribe(returnInvoices => {
+      returnInvoices.forEach((element: ReturnInvoiceFrontDto) => {
+        this.returnInvoiceDetails.push(element);
+      });
+    })
+  }
 
   public ionChangeLanguage(event: any): void {
     this.translateService.use(event.detail.value);
@@ -302,60 +286,74 @@ public findReturnInvoiceDetailsForReturnById() {
 
   private initialisePaymentFormBuilder(): void {
     this.paymentForm = this.formBuilder.group({
-      totalPrice: new FormControl({ value: this.totalPrice, disabled: true }, Validators.compose([Validators.required])),
-      soldAt: new FormControl({ value: this.totalPrice, disabled: false }, Validators.compose([
-        Validators.required,
-        Validators.min(0),
-        Validators.max(this.totalPrice),
-      ])),
+      totalPrice: new FormControl({ value: this.totalPrice.toFixed(2), disabled: true }, Validators.compose([Validators.required])),
       payments: this.formBuilder.array([
         this.addPaymentFormGroup()
       ])
     });
   }
 
-  private initialiseReturnFormBuilder(): void {    
+  private initialiseReturnFormBuilder(): void {
     const formDetail = this.returnFormGroup.get('formDetail') as FormArray;
-      this.salesInStock.forEach(sale =>{
-        const maxQuantity = sale.quantity;
-        let isQuantityAllowed = true;
-        if ((sale.quantity + sale.quantityReturned)> maxQuantity ){
-          isQuantityAllowed = false;
+    this.salesInStock.forEach(sale => {
+      let salesQuantity = 0;
+      let price = 0;
+      let unitSoldAt = 0;
+      if (sale.salesInvoiceType === SalesInvoiceType.EGG) {
+        if (sale.salesEggQuantityType === EggQuantityType.TIE) {
+          salesQuantity = sale.quantity * 300;
+          unitSoldAt = this.salesInvoiceDetailsForReturnDto?.discount !== 0 ? (sale.price / 300) - ((((((this.salesInvoiceDetailsForReturnDto?.totalPrice - this.salesInvoiceDetailsForReturnDto?.soldAt) / this.salesInvoiceDetailsForReturnDto?.totalPrice)) * 100)) / 100 * (sale.price / 300)) : (sale.price / 300);
+          price = (sale.price / 300);
+        } else if (sale.salesEggQuantityType === EggQuantityType.TRAY) {
+          salesQuantity = sale.quantity * 30
+          unitSoldAt = this.salesInvoiceDetailsForReturnDto?.discount !== 0 ? (sale.price / 30) - ((((((this.salesInvoiceDetailsForReturnDto?.totalPrice - this.salesInvoiceDetailsForReturnDto?.soldAt) / this.salesInvoiceDetailsForReturnDto?.totalPrice)) * 100)) / 100 * (sale.price / 30)) : (sale.price / 30);
+          price = (sale.price / 30);
+        } else {
+          salesQuantity = sale.quantity;
+          unitSoldAt = this.salesInvoiceDetailsForReturnDto?.discount !== 0 ? (sale.price) - ((((((this.salesInvoiceDetailsForReturnDto?.totalPrice - this.salesInvoiceDetailsForReturnDto?.soldAt) / this.salesInvoiceDetailsForReturnDto?.totalPrice)) * 100)) / 100 * (sale.price)) : (sale.price);
+          price = sale.price;
         }
-        const returnFormGroup = this.formBuilder.group({
-          id: sale.id,
-          maxQuantity : sale.quantity,
-          quantityReturned: sale.quantityReturned !== null ? sale.quantityReturned : 0,
-          quantityAllowedForReturn: isQuantityAllowed,
-          cageId :sale.cageId,
-          eggQuantityType: sale.eggQuantityType,
-          eggType: sale.eggType,
-          eggCategoryId: sale.eggCategoryId,
-          flockId: sale.flockId,
-          flockType: sale.flockType,
-          price: sale.price,
-          discount: this.salesInvoiceDetailsForReturnDto?.discount,
-          unitSoldAt: this.salesInvoiceDetailsForReturnDto?.discount !== 0 ? (this.salesInvoiceDetailsForReturnDto?.discount * sale.price) : (sale.price),
-          newPrice: new FormControl({ value: sale.price, disabled: false }),
-          quantity: new FormControl({ value: sale.quantity, disabled: false }, Validators.compose([Validators.max(maxQuantity), Validators.min(1)])),
-          totalPricePerItem: sale.quantity,
-          salesInvoiceType: sale.salesInvoiceType,
-          transferToBad: new FormControl({ value: false, disabled: false }),
-        })
-        formDetail.push(returnFormGroup);
+      } else {
+        salesQuantity = sale.quantity;
+        unitSoldAt = this.salesInvoiceDetailsForReturnDto?.discount !== 0 ? (sale.price) - ((((((this.salesInvoiceDetailsForReturnDto?.totalPrice - this.salesInvoiceDetailsForReturnDto?.soldAt) / this.salesInvoiceDetailsForReturnDto?.totalPrice)) * 100)) / 100 * (sale.price)) : (sale.price);
+        price = sale.price;
+      }
+      const maxQuantity = salesQuantity;
+      let isQuantityAllowed = true;
+      const returnFormGroup = this.formBuilder.group({
+        id: sale.id,
+        originalQuantity: sale.quantity,
+        maxQuantity: salesQuantity,
+        quantityReturned: sale.quantityReturned !== null ? sale.quantityReturned : 0,
+        quantityAllowedForReturn: isQuantityAllowed,
+        cageId: sale.cageId,
+        eggCategoryName: sale.eggCategoryName,
+        eggQuantityType: sale.salesEggQuantityType,
+        eggType: sale.eggType,
+        eggCategoryId: sale.eggCategoryId,
+        flockId: sale.flockId,
+        flockType: sale.flockType,
+        price: price,
+        discount: this.salesInvoiceDetailsForReturnDto?.discount,
+        unitSoldAt: unitSoldAt,
+        newPrice: new FormControl({ value: unitSoldAt, disabled: false }),
+        quantity: new FormControl({ value: salesQuantity - sale.quantityReturned, disabled: false }, Validators.compose([Validators.max(maxQuantity), Validators.min(0)])),
+        salesInvoiceType: sale.salesInvoiceType,
+        transferToBad: new FormControl({ value: false, disabled: false }),
       })
-    
+      formDetail.push(returnFormGroup);
+    })
+    this.calculateTotalPriceForReturnSummary();
     this.salesDetailsTable = new MatTableDataSource<SaleDetailsForReturnFrontDto>(this.returnFormGroupDetail.value);
-    console.log(this.salesDetailsTable);
   }
 
   public openModal(): void {
+    if (this.customerId == 1) {
+      this.paymentModes = this.completePaymentModes.filter(paymentMode => paymentMode.id != 1);
+    } else {
+      this.paymentModes = this.completePaymentModes;
+    }
     this.calculateTotalPrice();
-    // if (!this.checkIfCreditAllowed()) {
-    //   this.paymentTypes = this.paymentTypes.filter(payment => payment != PaymentType.CREDIT);
-    // } else {
-    //   this.paymentTypes = Object.keys(PaymentType);
-    // }
     this.initialisePaymentFormBuilder();
     this.isModalOpen = true;
   }
@@ -367,7 +365,6 @@ public findReturnInvoiceDetailsForReturnById() {
   }
 
   public confirm(): void {
-    console.log("pay",this.paymentForm)
     this.modal.dismiss(null, 'confirm');
   }
 
@@ -378,63 +375,61 @@ public findReturnInvoiceDetailsForReturnById() {
     }
     if (ev.detail.role === 'confirm') {
       this.isModalOpen = false;
-      console.log(this.paymentForm.value.payments);
       this.save();
     }
   }
 
   public save(): void {
-    console.log(this.paymentForm.value.payments);
-    const customerDto = {
-      id: "",
-      firstName:  this.salesInvoiceDetailsForReturnDto?.customerFirstName,
-      lastName: this.salesInvoiceDetailsForReturnDto?.customerLastName,
-      address: this.salesInvoiceDetailsForReturnDto?.customerAddress,
-      telephoneNumber: this.salesInvoiceDetailsForReturnDto?.customerTelephoneNumber,
-      totalAmountDue: null
-    }
-    const saleDetailsDtoList : SaleDetailsForReturnFrontDto[] = [];
-    this.returnFormGroupDetail.value.forEach((sale: any) =>{
-      const saleDetailsDto : SaleDetailsForReturnFrontDto ={
+    const saleDetailsDtoList: SaleDetailsFrontDto[] = [];
+    this.returnFormGroupDetail.value.forEach((sale: any) => {
+      const saleDetailsDto: SaleDetailsFrontDto = {
+        id: sale.id,
         salesInvoiceType: sale.salesInvoiceType,
         quantity: sale.quantity,
         price: sale.newPrice,
         eggType: sale.eggType,
-        eggQuantityType: sale.eggQuantityType,
+        eggQuantityType: EggQuantityType.PIECE,
         cageId: sale.cageId,
         flockId: sale.flockId,
         flockType: sale.flockType,
         eggCategoryId: sale.eggCategoryId,
-        id: sale.id,
-        quantityReturned: sale.quantityReturned,
-        transferToBad: sale.transferToBad
+        amount: null,
+        sterileChicken: null,
+        goodChicken: null,
+        eggInitialQuantity: null
       }
       saleDetailsDtoList.push(saleDetailsDto);
     })
-    
+
     this.paymentForm.value.payments?.forEach((payment: { paymentDeadline: moment.MomentInput; paymentModeId: { id: any; }; }) => {
       payment.paymentDeadline = moment(payment.paymentDeadline).startOf('day').format(moment.HTML5_FMT.DATE)
       payment.paymentModeId = payment.paymentModeId.id
     })
 
-    const saleSaveForm : any = {
-      customerDto: customerDto,
+    const saleSaveForm: any = {
+      customerDto: {
+        id: this.customerId,
+        firstName: null,
+        lastName: null,
+        address: null,
+        telephoneNumber: null,
+        totalAmountDue: null,
+      },
       paymentSaveDtos: this.paymentForm.value.payments,
       salesInvoiceCategory: this.salesInvoiceDetailsForReturnDto?.salesInvoiceCategory,
       driverId: null,
       comment: this.salesInvoiceDetailsForReturnDto?.comment,
       saleDetailsDtos: saleDetailsDtoList,
       newCustomer: false,
-      soldAt: this.paymentForm?.get("soldAt")?.value,
+      soldAt: this.paymentForm?.get("totalPrice")?.value,
       salesInvoiceId: this.salesInvoiceDetailsForReturnDto?.id
     }
-    
-    console.log(saleSaveForm);
+
     this.utilsService.presentLoading();
     this.returnApiService.save(saleSaveForm).subscribe({
       next: (data: string) => {
         this.utilsService.dismissLoading();
-        this.utilsService.successMsg('Product(s) stock updated successfully');
+        this.utilsService.successMsg('Product(s) returned successfully');
       },
       error: (error: HttpErrorResponse) => {
         this.utilsService.dismissLoading();
@@ -444,50 +439,43 @@ public findReturnInvoiceDetailsForReturnById() {
   }
 
   public calculateTotalPrice(): void {
-    this.returnFormGroupDetail.value.forEach((sale: any) =>{
+    this.totalPrice = 0;
+    this.returnFormGroupDetail.value.forEach((sale: any) => {
       this.totalPrice = this.totalPrice + (sale.quantity * sale.newPrice);
     })
   }
 
   public calculateTotalPriceForReturnSummary(): void {
     this.totalPriceForReturnSummary = 0;
-    this.returnFormGroupDetail.value.forEach((sale: any) =>{
-      this.totalPriceForReturnSummary =  this.totalPriceForReturnSummary + (sale.quantity * sale.newPrice);
+    this.returnFormGroupDetail.value.forEach((sale: any) => {
+      this.totalPriceForReturnSummary = this.totalPriceForReturnSummary + (sale.quantity * sale.newPrice);
     })
     this.quantityAllowed = this.returnFormGroupDetail.value.every((element: any) => element.quantityAllowedForReturn === true);
   }
 
-  get returnFormGroupDetail(){
-    return this.returnFormGroup.get('formDetail') as  FormArray;
+  get returnFormGroupDetail() {
+    return this.returnFormGroup.get('formDetail') as FormArray;
   }
 
-  onQuantityChange(event: any, element:any, index:number): void{
+  public onQuantityChange(event: any, element: any, index: number): void {
     const formGroupDetail = this.returnFormGroupDetail;
     formGroupDetail.at(index).get('totalPricePerItem')?.setValue(formGroupDetail.at(index).get('quantity')?.value * formGroupDetail.at(index).get('price')?.value);
     this.totalPriceReturn = formGroupDetail.at(index).get('price')?.value * formGroupDetail.at(index).get('quantity')?.value;
-    
-    if (formGroupDetail.at(index).get('quantity')?.value > formGroupDetail.at(index).get('maxQuantity')?.value || (+formGroupDetail.at(index).get('quantityReturned')?.value + +formGroupDetail.at(index).get('quantity')?.value) > formGroupDetail.at(index).get('maxQuantity')?.value)  {
+
+    if (formGroupDetail.at(index).get('quantity')?.value > formGroupDetail.at(index).get('maxQuantity')?.value || (formGroupDetail.at(index).get('quantityReturned')?.value + +formGroupDetail.at(index).get('quantity')?.value) > formGroupDetail.at(index).get('maxQuantity')?.value) {
       formGroupDetail.at(index).get('quantityAllowedForReturn')?.setValue(false);
     }
-    else{
+    else {
       formGroupDetail.at(index).get('quantityAllowedForReturn')?.setValue(true);
     }
     this.calculateTotalPriceForReturnSummary();
     this.quantityAllowed = formGroupDetail.value.every((element: any) => element.quantityAllowedForReturn === true);
   }
 
-  public transferToBad(event : any, index:number) : void{
+  public transferToBad(event: any, index: number): void {
     this.returnFormGroupDetail.at(index).get('transferToBad')?.setValue(event.detail.checked);
   }
 
-  public viewReturnInvoices():void{
-    if(this.showReturnInvoices){
-      this.showReturnInvoices = false;
-    }else{
-      this.showReturnInvoices = true;
-    }
-    
-  }
   public initialiseSalesInvoices(): void {
     this.salesInvoiceDetailsForReturnDto = {
       id: null,
@@ -497,6 +485,7 @@ public findReturnInvoiceDetailsForReturnById() {
       soldAt: null,
       createdBy: null,
       createdDate: null,
+      customerId: null,
       customerFirstName: null,
       customerLastName: null,
       customerAddress: null,
@@ -510,5 +499,13 @@ public findReturnInvoiceDetailsForReturnById() {
       comment: null,
       salesInvoiceLineForReturnDtos: []
     }
+  }
+
+  public routeToSalesInvoiceCustomerCreditList(): void {
+    const url = this.router.serializeUrl(
+      this.router.createUrlTree([`sales-invoice/sales-invoice-customer-credit-list/${this.customerId}`], { queryParams: { lastName: this.customerLastName, firstName: this.customerFirstName } })
+    );
+
+    window.open(url, '_blank');
   }
 }

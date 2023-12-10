@@ -16,4 +16,8 @@ export class PaymentApiService {
     public settleAccount(settleCustomerCreditPaymentDto: any): Observable<any> {
         return this.http.post(`${this.baseUrl}/settle-account`, settleCustomerCreditPaymentDto, { responseType: 'text' });
     }
+
+    public findTotalAmountDueByCustomerId(customerId: number): Observable<number> {
+        return this.http.get<number>(`${this.baseUrl}/amount-due/${customerId}`);
+      }    
 }

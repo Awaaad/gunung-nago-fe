@@ -16,6 +16,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { PaymentModeApiService } from 'src/app/shared/apis/payment-mode.api.service';
 import { BankAccountApiService } from 'src/app/shared/apis/bank-account.api.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-manure-sale-details',
@@ -110,7 +111,8 @@ export class ManureSaleDetailsComponent implements OnInit {
     private translateService: TranslateService,
     private utilsService: UtilsService,
     private bankAccountApiService: BankAccountApiService,
-    private paymentModeApiService: PaymentModeApiService
+    private paymentModeApiService: PaymentModeApiService,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -132,6 +134,14 @@ export class ManureSaleDetailsComponent implements OnInit {
       this.paymentModes = paymentModes;
       this.completePaymentModes = paymentModes;
     })
+  }
+
+  public routeToSalesInvoiceCustomerCreditList(): void {
+    const url = this.router.serializeUrl(
+      this.router.createUrlTree([`sales-invoice/sales-invoice-customer-credit-list/${this.selectedCustomer.id}`], { queryParams: { lastName: this.selectedCustomer.lastName, firstName: this.selectedCustomer.firstName } })
+    );
+
+    window.open(url, '_blank');
   }
 
   public getAllBankAccounts() {

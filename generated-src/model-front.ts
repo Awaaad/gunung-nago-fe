@@ -144,6 +144,7 @@ export class SaleSaveFrontDto {
 }
 
 export class SaleDetailsFrontDto {
+    id: number | null | undefined | any;
     salesInvoiceType!: SalesInvoiceType | null | undefined | any;
     quantity!: number | null | undefined | any;
     price!: number | null | undefined | any;
@@ -180,27 +181,6 @@ export class SalesInvoiceDetailsFrontDto {
     saleDetailsDtos!: SaleDetailsDto[] | [] | null | undefined;
 }
 
-export class SalesInvoiceDetailsFrontForReturnDto {
-    id!: number | null | undefined | any;
-    receiptId!: number | null | undefined | any;
-    salesInvoiceType!: SalesInvoiceType | null | undefined | any;
-    totalPrice!: number | null | undefined | any;
-    soldAt!: number | null | undefined | any;
-    createdBy!: string | null | undefined | any;
-    createdDate!: Date | null | undefined | any;
-    customerFirstName!: string | null | undefined | any;
-    customerLastName!: string | null | undefined | any;
-    customerAddress!: string | null | undefined | any;
-    customerTelephoneNumber!: number | null | undefined | any;
-    driverFirstName!: string | null | undefined | any;
-    driverLastName!: string | null | undefined | any;
-    salesPerson!: string | null | undefined | any;
-    salesInvoiceCategory!: SalesInvoiceCategory | null | undefined | any;
-    salesInvoiceStatus!: SalesInvoiceStatus | null | undefined | any;
-    comment: string | null | undefined | any;
-    saleDetailsForReturnDtos!: SaleDetailsForReturnFrontDto[] | [] | null | undefined;
-}
-
 export class SalesInvoiceDetailsForReturnFrontDto {
     id!: number | null | undefined | any;
     receiptId!: number | null | undefined | any;
@@ -209,6 +189,7 @@ export class SalesInvoiceDetailsForReturnFrontDto {
     soldAt!: number | null | undefined | any;
     createdBy!: string | null | undefined | any;
     createdDate!: Date | null | undefined | any;
+    customerId!: number | null | undefined | any;
     customerFirstName!: string | null | undefined | any;
     customerLastName!: string | null | undefined | any;
     customerAddress!: string | null | undefined | any;
@@ -377,12 +358,14 @@ export class SaleDetailsForReturnFrontDto {
     quantity!: number;
     price!: number;
     eggType!: EggType;
-    eggQuantityType!: EggQuantityType;
+    eggCategoryName!: string;
+    returnedEggQuantityType!: EggQuantityType;
+    salesEggQuantityType!: EggQuantityType;
     cageId!: number;
     flockId!: number;
     flockType!: FlockType;
     quantityReturned!: number;
-    eggCategoryId!:number;
+    eggCategoryId!: number;
     transferToBad!: boolean;
 }
 
@@ -392,20 +375,67 @@ export class ReturnInvoiceFrontDto {
     totalPrice!: number | null | undefined;
     returnInvoiceLineDtos!: ReturnInvoiceLineFrontDto[] | [] | null | undefined;
     createdDate!: Date | null | undefined | any;
-    
+
 }
 
 export class ReturnInvoiceLineFrontDto {
     returnInvoiceType!: ReturnInvoiceType | null | undefined;
-    pricePerBox!: number | null | undefined;
+    price!: number | null | undefined;
     totalPrice!: number | null | undefined;
     feedStockId!: number | null | undefined;
     flockId!: number | null | undefined;
+    flockType!: FlockType | null | undefined;
     manureStockId!: number | null | undefined;
     quantity!: number | null | undefined;
     salesInvoiceLineId!: number | null | undefined;
-
+    eggCategoryName!: string | null | undefined;
     eggQuantityType!: EggQuantityType | null | undefined;
-    eggCategory!:string | null | undefined;
+    eggCategory!: string | null | undefined;
     eggType!: EggType | null | undefined;
+}
+
+
+export class ReturnInvoiceDetailsFrontDto {
+    id!: number | null | undefined | any;
+    createdBy!: string | null | undefined | any;
+    createdDate!: Date | null | undefined | any;
+    customerFirstName!: string | null | undefined | any;
+    customerLastName!: string | null | undefined | any;
+    customerAddress!: string | null | undefined | any;
+    customerTelephoneNumber!: number | null | undefined | any;
+    driverFirstName!: string | null | undefined | any;
+    driverLastName!: string | null | undefined | any;
+    comment: string | null | undefined | any;
+    saleDetailsDtos!: SaleDetailsDto[] | [] | null | undefined;
+}
+
+export class ReturnDetailsFrontDto{
+    id!: number | null | undefined | any;
+    createdBy!: string | null | undefined | any;
+    createdDate!: Date | null | undefined | any;
+    customerFirstName!: string | null | undefined | any;
+    customerLastName!: string | null | undefined | any;
+    customerAddress!: string | null | undefined | any;
+    customerTelephoneNumber!: number | null | undefined | any;
+    driverFirstName!: string | null | undefined | any;
+    driverLastName!: string | null | undefined | any;
+    comment: string | null | undefined | any;
+    totalPrice: number | null | undefined | any;
+    returnDetailsDtos: ReturnInvoiceLineDetailsFrontDto[] | [] | null | undefined;
+}
+
+export class ReturnInvoiceLineDetailsFrontDto{
+    returnInvoiceType!: ReturnInvoiceType | null | undefined | any;
+
+    price!: number | null | undefined | any;
+    totalPrice!: number | null | undefined | any;
+    feedStockId!: number | null | undefined | any;
+    flockId!: number | null | undefined | any;
+    manureStockId!: number | null | undefined | any; 
+    quantity!: number | null | undefined | any;
+    salesInvoiceLineId!: number | null | undefined | any;
+    eggQuantityType!: EggQuantityType | null | undefined | any;
+    eggCategory!: number | null | undefined | any;
+    eggType!: string | null | undefined | any;
+    flockType!: FlockType | null | undefined | any;
 }
