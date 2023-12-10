@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { ReturnDetailsFrontDto, ReturnInvoiceFrontDto } from 'generated-src/model-front';
+import { ReturnDetailsFrontDto } from 'generated-src/model-front';
 import { FileApiService } from 'src/app/shared/apis/file.api.service';
 import { ReturnApiService } from 'src/app/shared/apis/return.api.service';
 import { UtilsService } from 'src/app/shared/utils/utils.service';
@@ -44,7 +44,6 @@ export class ReturnInvoiceDetailsComponent  implements OnInit {
     this.returnApiService.findReturnInvoiceDetailsById(this.returnInvoiceId).subscribe((res:any)=>{
       this.returnInvoiceFront = res;
       this.totalPrice = this.returnInvoiceFront.totalPrice;
-      console.log(this.returnInvoiceFront);
     })
   }
 

@@ -3,7 +3,6 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { ReturnInvoiceListDto, SalesInvoiceType, UserDto } from 'generated-src/model';
-import { ReturnDetailsFrontDto, ReturnInvoiceFrontDto } from 'generated-src/model-front';
 import { Subscription } from 'rxjs';
 import { ReturnApiService } from 'src/app/shared/apis/return.api.service';
 import { SecurityApiService } from 'src/app/shared/apis/security.api.service';
@@ -72,13 +71,11 @@ export class ReturnInvoiceListComponent  implements OnInit {
       sortOrder: this.sortOrder.toUpperCase(),
     }
 
-    console.log(salesInvoiceSearchCriteriaDto);
     if (salesInvoiceSearchCriteriaDto.createdBy === null) {
       delete salesInvoiceSearchCriteriaDto.createdBy;
     }
 
     this.returnInvoiceSearchSubscription = this.returnApiService.search(salesInvoiceSearchCriteriaDto).subscribe(returnInvoices => {
-      console.log(returnInvoices);
       this.infiniteReturnInvoices = [ ...returnInvoices.content];
       this.returnInvoiceList = new MatTableDataSource<ReturnInvoiceListDto>(this.infiniteReturnInvoices);
 
@@ -108,9 +105,6 @@ export class ReturnInvoiceListComponent  implements OnInit {
       delete x.createdBy;
     }
 
-    // this.returnInvoiceSearchSubscription = this.returnApiService.searchForType(x).subscribe(salesInvoices => {
-    //   console.log(salesInvoices)
-    // });
   }
 
   public routeToSalesInvoiceDetails(element:any){
@@ -119,8 +113,6 @@ export class ReturnInvoiceListComponent  implements OnInit {
 
   public routeToReturnInvoice(element:any){
     this.router.navigate([`return-invoice/return-invoice-details/${element.id}`]);
-    // this.returnApiService.findReturnInvoiceDetailsById(element.id).subscribe((res :any) => console.log(res));
-    // console.log(element);
   }
 
   public searchByCustomerName(customerName: any): void {
