@@ -52,20 +52,22 @@ export class FeedAllocationComponent implements OnInit {
 
   private initialiseSelectedFeedStock(): void {
     this.selectedFeedStock = {
-      id: 0,
+      feedStockId: 0,
       bags: 0,
       createdDate: new Date(),
       price: 0,
       weight: 0,
       name: '',
       feedCategory: FeedCategory.NORM,
-      feedId: 0
+      feedId: 0,
+      quantity: 0,
+      recommendedPrice: 0
     }
   }
 
   public changedSelectedFeedStock(feedStock: FeedStockDto): void {
     this.toBeSelectedFeedStock = feedStock;
-    if (this.selectedFeedStock.id != 0 && this.selectedFeedStock.id != feedStock.id) {
+    if (this.selectedFeedStock.feedStockId != 0 && this.selectedFeedStock.feedStockId != feedStock.feedStockId) {
       this.isChangeInFeedStock = true;
     } else {
       this.selectedFeedStock = feedStock;
@@ -73,7 +75,7 @@ export class FeedAllocationComponent implements OnInit {
       this.cagesNorm = [];
       this.cagesDara = [];
       this.cagesDoc = [];
-      this.getFeedStock(this.selectedFeedStock.id, feedStock.feedCategory);
+      this.getFeedStock(this.selectedFeedStock.feedStockId, feedStock.feedCategory);
     }
   }
 
@@ -132,7 +134,7 @@ export class FeedAllocationComponent implements OnInit {
       this.cagesNorm = [];
       this.cagesDara = [];
       this.cagesDoc = [];
-      this.getFeedStock(this.selectedFeedStock.id, this.toBeSelectedFeedStock.feedCategory);
+      this.getFeedStock(this.selectedFeedStock.feedStockId, this.toBeSelectedFeedStock.feedCategory);
       this.isChangeInFeedStock = false;
     } else {
       this.isChangeInFeedStock = false;

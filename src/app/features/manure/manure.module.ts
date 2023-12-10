@@ -18,11 +18,13 @@ import { MatNativeDateModule, DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } f
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MY_FORMATS } from '../report/report.module';
 import { ManureStockComponent } from './manure-stock/manure-stock.component';
+import { ManureListComponent } from './manure-list/manure-list.component';
+import { ManureDetailsComponent } from './manure-details/manure-details.component';
 
 
 @NgModule({
   declarations: [
-    ManureSaleDetailsComponent, ManureStockComponent
+    ManureSaleDetailsComponent, ManureStockComponent, ManureListComponent, ManureDetailsComponent
   ],
   imports: [
     CommonModule,

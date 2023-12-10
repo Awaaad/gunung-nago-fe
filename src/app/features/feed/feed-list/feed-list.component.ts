@@ -91,16 +91,17 @@ export class FeedListComponent {
       this.infiniteFeeds = [];
       this.feeds = new MatTableDataSource<FeedDto>([]);
     }
-    const cageSearchCriteriaDto = {
+    const feedSearchCriteriaDto = {
       page: this.page,
       size: this.size,
       sortBy: this.sortBy,
       sortOrder: this.sortOrder.toUpperCase(),
       name: this.feedName,
-      feedCategory: this.feedCategory
+      feedCategory: this.feedCategory,
+      sale: false
     }
 
-    this.feedSearchSubscription = this.feedApiService.search(cageSearchCriteriaDto).subscribe(feeds => {
+    this.feedSearchSubscription = this.feedApiService.search(feedSearchCriteriaDto).subscribe(feeds => {
       this.infiniteFeeds = [...this.infiniteFeeds, ...feeds.content];
       this.feeds = new MatTableDataSource<FeedDto>(this.infiniteFeeds);
 
@@ -140,6 +141,7 @@ export class FeedListComponent {
       this.search();
     })
   }
+  
   private findAllSuppliers(): void {
     this.supplierApiService.findAll().subscribe((data: SupplierDto[]) => {
       this.suppliers = data;

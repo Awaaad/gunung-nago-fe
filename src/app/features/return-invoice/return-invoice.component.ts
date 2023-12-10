@@ -248,6 +248,7 @@ export class ReturnInvoiceComponent implements OnInit {
 
   public findSalesInvoiceDetailsForReturnById() {
     this.salesInvoiceApiService.findSalesInvoiceDetailsForReturnById(this.salesInvoiceId).subscribe(returnInvoices => {
+      console.log(returnInvoices);
       this.salesInvoiceDetailsForReturnDto = returnInvoices;
       this.customerId = returnInvoices.customerId;
       this.customerFirstName = returnInvoices.customerFirstName;
@@ -296,6 +297,7 @@ export class ReturnInvoiceComponent implements OnInit {
   private initialiseReturnFormBuilder(): void {
     const formDetail = this.returnFormGroup.get('formDetail') as FormArray;
     this.salesInStock.forEach(sale => {
+      console.log(sale);
       let salesQuantity = 0;
       let price = 0;
       let unitSoldAt = 0;
@@ -336,6 +338,11 @@ export class ReturnInvoiceComponent implements OnInit {
         price: price,
         discount: this.salesInvoiceDetailsForReturnDto?.discount,
         unitSoldAt: unitSoldAt,
+        feedStockId: sale.feedStockId,
+        feedName: sale.feedName,
+        feedWeightPerBag: sale.feedWeightPerBag,
+        manureStockId: sale.manureStockId,
+        manureWeightPerBag: sale.manureWeightPerBag,
         newPrice: new FormControl({ value: unitSoldAt, disabled: false }),
         quantity: new FormControl({ value: salesQuantity - sale.quantityReturned, disabled: false }, Validators.compose([Validators.max(maxQuantity), Validators.min(0)])),
         salesInvoiceType: sale.salesInvoiceType,
@@ -396,7 +403,14 @@ export class ReturnInvoiceComponent implements OnInit {
         amount: null,
         sterileChicken: null,
         goodChicken: null,
-        eggInitialQuantity: null
+        eggInitialQuantity: null,
+        feedStockId: sale.feedStockId,
+        feedName: sale.feedName,
+        feedWeightPerBag: sale.feedWeightPerBag,
+        manureStockId: sale.manureStockId,
+        manureWeightPerBag: sale.manureWeightPerBag,
+        manureStocks: [],
+        manureBags: null
       }
       saleDetailsDtoList.push(saleDetailsDto);
     })
@@ -428,6 +442,7 @@ export class ReturnInvoiceComponent implements OnInit {
     this.utilsService.presentLoading();
     this.returnApiService.save(saleSaveForm).subscribe({
       next: (data: string) => {
+        this.reset();
         this.utilsService.dismissLoading();
         this.utilsService.successMsg('Product(s) returned successfully');
       },
@@ -436,6 +451,24 @@ export class ReturnInvoiceComponent implements OnInit {
         this.utilsService.unsuccessMsg('Error', 'gunung-nago-warehouse');
       }
     });
+  }
+
+  private reset(): void {
+    this.returnFormGroup = this.formBuilder.group({
+      customerFirstName: new FormControl(''),
+      customerLastName: new FormControl(''),
+      customerAddress: new FormControl(''),
+      customerTelephoneNumber: new FormControl(''),
+      formDetail: this.formBuilder.array([])
+    })
+    if (this.salesInvoiceId != null) {
+      this.findSalesInvoiceDetailsById();
+      this.findSalesInvoiceDetailsForReturnById();
+      this.findReturnInvoiceDetailsForReturnById();
+    }
+    this.initialiseSalesInvoices();
+    this.getAllPaymentModes();
+    this.getAllBankAccounts();
   }
 
   public calculateTotalPrice(): void {

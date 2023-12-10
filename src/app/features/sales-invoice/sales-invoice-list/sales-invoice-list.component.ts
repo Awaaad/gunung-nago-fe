@@ -402,7 +402,7 @@ export class SalesInvoiceListComponent {
       });
     }
     if (this.selectedStatus === SalesInvoiceStatus.RETURNED) {
-      console.log("re")
+
     }
     if (this.selectedStatus === SalesInvoiceStatus.COMPLETED) {
       this.salesInvoiceApiService.completeSalesInvoiceStatus(this.selectedInvoice.id).subscribe({

@@ -123,8 +123,28 @@ export class ManureSaleSaveFrontDto {
     customerDto!: CustomerFrontDto | null | undefined | any;
     paymentSaveDtos!: PaymentSaveFrontDto[] | [] | null | undefined;
     salesInvoiceCategory!: SalesInvoiceCategory | null | undefined | any;
+    manureSaleDetailsDtos!: ManureSaleDetailsFrontDto[] | [] | null | undefined;
+    soldAt!: number | null | undefined | any;
+    driverId!: number | null | undefined | any;
+    comment!: string | null | undefined | any;
+    newCustomer!: boolean | null | undefined | any;
+}
+
+export class ManureSaleDetailsFrontDto {
+    manureStockId!: number | null | undefined | any;
     quantity!: number | null | undefined | any;
     price!: number | null | undefined | any;
+}
+export class FeedSaleDetailsFrontDto {
+    feedStockId!: number | null | undefined | any;
+    quantity!: number | null | undefined | any;
+    price!: number | null | undefined | any;
+}
+export class FeedSaleSaveFrontDto {
+    customerDto!: CustomerFrontDto | null | undefined | any;
+    feedSaleDetailsDtos!: FeedSaleDetailsFrontDto[] | [] | null | undefined;
+    paymentSaveDtos!: PaymentSaveFrontDto[] | [] | null | undefined;
+    salesInvoiceCategory!: SalesInvoiceCategory | null | undefined | any;
     soldAt!: number | null | undefined | any;
     driverId!: number | null | undefined | any;
     comment!: string | null | undefined | any;
@@ -156,8 +176,15 @@ export class SaleDetailsFrontDto {
     amount!: number | null | undefined | any;
     sterileChicken!: number | null | undefined | any;
     goodChicken!: number | null | undefined | any;
+    manureBags!: number | null | undefined | any;
     flockId!: number | null | undefined | any;
     eggInitialQuantity!: number | null | undefined | any;
+    feedStockId!: number | null | undefined | any;
+    feedName!: string | null | undefined | any;
+    feedWeightPerBag!: number | null | undefined | any;
+    manureStockId!: number | null | undefined | any;
+    manureWeightPerBag!: number | null | undefined | any;
+    manureStocks: any[] = [];
 }
 
 export class SalesInvoiceDetailsFrontDto {
@@ -367,6 +394,11 @@ export class SaleDetailsForReturnFrontDto {
     quantityReturned!: number;
     eggCategoryId!: number;
     transferToBad!: boolean;
+    feedStockId!: number;
+    feedName!: string;
+    feedWeightPerBag!: number;
+    manureStockId!: number;
+    manureWeightPerBag!: number;
 }
 
 export class ReturnInvoiceFrontDto {
@@ -392,6 +424,32 @@ export class ReturnInvoiceLineFrontDto {
     eggQuantityType!: EggQuantityType | null | undefined;
     eggCategory!: string | null | undefined;
     eggType!: EggType | null | undefined;
+    feedName!: string | null | undefined;
+    feedWeightPerBag!: number | null | undefined;
+    manureWeightPerBag!: number | null | undefined;
+}
+
+export class FeedStockFrontDto {
+    feedStockId!: number | null | undefined;
+    bags!: number | null | undefined;
+    createdDate!: Date | null | undefined;
+    recommendedPrice!: number | null | undefined;
+    weight!: number | null | undefined;
+    name!: string | null | undefined;
+    feedCategory!: FeedCategory | null | undefined;
+    feedId!: number | null | undefined;
+    quantity!: number | null | undefined;
+    price!: number | null | undefined;
+    amount!: number | null | undefined;
+}
+
+export class FeedStockSaleDetailsFrontDto {
+    feedId!: number | null | undefined;
+    weight!: number | null | undefined;
+    name!: string | null | undefined;
+    feedCategory!: FeedCategory | null | undefined;
+    focused: boolean = false;
+    feedStockDto: FeedStockFrontDto[] | [] = [];
 }
 
 

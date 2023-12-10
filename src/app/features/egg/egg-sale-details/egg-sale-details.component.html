@@ -43,7 +43,7 @@
                     (ionChange)="newCustomerChange($event)" color="gunung-nago-report">New
                     Customer*</ion-toggle>
                 </ion-col>
-                <span *ngIf="selectedCustomer.totalAmountDue" class="ion-text-right red amount-due-customer-sale"
+                <span *ngIf="selectedCustomer?.totalAmountDue" class="ion-text-right red amount-due-customer-sale"
                   (click)="routeToSalesInvoiceCustomerCreditList()">
                   <strong>Total Credit Amount: Rp {{selectedCustomer.totalAmountDue}}</strong>
                 </span>
@@ -572,7 +572,7 @@
 
                 <ion-col size="6">
                   <ion-select color="gunung-nago-primary" label="Payment Mode*" label-placement="floating"
-                    fill="outline" interface="popover" placeholder="Payment Mode" formControlName="paymentModeId">
+                    fill="outline" interface="popover" formControlName="paymentModeId">
                     <ion-select-option *ngFor="let paymentMode of paymentModes" [value]="paymentMode">{{
                       paymentMode.name| titlecase}}</ion-select-option>
                   </ion-select>
@@ -602,7 +602,7 @@
               <ion-row *ngIf="payment.get('paymentModeId')?.value?.requireBankAccount">
                 <ion-col size="6">
                   <ion-select color="gunung-nago-primary" label="Bank Account" label-placement="floating" fill="outline"
-                    interface="popover" placeholder="Bank account" formControlName="bankAccountId">
+                    interface="popover" formControlName="bankAccountId">
                     <ion-select-option *ngFor="let bankAccount of bankAccounts" [value]="bankAccount.id">{{
                       bankAccount.accountHolder| uppercase}} - {{bankAccount.accountNumber}} -
                       {{bankAccount.bankName}}</ion-select-option>
@@ -637,7 +637,7 @@
               <ion-label>Driver</ion-label>
             </ion-item-divider>
             <ion-select color="gunung-nago-primary" label="Driver" label-placement="floating" fill="outline"
-              interface="popover" placeholder="Driver" [(ngModel)]="selectedDriver">
+              interface="popover" [(ngModel)]="selectedDriver">
               <ion-select-option *ngFor="let driver of drivers" [value]="driver">{{driver.firstName}}
                 {{driver.lastName}}</ion-select-option>
             </ion-select>

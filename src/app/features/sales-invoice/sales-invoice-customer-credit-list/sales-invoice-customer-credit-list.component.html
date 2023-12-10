@@ -315,7 +315,7 @@
 
                 <ion-col size="6">
                   <ion-select color="gunung-nago-primary" label="Payment Mode" label-placement="floating" fill="outline"
-                    interface="popover" placeholder="Payment Mode" formControlName="paymentModeId">
+                    interface="popover" formControlName="paymentModeId">
                     <ion-select-option *ngFor="let paymentMode of paymentModes" [value]="paymentMode">{{
                       paymentMode.name| titlecase}}</ion-select-option>
                   </ion-select>
@@ -333,7 +333,7 @@
               <ion-row *ngIf="payment.get('paymentModeId')?.value?.requireBankAccount">
                 <ion-col size="6">
                   <ion-select color="gunung-nago-primary" label="Bank Account" label-placement="floating" fill="outline"
-                    interface="popover" placeholder="Bank account" formControlName="bankAccountId">
+                    interface="popover" formControlName="bankAccountId">
                     <ion-select-option *ngFor="let bankAccount of bankAccounts" [value]="bankAccount.id">{{
                       bankAccount.accountHolder| uppercase}} - {{bankAccount.accountNumber}} -
                       {{bankAccount.bankName}}</ion-select-option>

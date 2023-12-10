@@ -220,7 +220,6 @@
                     <ion-select color="gunung-nago-primary"
                       label="{{ 'flock.flock-details.aquisition-type' | translate }}*" label-placement="floating"
                       fill="outline" interface="popover"
-                      placeholder="{{ 'flock.flock-details.aquisition-type' | translate }}"
                       formControlName="aquisitionType">
                       <ion-select-option value="PURCHASE">Purchase</ion-select-option>
                       <!-- <ion-select-option value="BORN_ON_FARM">Born on farm</ion-select-option> -->
@@ -300,8 +299,7 @@
                   </ion-col>
                   <ion-col size-xs="12" size-md="3">
                     <ion-select color="gunung-nago-primary" label="{{ 'cage.cage-details.cage-category' | translate }}"
-                      label-placement="floating" fill="outline" interface="popover" required="true"
-                      placeholder="{{ 'cage.cage-details.cage-category' | translate }}" formControlName="cageCategory">
+                      label-placement="floating" fill="outline" interface="popover" required="true" formControlName="cageCategory">
                       <ion-select-option *ngFor="let category of cageCategories" [value]="category">{{ category
                         }}</ion-select-option>
                     </ion-select>

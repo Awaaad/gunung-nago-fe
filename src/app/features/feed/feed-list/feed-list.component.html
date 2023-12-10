@@ -51,7 +51,7 @@
       <ion-row>
         <ion-col size-xs="12" size-md="3">
           <ion-select color="gunung-nago-primary" label="Feed Category" label-placement="floating" fill="outline"
-            interface="popover" placeholder="Feed Category" (ionChange)="ionChangeFeedCategory($event)">
+            interface="popover" (ionChange)="ionChangeFeedCategory($event)">
             <ion-select-option *ngFor="let feedCategory of feedCategories" [value]="feedCategory">{{ feedCategory
               }}</ion-select-option>
           </ion-select>
@@ -130,7 +130,7 @@
             </ion-col>
             <ion-col size-xs="12" size-md="6">
               <ion-select color="gunung-nago-primary" label="Category" label-placement="floating" fill="outline"
-                interface="popover" required="true" placeholder="Category" formControlName="feedCategory">
+                interface="popover" required="true" formControlName="feedCategory">
                 <ion-select-option *ngFor="let feedCategory of feedCategories" [value]="feedCategory">{{ feedCategory
                   }}</ion-select-option>
               </ion-select>
@@ -160,7 +160,7 @@
           <ion-row>
             <ion-col size-xs="12" size-md="12">
               <ion-select color="gunung-nago-primary" label="Supplier*" label-placement="floating" fill="outline"
-                interface="popover" required="true" placeholder="Supplier" formControlName="supplierId">
+                interface="popover" required="true" formControlName="supplierId">
                 <ion-select-option *ngFor="let supplier of suppliers" [value]="supplier.id"
                   selected="supplier.supplierId === supplierId" color="secondary">{{ supplier.name }}
                 </ion-select-option>

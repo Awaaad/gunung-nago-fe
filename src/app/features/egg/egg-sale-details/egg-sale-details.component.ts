@@ -475,6 +475,7 @@ export class EggSaleDetailsComponent implements OnInit {
   }
 
   public reset(): void {
+    this.initialiseSelectedCustomer();
     this.totalPrice = 0;
     this.totalRemainingEggs = 0;
     this.totalRemainingGoodEggs = 0;

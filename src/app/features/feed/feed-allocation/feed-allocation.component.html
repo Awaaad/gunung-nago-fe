@@ -28,7 +28,7 @@
     <ion-row>
       <ion-col size-xs="12" size-md="3" *ngFor="let feed of feedsToBeAllocated">
         <ion-card (click)="changedSelectedFeedStock(feed)"
-          [ngClass]="selectedFeedStock.id === feed.id? 'selected' : null">
+          [ngClass]="selectedFeedStock.feedStockId === feed.feedStockId? 'selected' : null">
           <ion-card-content>
             <div class="feed-section">
               <div>

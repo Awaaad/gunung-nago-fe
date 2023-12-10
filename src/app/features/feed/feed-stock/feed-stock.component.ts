@@ -161,7 +161,8 @@ export class FeedStockComponent implements OnInit {
       sortOrder: this.sortOrder.toUpperCase(),
       name: this.feedName,
       feedCategory: this.feedCategory,
-      supplierId: this.selectedSupplier.id
+      supplierId: this.selectedSupplier.id,
+      sale: false
     }
 
     this.feedSearchSubscription = this.feedApiService.search(feedSearchCriteriaDto).subscribe(feeds => {
