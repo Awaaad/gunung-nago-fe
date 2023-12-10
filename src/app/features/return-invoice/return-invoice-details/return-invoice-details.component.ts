@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { ReturnDetailsFrontDto, ReturnInvoiceFrontDto } from 'generated-src/model-front';
+import { FileApiService } from 'src/app/shared/apis/file.api.service';
 import { ReturnApiService } from 'src/app/shared/apis/return.api.service';
+import { UtilsService } from 'src/app/shared/utils/utils.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -25,7 +27,9 @@ export class ReturnInvoiceDetailsComponent  implements OnInit {
 
   constructor( private returnApiService: ReturnApiService,
     private readonly activatedRoute: ActivatedRoute,
-    private translateService: TranslateService) { }
+    private translateService: TranslateService,
+    private readonly fileApiService: FileApiService,
+    private utilsService: UtilsService) { }
 
   ngOnInit() {
     this.initialiseReturnInvoices();
@@ -41,6 +45,12 @@ export class ReturnInvoiceDetailsComponent  implements OnInit {
       this.returnInvoiceFront = res;
       this.totalPrice = this.returnInvoiceFront.totalPrice;
       console.log(this.returnInvoiceFront);
+    })
+  }
+
+  public generateReturnInvoicePdf(): void {
+    this.fileApiService.generateReturnInvoicePdf(this.returnInvoiceId).subscribe(fileResponse => {
+      this.utilsService.openTemplateInNewTab(fileResponse);
     })
   }
 

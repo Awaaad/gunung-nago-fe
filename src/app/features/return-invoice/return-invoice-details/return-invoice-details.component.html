@@ -43,7 +43,7 @@
           </div>
 
           <div>
-            <span class="main"><strong>Invoice No: {{returnInvoiceFront.id}}</strong></span>
+            <span class="main"><strong>Return No: {{returnInvoiceFront.id}}</strong></span>
             <div class="sub"><strong>Date Issued:</strong> </div>
             <div class="sub">{{returnInvoiceFront   .createdDate | date:'EEEE, MMMM d, y HH:mm'}}
             </div>
@@ -148,6 +148,6 @@
         <textarea name="" id="" cols="30" rows="3" [disabled]="true">{{returnInvoiceFront.comment}}</textarea>
       </ion-card-content>
     </ion-card>
-    <!-- <ion-button color="neutral-btn" class="print" (click)="generateSaleInvoicePdf()">Print</ion-button> -->
+    <ion-button color="neutral-btn" class="print" (click)="generateReturnInvoicePdf()">Print</ion-button>
   </div>
 </ion-content>
