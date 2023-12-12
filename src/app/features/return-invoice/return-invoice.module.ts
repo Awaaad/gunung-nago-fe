@@ -17,9 +17,12 @@ import { ReturnInvoiceRoutingModule } from './return-invoice-routing.module';
 import { SalesInvoiceApiService } from 'src/app/shared/apis/sales-invoice.api.service';
 import { ReturnApiService } from 'src/app/shared/apis/return.api.service';
 import { PaymentApiService } from 'src/app/shared/apis/payment.api.service';
+import { ReturnInvoiceDetailsComponent } from './return-invoice-details/return-invoice-details.component';
+import { ReturnInvoiceListComponent } from './return-invoice-list/return-invoice-list.component';
+import { FileApiService } from 'src/app/shared/apis/file.api.service';
 
 @NgModule({
-  declarations: [ReturnInvoiceComponent],
+  declarations: [ReturnInvoiceComponent, ReturnInvoiceListComponent, ReturnInvoiceDetailsComponent],
   imports: [
     CommonModule,
     ReturnInvoiceRoutingModule,
@@ -37,6 +40,6 @@ import { PaymentApiService } from 'src/app/shared/apis/payment.api.service';
     MatButtonModule,
     MatAutocompleteModule,
   ],
-  providers: [SalesInvoiceApiService, TranslateService, ReturnApiService, PaymentApiService]
+  providers: [SalesInvoiceApiService, TranslateService, ReturnApiService, PaymentApiService, FileApiService]
 })
 export class ReturnInvoiceModule { }

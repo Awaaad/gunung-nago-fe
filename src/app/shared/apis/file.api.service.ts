@@ -29,4 +29,9 @@ export class FileApiService {
         const headers = this.setHeaders();
         return this.http.get<any>(`${this.baseUrl}/sale-invoice/${salesInvoiceId}`, { headers, responseType: 'blob' as 'json' });
     }
+
+    public generateReturnInvoicePdf(returnInvoiceId: number): Observable<any> {
+        const headers = this.setHeaders();
+        return this.http.get<any>(`${this.baseUrl}/return-invoice/${returnInvoiceId}`, { headers, responseType: 'blob' as 'json' });
+    }
 }

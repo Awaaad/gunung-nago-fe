@@ -206,7 +206,6 @@ export class FeedSaleSaveDto {
     comment!: string;
     newCustomer!: boolean;
 }
-
 export class FeedSearchCriteriaDto {
     name!: string;
     feedCategory!: FeedCategory;
@@ -736,12 +735,42 @@ export class DailyProductionReportDto {
     eggCategoryStocks!: EggCategoryStockDto[];
 }
 
+export class ReturnInvoiceDetailsDto {
+    id!: number;
+    totalPrice!: number;
+    comment!: string;
+    createdBy!: string;
+    createdDate!: Date;
+    customerFirstName!: string;
+    customerLastName!: string;
+    customerAddress!: string;
+    customerTelephoneNumber!: number;
+    driverFirstName!: string;
+    driverLastName!: string;
+    returnDetailsDtos!: ReturnInvoiceLineDetailsDto[];
+}
+
 export class ReturnInvoiceDto {
     returnNumber!: number;
     comment!: string;
     totalPrice!: number;
     createdDate!: Date;
     returnInvoiceLineDtos!: ReturnInvoiceLineDto[];
+}
+
+export class ReturnInvoiceLineDetailsDto {
+    returnInvoiceType!: ReturnInvoiceType;
+    price!: number;
+    totalPrice!: number;
+    feedStockId!: number;
+    flockId!: number;
+    manureStockId!: number;
+    quantity!: number;
+    salesInvoiceLineId!: number;
+    eggQuantityType!: EggQuantityType;
+    eggCategory!: number;
+    eggType!: string;
+    flockType!: FlockType;
 }
 
 export class ReturnInvoiceLineDto {
@@ -759,6 +788,21 @@ export class ReturnInvoiceLineDto {
     flockType!: FlockType;
     feedName!: string;
     feedWeightPerBag!: number;
+}
+
+export class ReturnInvoiceListDto {
+    id!: number;
+    returnInvoiceType!: ReturnInvoiceType;
+    totalPrice!: number;
+    discount!: number;
+    createdBy!: string;
+    createdDate!: Date;
+    customerFirstName!: string;
+    customerLastName!: string;
+    driverFirstName!: string;
+    driverLastName!: string;
+    salesInvoiceStatus!: SalesInvoiceStatus;
+    salesInvoiceId!: number;
 }
 
 export class SalesInvoiceDetailsDto {

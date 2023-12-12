@@ -1,0 +1,188 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      <div class="router-links">
+        <div class="title">
+          <img class="header-logo" src='./assets/flaticon/sales-invoice.png'>
+          <h3 class="header-nav-products">Return Invoice List</h3>
+        </div>
+        <div>
+          <ion-item class="language-selection">
+            <ion-select aria-label="language" interface="popover" placeholder="Select language" [(ngModel)]="language"
+              (ionChange)="ionChangeLanguage($event)">
+              <ion-select-option value="en">English</ion-select-option>
+              <ion-select-option value="id">Indonesian</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </div>
+      </div>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="false" class="ion-padding">
+  <ion-card>
+    <ion-card-content>
+      <ion-row>
+        <ion-col size-xs="12" size-md="6">
+          <ion-searchbar placeholder="Search by customer name..." type="text" #customerName
+            (ionInput)="searchByCustomerName(customerName.value)"></ion-searchbar>
+        </ion-col>
+        <ion-col size-xs="12" size-md="6">
+          <div class="filters">
+            <div>
+
+            </div>
+            <div>
+              <ion-button class="reset" (click)="reset()">Reset Filters</ion-button>
+            </div>
+          </div>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col size-xs="12" size-md="3">
+          <ion-select color="gunung-nago-primary" label="Salesperson" label-placement="floating" fill="outline"
+            interface="popover" placeholder="" [(ngModel)]="username" (ionChange)="ionChangeUsername($event)">
+            <ion-select-option value='' selected="true">All</ion-select-option>
+            <ion-select-option *ngFor="let username of usernames" [value]="username">{{username |
+              titlecase}}</ion-select-option>
+          </ion-select>
+        </ion-col>
+
+        <ion-col size-xs="12" size-md="3">
+          <ion-select color="gunung-nago-primary" label="Driver" label-placement="floating" fill="outline"
+            interface="popover" placeholder="Driver" [(ngModel)]="selectedDriverId"
+            (ionChange)="ionChangeDriver($event)">
+            <ion-select-option value='0' selected="true">All</ion-select-option>
+            <ion-select-option *ngFor="let driver of drivers" [value]="driver.id">{{driver.firstName}}
+              {{driver.lastName}}</ion-select-option>
+          </ion-select>
+        </ion-col>
+
+        <ion-col size-xs="12" size-md="2">
+          <ion-label>Date Issued From </ion-label>
+          <div class="date-time-picker-container">
+            <ion-datetime-button datetime="datetimeFrom"></ion-datetime-button>
+            <ion-chip class="date-time-picer-clear" (click)="clearDateFrom()" *ngIf="dateFrom">
+              <ion-icon class="date-time-picker-clear-icon" name="close-outline"></ion-icon>
+            </ion-chip>
+          </div>
+
+          <ion-popover [keepContentsMounted]="true">
+            <ng-template>
+              <ion-datetime id="datetimeFrom" [(ngModel)]="dateFrom" (ngModelChange)="selectDateFrom()"></ion-datetime>
+            </ng-template>
+          </ion-popover>
+        </ion-col>
+
+        <ion-col size-xs="12" size-md="2">
+          <ion-label>Date Issued To </ion-label>
+          <div class="date-time-picker-container">
+            <ion-datetime-button datetime="datetimeTo"></ion-datetime-button>
+            <ion-chip class="date-time-picer-clear" (click)="clearDateTo()" *ngIf="dateTo">
+              <ion-icon class="date-time-picker-clear-icon" name="close-outline"></ion-icon>
+            </ion-chip>
+          </div>
+
+          <ion-popover [keepContentsMounted]="true">
+            <ng-template>
+              <ion-datetime id="datetimeTo" [(ngModel)]="dateTo" (ngModelChange)="selectDateTo()"></ion-datetime>
+            </ng-template>
+          </ion-popover>
+        </ion-col>
+      </ion-row>
+
+      <!-- <ion-row>
+        <ion-col size-xs="12" size-md="3">
+          <ion-select color="gunung-nago-primary" label="Status" label-placement="floating" fill="outline"
+            interface="popover" clear-input="true" placeholder="Status" [(ngModel)]="salesInvoiceStatus"
+            (ionChange)="ionChangeStatus($event)">
+            <ion-select-option value='' selected="true">All</ion-select-option>
+            <ion-select-option *ngFor="let salesInvoiceStatus of salesInvoiceStatuses" [value]="salesInvoiceStatus">{{
+              salesInvoiceStatus | titlecase
+              }}</ion-select-option>
+          </ion-select>
+        </ion-col>
+
+        <ion-col size-xs="12" size-md="3">
+          <ion-select color="gunung-nago-primary" label="Option" label-placement="floating" fill="outline"
+            interface="popover" clear-input="true" placeholder="Status" [(ngModel)]="salesInvoiceCategory"
+            (ionChange)="ionChangeCategory($event)">
+            <ion-select-option value='' selected="true">All</ion-select-option>
+            <ion-select-option *ngFor="let salesInvoiceCategory of salesInvoiceCategories"
+              [value]="salesInvoiceCategory">{{
+              salesInvoiceCategory | titlecase
+              }}</ion-select-option>
+          </ion-select>
+        </ion-col>
+      </ion-row> -->
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <div class="mat-elevation-z8 table-responsive">
+      <table mat-table 
+        [dataSource]="returnInvoiceList">
+  
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef> Invoice Number </th>
+          <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+        </ng-container>
+  
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef> Customer Name </th>
+          <td mat-cell *matCellDef="let element">
+            <span *ngIf="element.customerFirstName != 'anonymous'">{{element.customerFirstName}}</span>
+            <span *ngIf="element.customerLastName != 'anonymous'"> {{element.customerLastName}}</span>
+          </td>
+        </ng-container>
+  
+        <ng-container matColumnDef="createdBy">
+          <th mat-header-cell *matHeaderCellDef> Salesperson </th>
+          <td mat-cell *matCellDef="let element"> {{element.createdBy | titlecase}} </td>
+        </ng-container>
+  
+        <ng-container matColumnDef="createdDate">
+          <th mat-header-cell *matHeaderCellDef> Date Issued </th>
+          <td mat-cell *matCellDef="let element"> {{element.createdDate | date:'dd-MM-yyyy HH:mm'}} </td>
+        </ng-container>
+  
+        <ng-container matColumnDef="driver">
+          <th mat-header-cell *matHeaderCellDef> Driver </th>
+          <td mat-cell *matCellDef="let element"> {{element.driverFirstName}} {{element.driverLastName}} </td>
+        </ng-container>
+  
+        <ng-container matColumnDef="totalPrice">
+          <th mat-header-cell *matHeaderCellDef> Total Price </th>
+          <td mat-cell *matCellDef="let element"> {{element.totalPrice | number :'1.2-2'}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="salesInvoiceId">
+          <th mat-header-cell *matHeaderCellDef> Sales Invoice </th>
+          <td mat-cell *matCellDef="let element"> {{element.salesInvoiceId }} </td>
+        </ng-container>
+  
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef> Actions </th>
+          <td mat-cell *matCellDef="let element">
+            <div class="table-chips">
+              <ion-icon color="positive-btn" class="table-view-details-icon" name="eye"
+                (click)="routeToSalesInvoiceDetails(element)"></ion-icon>
+  
+              <ion-icon class="table-credit-icon" name="arrow-undo" color="gunung-nago-warehouse"
+                (click)="routeToReturnInvoice(element)"></ion-icon>
+  
+            </div>
+          </td>
+        </ng-container>
+  
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+  </ion-card>
+</ion-content>

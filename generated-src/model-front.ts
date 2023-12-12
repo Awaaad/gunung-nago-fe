@@ -455,3 +455,49 @@ export class FeedStockSaleDetailsFrontDto {
     focused: boolean = false;
     feedStockDto: FeedStockFrontDto[] | [] = [];
 }
+
+
+export class ReturnInvoiceDetailsFrontDto {
+    id!: number | null | undefined | any;
+    createdBy!: string | null | undefined | any;
+    createdDate!: Date | null | undefined | any;
+    customerFirstName!: string | null | undefined | any;
+    customerLastName!: string | null | undefined | any;
+    customerAddress!: string | null | undefined | any;
+    customerTelephoneNumber!: number | null | undefined | any;
+    driverFirstName!: string | null | undefined | any;
+    driverLastName!: string | null | undefined | any;
+    comment: string | null | undefined | any;
+    saleDetailsDtos!: SaleDetailsDto[] | [] | null | undefined;
+}
+
+export class ReturnDetailsFrontDto{
+    id!: number | null | undefined | any;
+    createdBy!: string | null | undefined | any;
+    createdDate!: Date | null | undefined | any;
+    customerFirstName!: string | null | undefined | any;
+    customerLastName!: string | null | undefined | any;
+    customerAddress!: string | null | undefined | any;
+    customerTelephoneNumber!: number | null | undefined | any;
+    driverFirstName!: string | null | undefined | any;
+    driverLastName!: string | null | undefined | any;
+    comment: string | null | undefined | any;
+    totalPrice: number | null | undefined | any;
+    returnDetailsDtos: ReturnInvoiceLineDetailsFrontDto[] | [] | null | undefined;
+}
+
+export class ReturnInvoiceLineDetailsFrontDto{
+    returnInvoiceType!: ReturnInvoiceType | null | undefined | any;
+
+    price!: number | null | undefined | any;
+    totalPrice!: number | null | undefined | any;
+    feedStockId!: number | null | undefined | any;
+    flockId!: number | null | undefined | any;
+    manureStockId!: number | null | undefined | any; 
+    quantity!: number | null | undefined | any;
+    salesInvoiceLineId!: number | null | undefined | any;
+    eggQuantityType!: EggQuantityType | null | undefined | any;
+    eggCategory!: number | null | undefined | any;
+    eggType!: string | null | undefined | any;
+    flockType!: FlockType | null | undefined | any;
+}
