@@ -197,6 +197,29 @@
         </ion-card>
       </div>
 
+      <div *ngIf="showFeed">
+        <div class="subtitle">
+          <img class="cart-logo" src='./assets/flaticon/feed.png'>
+          <div class="form-section-cart">Feed</div>
+        </div>
+        <ion-card>
+          <ion-card-content>
+            <ion-item-divider>
+              <ion-label>Feed Stock</ion-label>
+            </ion-item-divider>
+            <div class="feed-stock">
+              <div class="manure-section-top">
+                <strong>{{selectedFeed.name}}</strong>
+              </div>
+              <img class="manures" src='./assets/flaticon/feed.png'>
+              <div class="manure-count">
+                <strong>{{selectedFeed.bags}}</strong>
+              </div>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </div>
+
       <div *ngIf="showEgg">
         <div class="subtitle">
           <img class="cart-logo" src='./assets/flaticon/eggs.png'>
@@ -267,15 +290,15 @@
   <ion-card>
     <ion-card-content>
       <div *ngFor="let saleDetail of saleDetailsDto; let i = index">
+        <!-- Type -->
+        <ion-item-divider>
+          <ion-label>{{i}}</ion-label>
+        </ion-item-divider>
         <div class="form-array-index">
           <h6></h6>
           <ion-button *ngIf="saleDetailsDto.length > 1" class="delete-product-btn" color="gunung-nago-warehouse"><span
               (click)="removeSaleDetails(i)" class="material-icons">delete</span></ion-button>
         </div>
-        <!-- Type -->
-        <ion-item-divider>
-          <ion-label>{{i}}</ion-label>
-        </ion-item-divider>
         <ion-row>
           <ion-col size-lg="2" size-md="3" size-xs="12">
             <ion-select color="gunung-nago-primary" label="Type" label-placement="floating" fill="outline"
@@ -290,8 +313,7 @@
           <!-- Manure -->
           <ion-col size-lg="2" size-md="3" size-xs="12" *ngIf="saleDetail.salesInvoiceType === 'MANURE'">
             <ion-select color="gunung-nago-primary" label="Weight (KG)" label-placement="floating" fill="outline"
-              interface="popover" required="true" [(ngModel)]="saleDetail.manureWeightPerBag"
-              (ionChange)="ionSelectManure($event, i)">
+              interface="popover" required="true" (ionChange)="ionSelectManure($event, i)">
               <ion-select-option *ngFor="let manure of manures" [value]="manure">{{ manure.weight
                 }}</ion-select-option>
             </ion-select>
@@ -299,12 +321,35 @@
 
           <ion-col size-lg="4" size-md="4" size-xs="12" *ngIf="saleDetail.manureWeightPerBag">
             <ion-select color="gunung-nago-primary" label="Fertilizer Stock" label-placement="floating" fill="outline"
-              interface="popover" required="true" [(ngModel)]="saleDetail.manureStockId"
-              (ionChange)="ionSelectManureStock($event, i)">
+              interface="popover" required="true" [(ngModel)]="saleDetail.manureStockId">
               <ion-select-option *ngFor="let manureStock of saleDetail.manureStocks" [value]="manureStock.id">
-                {{manureStock.bags}} - BAGS | Collected on: {{manureStock.collectedDate | date:'dd-MM-yyyy'}} |
+                {{manureStock.bags ? manureStock.bags : 0}} - BAGS | Collected on: {{manureStock.collectedDate |
+                date:'dd-MM-yyyy'}} |
                 Collected By: {{manureStock.collectedByFirstName | titlecase}} {{manureStock.collectedByLastName |
                 titlecase}}</ion-select-option>
+            </ion-select>
+          </ion-col>
+
+          <!-- Feed -->
+          <ion-col size-lg="4" size-md="4" size-xs="12" *ngIf="saleDetail.salesInvoiceType === 'FEED'">
+            <ion-searchbar type="text" (ionInput)="searchFeed($event, i)"></ion-searchbar>
+            <mat-radio-group *ngIf="saleDetailsDto[i].feeds.length > 0" class="radio-feed"
+              [(ngModel)]="saleDetailDto.feedId" (ngModelChange)="ionRadioSelectFeed($event, i)">
+              <mat-radio-button color="primary" *ngFor="let feed of saleDetailsDto[i].feeds" [value]="feed">
+                {{ feed.name }} |
+                {{feed.feedCategory}}
+                |
+                {{feed.bags}}
+                BAGS
+              </mat-radio-button>
+            </mat-radio-group>
+          </ion-col>
+
+          <ion-col size-lg="4" size-md="4" size-xs="12" *ngIf="saleDetailsDto[i].feedId">
+            <ion-select color="gunung-nago-primary" label="Feed Stock" label-placement="floating" fill="outline"
+              interface="popover" required="true" (ionChange)="ionSelectFeedStock($event, i)">
+              <ion-select-option *ngFor="let feedStock of saleDetail.feedStocks" [value]="feedStock">
+                {{feedStock.bags}} - BAGS | Recommended Price: {{feedStock.recommendedPrice}} </ion-select-option>
             </ion-select>
           </ion-col>
 
@@ -334,9 +379,7 @@
               interface="popover" clear-input="true" [(ngModel)]="saleDetail.eggCategoryId"
               (ionChange)="ionSelectEggCategory($event, i)">
               <ion-select-option *ngFor="let eggType of eggStock.eggCategoryStockDtos"
-                [value]="eggType.eggCategoryId">{{
-                eggType.name | titlecase
-                }}</ion-select-option>
+                [value]="eggType.eggCategoryId">{{eggType.name | titlecase}}</ion-select-option>
             </ion-select>
           </ion-col>
 
@@ -481,6 +524,44 @@
           </ion-row>
         </div>
 
+        <!-- Feed -->
+        <div *ngIf="saleDetailsDto[i].feedStockId">
+          <ion-row class=" quantity-qp">
+            <ion-col size-lg="2" size-md="3" size-xs="12">
+              <div class="quantity-count-section">
+                <div class="quantity-section">
+                  <div>
+                    <strong>Quantity In Stock</strong>
+                  </div>
+                  <div class="manure-section-top">
+                    <strong>{{saleDetailsDto[i].feedName}}</strong>
+                  </div>
+                  <img class="quantities" src='./assets/flaticon/feed.png'>
+                  <div class="quantity-count">
+                    <strong>{{saleDetailsDto[i].feedBags - saleDetailDto.quantity}}</strong>
+                  </div>
+                </div>
+              </div>
+            </ion-col>
+
+            <ion-col size-lg="2" size-md="3" size-xs="12" *ngIf="saleDetailsDto[i].feedStockId">
+              <ion-input color="gunung-nago-survey" label="Quantity" label-placement="floating" fill="outline"
+                type="number" min="0" clear-input="true" [(ngModel)]="saleDetail.quantity"
+                (ngModelChange)="calculateTotalPrice()"></ion-input>
+            </ion-col>
+            <ion-col size-lg="2" size-md="3" size-xs="12" *ngIf="saleDetail.quantity > 0">
+              <ion-input color="gunung-nago-survey" label="Price" label-placement="floating" fill="outline"
+                type="number" min="0" clear-input="true" [(ngModel)]="saleDetail.price"
+                (ngModelChange)="calculateTotalPrice()"></ion-input>
+            </ion-col>
+            <ion-col size-lg="2" size-md="3" size-xs="12" *ngIf="saleDetail.quantity > 0 && saleDetail.price > 0">
+              <div class="total-per ml-05">
+                <strong>Amount: {{saleDetail.price * saleDetail.quantity}}</strong>
+              </div>
+            </ion-col>
+          </ion-row>
+        </div>
+
       </div>
     </ion-card-content>
   </ion-card>
@@ -568,7 +649,9 @@
                   *ngIf="saleDetail.salesInvoiceType === 'FLOCK' && saleDetail.flockType === 'GOOD'">CHICKEN -
                   <strong>GOOD</strong>
                 </td>
-                <td data-label="Product" *ngIf="saleDetail.salesInvoiceType === 'FEED'">Feed</td>
+                <td data-label="Product" *ngIf="saleDetail.salesInvoiceType === 'FEED'">Feed -
+                  <strong>{{saleDetail.feedName}}</strong>
+                </td>
 
                 <td data-label="Product" *ngIf="saleDetail.salesInvoiceType === 'EGG'">
                   EGG - <strong>{{saleDetail.eggType}}</strong></td>
@@ -584,6 +667,8 @@
                   *ngIf="saleDetail.salesInvoiceType === 'EGG' && saleDetail.eggQuantityType === 'PIECE'">
                   {{saleDetail.quantity}} - <strong>PIECE</strong></td>
 
+                <td data-label="Quantity" *ngIf="saleDetail.salesInvoiceType === 'FEED'">
+                  {{saleDetail.quantity}} - <strong>BAG(S)</strong> - {{saleDetail.feedWeightPerBag}} KG</td>
                 <td data-label="Quantity" *ngIf="saleDetail.salesInvoiceType === 'MANURE'">
                   {{saleDetail.quantity}} - <strong>BAG(S)</strong> - {{saleDetail.manureWeightPerBag}} KG</td>
 

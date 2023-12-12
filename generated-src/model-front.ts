@@ -177,7 +177,9 @@ export class SaleDetailsFrontDto {
     sterileChicken!: number | null | undefined | any;
     goodChicken!: number | null | undefined | any;
     manureBags!: number | null | undefined | any;
+    feedBags!: number | null | undefined | any;
     flockId!: number | null | undefined | any;
+    feedId!: number | null | undefined | any;
     eggInitialQuantity!: number | null | undefined | any;
     feedStockId!: number | null | undefined | any;
     feedName!: string | null | undefined | any;
@@ -185,6 +187,8 @@ export class SaleDetailsFrontDto {
     manureStockId!: number | null | undefined | any;
     manureWeightPerBag!: number | null | undefined | any;
     manureStocks: any[] = [];
+    feeds: any[] = [];
+    feedStocks: any[] =[];
 }
 
 export class SalesInvoiceDetailsFrontDto {

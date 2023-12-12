@@ -3,7 +3,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { IonModal } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { ManureStockDto, SalesInvoiceCategory, UserDto, CustomerDto, SalesInvoiceType, EggQuantityType, FlockType, EggType, CageCategory, CageDto, SurveyDto, FlockStockCountDto, EggCategoryStockDto, BankAccountDto, PaymentModeDto, ManureDto } from 'generated-src/model';
+import { ManureStockDto, SalesInvoiceCategory, UserDto, CustomerDto, SalesInvoiceType, EggQuantityType, FlockType, EggType, CageCategory, CageDto, SurveyDto, FlockStockCountDto, EggCategoryStockDto, BankAccountDto, PaymentModeDto, ManureDto, FeedDto, FeedCategory } from 'generated-src/model';
 import { CustomerFrontDto, SaleDetailsFrontDto, SaleSaveFrontDto, EggStockFrontDto, SalesInvoiceDetailsFrontDto } from 'generated-src/model-front';
 import * as moment from 'moment';
 import { Subscription, filter, distinctUntilChanged, debounceTime, tap, switchMap, finalize } from 'rxjs';
@@ -23,6 +23,8 @@ import { FlockApiService } from 'src/app/shared/apis/flock.api.service';
 import { BankAccountApiService } from 'src/app/shared/apis/bank-account.api.service';
 import { PaymentModeApiService } from 'src/app/shared/apis/payment-mode.api.service';
 import { ReturnApiService } from 'src/app/shared/apis/return.api.service';
+import { FeedApiService } from 'src/app/shared/apis/feed.api.service';
+import { FeedStockApiService } from 'src/app/shared/apis/feed-stock.api.service';
 
 @Component({
   selector: 'app-point-of-sale',
@@ -73,6 +75,7 @@ export class PointOfSaleComponent implements OnInit {
   public showFlock: boolean = false;
   public showEgg: boolean = false;
   public showManure: boolean = false;
+  public showFeed: boolean = false;
 
   public cages: CageDto[] = [];
   public eggStock!: EggStockFrontDto;
@@ -90,6 +93,15 @@ export class PointOfSaleComponent implements OnInit {
   public bankAccounts: BankAccountDto[] = [];
   public paymentModes: PaymentModeDto[] = [];
   public completePaymentModes: PaymentModeDto[] = [];
+
+  private searchFeedSubscription!: Subscription;
+  public searchFeedCtrl = new FormControl();
+  public filteredFeeds: FeedDto[] = [];
+  public selectedFeed!: FeedDto;
+  public isLoadingFeed = false;
+  public errorMsgFeed!: string;
+  public minLengthTermFeed = 1;
+  public radioColor = "#cf9d06";
 
   public errorMessages = {
     firstName: [{ type: "required", message: "First name is required" }],
@@ -143,6 +155,8 @@ export class PointOfSaleComponent implements OnInit {
     private paymentModeApiService: PaymentModeApiService,
     private returnApiService: ReturnApiService,
     private router: Router,
+    private feedApiService: FeedApiService,
+    private feedStockService: FeedStockApiService,
   ) { }
 
   async ngOnInit() {
@@ -237,7 +251,11 @@ export class PointOfSaleComponent implements OnInit {
       manureStockId: null,
       manureWeightPerBag: null,
       manureStocks: [],
-      manureBags: null
+      manureBags: null,
+      feedStocks: [],
+      feedBags: null,
+      feedId: null,
+      feeds: [],
     }
   }
 
@@ -269,19 +287,28 @@ export class PointOfSaleComponent implements OnInit {
   }
 
   public ionSelectType(event: any, index: number) {
+    this.initialiseSelectedFeed();
     this.resetInputsUponChange(index);
     if (event.detail.value === 'FLOCK') {
       this.showFlock = true;
       this.showEgg = false;
       this.showManure = false;
+      this.showFeed = false;
     } else if (event.detail.value === 'MANURE') {
       this.showFlock = false;
       this.showEgg = false;
       this.showManure = true;
+      this.showFeed = false;
     } else if (event.detail.value === 'EGG') {
       this.showFlock = false;
       this.showEgg = true;
       this.showManure = false;
+      this.showFeed = false;
+    } else if (event.detail.value === 'FEED') {
+      this.showFlock = false;
+      this.showEgg = false;
+      this.showManure = false;
+      this.showFeed = true;
     }
   }
 
@@ -291,7 +318,6 @@ export class PointOfSaleComponent implements OnInit {
   }
 
   public ionSelectManure(event: any, index: number) {
-    console.log(event);
     const manureId = event.detail.value.id;
     this.saleDetailsDto[index].manureBags = event.detail.value.bags;
     this.saleDetailsDto[index].manureWeightPerBag = event.detail.value.weight;
@@ -300,8 +326,21 @@ export class PointOfSaleComponent implements OnInit {
     })
   }
 
-  public ionSelectManureStock(event: any, index: number) {
-
+  public ionSelectFeedStock(event: any, index: number) {
+    this.initialiseSelectedFeed();
+    this.saleDetailsDto[index].feedBags = event.detail.value.bags;
+    this.saleDetailsDto[index].feedStockId = event.detail.value.feedStockId;
+    this.saleDetailsDto[index].feedName = event.detail.value.name;
+    this.saleDetailsDto[index].feedWeightPerBag = event.detail.value.weight;
+    this.selectedFeed = {
+      id: 0,
+      feedCategory: FeedCategory.NORM,
+      name: event.detail.value.name,
+      recommendedWeight: event.detail.value.weight,
+      supplierId: 0,
+      supplierName: "",
+      bags: event.detail.value.bags
+    };
   }
 
   public ionSelectEggCategory(event: any, index: number) {
@@ -490,7 +529,6 @@ export class PointOfSaleComponent implements OnInit {
     this.saleForm?.get("customer.telephoneNumber")?.setValue(event.option.value.telephoneNumber);
     this.saleForm?.get("newCustomer")?.setValue(false);
   }
-
 
   private checkIfCreditAllowed(): boolean {
     return (this.selectedCustomer != null && this.selectedCustomer.id != null) || (this.isNewCustomer && this.saleForm?.get("customer.telephoneNumber")?.value != '');
@@ -721,6 +759,64 @@ export class PointOfSaleComponent implements OnInit {
   private getAllDrivers(): void {
     this.securityApiService.getAllDrivers().subscribe(drivers => {
       this.drivers = drivers;
+    })
+  }
+
+  public searchFeed(event: any, index: number): void {
+    this.saleDetailsDto[index].feeds = [];
+    if (this.searchFeedSubscription) {
+      this.searchFeedSubscription.unsubscribe();
+    }
+    const feedSearchCriteriaDto = {
+      page: this.page,
+      size: this.size,
+      sortBy: this.sortBy,
+      sortOrder: this.sortOrder.toUpperCase(),
+      name: event.target.value,
+      feedCategory: "",
+      sale: true
+    }
+
+    if (feedSearchCriteriaDto.name == "") {
+      this.saleDetailsDto[index].feeds = [];
+    } else {
+      this.searchFeedSubscription = this.feedApiService.search(feedSearchCriteriaDto).subscribe(feeds => {
+        this.saleDetailsDto[index].feeds = [...this.saleDetailsDto[index].feeds, ...feeds.content];
+
+        if (event) {
+          event.returnValue = false;
+        }
+      })
+    }
+  }
+
+  public displayFeedWith(subject: FeedDto): any {
+    if (subject?.name) {
+      return subject ? `${subject.name}${" | "}${subject.feedCategory}${" | "}${subject.bags} ${" BAGS "}` : undefined;
+    }
+  }
+
+  private initialiseSelectedFeed(): void {
+    this.selectedFeed = {
+      id: 0,
+      feedCategory: FeedCategory.NORM,
+      name: "",
+      recommendedWeight: 0,
+      supplierId: 0,
+      supplierName: "",
+      bags: 0
+    };
+  }
+
+  public clearFeed(ctrl: FormControl): void {
+    ctrl.setValue(null);
+    this.initialiseSelectedFeed();
+  }
+
+  async ionRadioSelectFeed(event: any, index: number) {
+    this.saleDetailsDto[index].feedStocks = [];
+    this.feedStockService.findFeedStockByFeedId(event.id).subscribe(feedStocks => {
+      this.saleDetailsDto[index].feedStocks = feedStocks;
     })
   }
 }

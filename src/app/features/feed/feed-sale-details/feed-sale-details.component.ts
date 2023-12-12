@@ -300,7 +300,7 @@ export class FeedSaleDetailsComponent implements OnInit {
       this.infiniteFeeds = [];
       this.feeds = new MatTableDataSource<FeedDto>([]);
     }
-    const cageSearchCriteriaDto = {
+    const feedSearchCriteriaDto = {
       page: this.page,
       size: this.size,
       sortBy: this.sortBy,
@@ -310,7 +310,7 @@ export class FeedSaleDetailsComponent implements OnInit {
       sale: true
     }
 
-    this.feedSearchSubscription = this.feedApiService.search(cageSearchCriteriaDto).subscribe(feeds => {
+    this.feedSearchSubscription = this.feedApiService.search(feedSearchCriteriaDto).subscribe(feeds => {
       this.infiniteFeeds = [...this.infiniteFeeds, ...feeds.content];
       this.feeds = new MatTableDataSource<FeedDto>(this.infiniteFeeds);
 

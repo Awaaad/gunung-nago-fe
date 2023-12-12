@@ -27,7 +27,9 @@ import { PointOfSaleApiService } from 'src/app/shared/apis/point-of-sale.api.ser
 import { SalesInvoiceApiService } from 'src/app/shared/apis/sales-invoice.api.service';
 import { ReturnApiService } from 'src/app/shared/apis/return.api.service';
 import { FlockApiService } from 'src/app/shared/apis/flock.api.service';
-
+import { FeedApiService } from 'src/app/shared/apis/feed.api.service';
+import { FeedStockApiService } from 'src/app/shared/apis/feed-stock.api.service';
+import { MatRadioModule } from '@angular/material/radio';
 
 @NgModule({
   declarations: [PointOfSaleComponent],
@@ -48,9 +50,10 @@ import { FlockApiService } from 'src/app/shared/apis/flock.api.service';
     MatAutocompleteModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatRadioModule
   ],
-  providers: [SalesInvoiceApiService, CustomerApiService, ManureStockApiService, CageApiService, FlockApiService, SurveyApiService, EggStockApiService, 
-    FlockStockApiService, PointOfSaleApiService, ReturnApiService,
+  providers: [SalesInvoiceApiService, CustomerApiService, ManureStockApiService, CageApiService, FlockApiService, SurveyApiService, EggStockApiService,
+    FlockStockApiService, PointOfSaleApiService, ReturnApiService, FeedApiService, FeedStockApiService,
     {
       provide: DateAdapter,
       useClass: MomentDateAdapter,

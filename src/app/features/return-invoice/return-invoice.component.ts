@@ -410,7 +410,11 @@ export class ReturnInvoiceComponent implements OnInit {
         manureStockId: sale.manureStockId,
         manureWeightPerBag: sale.manureWeightPerBag,
         manureStocks: [],
-        manureBags: null
+        feedStocks: [],
+        manureBags: null,
+        feedBags: null,
+        feedId: null,
+        feeds: [],
       }
       saleDetailsDtoList.push(saleDetailsDto);
     })
