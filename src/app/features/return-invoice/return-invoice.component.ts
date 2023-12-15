@@ -220,7 +220,6 @@ export class ReturnInvoiceComponent implements OnInit {
   public checkCreditCompleted(): boolean {
     let totalAmountDue = 0;
     this.paymentForm.get('payments')?.value.forEach((payment: any) => {
-      console.log(payment)
       if (payment.paymentMode && payment.paymentModeId.id == 1) {
         totalAmountDue += payment.amountPaid;
       } else {
@@ -248,7 +247,6 @@ export class ReturnInvoiceComponent implements OnInit {
 
   public findSalesInvoiceDetailsForReturnById() {
     this.salesInvoiceApiService.findSalesInvoiceDetailsForReturnById(this.salesInvoiceId).subscribe(returnInvoices => {
-      console.log(returnInvoices);
       this.salesInvoiceDetailsForReturnDto = returnInvoices;
       this.customerId = returnInvoices.customerId;
       this.customerFirstName = returnInvoices.customerFirstName;
@@ -297,7 +295,6 @@ export class ReturnInvoiceComponent implements OnInit {
   private initialiseReturnFormBuilder(): void {
     const formDetail = this.returnFormGroup.get('formDetail') as FormArray;
     this.salesInStock.forEach(sale => {
-      console.log(sale);
       let salesQuantity = 0;
       let price = 0;
       let unitSoldAt = 0;
@@ -458,6 +455,8 @@ export class ReturnInvoiceComponent implements OnInit {
   }
 
   private reset(): void {
+    this.salesDetailsTable = new MatTableDataSource<SaleDetailsForReturnFrontDto>();
+    this.salesInStock = [];
     this.returnFormGroup = this.formBuilder.group({
       customerFirstName: new FormControl(''),
       customerLastName: new FormControl(''),

@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2023-12-10 10:05:36.
+// Generated using typescript-generator version 3.2.1263 on 2023-12-13 16:45:28.
 
 export class BankAccountDto {
     id!: number;
@@ -206,6 +206,7 @@ export class FeedSaleSaveDto {
     comment!: string;
     newCustomer!: boolean;
 }
+
 export class FeedSearchCriteriaDto {
     name!: string;
     feedCategory!: FeedCategory;
@@ -763,14 +764,18 @@ export class ReturnInvoiceLineDetailsDto {
     price!: number;
     totalPrice!: number;
     feedStockId!: number;
-    flockId!: number;
-    manureStockId!: number;
+    feedName!: string;
+    feedWeightPerBag!: number;
     quantity!: number;
     salesInvoiceLineId!: number;
     eggQuantityType!: EggQuantityType;
     eggCategory!: number;
     eggType!: string;
+    cageId!: number;
+    flockId!: number;
     flockType!: FlockType;
+    manureStockId!: number;
+    manureWeightPerBag!: number;
 }
 
 export class ReturnInvoiceLineDto {
@@ -788,6 +793,7 @@ export class ReturnInvoiceLineDto {
     flockType!: FlockType;
     feedName!: string;
     feedWeightPerBag!: number;
+    manureWeightPerBag!: number;
 }
 
 export class ReturnInvoiceListDto {
@@ -803,6 +809,19 @@ export class ReturnInvoiceListDto {
     driverLastName!: string;
     salesInvoiceStatus!: SalesInvoiceStatus;
     salesInvoiceId!: number;
+}
+
+export class ReturnInvoiceSearchCriteriaDto {
+    returnInvoiceType!: ReturnInvoiceType;
+    customerName!: string;
+    createdBy!: string;
+    dateFrom!: Date;
+    dateTo!: Date;
+    salesInvoiceStatus!: SalesInvoiceStatus;
+    farmId!: number;
+    customerId!: number;
+    salesInvoiceId!: number;
+    returnInvoiceId!: number;
 }
 
 export class SalesInvoiceDetailsDto {
@@ -875,10 +894,14 @@ export class SalesInvoiceSearchCriteriaDto {
     dateFrom!: Date;
     dateTo!: Date;
     salesInvoiceStatus!: SalesInvoiceStatus;
+    eggQuantityType!: EggQuantityType;
     salesInvoiceCategory!: SalesInvoiceCategory;
     farmId!: number;
     customerId!: number;
     credit!: boolean;
+    manureId!: number;
+    feedName!: string;
+    eggCategoryId!: number;
 }
 
 export class SalesInvoiceLineDto {
@@ -905,6 +928,11 @@ export class SalesInvoiceLineDto {
     driverLastName!: string;
     createdBy!: string;
     createdDate!: Date;
+    feedStockId!: number;
+    feedName!: string;
+    feedWeightPerBag!: number;
+    manureStockId!: number;
+    manureWeightPerBag!: number;
 }
 
 export class SalesInvoiceLineForReturnDto {
@@ -923,6 +951,8 @@ export class SalesInvoiceLineForReturnDto {
     feedStockId!: number;
     feedName!: string;
     feedWeightPerBag!: number;
+    manureStockId!: number;
+    manureWeightPerBag!: number;
 }
 
 export class AuthenticatedUserDetailsDto {

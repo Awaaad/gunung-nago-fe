@@ -25,7 +25,7 @@ export class PurchaseInvoiceListComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   public language = "en";
-  public displayedColumns: string[] = ['number', 'supplier', 'createdBy', 'createdDate', 'totalPrice'];
+  public displayedColumns: string[] = ['number', 'supplier', 'createdBy', 'createdDate', 'totalPrice', 'actions'];
   public purchaseInvoices = new MatTableDataSource<PurchaseInvoiceDto>;
   private infinitePurchaseInvoices: PurchaseInvoiceDto[] = [];
   public purchaseInvoiceSearchSubscription!: Subscription;
@@ -265,6 +265,13 @@ export class PurchaseInvoiceListComponent {
       address: new FormControl({ value: supplierDetails.address, disabled: false }),
       telephoneNumber: new FormControl({ value: supplierDetails.telephoneNumber, disabled: false }, Validators.compose([Validators.required]))
     })
+  }
+
+  public getTotalPrice(): any {
+    const total = this.purchaseInvoices.data.map(data => data.totalPrice).reduce((acc, value) => acc + value, 0);
+    if (total != 0) {
+      return total;
+    }
   }
 }
 

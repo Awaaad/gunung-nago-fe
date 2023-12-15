@@ -10,6 +10,10 @@ const routes: Routes = [
     component: ReturnInvoiceListComponent
   },
   {
+    path: 'return-invoice-list/:salesInvoiceId',
+    component: ReturnInvoiceListComponent
+  },
+  {
     path: 'return-invoice-details/:id',
     component: ReturnInvoiceDetailsComponent
   },
@@ -17,7 +21,6 @@ const routes: Routes = [
     path: ':id',
     component: ReturnInvoiceComponent
   },
-  
 ];
 
 @NgModule({

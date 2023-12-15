@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { ReturnInvoiceListDto, SalesInvoiceType, UserDto } from 'generated-src/model';
 import { Subscription } from 'rxjs';
@@ -13,16 +13,19 @@ import { UtilsService } from 'src/app/shared/utils/utils.service';
   templateUrl: './return-invoice-list.component.html',
   styleUrls: ['./return-invoice-list.component.scss'],
 })
-export class ReturnInvoiceListComponent  implements OnInit {
+export class ReturnInvoiceListComponent implements OnInit {
+  public salesInvoiceId: any = this.activatedRoute.snapshot.paramMap.get('salesInvoiceId');
   public language = "en";
   public returnInvoiceList = new MatTableDataSource<ReturnInvoiceListDto>;
   private infiniteReturnInvoices: ReturnInvoiceListDto[] = [];
-  public displayedColumns: string[] = ['id', 'name', 'createdBy', 'createdDate', 'driver', 'totalPrice', 'salesInvoiceId', 'actions'];
+  public displayedColumns: string[] = ['id', 'name', 'createdBy', 'createdDate', 'totalPrice', 'salesInvoiceId', 'actions'];
   private page: number = 0;
   private size: number = 50;
   public sortOrder: string = 'desc';
   public sortBy: string = 'createdDate';
   public customerName: string = '';
+  public returnInvoiceNumber: string = '';
+  public salesInvoiceNumber: string = '';
   public dateFrom: Date | any = null;
   public dateTo: Date | any = null;
   public usernames: string[] = [];
@@ -30,17 +33,22 @@ export class ReturnInvoiceListComponent  implements OnInit {
   public drivers: UserDto[] = [];
   public selectedDriverId: number | any = '0';
   public returnInvoiceSearchSubscription!: Subscription;
-  
-  constructor(private translateService: TranslateService,
+
+  constructor(
+    private readonly activatedRoute: ActivatedRoute,
+    private translateService: TranslateService,
     private returnApiService: ReturnApiService,
     private router: Router,
     private utilsService: UtilsService,
     private securityApiService: SecurityApiService,
-              ) { }
+  ) { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   ionViewWillEnter(): void {
+    if (this.salesInvoiceId) {
+      this.salesInvoiceNumber = this.salesInvoiceId;
+    }
     this.search();
     this.getAllUsernames();
     this.getAllDrivers();
@@ -62,6 +70,8 @@ export class ReturnInvoiceListComponent  implements OnInit {
       dateFrom: this.dateFrom === null ? '' : this.dateFrom,
       dateTo: this.dateTo === null ? '' : this.dateTo,
       customerName: this.customerName,
+      returnInvoiceId: this.returnInvoiceNumber,
+      salesInvoiceId: this.salesInvoiceNumber,
       salesInvoiceStatus: '',
       salesInvoiceCategory: '',
 
@@ -76,7 +86,7 @@ export class ReturnInvoiceListComponent  implements OnInit {
     }
 
     this.returnInvoiceSearchSubscription = this.returnApiService.search(salesInvoiceSearchCriteriaDto).subscribe(returnInvoices => {
-      this.infiniteReturnInvoices = [ ...returnInvoices.content];
+      this.infiniteReturnInvoices = [...returnInvoices.content];
       this.returnInvoiceList = new MatTableDataSource<ReturnInvoiceListDto>(this.infiniteReturnInvoices);
 
       if (event) {
@@ -84,34 +94,13 @@ export class ReturnInvoiceListComponent  implements OnInit {
         event.returnValue = false;
       }
     })
-
-    const x: any = {
-      salesInvoiceType: SalesInvoiceType.EGG,
-      createdBy: this.username === '' || this.username === null ? null : this.username,
-      driverId: this.selectedDriverId === '0' || this.selectedDriverId === null ? '' : this.selectedDriverId,
-      dateFrom: this.dateFrom === null ? '' : this.dateFrom,
-      dateTo: this.dateTo === null ? '' : this.dateTo,
-      customerName: this.customerName,
-      salesInvoiceStatus: '',
-      salesInvoiceCategory: '',
-
-      page: this.page,
-      size: this.size,
-      sortBy: this.sortBy,
-      sortOrder: this.sortOrder.toUpperCase(),
-    }
-
-    if (x.createdBy === null) {
-      delete x.createdBy;
-    }
-
   }
 
-  public routeToSalesInvoiceDetails(element:any){
+  public routeToSalesInvoiceDetails(element: any) {
     this.router.navigate([`sales-invoice/sales-invoice-details/${element.salesInvoiceId}`]);
   }
 
-  public routeToReturnInvoice(element:any){
+  public routeToReturnInvoice(element: any) {
     this.router.navigate([`return-invoice/return-invoice-details/${element.id}`]);
   }
 
@@ -120,6 +109,21 @@ export class ReturnInvoiceListComponent  implements OnInit {
     this.returnInvoiceList = new MatTableDataSource<ReturnInvoiceListDto>;
     this.page = 0;
     this.customerName = customerName;
+    this.search();
+  }
+  public searchBySalesInvoiceNumber(salesInvoiceNumber: any): void {
+    this.returnInvoiceSearchSubscription.unsubscribe();
+    this.returnInvoiceList = new MatTableDataSource<ReturnInvoiceListDto>;
+    this.page = 0;
+    this.salesInvoiceNumber = salesInvoiceNumber;
+    this.search();
+  }
+
+  public searchByReturnInvoiceNumber(returnInvoiceNumber: any): void {
+    this.returnInvoiceSearchSubscription.unsubscribe();
+    this.returnInvoiceList = new MatTableDataSource<ReturnInvoiceListDto>;
+    this.page = 0;
+    this.returnInvoiceNumber = returnInvoiceNumber;
     this.search();
   }
 
@@ -184,5 +188,12 @@ export class ReturnInvoiceListComponent  implements OnInit {
     this.securityApiService.getAllDrivers().subscribe(drivers => {
       this.drivers = drivers;
     })
+  }
+
+  public getTotalPrice(): any {
+    const total = this.returnInvoiceList.data.map(data => data.totalPrice).reduce((acc, value) => acc + value, 0);
+    if (total != 0) {
+      return total;
+    }
   }
 }

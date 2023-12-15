@@ -13,7 +13,6 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./return-invoice-details.component.scss'],
 })
 export class ReturnInvoiceDetailsComponent  implements OnInit {
-
   public returnInvoiceId: any = this.activatedRoute.snapshot.paramMap.get('id');
   public returnInvoiceFront! : ReturnDetailsFrontDto; 
   public language = "en";

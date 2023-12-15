@@ -30,6 +30,7 @@ export class SalesInvoiceListComponent {
   @ViewChild(IonModal) modal!: IonModal;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+  public returnInvoice = 'assets/flaticon/return-invoice-icon-list.svg';
   public language = "en";
   public displayedColumns: string[] = ['id', 'name', 'createdBy', 'createdDate', 'category', 'driver', 'totalPrice', 'soldAt', 'amountPaid', 'amountDue', 'status', 'actions'];
   public salesInvoices = new MatTableDataSource<SalesInvoiceDto>;
@@ -210,6 +211,11 @@ export class SalesInvoiceListComponent {
     this.router.navigate([`return-invoice/${salesInvoiceDto.id}`]);
   }
 
+  public routeToReturnInvoiceList(salesInvoiceDto: SalesInvoiceDto): void {
+    this.modal.dismiss(null, 'cancel');
+    this.router.navigate([`return-invoice/return-invoice-list/${salesInvoiceDto.id}`]);
+  }
+
   public selectDateFrom(): void {
     this.utilsService.presentLoadingDuration(500).then(() => {
       this.search();
@@ -270,30 +276,6 @@ export class SalesInvoiceListComponent {
         event.returnValue = false;
       }
     })
-
-    const x: any = {
-      salesInvoiceType: SalesInvoiceType.EGG,
-      createdBy: this.username === '' || this.username === null ? null : this.username,
-      driverId: this.selectedDriverId === '0' || this.selectedDriverId === null ? '' : this.selectedDriverId,
-      dateFrom: this.dateFrom === null ? '' : this.dateFrom,
-      dateTo: this.dateTo === null ? '' : this.dateTo,
-      customerName: this.customerName,
-      salesInvoiceStatus: this.salesInvoiceStatus,
-      salesInvoiceCategory: this.salesInvoiceCategory,
-
-      page: this.page,
-      size: this.size,
-      sortBy: this.sortBy,
-      sortOrder: this.sortOrder.toUpperCase(),
-    }
-
-    if (x.createdBy === null) {
-      delete x.createdBy;
-    }
-
-    this.salesInvoiceSearchSubscription = this.salesInvoiceApiService.searchForType(x).subscribe(salesInvoices => {
-      console.log(salesInvoices)
-    });
   }
 
   public reset(): void {
@@ -518,6 +500,50 @@ export class SalesInvoiceListComponent {
     this.salesInvoiceSettleCreditPaymentFrontDto.paymentSaveDtos?.forEach(payment => {
       payment.paymentModeId = payment.paymentModeId.id
     })
+  }
+
+  public getTotalPrice(): any {
+    const total = this.salesInvoices.data.map(data => data.totalPrice).reduce((acc, value) => acc + value, 0);
+    if (total != 0) {
+      return total;
+    }
+  }
+
+  public getTotalSoldAt(): any {
+    const total = this.salesInvoices.data.map(data => data.soldAt).reduce((acc, value) => acc + value, 0);
+    if (total != 0) {
+      return total;
+    }
+  }
+
+  public getTotalAmountDue(): any {
+    const total = this.salesInvoices.data.map(data => {
+      let totalAmount = 0;
+      data.paymentDtos.filter(payment => payment.paymentModeId == 1 && !payment.settled).forEach(payment => {
+        totalAmount = totalAmount + payment.amountPaid
+      })
+      return totalAmount;
+    }).reduce((acc, value) => acc + value, 0);
+    if (total != 0) {
+      return total;
+    }
+  }
+
+  public getTableTotalAmountPaid(): any {
+    const total = this.salesInvoices.data.map(data => {
+      let totalAmount = 0;
+      data.paymentDtos.forEach(payment => {
+        if (payment.paymentModeId !== 1) {
+          totalAmount = totalAmount + payment.amountPaid;
+        } else if (payment.paymentModeId == 1 && payment.amountPaid < 0) {
+          totalAmount = totalAmount + payment.amountPaid;
+        }
+      })
+      return totalAmount;
+    }).reduce((acc, value) => acc + value, 0);
+    if (total != 0) {
+      return total;
+    }
   }
 }
 

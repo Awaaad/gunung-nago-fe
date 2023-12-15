@@ -345,14 +345,6 @@
             </mat-radio-group>
           </ion-col>
 
-          <ion-col size-lg="4" size-md="4" size-xs="12" *ngIf="saleDetailsDto[i].feedId">
-            <ion-select color="gunung-nago-primary" label="Feed Stock" label-placement="floating" fill="outline"
-              interface="popover" required="true" (ionChange)="ionSelectFeedStock($event, i)">
-              <ion-select-option *ngFor="let feedStock of saleDetail.feedStocks" [value]="feedStock">
-                {{feedStock.bags}} - BAGS | Recommended Price: {{feedStock.recommendedPrice}} </ion-select-option>
-            </ion-select>
-          </ion-col>
-
           <!-- Flock -->
           <ion-col size-lg="2" size-md="3" size-xs="12" *ngIf="saleDetail.salesInvoiceType === 'FLOCK'">
             <ion-select color="gunung-nago-primary" label="Cage" label-placement="floating" fill="outline"
@@ -525,9 +517,9 @@
         </div>
 
         <!-- Feed -->
-        <div *ngIf="saleDetailsDto[i].feedStockId">
+        <div *ngIf="saleDetail.salesInvoiceType === 'FEED'">
           <ion-row class=" quantity-qp">
-            <ion-col size-lg="2" size-md="3" size-xs="12">
+            <ion-col size-lg="2" size-md="3" size-xs="12" *ngIf="saleDetailsDto[i].feedStockId">
               <div class="quantity-count-section">
                 <div class="quantity-section">
                   <div>
@@ -542,6 +534,14 @@
                   </div>
                 </div>
               </div>
+            </ion-col>
+
+            <ion-col size-lg="4" size-md="4" size-xs="12" *ngIf="saleDetailsDto[i].feedId">
+              <ion-select color="gunung-nago-primary" label="Feed Stock" label-placement="floating" fill="outline"
+                interface="popover" required="true" (ionChange)="ionSelectFeedStock($event, i)">
+                <ion-select-option *ngFor="let feedStock of saleDetail.feedStocks" [value]="feedStock">
+                  {{feedStock.bags}} - BAGS | Recommended Price: {{feedStock.recommendedPrice}} </ion-select-option>
+              </ion-select>
             </ion-col>
 
             <ion-col size-lg="2" size-md="3" size-xs="12" *ngIf="saleDetailsDto[i].feedStockId">

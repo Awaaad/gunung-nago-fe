@@ -214,7 +214,7 @@
                 <ion-col size-xs="12" size-md="3">
                   <ion-input color="gunung-nago-survey" label="Quantity" label-placement="floating" fill="outline"
                     type="number" min="0" clear-input="true" formControlName="quantity"
-                    (change)="calculateTotalPrice()"></ion-input>
+                    (ionInput)="calculateTotalPrice()"></ion-input>
                   <div class="error-messages">
                     <ng-container *ngFor="let error of errorMessages.minValue">
                       <div class="error-message"
@@ -227,7 +227,7 @@
                 <ion-col size-xs="12" size-md="3">
                   <ion-input color="gunung-nago-survey" label="Price" label-placement="floating" fill="outline"
                     type="number" min="0" clear-input="true" formControlName="price"
-                    (change)="calculateTotalPrice()"></ion-input>
+                    (ionInput)="calculateTotalPrice()"></ion-input>
                   <div class="error-messages">
                     <ng-container *ngFor="let error of errorMessages.minValue">
                       <div class="error-message"

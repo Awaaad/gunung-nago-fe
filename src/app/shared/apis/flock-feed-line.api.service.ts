@@ -15,6 +15,6 @@ export class FlockFeedLineApiService {
     }
 
     public findAllActiveFlockFeedLinesByFlockId(id: number): Observable<FlockFeedLineDto[]> {
-        return this.http.get<FlockFeedLineDto[]>(`${this.baseUrl}${id}`);
+        return this.http.get<FlockFeedLineDto[]>(`${this.baseUrl}/${id}`);
     }
 }

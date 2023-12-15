@@ -16,7 +16,6 @@ import { environment } from 'src/environments/environment';
 })
 export class SalesInvoiceDetailsComponent implements OnInit {
   public salesInvoiceId: any = this.activatedRoute.snapshot.paramMap.get('salesInvoiceId');
-  public type: any = this.activatedRoute.snapshot.paramMap.get('type');
   public language = "en";
   public salesInvoiceDetailsFrontDto!: SalesInvoiceDetailsFrontDto;
   public totalPiece: number = 0;

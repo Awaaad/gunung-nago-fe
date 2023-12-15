@@ -188,7 +188,7 @@ export class SaleDetailsFrontDto {
     manureWeightPerBag!: number | null | undefined | any;
     manureStocks: any[] = [];
     feeds: any[] = [];
-    feedStocks: any[] =[];
+    feedStocks: any[] = [];
 }
 
 export class SalesInvoiceDetailsFrontDto {
@@ -471,7 +471,7 @@ export class ReturnInvoiceDetailsFrontDto {
     saleDetailsDtos!: SaleDetailsDto[] | [] | null | undefined;
 }
 
-export class ReturnDetailsFrontDto{
+export class ReturnDetailsFrontDto {
     id!: number | null | undefined | any;
     createdBy!: string | null | undefined | any;
     createdDate!: Date | null | undefined | any;
@@ -486,18 +486,21 @@ export class ReturnDetailsFrontDto{
     returnDetailsDtos: ReturnInvoiceLineDetailsFrontDto[] | [] | null | undefined;
 }
 
-export class ReturnInvoiceLineDetailsFrontDto{
-    returnInvoiceType!: ReturnInvoiceType | null | undefined | any;
-
-    price!: number | null | undefined | any;
-    totalPrice!: number | null | undefined | any;
-    feedStockId!: number | null | undefined | any;
-    flockId!: number | null | undefined | any;
-    manureStockId!: number | null | undefined | any; 
-    quantity!: number | null | undefined | any;
-    salesInvoiceLineId!: number | null | undefined | any;
-    eggQuantityType!: EggQuantityType | null | undefined | any;
-    eggCategory!: number | null | undefined | any;
-    eggType!: string | null | undefined | any;
-    flockType!: FlockType | null | undefined | any;
+export class ReturnInvoiceLineDetailsFrontDto {
+    returnInvoiceType: ReturnInvoiceType | null | undefined | any;
+    price: number | null | undefined | any;
+    totalPrice: number | null | undefined | any;
+    feedStockId: number | null | undefined | any;
+    feedName: string | null | undefined | any;
+    feedWeightPerBag: number | null | undefined | any;
+    quantity: number | null | undefined | any;
+    salesInvoiceLineId: number | null | undefined | any;
+    eggQuantityType: EggQuantityType | null | undefined | any;
+    eggCategory: number | null | undefined | any;
+    eggType: string | null | undefined | any;
+    cageId: number | null | undefined | any;
+    flockId: number | null | undefined | any;
+    flockType: FlockType | null | undefined | any;
+    manureStockId: number | null | undefined | any;
+    manureWeightPerBag: number | null | undefined | any;
 }

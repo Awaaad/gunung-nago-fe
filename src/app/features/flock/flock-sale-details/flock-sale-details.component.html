@@ -209,7 +209,7 @@
               </ion-col>
             </ion-row>
 
-            <ion-row>
+            <ion-row *ngIf="flockSaleDetails.get('cageId')?.value">
               <ion-col size-xs="12" size-md="4">
                 <div class="flock-form-section-left">
                   <div class="divider-wrapper">
@@ -230,7 +230,7 @@
                   <div>
                     <ion-input color="gunung-nago-primary" label="Quantity for sterile" label-placement="floating"
                       fill="outline" type="number" clear-input="true" formControlName="quantitySoldForSterile"
-                      required="true" (change)="calculateTotalPrice()"></ion-input>
+                      required="true" (ionInput)="calculateTotalPrice()"></ion-input>
                     <div class="error-messages">
                       <ng-container *ngFor="let error of errorMessages.quantitySoldForSterile">
                         <div class="error-message"
@@ -245,7 +245,7 @@
                     <ion-input color="gunung-nago-primary" label="Price per chicken for sterile"
                       label-placement="floating" fill="outline" type="number" clear-input="true"
                       formControlName="pricePerChickenForSterile" required="true"
-                      (change)="calculateTotalPrice()"></ion-input>
+                      (ionInput)="calculateTotalPrice()"></ion-input>
                     <div class="error-messages">
                       <ng-container *ngFor="let error of errorMessages.pricePerChickenForSterile">
                         <div class="error-message"
@@ -284,7 +284,7 @@
                   <div>
                     <ion-input color="gunung-nago-primary" label="Quantity for good" label-placement="floating"
                       fill="outline" type="number" clear-input="true" formControlName="quantitySoldForGood"
-                      (change)="calculateTotalPrice()" required="true"></ion-input>
+                      (ionInput)="calculateTotalPrice()" required="true"></ion-input>
                     <div class="error-messages">
                       <ng-container *ngFor="let error of errorMessages.quantitySoldForGood">
                         <div class="error-message"
@@ -298,7 +298,7 @@
                   <div class="mt-1">
                     <ion-input color="gunung-nago-primary" label="Price per chicken for good" label-placement="floating"
                       fill="outline" type="number" clear-input="true" formControlName="pricePerChickenForGood"
-                      (change)="calculateTotalPrice()" required="true"></ion-input>
+                      (ionInput)="calculateTotalPrice()" required="true"></ion-input>
                     <div class="error-messages">
                       <ng-container *ngFor="let error of errorMessages.pricePerChickenForGood">
                         <div class="error-message"

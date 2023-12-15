@@ -243,7 +243,7 @@
                   <div>
                     <ion-input color="gunung-nago-survey" label="Tie" label-placement="floating" fill="outline"
                       type="number" min="0" clear-input="true" formControlName="tie"
-                      (ionChange)="calculateTotalPrice(); calculateRemainingEggs()"></ion-input>
+                      (ionInput)="calculateTotalPrice(); calculateRemainingEggs()"></ion-input>
                     <div class="error-messages">
                       <ng-container *ngFor="let error of errorMessages.minValue">
                         <div class="error-message"
@@ -256,7 +256,7 @@
                   <div class="mt-1">
                     <ion-input color="gunung-nago-survey" label="Price per Tie" label-placement="floating"
                       fill="outline" type="number" min="0" clear-input="true" formControlName="pricePerTie"
-                      (ionChange)="calculateTotalPrice(); calculateRemainingEggs()"></ion-input>
+                      (ionInput)="calculateTotalPrice(); calculateRemainingEggs()"></ion-input>
                     <div class="error-messages">
                       <ng-container *ngFor="let error of errorMessages.minValue">
                         <div class="error-message"
@@ -280,7 +280,7 @@
                   <div>
                     <ion-input color="gunung-nago-survey" label="Tray" label-placement="floating" fill="outline"
                       type="number" min="0" clear-input="true" formControlName="tray"
-                      (ionChange)="calculateTotalPrice(); calculateRemainingEggs()"></ion-input>
+                      (ionInput)="calculateTotalPrice(); calculateRemainingEggs()"></ion-input>
                     <div class="error-messages">
                       <ng-container *ngFor="let error of errorMessages.minValue">
                         <div class="error-message"
@@ -293,7 +293,7 @@
                   <div class="mt-1">
                     <ion-input color="gunung-nago-survey" label="Price per tray" label-placement="floating"
                       fill="outline" type="number" min="0" clear-input="true" formControlName="pricePerTray"
-                      (ionChange)="calculateTotalPrice(); calculateRemainingEggs()"></ion-input>
+                      (ionInput)="calculateTotalPrice(); calculateRemainingEggs()"></ion-input>
                     <div class="error-messages">
                       <ng-container *ngFor="let error of errorMessages.minValue">
                         <div class="error-message"
@@ -317,7 +317,7 @@
                   <div>
                     <ion-input color="gunung-nago-survey" label="Piece" label-placement="floating" fill="outline"
                       type="number" min="0" clear-input="true" formControlName="piece"
-                      (ionChange)="calculateTotalPrice(); calculateRemainingEggs()"></ion-input>
+                      (ionInput)="calculateTotalPrice(); calculateRemainingEggs()"></ion-input>
                     <div class="error-messages">
                       <ng-container *ngFor="let error of errorMessages.minValue">
                         <div class="error-message"
@@ -330,7 +330,7 @@
                   <div class="mt-1">
                     <ion-input color="gunung-nago-survey" label="Price per piece" label-placement="floating"
                       fill="outline" type="number" min="0" clear-input="true" formControlName="pricePerPiece"
-                      (ionChange)="calculateTotalPrice(); calculateRemainingEggs()"></ion-input>
+                      (ionInput)="calculateTotalPrice(); calculateRemainingEggs()"></ion-input>
                     <div class="error-messages">
                       <ng-container *ngFor="let error of errorMessages.minValue">
                         <div class="error-message"

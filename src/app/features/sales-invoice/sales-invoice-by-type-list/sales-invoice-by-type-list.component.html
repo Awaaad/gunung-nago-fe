@@ -1,0 +1,262 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      <div class="router-links">
+        <div class="title">
+          <img class="header-logo" src='./assets/flaticon/record.png'>
+          <h3 *ngIf="!type" class="header-nav-products">Sales Record</h3>
+          <h3 *ngIf="type" class="header-nav-products">{{type | titlecase}} Sales Record</h3>
+        </div>
+        <div>
+          <ion-item class="language-selection">
+            <ion-select aria-label="language" interface="popover" placeholder="Select language" [(ngModel)]="language"
+              (ionChange)="ionChangeLanguage($event)">
+              <ion-select-option value="en">English</ion-select-option>
+              <ion-select-option value="id">Indonesian</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </div>
+      </div>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="false" class="ion-padding" [scrollEvents]="true" (ionScroll)="onScroll($event)">
+  <ion-card>
+    <ion-card-content>
+      <ion-row>
+        <ion-col size-xs="12" size-md="6">
+          <ion-searchbar placeholder="Search by customer name..." type="text" #customerName
+            (ionInput)="searchByCustomerName(customerName.value)"></ion-searchbar>
+        </ion-col>
+        <ion-col size-xs="12" size-md="6">
+          <div class="filters">
+            <div>
+
+            </div>
+            <div>
+              <ion-button class="reset" (click)="reset()">Reset Filters</ion-button>
+            </div>
+          </div>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col size-xs="12" size-md="3">
+          <ion-select [disabled]="type" color="gunung-nago-primary" label="Type" label-placement="floating"
+            fill="outline" interface="popover" [(ngModel)]="salesInvoiceType" (ionChange)="ionChangeType($event)">
+            <ion-select-option value='' selected="true">All</ion-select-option>
+            <ion-select-option *ngFor="let salesInvoiceType of salesInvoiceTypes"
+              [value]="salesInvoiceType">{{salesInvoiceType |
+              titlecase}}</ion-select-option>
+          </ion-select>
+        </ion-col>
+
+        <ion-col size-xs="12" size-md="3">
+          <ion-select color="gunung-nago-primary" label="Salesperson" label-placement="floating" fill="outline"
+            interface="popover" [(ngModel)]="username" (ionChange)="ionChangeUsername($event)">
+            <ion-select-option value='' selected="true">All</ion-select-option>
+            <ion-select-option *ngFor="let username of usernames" [value]="username">{{username |
+              titlecase}}</ion-select-option>
+          </ion-select>
+        </ion-col>
+
+        <ion-col size-xs="12" size-md="2">
+          <ion-label>Date Issued From </ion-label>
+          <div class="date-time-picker-container">
+            <ion-datetime-button datetime="datetimeFrom"></ion-datetime-button>
+            <ion-chip class="date-time-picer-clear" (click)="clearDateFrom()" *ngIf="dateFrom">
+              <ion-icon class="date-time-picker-clear-icon" name="close-outline"></ion-icon>
+            </ion-chip>
+          </div>
+
+          <ion-popover [keepContentsMounted]="true">
+            <ng-template>
+              <ion-datetime id="datetimeFrom" hourCycle="h23" [(ngModel)]="dateFrom"
+                (ngModelChange)="selectDateFrom()"></ion-datetime>
+            </ng-template>
+          </ion-popover>
+        </ion-col>
+
+        <ion-col size-xs="12" size-md="2">
+          <ion-label>Date Issued To </ion-label>
+          <div class="date-time-picker-container">
+            <ion-datetime-button datetime="datetimeTo"></ion-datetime-button>
+            <ion-chip class="date-time-picer-clear" (click)="clearDateTo()" *ngIf="dateTo">
+              <ion-icon class="date-time-picker-clear-icon" name="close-outline"></ion-icon>
+            </ion-chip>
+          </div>
+
+          <ion-popover [keepContentsMounted]="true">
+            <ng-template>
+              <ion-datetime id="datetimeTo" hourCycle="h23" [(ngModel)]="dateTo"
+                (ngModelChange)="selectDateTo()"></ion-datetime>
+            </ng-template>
+          </ion-popover>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col size-xs="12" size-md="3" *ngIf="salesInvoiceType === 'MANURE'">
+          <ion-select color="gunung-nago-primary" label="Weight (KG)" label-placement="floating" fill="outline"
+            interface="popover" required="true" (ionChange)="ionChangeManure($event)" [(ngModel)]="manureId">
+            <ion-select-option value='0' selected="true">All</ion-select-option>
+            <ion-select-option *ngFor="let manure of manures" [value]="manure.id">{{ manure.weight
+              }}</ion-select-option>
+          </ion-select>
+        </ion-col>
+
+        <ion-col size-xs="12" size-md="3" *ngIf="salesInvoiceType === 'EGG'">
+          <ion-select color="gunung-nago-primary" label="Egg Category" label-placement="floating" fill="outline"
+            interface="popover" clear-input="true" [(ngModel)]="eggCategoryId"
+            (ionChange)="ionChangeEggCategory($event)">
+            <ion-select-option value='0' selected="true">All</ion-select-option>
+            <ion-select-option *ngFor="let eggCategory of eggCategories" [value]="eggCategory.id">{{ eggCategory.name
+              }}</ion-select-option>
+          </ion-select>
+        </ion-col>
+
+        <ion-col size-xs="12" size-md="3" *ngIf="salesInvoiceType === 'EGG'">
+          <ion-select color="gunung-nago-primary" label="Egg Quantity Type" label-placement="floating" fill="outline"
+            interface="popover" clear-input="true" [(ngModel)]="eggQuantityType"
+            (ionChange)="ionChangeEggQuantityType($event)">
+            <ion-select-option value='' selected="true">All</ion-select-option>
+            <ion-select-option *ngFor="let eggQuantityType of eggQuantityTypes" [value]="eggQuantityType">{{
+              eggQuantityType | titlecase
+              }}</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size-xs="12" size-md="3" *ngIf="salesInvoiceType === 'FEED'">
+          <ion-searchbar placeholder="Search by feed name..." type="text" #feedName
+            (ionInput)="searchByFeedName(feedName.value)"></ion-searchbar>
+        </ion-col>
+      </ion-row>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <div class="mat-elevation-z8 table-responsive">
+      <table mat-table matSort (matSortChange)="sortData($event)" matSortDisableClear="true"
+        [dataSource]="salesInvoices">
+
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="id"> Sales Invoice Number </th>
+          <td mat-cell *matCellDef="let element"> <span class="table-link"
+              (click)="routeToSalesInvoiceDetails(element)">{{ element.salesInvoiceId }}</span></td>
+          <td mat-footer-cell *matFooterCellDef><strong>Total: </strong></td>
+        </ng-container>
+
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="name"> Customer Name </th>
+          <td mat-cell *matCellDef="let element">
+            <span *ngIf="element.customerFirstName != 'anonymous'">{{element.customerFirstName}}</span>
+            <span *ngIf="element.customerLastName != 'anonymous'"> {{element.customerLastName}}</span>
+          </td>
+          <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+
+        <ng-container matColumnDef="createdBy">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="createdBy"> Salesperson </th>
+          <td mat-cell *matCellDef="let element"> {{element.createdBy | titlecase}} </td>
+          <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+
+        <ng-container matColumnDef="createdDate">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="createdDate"> Date Issued </th>
+          <td mat-cell *matCellDef="let element"> {{element.createdDate | date:'dd-MM-yyyy HH:mm'}} </td>
+          <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+
+        <ng-container matColumnDef="category">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="category"> Type </th>
+          <td mat-cell *matCellDef="let element">
+            <div *ngIf="element.salesInvoiceType === 'FLOCK'" class="table-content-wrapper">
+              <img class="table-content-icon" src='./assets/flaticon/flock.png'>
+              <div class="table-content-text">Flock - <strong>{{element.flockType | titlecase}}</strong></div>
+            </div>
+            <div *ngIf="element.salesInvoiceType === 'EGG'" class="table-content-wrapper">
+              <img class="table-content-icon" src='./assets/flaticon/eggs.png'>
+              <div class="table-content-text">Egg - <strong>{{element.eggCategoryName}}</strong></div>
+            </div>
+            <div *ngIf="element.salesInvoiceType === 'MANURE'" class="table-content-wrapper">
+              <img class="table-content-icon" src='./assets/flaticon/manure-bag.png'>
+              <div class="table-content-text">Fertilizer - <strong>{{element.manureWeightPerBag}} Kg</strong></div>
+            </div>
+            <div *ngIf="element.salesInvoiceType === 'FEED'" class="table-content-wrapper">
+              <img class="table-content-icon" src='./assets/flaticon/feed.png'>
+              <div class="table-content-text">Feed - <strong>{{element.feedName}}</strong> -
+                <strong>{{element.feedWeightPerBag}} Kg</strong>
+              </div>
+            </div>
+          </td>
+          <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+
+        <ng-container matColumnDef="quantity">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="quantity"> Quantity </th>
+          <td mat-cell *matCellDef="let element">
+            <div *ngIf="element.salesInvoiceType === 'EGG'" class="table-content-wrapper">
+              {{element.quantity}} - <strong> {{element.eggQuantityType | titlecase}}</strong>
+            </div>
+            <div *ngIf="element.salesInvoiceType == 'MANURE' || element.salesInvoiceType == 'FEED'"
+              class="table-content-wrapper">
+              {{element.quantity}} - Bags
+            </div>
+            <div *ngIf="element.salesInvoiceType == 'FLOCK'" class="table-content-wrapper">
+              {{element.quantity}}
+            </div>
+          </td>
+          <td mat-footer-cell *matFooterCellDef>
+            <div *ngIf="salesInvoiceType === 'EGG' || !salesInvoiceType">
+              <span><strong>Eggs:</strong> </span>
+              <div class="ml-1">Tie: {{getTotalQuantityEggTie()}}</div>
+              <div class="ml-1">Tray: {{getTotalQuantityEggTray()}}</div>
+              <div class="ml-1">Piece: {{getTotalQuantityEggPiece()}}</div>
+            </div>
+
+            <div *ngIf="salesInvoiceType === 'FLOCK' || !salesInvoiceType">
+              <span><strong>Flock:</strong> {{getTotalQuantityFlock()}}</span>
+            </div>
+
+            <div *ngIf="salesInvoiceType === 'FEED' || !salesInvoiceType">
+              <span><strong>Feed:</strong> {{getTotalQuantityFeed()}} - Bags</span>
+            </div>
+            
+            <div *ngIf="salesInvoiceType === 'MANURE' || !salesInvoiceType">
+              <span><strong>Fertilizer:</strong> {{getTotalQuantityManure()}} - Bags</span>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="price">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="price"> Price </th>
+          <td mat-cell *matCellDef="let element"> {{element.price | number :'1.2-2'}} </td>
+          <td mat-footer-cell *matFooterCellDef>{{getTotalPrice() | number :'1.2-2'}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="totalPrice">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="totalPrice"> Total Price </th>
+          <td mat-cell *matCellDef="let element"> {{element.totalPrice | number :'1.2-2'}} </td>
+          <td mat-footer-cell *matFooterCellDef>{{getTotalTotalPrice() | number :'1.2-2'}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="soldAt">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="soldAt"> Sold At </th>
+          <td mat-cell *matCellDef="let element"> {{element.soldAt | number :'1.2-2'}} </td>
+          <td mat-footer-cell *matFooterCellDef>{{getTotalSoldAt() | number :'1.2-2'}}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+      </table>
+    </div>
+  </ion-card>
+  <ion-infinite-scroll threshold="100px" position="bottom" (ionInfinite)="loadData($event)">
+    <ion-infinite-scroll-content loadingSpinner="crescent" loadingText="Loading more sales invoices...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>

@@ -45,7 +45,7 @@
           <div>
             <span class="main"><strong>Return No: {{returnInvoiceFront.id}}</strong></span>
             <div class="sub"><strong>Date Issued:</strong> </div>
-            <div class="sub">{{returnInvoiceFront   .createdDate | date:'EEEE, MMMM d, y HH:mm'}}
+            <div class="sub">{{returnInvoiceFront .createdDate | date:'EEEE, MMMM d, y HH:mm'}}
             </div>
           </div>
         </div>
@@ -92,9 +92,8 @@
             </tr>
             <tr *ngIf="invoiceDetail.returnInvoiceType === 'EGG'">
               <td data-label="No.">{{i + 1}}</td>
-              <td data-label="Product">EGG - <strong>{{invoiceDetail?.eggType | uppercase}}</strong></td>
-              <td data-label="Quantity">{{invoiceDetail?.quantity}} - <strong>{{invoiceDetail.eggQuantityType |
-                  uppercase}}</strong></td>
+              <td data-label="Product">EGG - <strong>{{invoiceDetail?.eggCategory | uppercase}}</strong></td>
+              <td data-label="Quantity">{{invoiceDetail?.quantity}} - <strong>PIECE</strong></td>
               <td data-label="Unit Price">Rp {{invoiceDetail?.price | number : '1.2-2'}}</td>
               <td data-label="Amount">Rp {{invoiceDetail.quantity * invoiceDetail.price | number : '1.2-2'}}</td>
             </tr>
@@ -102,6 +101,14 @@
               <td data-label="No.">{{i + 1}}</td>
               <td data-label="Product">CHICKEN - <strong>{{invoiceDetail.flockType | uppercase}}</strong></td>
               <td data-label="Quantity">{{invoiceDetail?.quantity}}</td>
+              <td data-label="Unit Price">Rp {{invoiceDetail?.price | number : '1.2-2'}}</td>
+              <td data-label="Amount">Rp {{invoiceDetail.quantity * invoiceDetail.price | number : '1.2-2'}}</td>
+            </tr>
+            <tr *ngIf="invoiceDetail.returnInvoiceType === 'FEED'">
+              <td data-label="No.">{{i + 1}}</td>
+              <td data-label="Product">FEED - <strong>{{invoiceDetail.feedName | uppercase}}</strong></td>
+              <td data-label="Quantity">{{invoiceDetail?.quantity}} - <strong>BAG(S)</strong> -
+                {{invoiceDetail.feedWeightPerBag}} KG</td>
               <td data-label="Unit Price">Rp {{invoiceDetail?.price | number : '1.2-2'}}</td>
               <td data-label="Amount">Rp {{invoiceDetail.quantity * invoiceDetail.price | number : '1.2-2'}}</td>
             </tr>

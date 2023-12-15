@@ -392,7 +392,16 @@ ion-radio {
 
 .amount-due-customer-sale {
     text-decoration: underline;
+
     &:hover {
         cursor: pointer;
+    }
+}
+
+.table-link {
+    text-decoration: underline;
+
+    &:hover {
+        color: blue;
     }
 }

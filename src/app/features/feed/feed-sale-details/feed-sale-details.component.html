@@ -294,12 +294,12 @@
                 <ion-col size-xs="12" size-md="4">
                   <ion-input color="gunung-nago-primary" label="Quantity" label-placement="floating" fill="outline"
                     type="number" clear-input="true" required="true" [(ngModel)]="productInCart.quantity"
-                    (ngModelChange)="calculateSubTotal()"></ion-input>
+                    (ionInput)="calculateSubTotal()"></ion-input>
                 </ion-col>
                 <ion-col size-xs="12" size-md="4">
                   <ion-input color="gunung-nago-primary" label="Price" label-placement="floating" fill="outline"
                     type="number" clear-input="true" required="true" [(ngModel)]="productInCart.price"
-                    (ngModelChange)="calculateSubTotal()"></ion-input>
+                    (ionInput)="calculateSubTotal()"></ion-input>
                 </ion-col>
                 <div class="total-per ml-05">
                   <strong>Amount: {{(productInCart.quantity? productInCart.quantity : 0) * (productInCart.price?

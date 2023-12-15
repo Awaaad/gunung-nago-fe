@@ -22,9 +22,12 @@ import { MatMenuModule } from '@angular/material/menu';
 import { PaymentApiService } from 'src/app/shared/apis/payment.api.service';
 import { SalesInvoiceCustomerCreditListComponent } from './sales-invoice-customer-credit-list/sales-invoice-customer-credit-list.component';
 import { MatIconModule } from '@angular/material/icon';
+import { SalesInvoiceByTypeListComponent } from './sales-invoice-by-type-list/sales-invoice-by-type-list.component';
+import { ManureStockApiService } from 'src/app/shared/apis/manure-stock.api.service';
+import { EggCategoryApiService } from 'src/app/shared/apis/egg-category.api.service';
 
 @NgModule({
-  declarations: [SalesInvoiceListComponent, SalesInvoiceDetailsComponent, SalesInvoiceCustomerCreditListComponent],
+  declarations: [SalesInvoiceListComponent, SalesInvoiceDetailsComponent, SalesInvoiceCustomerCreditListComponent, SalesInvoiceByTypeListComponent],
   imports: [
     CommonModule,
     SalesInvoiceRoutingModule,
@@ -42,6 +45,6 @@ import { MatIconModule } from '@angular/material/icon';
     MatMenuModule,
     MatIconModule
   ],
-  providers: [SalesInvoiceApiService, ReceiptApiService, SecurityApiService, FileApiService, PaymentApiService]
+  providers: [SalesInvoiceApiService, ReceiptApiService, SecurityApiService, FileApiService, PaymentApiService, ManureStockApiService, EggCategoryApiService]
 })
 export class SalesInvoiceModule { }
