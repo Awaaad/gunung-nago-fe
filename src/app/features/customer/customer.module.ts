@@ -15,10 +15,13 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { IonicModule } from '@ionic/angular';
 import { TranslateModule } from '@ngx-translate/core';
 import { CustomerApiService } from 'src/app/shared/apis/customer.api.service';
+import { SalesInvoiceApiService } from 'src/app/shared/apis/sales-invoice.api.service';
+import { CustomerStatementOfAccountComponent } from './customer-statement-of-account/customer-statement-of-account.component';
+import { FileApiService } from 'src/app/shared/apis/file.api.service';
 
 
 @NgModule({
-  declarations: [CustomerDetailsComponent, CustomerListComponent],
+  declarations: [CustomerDetailsComponent, CustomerListComponent, CustomerStatementOfAccountComponent],
   imports: [
     CommonModule,
     CustomerRoutingModule,
@@ -34,6 +37,6 @@ import { CustomerApiService } from 'src/app/shared/apis/customer.api.service';
     MatDatepickerModule,
     MatInputModule
   ],
-  providers: [CustomerApiService]
+  providers: [CustomerApiService, SalesInvoiceApiService, FileApiService]
 })
 export class CustomerModule { }

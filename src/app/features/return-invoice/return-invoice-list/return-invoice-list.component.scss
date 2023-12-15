@@ -169,3 +169,8 @@ tbody {
     display: flex;
     font-size:2em;
 }
+
+.mat-column-totalPrice {
+    text-align: right;
+    justify-content: flex-end;
+}

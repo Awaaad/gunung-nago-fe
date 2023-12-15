@@ -212,20 +212,20 @@
           <td mat-footer-cell *matFooterCellDef>
             <div *ngIf="salesInvoiceType === 'EGG' || !salesInvoiceType">
               <span><strong>Eggs:</strong> </span>
-              <div class="ml-1">Tie: {{getTotalQuantityEggTie()}}</div>
-              <div class="ml-1">Tray: {{getTotalQuantityEggTray()}}</div>
-              <div class="ml-1">Piece: {{getTotalQuantityEggPiece()}}</div>
+              <div class="ml-1 mtx-5"><strong>Tie:</strong> {{getTotalQuantityEggTie()}}</div>
+              <div class="ml-1 mtx-5"><strong>Tray:</strong> {{getTotalQuantityEggTray()}}</div>
+              <div class="ml-1 mtx-5 mbx-5"><strong>Piece:</strong> {{getTotalQuantityEggPiece()}}</div>
             </div>
 
-            <div *ngIf="salesInvoiceType === 'FLOCK' || !salesInvoiceType">
+            <div class="mbx-5" *ngIf="salesInvoiceType === 'FLOCK' || !salesInvoiceType">
               <span><strong>Flock:</strong> {{getTotalQuantityFlock()}}</span>
             </div>
 
-            <div *ngIf="salesInvoiceType === 'FEED' || !salesInvoiceType">
+            <div class="mbx-5" *ngIf="salesInvoiceType === 'FEED' || !salesInvoiceType">
               <span><strong>Feed:</strong> {{getTotalQuantityFeed()}} - Bags</span>
             </div>
-            
-            <div *ngIf="salesInvoiceType === 'MANURE' || !salesInvoiceType">
+
+            <div class="mbx-5" *ngIf="salesInvoiceType === 'MANURE' || !salesInvoiceType">
               <span><strong>Fertilizer:</strong> {{getTotalQuantityManure()}} - Bags</span>
             </div>
           </td>

@@ -164,3 +164,26 @@ tbody {
     display: flex;
     justify-content: flex-end;
 }
+
+.mtx-5 {
+    margin-top: 5px;
+}
+
+.mbx-5 {
+    margin-bottom: 5px;
+}
+
+.mat-column-price {
+    text-align: right;
+    justify-content: flex-end;
+}
+
+.mat-column-totalPrice {
+    text-align: right;
+    justify-content: flex-end;
+}
+
+.mat-column-soldAt {
+    text-align: right;
+    justify-content: flex-end;
+}

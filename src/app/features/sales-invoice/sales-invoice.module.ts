@@ -25,6 +25,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { SalesInvoiceByTypeListComponent } from './sales-invoice-by-type-list/sales-invoice-by-type-list.component';
 import { ManureStockApiService } from 'src/app/shared/apis/manure-stock.api.service';
 import { EggCategoryApiService } from 'src/app/shared/apis/egg-category.api.service';
+import { CustomerApiService } from 'src/app/shared/apis/customer.api.service';
 
 @NgModule({
   declarations: [SalesInvoiceListComponent, SalesInvoiceDetailsComponent, SalesInvoiceCustomerCreditListComponent, SalesInvoiceByTypeListComponent],
@@ -45,6 +46,6 @@ import { EggCategoryApiService } from 'src/app/shared/apis/egg-category.api.serv
     MatMenuModule,
     MatIconModule
   ],
-  providers: [SalesInvoiceApiService, ReceiptApiService, SecurityApiService, FileApiService, PaymentApiService, ManureStockApiService, EggCategoryApiService]
+  providers: [SalesInvoiceApiService, ReceiptApiService, SecurityApiService, FileApiService, PaymentApiService, ManureStockApiService, EggCategoryApiService, CustomerApiService]
 })
 export class SalesInvoiceModule { }

@@ -23,4 +23,8 @@ export class CustomerApiService {
     public search(searchValues: any): Observable<PageResult<CustomerDto>> {
         return this.http.get<PageResult<CustomerDto>>(`${this.baseUrl}/search`, { params: searchValues });
     }
+
+    public findById(id: number): Observable<CustomerDto> {
+        return this.http.get<CustomerDto>(`${this.baseUrl}/${id}`);
+    }
 }

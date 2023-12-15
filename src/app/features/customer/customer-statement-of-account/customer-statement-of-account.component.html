@@ -1,3 +1,162 @@
-<p>
-  customer-statement-of-account works!
-</p>
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      <div class="router-links">
+        <div class="title">
+          <img class="header-logo" src='./assets/flaticon/official-documents.png'>
+          <h3 class="header-nav-products">Sales Invoice</h3>
+        </div>
+        <div>
+          <ion-item class="language-selection">
+            <ion-select aria-label="language" interface="popover" placeholder="Select language" [(ngModel)]="language"
+              (ionChange)="ionChangeLanguage($event)">
+              <ion-select-option value="en">English</ion-select-option>
+              <ion-select-option value="id">Indonesian</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </div>
+      </div>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="invoice-margin">
+    <ion-card class="invoice">
+      <ion-card-content>
+        <div class="invoice-title">
+          <div>
+            <div class="invoice-logo">
+              <img class="logo-img" src='./assets/icon/chicken/icons8-chicken-64.png'>
+              <h5 class="logo-text"><strong>{{company}}</strong></h5>
+            </div>
+            <div>
+              <div class="sub"><strong>Address:</strong> {{address}} </div>
+              <div class="sub"><strong>Telephone Number(s):</strong> {{phone}}</div>
+              <div class="sub"><strong>Email:</strong> {{email}}</div>
+              <!-- <div class="sub"><strong>Registration Number (SIUP):</strong> {{regNo}}</div> -->
+              <div class="sub"><strong>Year of Establishment:</strong> {{yoe}}</div>
+            </div>
+          </div>
+
+          <div>
+            <span class="main"><strong>Invoice No: {{salesInvoiceDetailsFrontDto.id}}</strong></span>
+            <div class="sub"><strong>Date Issued:</strong> </div>
+            <div class="sub">{{salesInvoiceDetailsFrontDto.createdDate | date:'EEEE, MMMM d, y HH:mm'}}
+            </div>
+          </div>
+        </div>
+        <div class="invoice-subtitle">
+          <div *ngIf="salesInvoiceDetailsFrontDto.customerFirstName != 'anonymous'">
+            <div class="sub"><strong>Invoice To:</strong></div>
+            <span class="sub"><strong>Name:
+              </strong> {{salesInvoiceDetailsFrontDto.customerFirstName}}
+              {{salesInvoiceDetailsFrontDto.customerLastName}}</span>
+            <div class="sub">
+              <strong>Address:</strong> {{salesInvoiceDetailsFrontDto.customerAddress}}
+            </div>
+            <div class="sub"><strong>Telephone
+                Number:</strong> {{salesInvoiceDetailsFrontDto.customerTelephoneNumber}}</div>
+          </div>
+          <div>
+            <div *ngIf="salesInvoiceDetailsFrontDto.salesPerson != null" class="salesperson">
+              <div class="sub"><strong>Salesperson:</strong> {{salesInvoiceDetailsFrontDto.salesPerson}}</div>
+            </div>
+            <div *ngIf="salesInvoiceDetailsFrontDto.driverFirstName != null">
+              <div class="sub"><strong>Driver:</strong> {{salesInvoiceDetailsFrontDto.driverFirstName}}
+                {{salesInvoiceDetailsFrontDto.driverLastName}}</div>
+            </div>
+          </div>
+        </div>
+
+        <table class="invoice-table">
+          <thead>
+            <tr>
+              <th scope="col">No.</th>
+              <th scope="col">Product</th>
+              <th scope="col">Quantity</th>
+              <th scope="col">Unit Price</th>
+              <th scope="col">Amount</th>
+            </tr>
+          </thead>
+          <tbody *ngFor="let invoiceDetail of salesInvoiceDetailsFrontDto?.saleDetailsDtos let i = index">
+            <tr *ngIf="invoiceDetail.salesInvoiceType === 'MANURE'">
+              <td data-label="No.">{{i + 1}}</td>
+              <td data-label="Product">FERTILIZER</td>
+              <td data-label="Quantity">{{invoiceDetail?.quantity}} - <strong>BAG(S)</strong> -
+                {{invoiceDetail.manureWeightPerBag}} KG</td>
+              <td data-label="Unit Price">Rp {{invoiceDetail?.price | number : '1.2-2'}}</td>
+              <td data-label="Amount">Rp {{invoiceDetail.quantity * invoiceDetail.price | number : '1.2-2'}}</td>
+            </tr>
+            <tr *ngIf="invoiceDetail.salesInvoiceType === 'EGG'">
+              <td data-label="No.">{{i + 1}}</td>
+              <td data-label="Product">EGG - <strong>{{invoiceDetail?.eggType | uppercase}}</strong></td>
+              <td data-label="Quantity">{{invoiceDetail?.quantity}} - <strong>{{invoiceDetail.eggQuantityType |
+                  uppercase}}</strong></td>
+              <td data-label="Unit Price">Rp {{invoiceDetail?.price | number : '1.2-2'}}</td>
+              <td data-label="Amount">Rp {{invoiceDetail.quantity * invoiceDetail.price | number : '1.2-2'}}</td>
+            </tr>
+            <tr *ngIf="invoiceDetail.salesInvoiceType === 'FLOCK'">
+              <td data-label="No.">{{i + 1}}</td>
+              <td data-label="Product">CHICKEN - <strong>{{invoiceDetail.flockType | uppercase}}</strong></td>
+              <td data-label="Quantity">{{invoiceDetail?.quantity}}</td>
+              <td data-label="Unit Price">Rp {{invoiceDetail?.price | number : '1.2-2'}}</td>
+              <td data-label="Amount">Rp {{invoiceDetail.quantity * invoiceDetail.price | number : '1.2-2'}}</td>
+            </tr>
+            <tr *ngIf="invoiceDetail.salesInvoiceType === 'FEED'">
+              <td data-label="No.">{{i + 1}}</td>
+              <td data-label="Product">FEED - <strong>{{invoiceDetail.feedName | uppercase}}</strong></td>
+              <td data-label="Quantity">{{invoiceDetail?.quantity}} - <strong>BAG(S)</strong> -
+                {{invoiceDetail.feedWeightPerBag}} KG</td>
+              <td data-label="Unit Price">Rp {{invoiceDetail?.price | number : '1.2-2'}}</td>
+              <td data-label="Amount">Rp {{invoiceDetail.quantity * invoiceDetail.price | number : '1.2-2'}}</td>
+            </tr>
+          </tbody>
+          <!-- <tfoot>
+            <tr>
+              <th id="total" colspan="1">Total :</th>
+              <td></td>
+              <td>{{totalQuantityManure}}</td>
+              <td>Rp {{totalPriceManure | number :'1.2-2'}}</td>
+            </tr>
+          </tfoot> -->
+        </table>
+
+        <div class="invoice-footer">
+          <div>
+          </div>
+          <div>
+            <div class="invoice-date-title">
+              <table class="summary-table">
+                <tbody>
+                  <tr>
+                    <th id="total" colspan="1">SubTotal :</th>
+                    <td>Rp {{salesInvoiceDetailsFrontDto.totalPrice | number :'1.2-2'}}</td>
+                  </tr>
+                  <tr>
+                    <th id="total" colspan="1">Discount :</th>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <th id="total" colspan="1">Tax :</th>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <th id="total" colspan="1">Total :</th>
+                    <td>Rp {{salesInvoiceDetailsFrontDto.totalPrice | number :'1.2-2'}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <textarea name="" id="" cols="30" rows="3" [disabled]="true">{{salesInvoiceDetailsFrontDto.comment}}</textarea>
+      </ion-card-content>
+    </ion-card>
+    <ion-button color="neutral-btn" class="print" (click)="generateSaleInvoicePdf()">Print</ion-button>
+  </div>
+</ion-content>

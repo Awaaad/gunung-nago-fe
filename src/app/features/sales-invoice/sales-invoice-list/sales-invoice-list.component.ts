@@ -1,14 +1,14 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { IonInfiniteScroll, IonModal } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { BankAccountDto, PaymentDto, PaymentModeDto, SalesInvoiceCategory, SalesInvoiceDto, SalesInvoiceStatus, SalesInvoiceType, UserDto } from 'generated-src/model';
+import { BankAccountDto, CustomerDto, PaymentDto, PaymentModeDto, SalesInvoiceCategory, SalesInvoiceDto, SalesInvoiceStatus, SalesInvoiceType, UserDto } from 'generated-src/model';
 import { Subscription } from 'rxjs';
 import { UtilsService } from 'src/app/shared/utils/utils.service';
 import { SalesInvoiceApiService } from 'src/app/shared/apis/sales-invoice.api.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SecurityApiService } from 'src/app/shared/apis/security.api.service';
 import { OverlayEventDetail } from '@ionic/core/components';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -18,13 +18,16 @@ import { SalesInvoiceSettleCreditPaymentFrontDto } from 'generated-src/model-fro
 import { PaymentApiService } from 'src/app/shared/apis/payment.api.service';
 import { PaymentModeApiService } from 'src/app/shared/apis/payment-mode.api.service';
 import { BankAccountApiService } from 'src/app/shared/apis/bank-account.api.service';
+import { CustomerApiService } from 'src/app/shared/apis/customer.api.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-sales-invoice-list',
   templateUrl: './sales-invoice-list.component.html',
   styleUrls: ['./sales-invoice-list.component.scss'],
 })
-export class SalesInvoiceListComponent {
+export class SalesInvoiceListComponent implements OnInit {
+  public customerId: any = this.activatedRoute.snapshot.paramMap.get('customerId');
   @ViewChild('picker') picker: any;
   @ViewChild(IonInfiniteScroll, { static: true }) infiniteScroll!: IonInfiniteScroll;
   @ViewChild(IonModal) modal!: IonModal;
@@ -35,6 +38,7 @@ export class SalesInvoiceListComponent {
   public displayedColumns: string[] = ['id', 'name', 'createdBy', 'createdDate', 'category', 'driver', 'totalPrice', 'soldAt', 'amountPaid', 'amountDue', 'status', 'actions'];
   public salesInvoices = new MatTableDataSource<SalesInvoiceDto>;
   private infiniteSalesInvoices: SalesInvoiceDto[] = [];
+  public statementInvoices: SalesInvoiceDto[] = [];
   public salesInvoiceSearchSubscription!: Subscription;
   private page: number = 0;
   private size: number = 50;
@@ -60,9 +64,24 @@ export class SalesInvoiceListComponent {
   public paymentForm!: FormGroup;
   private salesInvoiceSettleCreditPaymentFrontDto!: SalesInvoiceSettleCreditPaymentFrontDto;
   public amountDue!: number;
+  public lastName!: string;
+  public firstName!: string;
 
   public bankAccounts: BankAccountDto[] = [];
   public paymentModes: PaymentModeDto[] = [];
+
+  public generateStatementOfAccount: boolean = false;
+  public preview: boolean = false;
+  public statementOfAccountDateFrom!: Date | null;
+  public statementOfAccountDateTo!: Date | null;
+
+  public customer!: CustomerDto;
+  public company = environment.company;
+  public address = environment.address;
+  public phone = environment.phone;
+  public email = environment.email;
+  public regNo = environment.regNo;
+  public yoe = environment.yoe;
 
   public errorMessages = {
     name: [
@@ -102,6 +121,8 @@ export class SalesInvoiceListComponent {
   };
 
   constructor(
+    private readonly activatedRoute: ActivatedRoute,
+    private customerApiService: CustomerApiService,
     private salesInvoiceApiService: SalesInvoiceApiService,
     private paymentApiService: PaymentApiService,
     private formBuilder: FormBuilder,
@@ -114,16 +135,56 @@ export class SalesInvoiceListComponent {
   ) {
   }
 
+  ngOnInit() {
+    this.initialiseCustomer();
+    this.statementInvoices = [];
+    this.statementOfAccountDateFrom = null;
+    this.statementOfAccountDateTo = null;
+  }
+
   ionViewWillEnter(): void {
+    this.statementInvoices = [];
+    this.initialiseCustomer();
     this.isStatusModalOpen = false;
     this.salesInvoiceTypes = Object.keys(SalesInvoiceType);
     this.salesInvoiceStatuses = Object.keys(SalesInvoiceStatus);
     this.salesInvoiceCategories = Object.keys(SalesInvoiceCategory);
+    if (this.customerId) {
+      this.getRouteParams();
+    }
     this.getAllPaymentModes();
     this.getAllBankAccounts();
     this.getAllUsernames();
     this.getAllDrivers();
     this.search();
+  }
+
+  private getRouteParams(): void {
+    this.activatedRoute.queryParams
+      .subscribe(params => {
+        this.lastName = params['lastName'];
+        this.firstName = params['firstName'];
+      }
+      );
+  }
+
+  private initialiseCustomer(): void {
+    this.customer = {
+      id: 0,
+      firstName: "",
+      lastName: "",
+      address: "",
+      telephoneNumber: 0,
+      telephoneNumberTwo: 0,
+      telephoneNumberThree: 0,
+      totalAmountDue: 0
+    }
+  }
+
+  private getCustomerById(): void {
+    this.customerApiService.findById(this.customerId).subscribe(customer => {
+      this.customer = customer;
+    })
   }
 
   public getAllPaymentModes() {
@@ -137,7 +198,6 @@ export class SalesInvoiceListComponent {
       this.bankAccounts = bankAccounts;
     })
   }
-
 
   public ionChangeLanguage(event: any): void {
     this.translateService.use(event.detail.value);
@@ -249,6 +309,7 @@ export class SalesInvoiceListComponent {
       this.salesInvoices = new MatTableDataSource<SalesInvoiceDto>([]);
     }
     const salesInvoiceSearchCriteriaDto: any = {
+      customerId: this.customerId === '' || this.customerId === null ? null : this.customerId,
       createdBy: this.username === '' || this.username === null ? null : this.username,
       driverId: this.selectedDriverId === '0' || this.selectedDriverId === null ? '' : this.selectedDriverId,
       dateFrom: this.dateFrom === null ? '' : this.dateFrom,
@@ -266,6 +327,9 @@ export class SalesInvoiceListComponent {
     if (salesInvoiceSearchCriteriaDto.createdBy === null) {
       delete salesInvoiceSearchCriteriaDto.createdBy;
     }
+    if (salesInvoiceSearchCriteriaDto.customerId === null) {
+      delete salesInvoiceSearchCriteriaDto.customerId;
+    }
 
     this.salesInvoiceSearchSubscription = this.salesInvoiceApiService.search(salesInvoiceSearchCriteriaDto).subscribe(salesInvoices => {
       this.infiniteSalesInvoices = [...this.infiniteSalesInvoices, ...salesInvoices.content];
@@ -276,6 +340,108 @@ export class SalesInvoiceListComponent {
         event.returnValue = false;
       }
     })
+  }
+
+  public previewStatement(event: any): void {
+    if (event.detail.checked) {
+      this.generateStatement();
+    }
+    this.preview = event.detail.checked;
+  }
+
+  public changeReportDateFrom(event: any): void {
+    if (!event) {
+      this.preview = false;
+    }
+  }
+
+  public changeReportDateTo(event: any): void {
+    if (!event) {
+      this.preview = false;
+    }
+  }
+
+  public generateStatement(): void {
+    this.getCustomerById();
+    this.statementInvoices = [];
+    const salesInvoiceSearchCriteriaDto: any = {
+      customerId: this.customerId === '' || this.customerId === null ? null : this.customerId,
+      dateFrom: this.statementOfAccountDateFrom === null ? '' : moment(this.statementOfAccountDateFrom).startOf('day').format(moment.HTML5_FMT.DATETIME_LOCAL),
+      dateTo: this.statementOfAccountDateTo === null ? '' : moment(this.statementOfAccountDateTo).startOf('day').format(moment.HTML5_FMT.DATETIME_LOCAL),
+
+      sortBy: this.sortBy,
+      sortOrder: this.sortOrder.toUpperCase(),
+    }
+
+    if (salesInvoiceSearchCriteriaDto.customerId === null) {
+      delete salesInvoiceSearchCriteriaDto.customerId;
+    }
+
+    this.salesInvoiceSearchSubscription = this.salesInvoiceApiService.generateStatement(salesInvoiceSearchCriteriaDto).subscribe(salesInvoices => {
+      this.statementInvoices = salesInvoices.content;
+    })
+  }
+
+  public getTotalReturn(paymentDto: PaymentDto[]): number {
+    let sum = 0;
+    paymentDto.forEach(payment => {
+      if (payment.settled && payment.amountPaid < 0) {
+        sum = sum + (payment.amountPaid * -1);
+      }
+    })
+    return sum;
+  }
+
+  public getTotalAmountPaidPerInvoice(paymentDto: PaymentDto[]): number {
+    let sum = 0;
+    paymentDto.forEach(payment => {
+      if (payment.paymentModeId !== 1 && payment.settled)
+        sum = sum + payment.amountPaid;
+    })
+    return sum;
+  }
+
+  public getTotalCreditAmountPerInvoice(paymentDto: PaymentDto[]): number {
+    let sum = 0;
+    paymentDto.forEach(payment => {
+      if (payment.paymentModeId == 1 && !payment.settled)
+        sum = sum + payment.amountPaid;
+    })
+    return sum;
+  }
+  
+  public getTotalInvoicePrice(): number {
+    let sum = 0;
+    this.statementInvoices.forEach(salesInvoice => {
+      sum = sum + salesInvoice.soldAt;
+    })
+    return sum;
+  }
+
+  public getTableTotalReturnAmount(): number {
+    const total = this.statementInvoices.map(data => {
+      let totalAmount = 0;
+      data.paymentDtos.forEach(payment => {
+        if (payment.settled && payment.amountPaid < 0) {
+          totalAmount = totalAmount + (payment.amountPaid * -1);
+        }
+      })
+      return totalAmount;
+    }).reduce((acc, value) => acc + value, 0);
+    return total;
+  }
+
+  public getTableTotalAmountDue(): number {
+    const total = this.statementInvoices.map(data => {
+      let totalAmount = 0;
+      data.paymentDtos.forEach(payment => {
+        if (!payment.settled && payment.paymentModeId == 1) {
+          totalAmount = totalAmount + payment.amountPaid;
+        }
+      })
+      return totalAmount;
+    }).reduce((acc, value) => acc + value, 0);
+    return total;
   }
 
   public reset(): void {
@@ -289,7 +455,6 @@ export class SalesInvoiceListComponent {
     this.salesInvoiceCategory = '';
     this.username = '';
     this.amountDue = 0;
-    this.initialisePaymentFormBuilder();
     this.utilsService.presentLoadingDuration(500).then(() => {
       this.search();
     });

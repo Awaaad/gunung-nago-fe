@@ -7,7 +7,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IonInfiniteScroll, IonModal } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { SalesInvoiceDto, UserDto, SalesInvoiceType, SalesInvoiceStatus, SalesInvoiceCategory, PaymentDto, BankAccountDto, PaymentModeDto } from 'generated-src/model';
+import { SalesInvoiceDto, UserDto, SalesInvoiceType, SalesInvoiceStatus, SalesInvoiceCategory, PaymentDto, BankAccountDto, PaymentModeDto, CustomerDto } from 'generated-src/model';
 import { SettleCustomerCreditPaymentFrontDto } from 'generated-src/model-front';
 import * as moment from 'moment';
 import { Subscription } from 'rxjs';
@@ -18,13 +18,15 @@ import { UtilsService } from 'src/app/shared/utils/utils.service';
 import { OverlayEventDetail } from '@ionic/core/components';
 import { PaymentModeApiService } from 'src/app/shared/apis/payment-mode.api.service';
 import { BankAccountApiService } from 'src/app/shared/apis/bank-account.api.service';
+import { environment } from 'src/environments/environment';
+import { CustomerApiService } from 'src/app/shared/apis/customer.api.service';
 
 @Component({
   selector: 'app-sales-invoice-customer-credit-list',
   templateUrl: './sales-invoice-customer-credit-list.component.html',
   styleUrls: ['./sales-invoice-customer-credit-list.component.scss'],
 })
-export class SalesInvoiceCustomerCreditListComponent {
+export class SalesInvoiceCustomerCreditListComponent implements OnInit {
   public customerId: any = this.activatedRoute.snapshot.paramMap.get('customerId');
   @ViewChild('picker') picker: any;
   @ViewChild(IonInfiniteScroll, { static: true }) infiniteScroll!: IonInfiniteScroll;
@@ -41,8 +43,6 @@ export class SalesInvoiceCustomerCreditListComponent {
   public sortOrder: string = 'desc';
   public sortBy: string = 'createdDate';
   public customerName: string = '';
-  public dateFrom: Date | any = null;
-  public dateTo: Date | any = null;
   public usernames: string[] = [];
   public username: string = '';
   public drivers: UserDto[] = [];
@@ -61,8 +61,6 @@ export class SalesInvoiceCustomerCreditListComponent {
 
   public soldAt: number = 0;
   public amountPaid: number = 0;
-  public lastName!: string;
-  public firstName!: string;
   public totalAmountDue: number = 0;
   public initialTotalAmountDue: number = 0;
   public totalLockedAmountDue: number = 0;
@@ -72,6 +70,17 @@ export class SalesInvoiceCustomerCreditListComponent {
 
   public bankAccounts: BankAccountDto[] = [];
   public paymentModes: PaymentModeDto[] = [];
+
+  public preview: boolean = false;
+  public customer!: CustomerDto;
+  public dateFrom: Date = new Date();
+  public dateTo: Date = new Date();
+  public company = environment.company;
+  public address = environment.address;
+  public phone = environment.phone;
+  public email = environment.email;
+  public regNo = environment.regNo;
+  public yoe = environment.yoe;
 
   public errorMessages = {
     name: [
@@ -112,6 +121,7 @@ export class SalesInvoiceCustomerCreditListComponent {
 
   constructor(
     private readonly activatedRoute: ActivatedRoute,
+    private customerApiService: CustomerApiService,
     private salesInvoiceApiService: SalesInvoiceApiService,
     private paymentApiService: PaymentApiService,
     private formBuilder: FormBuilder,
@@ -124,25 +134,40 @@ export class SalesInvoiceCustomerCreditListComponent {
   ) {
   }
 
+  ngOnInit() {
+    this.initialiseCustomer();
+  }
+
   ionViewWillEnter(): void {
+    this.initialiseCustomer();
     this.salesInvoiceTypes = Object.keys(SalesInvoiceType);
     this.salesInvoiceStatuses = Object.keys(SalesInvoiceStatus);
     this.salesInvoiceCategories = Object.keys(SalesInvoiceCategory);
     this.getAllPaymentModes();
     this.getAllBankAccounts();
-    this.getRouteParams();
     this.getAllUsernames();
     this.getAllDrivers();
+    this.getCustomerById();
     this.search();
   }
 
-  private getRouteParams(): void {
-    this.activatedRoute.queryParams
-      .subscribe(params => {
-        this.lastName = params['lastName'];
-        this.firstName = params['firstName'];
-      }
-      );
+  private initialiseCustomer(): void {
+    this.customer = {
+      id: 0,
+      firstName: "",
+      lastName: "",
+      address: "",
+      telephoneNumber: 0,
+      telephoneNumberTwo: 0,
+      telephoneNumberThree: 0,
+      totalAmountDue: 0
+    }
+  }
+
+  private getCustomerById(): void {
+    this.customerApiService.findById(this.customerId).subscribe(customer => {
+      this.customer = customer;
+    })
   }
 
   public getAllPaymentModes() {
@@ -156,7 +181,6 @@ export class SalesInvoiceCustomerCreditListComponent {
       this.bankAccounts = bankAccounts;
     })
   }
-
 
   public ionChangeLanguage(event: any): void {
     this.translateService.use(event.detail.value);
@@ -224,21 +248,7 @@ export class SalesInvoiceCustomerCreditListComponent {
     });
   }
 
-  public clearDateFrom(): void {
-    this.dateFrom = null;
-    this.utilsService.presentLoadingDuration(500).then(() => {
-      this.search();
-    });
-  }
-
   public selectDateTo(): void {
-    this.utilsService.presentLoadingDuration(500).then(() => {
-      this.search();
-    });
-  }
-
-  public clearDateTo(): void {
-    this.dateTo = null;
     this.utilsService.presentLoadingDuration(500).then(() => {
       this.search();
     });
@@ -253,9 +263,6 @@ export class SalesInvoiceCustomerCreditListComponent {
     const salesInvoiceSearchCriteriaDto: any = {
       customerId: this.customerId,
       credit: true,
-
-      page: this.page,
-      size: this.size,
       sortBy: this.sortBy,
       sortOrder: this.sortOrder.toUpperCase(),
     }
@@ -283,8 +290,7 @@ export class SalesInvoiceCustomerCreditListComponent {
   }
 
   public reset(): void {
-    this.dateFrom = null;
-    this.dateTo = null;
+    this.preview = false;
     this.customerName = '';
     this.salesInvoiceType = '';
     this.salesInvoiceStatus = '';
@@ -298,7 +304,6 @@ export class SalesInvoiceCustomerCreditListComponent {
     this.totalLockedAmountDue = 0;
     this.totalUnlockedAmountDue = 0;
     this.discountOnTotalCredit = 0;
-    this.getRouteParams();
     this.paymentDeadline = moment(this.today).startOf('day').format(moment.HTML5_FMT.DATE);
 
     this.initialisePaymentFormBuilder();
@@ -327,13 +332,83 @@ export class SalesInvoiceCustomerCreditListComponent {
     })
   }
 
-  public getTotalAmountPaid(paymentDto: PaymentDto[]): number {
+  public getTotalAmountPaidPerInvoice(paymentDto: PaymentDto[]): number {
     let sum = 0;
     paymentDto.forEach(payment => {
-      if (payment.paymentModeId !== 1)
+      if (payment.paymentModeId !== 1 && payment.settled)
         sum = sum + payment.amountPaid;
     })
     return sum;
+  }
+
+  public getTotalCreditAmountPerInvoice(paymentDto: PaymentDto[]): number {
+    let sum = 0;
+    paymentDto.forEach(payment => {
+      if (payment.paymentModeId == 1 && !payment.settled)
+        sum = sum + payment.amountPaid;
+    })
+    return sum;
+  }
+
+  public getTableTotalAmountPaid(): number {
+    const total = this.salesInvoices.data.map(data => {
+      let totalAmount = 0;
+      data.paymentDtos.forEach(payment => {
+        if (payment.paymentModeId !== 1) {
+          totalAmount = totalAmount + payment.amountPaid;
+        }
+      })
+      return totalAmount;
+    }).reduce((acc, value) => acc + value, 0);
+    if (total != 0) {
+      return total;
+    } else {
+      return 0;
+    }
+  }
+
+  public getTotalInvoicePrice(): number {
+    let sum = 0;
+    this.salesInvoices.data.forEach(salesInvoice => {
+      sum = sum + salesInvoice.soldAt;
+    })
+    return sum;
+  }
+
+  public getBalance(soldAt: number, paymentDto: PaymentDto[]): number {
+    const balance = (soldAt - this.getTotalReturn(paymentDto)) - this.getTotalAmountPaidPerInvoice(paymentDto);
+    if (balance < 0) {
+      return balance * -1
+    } else {
+      return balance
+    }
+  }
+
+  public getTotalReturn(paymentDto: PaymentDto[]): number {
+    let sum = 0;
+    paymentDto.forEach(payment => {
+      if (payment.settled && payment.amountPaid < 0) {
+        sum = sum + (payment.amountPaid * -1);
+      }
+    })
+    return sum;
+  }
+
+  public getTableTotalReturnAmount(): number {
+    const total = this.salesInvoices.data.map(data => {
+      let totalAmount = 0;
+      data.paymentDtos.forEach(payment => {
+        if (payment.settled && payment.amountPaid < 0) {
+          totalAmount = totalAmount + (payment.amountPaid * -1);
+        }
+      })
+      return totalAmount;
+    }).reduce((acc, value) => acc + value, 0);
+    if (total != 0) {
+      return total;
+    } else {
+      return 0;
+    }
   }
 
   public openPaymentModal(): void {

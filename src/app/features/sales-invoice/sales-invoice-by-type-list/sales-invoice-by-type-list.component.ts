@@ -407,8 +407,21 @@ export class SalesInvoiceByTypeListComponent {
     }
   }
 
+  private removeDuplicates(salesInvoiceLineDtos: SalesInvoiceLineDto[]) {
+    const seen = new Set();
+    return salesInvoiceLineDtos.filter(obj => {
+      const value = obj.salesInvoiceId;
+      if (!seen.has(value)) {
+        seen.add(value);
+        return true;
+      }
+      return false;
+    });
+  }
+
   public getTotalSoldAt(): any {
-    const total = this.salesInvoices.data.map(data => data.soldAt).reduce((acc, value) => acc + value, 0);
+    const filteredSalesInvoiceDtos = this.removeDuplicates(this.salesInvoices.data);
+    const total = filteredSalesInvoiceDtos.map(data => data.invoiceSoldAt).reduce((acc, value) => acc + value, 0);
     if (total != 0) {
       return total;
     }

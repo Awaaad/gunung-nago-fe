@@ -19,6 +19,10 @@ export class SalesInvoiceApiService {
         return this.http.get<PageResult<SalesInvoiceLineDto>>(`${this.baseUrl}/search/type`, { params: searchValues });
     }
 
+    public generateStatement(searchValues: any): Observable<PageResult<SalesInvoiceDto>> {
+        return this.http.get<PageResult<SalesInvoiceDto>>(`${this.baseUrl}/search`, { params: searchValues });
+    }
+
     public findSalesInvoiceDetailsById(id: number): Observable<SalesInvoiceDetailsFrontDto> {
         return this.http.get<any>(`${this.baseUrl}/${id}`);
     }

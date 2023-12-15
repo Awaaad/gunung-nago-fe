@@ -25,6 +25,7 @@ export class CustomerListComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   public language = "en";
+  public invoice = 'assets/flaticon/invoice-icon.svg';
   public displayedColumns: string[] = ['firstName', 'lastName', 'email', 'telephoneNumber', 'address', 'edit'];
   public customers = new MatTableDataSource<CustomerDto>;
   private infiniteCustomers: CustomerDto[] = [];
@@ -179,7 +180,11 @@ export class CustomerListComponent {
     this.router.navigate([`customer/customer-statement-of-account/${customer.id}`]);
   }
 
+  public routeToSalesInvoiceList(customer: CustomerDto): void {
+    this.router.navigate([`sales-invoice/sales-invoice-list/${customer.id}`], { queryParams: { lastName: customer.lastName, firstName: customer.firstName } });
+  }
+
   public routeToSalesInvoiceCustomerCreditList(customer: CustomerDto): void {
-    this.router.navigate([`sales-invoice/sales-invoice-customer-credit-list/${customer.id}`], { queryParams: { lastName: customer.lastName, firstName: customer.firstName } });
+    this.router.navigate([`sales-invoice/sales-invoice-customer-credit-list/${customer.id}`]);
   }
 }

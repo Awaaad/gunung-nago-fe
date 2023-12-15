@@ -69,3 +69,8 @@ tbody {
 .mat-mdc-row:hover .mat-mdc-cell {
     background-color: #ececec;
 }
+
+.mat-column-totalPrice {
+    text-align: right;
+    justify-content: flex-end;
+}
