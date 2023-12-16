@@ -35,7 +35,7 @@ export class SalesInvoiceByTypeListComponent {
   @ViewChild(MatSort) sort!: MatSort;
   public returnInvoice = 'assets/flaticon/return-invoice-icon-list.svg';
   public language = "en";
-  public displayedColumns: string[] = ['id', 'name', 'createdBy', 'createdDate', 'category', 'quantity', 'price', 'totalPrice', 'soldAt', 'return', 'returnTotalPrice'];
+  public displayedColumns: string[] = ['id', 'name', 'createdBy', 'createdDate', 'category', 'quantity', 'price', 'totalPrice', 'soldAt', 'return', 'returnTotalPrice', 'balance'];
   public salesInvoices = new MatTableDataSource<SalesInvoiceLineDto>;
   private infiniteSalesInvoices: SalesInvoiceLineDto[] = [];
   public salesInvoiceSearchSubscription!: Subscription;
@@ -477,6 +477,14 @@ export class SalesInvoiceByTypeListComponent {
     return sum;
   }
 
+  public getBalance(soldAt: number, returns: ReturnInvoiceLineDetailsDto[]): number {
+    let sum = 0;
+    returns.forEach(returnInvoice => {
+      sum = sum + returnInvoice.totalPrice;
+    })
+    return soldAt - sum;
+  }
+
   public getTableTotalPriceForReturn(): any {
     const total = this.salesInvoices.data.filter(data => data.returnInvoiceLineDetailsDtos && data.returnInvoiceLineDetailsDtos.length > 0)
       .map(data => data.returnInvoiceLineDetailsDtos)
@@ -508,6 +516,7 @@ export class SalesInvoiceByTypeListComponent {
       return total;
     }
   }
+
   public getTotalReturnQuantityFlock(): any {
     const total = this.salesInvoices.data.filter(data => data.returnInvoiceLineDetailsDtos && data.returnInvoiceLineDetailsDtos.length > 0)
       .map(data => data.returnInvoiceLineDetailsDtos)
@@ -523,6 +532,7 @@ export class SalesInvoiceByTypeListComponent {
       return total;
     }
   }
+
   public getTotalReturnQuantityManure(): any {
     const total = this.salesInvoices.data.filter(data => data.returnInvoiceLineDetailsDtos && data.returnInvoiceLineDetailsDtos.length > 0)
       .map(data => data.returnInvoiceLineDetailsDtos)
@@ -538,6 +548,7 @@ export class SalesInvoiceByTypeListComponent {
       return total;
     }
   }
+
   public getTotalReturnQuantityFeed(): any {
     const total = this.salesInvoices.data.filter(data => data.returnInvoiceLineDetailsDtos && data.returnInvoiceLineDetailsDtos.length > 0)
       .map(data => data.returnInvoiceLineDetailsDtos)
@@ -552,6 +563,10 @@ export class SalesInvoiceByTypeListComponent {
     if (total != 0) {
       return total;
     }
+  }
+
+  public getTableTotalBalance(): any {
+    return this.getTotalSoldAt() - this.getTableTotalPriceForReturn();
   }
 }
 
