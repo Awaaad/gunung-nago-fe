@@ -63,7 +63,6 @@ export class ManureStockComponent implements OnInit {
   public getManures() {
     this.manures = [];
     this.manureStockApiService.findManures().subscribe(manures => {
-      console.log(manures);
       this.manures = manures;
     })
   }

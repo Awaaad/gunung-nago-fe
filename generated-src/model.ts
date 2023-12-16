@@ -933,6 +933,7 @@ export class SalesInvoiceLineDto {
     feedWeightPerBag!: number;
     manureStockId!: number;
     manureWeightPerBag!: number;
+    returnInvoiceLineDetailsDtos!: ReturnInvoiceLineDetailsDto[];
 }
 
 export class SalesInvoiceLineForReturnDto {
