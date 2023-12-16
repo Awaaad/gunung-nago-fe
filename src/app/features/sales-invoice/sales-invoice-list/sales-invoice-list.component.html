@@ -43,6 +43,14 @@
           </div>
         </ion-col>
       </ion-row>
+      <ion-row>
+        <ion-col size-xs="12" size-md="3">
+          <ion-searchbar placeholder="Search by sales invoice number..." type="text" #salesInvoiceNumber
+            (ionInput)="searchBySalesInvoiceNumber(salesInvoiceNumber.value)"></ion-searchbar>
+        </ion-col>
+        <ion-col size-xs="12" size-md="3">
+        </ion-col>
+      </ion-row>
 
       <ion-row>
         <ion-col size-xs="12" size-md="3">

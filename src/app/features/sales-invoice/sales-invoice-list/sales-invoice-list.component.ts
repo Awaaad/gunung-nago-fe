@@ -66,6 +66,7 @@ export class SalesInvoiceListComponent implements OnInit {
   public amountDue!: number;
   public lastName!: string;
   public firstName!: string;
+  public salesInvoiceNumber: string = '';
 
   public bankAccounts: BankAccountDto[] = [];
   public paymentModes: PaymentModeDto[] = [];
@@ -223,6 +224,14 @@ export class SalesInvoiceListComponent implements OnInit {
     this.search();
   }
 
+  public searchBySalesInvoiceNumber(salesInvoiceNumber: any): void {
+    this.salesInvoiceSearchSubscription.unsubscribe();
+    this.salesInvoices = new MatTableDataSource<SalesInvoiceDto>;
+    this.page = 0;
+    this.salesInvoiceNumber = salesInvoiceNumber;
+    this.search();
+  }
+
   public ionChangeType(event: any): void {
     this.salesInvoiceType = event.detail.value;
     this.utilsService.presentLoadingDuration(500).then(() => {
@@ -317,6 +326,7 @@ export class SalesInvoiceListComponent implements OnInit {
       customerName: this.customerName,
       salesInvoiceStatus: this.salesInvoiceStatus,
       salesInvoiceCategory: this.salesInvoiceCategory,
+      id: this.salesInvoiceNumber,
 
       page: this.page,
       size: this.size,
@@ -409,7 +419,7 @@ export class SalesInvoiceListComponent implements OnInit {
     })
     return sum;
   }
-  
+
   public getTotalInvoicePrice(): number {
     let sum = 0;
     this.statementInvoices.forEach(salesInvoice => {

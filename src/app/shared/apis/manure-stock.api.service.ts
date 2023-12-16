@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ManureDto, ManureStockDto } from 'generated-src/model';
+import { PageResult } from 'generated-src/model-front';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
@@ -12,6 +13,14 @@ export class ManureStockApiService {
 
     public findManures(): Observable<ManureDto[]> {
         return this.http.get<ManureDto[]>(`${this.baseUrl}`);
+    }
+
+    public search(searchValues: any): Observable<PageResult<ManureDto>> {
+        return this.http.get<PageResult<ManureDto>>(`${this.baseUrl}/search`, { params: searchValues });
+    }
+
+    public edit(manureDto: ManureDto): Observable<any> {
+        return this.http.put(`${this.baseUrl}`, manureDto);
     }
 
     public findManureStockByManureId(manureId: number): Observable<ManureStockDto[]> {

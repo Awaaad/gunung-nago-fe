@@ -35,6 +35,8 @@ export class BankAccountListComponent {
   public active: boolean | string = '';
   public isModalOpen: boolean = false;
   public accountHolder: string = '';
+  public accountNumber: string = '';
+  public bankName: string = '';
   public errorMessages = {
     accountHolder: [
       { type: 'required', message: 'Account Holder is required' },
@@ -70,6 +72,22 @@ export class BankAccountListComponent {
     this.search();
   }
 
+  public searchByAccountNumber(accountNumber: any): void {
+    this.bankAccountSearchSubscription.unsubscribe();
+    this.bankAccounts = new MatTableDataSource<BankAccountDto>;
+    this.page = 0;
+    this.accountNumber = accountNumber;
+    this.search();
+  }
+
+  public searchByBankName(bankName: any): void {
+    this.bankAccountSearchSubscription.unsubscribe();
+    this.bankAccounts = new MatTableDataSource<BankAccountDto>;
+    this.page = 0;
+    this.bankName = bankName;
+    this.search();
+  }
+
   public search(event?: any, isLoadevent?: any) {
     if (!isLoadevent) {
       this.page = 0;
@@ -82,6 +100,8 @@ export class BankAccountListComponent {
       sortBy: this.sortBy,
       sortOrder: this.sortOrder.toUpperCase(),
       accountHolder: this.accountHolder,
+      accountNumber: this.accountNumber,
+      bankName: this.bankName,
       // active: this.active
     }
 
@@ -98,6 +118,8 @@ export class BankAccountListComponent {
 
   public reset(): void {
     this.accountHolder = '';
+    this.accountNumber = '';
+    this.bankName = '';
     this.page = 0;
     this.utilsService.presentLoadingDuration(500).then(value => {
       this.search();

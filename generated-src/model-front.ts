@@ -1,4 +1,4 @@
-import { AquisitionType, CageCategory, EggCategoryStockDto, EggQuantityType, EggType, FarmDto, FeedCategory, FeedSurveyDto, FlockCategory, FlockSaleDetailsDto, FlockType, HealthSurveyDto, HealthType, PurchaseDetailsDto, PurchaseInvoiceType, ReturnInvoiceType, RoleDto, SaleDetailsDto, SalesInvoiceCategory, SalesInvoiceStatus, SalesInvoiceType, SurveyEggCountDto } from "./model";
+import { AquisitionType, CageCategory, EggCategoryStockDto, EggQuantityType, EggType, FarmDto, FeedCategory, FeedSurveyDto, FlockCategory, FlockSaleDetailsDto, FlockType, HealthSurveyDto, HealthType, ManureStockDto, PurchaseDetailsDto, PurchaseInvoiceType, ReturnInvoiceType, RoleDto, SaleDetailsDto, SalesInvoiceCategory, SalesInvoiceStatus, SalesInvoiceType, SurveyEggCountDto } from "./model";
 
 export class PageResult<T> {
     public content!: Array<T>;
@@ -28,9 +28,8 @@ export class SurveyFrontDto {
     healthSurveyDtos: HealthSurveyDto[] | null | undefined;
     feedSurveyDtos: FeedSurveyDto[] | null | undefined;
     surveyEggCountDtos!: SurveyEggCountDto[] | null | undefined;
+    manureStockDtos!: ManureStockDto[] | null | undefined;
     comment: string | null | undefined;
-    manureBags!: number | null | undefined;
-    manureWeight!: number | null | undefined;
     amountOfChickenWeighted!: number | null | undefined;
     totalWeight!: number | null | undefined;
     averageWeight!: number | null | undefined;
@@ -503,4 +502,17 @@ export class ReturnInvoiceLineDetailsFrontDto {
     flockType: FlockType | null | undefined | any;
     manureStockId: number | null | undefined | any;
     manureWeightPerBag: number | null | undefined | any;
+}
+
+export class ManureStockFrontDto {
+    id: number | null | undefined | any;
+    manureId: number | null | undefined | any;
+    cageId: number | null | undefined | any;
+    cageName: string | null | undefined | any;
+    weight: number | null | undefined | any;
+    bags: number | null | undefined | any;
+    collectedById: number | null | undefined | any;
+    collectedByFirstName: string | null | undefined | any;
+    collectedByLastName: string | null | undefined | any;
+    collectedDate: Date | null | undefined | any;
 }

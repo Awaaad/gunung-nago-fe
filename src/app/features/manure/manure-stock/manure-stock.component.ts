@@ -2,7 +2,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators, FormArray } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
-import { ManureDto } from 'generated-src/model';
+import { CageDto, ManureDto } from 'generated-src/model';
+import { CageApiService } from 'src/app/shared/apis/cage.api.service';
 import { ManureStockApiService } from 'src/app/shared/apis/manure-stock.api.service';
 import { UtilsService } from 'src/app/shared/utils/utils.service';
 
@@ -15,16 +16,22 @@ export class ManureStockComponent implements OnInit {
   public manureStockUpdateForm!: FormGroup;
   public language = "en";
   public manures: ManureDto[] = [];
+  public cages: CageDto[] = [];
+
   public errorMessages = {
     weight: [
       { type: 'required', message: 'Weight is required' },
     ],
     bags: [
       { type: 'required', message: 'Bags collected is required' },
+    ],
+    cage: [
+      { type: 'required', message: 'Cage is required' },
     ]
   };
 
   constructor(
+    private cageApiService: CageApiService,
     private formBuilder: FormBuilder,
     private manureStockApiService: ManureStockApiService,
     private translateService: TranslateService,
@@ -34,6 +41,7 @@ export class ManureStockComponent implements OnInit {
 
   ngOnInit(): void {
     this.initialiseFormBuilder();
+    this.getAllActiveCages();
     this.getManures();
   }
 
@@ -45,9 +53,17 @@ export class ManureStockComponent implements OnInit {
     this.translateService.use(event.value);
   }
 
+  public getAllActiveCages() {
+    this.cages = [];
+    this.cageApiService.getAllActiveCages().subscribe(cages => {
+      this.cages = cages;
+    })
+  }
+
   public getManures() {
     this.manures = [];
     this.manureStockApiService.findManures().subscribe(manures => {
+      console.log(manures);
       this.manures = manures;
     })
   }
@@ -65,6 +81,7 @@ export class ManureStockComponent implements OnInit {
       id: null,
       manureId: new FormControl({ value: null, disabled: false }, Validators.compose([Validators.required])),
       bags: new FormControl({ value: null, disabled: false }, Validators.compose([Validators.required])),
+      cageId: new FormControl({ value: null, disabled: false }, Validators.compose([Validators.required])),
     });
   }
 

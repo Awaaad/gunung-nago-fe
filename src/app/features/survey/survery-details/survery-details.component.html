@@ -181,7 +181,8 @@
               <ion-col size-xs="12" size-md="3">
                 <ion-input color="gunung-nago-survey" label="{{ 'survey.survey-details.item' | translate }}"
                   label-placement="floating" fill="outline" type="number" min="0" max="29" maxlength="2"
-                  clear-input="true" formControlName="item" (ionChange)="calculateTotalItem(); calculateRemaining()"></ion-input>
+                  clear-input="true" formControlName="item"
+                  (ionChange)="calculateTotalItem(); calculateRemaining()"></ion-input>
                 <div class="error-messages">
                   <ng-container *ngFor="let error of errorMessages.item">
                     <div class="error-message"
@@ -322,30 +323,46 @@
       <ion-row>
         <ion-col size-xs="12" size-md="6">
           <!-- manure -->
-          <div class="ion-padding">
-            <div class="divider-wrapper">
-              <div class="flock-section">
-                <img class="survey-divider-img" src='./assets/flaticon/manure-bag.png'>
-              </div>
-              <div class="divider-text">
-                <ion-item-divider>
-                  <ion-label>Manure</ion-label>
-                </ion-item-divider>
-              </div>
-            </div>
 
-            <ion-row>
-              <ion-col size-xs="12" size-md="4">
-                <ion-input color="gunung-nago-survey" label="Bags collected" label-placement="floating" fill="outline"
-                  type="number" min="0" clear-input="true" formControlName="manureBags"
-                  [(ngModel)]="manureBags"></ion-input>
-              </ion-col>
-              <ion-col size-xs="12" size-md="4">
-                <ion-input color="gunung-nago-survey" label="Weight (Kg)" label-placement="floating" fill="outline"
-                  type="number" min="0" clear-input="true" formControlName="manureWeight"
-                  [(ngModel)]="manureWeight"></ion-input>
-              </ion-col>
-            </ion-row>
+          <div class="divider-wrapper mt-1">
+            <div class="flock-section">
+              <img class="survey-divider-img" src='./assets/flaticon/manure-bag.png'>
+            </div>
+            <div class="divider-text">
+              <ion-item-divider>
+                <ion-label>Fertilizer</ion-label>
+              </ion-item-divider>
+            </div>
+            <div class="button-section">
+              <ion-button color="neutral-btn" class="add-payment-btn" (click)="addManureStock()">Add
+                Fertilizer</ion-button>
+            </div>
+          </div>
+
+          <div formArrayName="manureStocks" *ngFor="let manureStock of manureStockFields?.controls; let i = index">
+            <span [formGroupName]="i">
+              <ion-item-divider *ngIf="i > 0" class="gray-divider">
+              </ion-item-divider>
+              <div class="form-array-index">
+                <div></div>
+                <ion-button *ngIf="manureStockFields != null && manureStockFields.length > 1"
+                  (click)="removeManureStock(i)" color="gunung-nago-warehouse"><span
+                    class="material-icons">delete</span></ion-button>
+              </div>
+              <ion-row>
+                <ion-col size-xs="12" size-md="3">
+                  <ion-select color="gunung-nago-primary" label="Weight" label-placement="floating" fill="outline"
+                    interface="popover" formControlName="manureId">
+                    <ion-select-option *ngFor="let manure of manures" [value]="manure.id">{{manure.weight}}
+                      (KG)</ion-select-option>
+                  </ion-select>
+                </ion-col>
+                <ion-col size-xs="12" size-md="3">
+                  <ion-input color="gunung-nago-primary" label="Bags collected*" label-placement="floating"
+                    fill="outline" type="text" clear-input="true" formControlName="bags" required="true"></ion-input>
+                </ion-col>
+              </ion-row>
+            </span>
           </div>
         </ion-col>
 
@@ -370,13 +387,13 @@
                   [(ngModel)]="amountOfChickenWeighted"></ion-input>
               </ion-col>
               <ion-col size-xs="12" size-md="4">
-                <ion-input color="gunung-nago-survey" label="Total weighted (Kg)" label-placement="floating" fill="outline"
-                  type="number" min="0" clear-input="true" formControlName="totalWeight"
+                <ion-input color="gunung-nago-survey" label="Total weighted (Kg)" label-placement="floating"
+                  fill="outline" type="number" min="0" clear-input="true" formControlName="totalWeight"
                   [(ngModel)]="totalWeight"></ion-input>
               </ion-col>
               <ion-col size-xs="12" size-md="4">
-                <ion-input color="gunung-nago-survey" label="Average weight (Kg)" label-placement="floating" fill="outline"
-                  type="number" min="0" clear-input="true"
+                <ion-input color="gunung-nago-survey" label="Average weight (Kg)" label-placement="floating"
+                  fill="outline" type="number" min="0" clear-input="true"
                   [value]="(totalWeight / amountOfChickenWeighted) | number :'1.2-2'"></ion-input>
               </ion-col>
             </ion-row>

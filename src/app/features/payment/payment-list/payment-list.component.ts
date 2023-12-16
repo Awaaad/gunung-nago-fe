@@ -9,7 +9,6 @@ import { OverlayEventDetail } from '@ionic/core/components';
 import { TranslateService } from '@ngx-translate/core';
 import { PaymentModeDto } from 'generated-src/model';
 import { Subscription } from 'rxjs';
-import { EggCategoryApiService } from 'src/app/shared/apis/egg-category.api.service';
 import { PaymentModeApiService } from 'src/app/shared/apis/payment-mode.api.service';
 import { UtilsService } from 'src/app/shared/utils/utils.service';
 
@@ -70,8 +69,6 @@ export class PaymentListComponent {
       size: this.size,
       sortBy: this.sortBy,
       sortOrder: this.sortOrder.toUpperCase(),
-      // cageCategory: this.cageCategory,
-      // active: this.active
     }
 
     this.paymentModeApiService.search(paymentModeSearchCriteriaDto).subscribe(paymentModes => {
@@ -86,7 +83,6 @@ export class PaymentListComponent {
   }
 
   public reset(): void {
-    // this.cageCategory = '';
     this.active = '';
     this.page = 0;
     this.utilsService.presentLoadingDuration(500).then(value => {

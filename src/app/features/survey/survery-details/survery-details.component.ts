@@ -4,14 +4,15 @@ import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { EggCategoryDto, FeedSurveyDto, FlockCategory, FlockFeedLineDto, HealthProductDto, HealthSurveyDto, SurveyDto, SurveyEggCountDto } from 'generated-src/model';
-import { SurveyFrontDto } from 'generated-src/model-front';
+import { EggCategoryDto, FeedSurveyDto, FlockCategory, FlockFeedLineDto, HealthProductDto, HealthSurveyDto, ManureDto, SurveyDto, SurveyEggCountDto } from 'generated-src/model';
+import { ManureStockFrontDto, SurveyFrontDto } from 'generated-src/model-front';
 import { Subscription, debounceTime, distinctUntilChanged, filter, finalize, switchMap, tap } from 'rxjs';
 import { FlockFeedLineApiService } from 'src/app/shared/apis/flock-feed-line.api.service';
 import { HealthProductApiService } from 'src/app/shared/apis/health-product.api.service';
 import { UtilsService } from 'src/app/shared/utils/utils.service';
 import { SurveyApiService } from '../../../shared/apis/survey.api.service';
 import { EggCategoryApiService } from 'src/app/shared/apis/egg-category.api.service';
+import { ManureStockApiService } from 'src/app/shared/apis/manure-stock.api.service';
 
 @Component({
   selector: 'app-survery-details',
@@ -32,8 +33,6 @@ export class SurveryDetailsComponent implements OnInit {
   public smallEggsItem: number = 0;
   public smallEggsTie: number = 0;
   public smallEggsTray: number = 0;
-  public manureBags: number = 0;
-  public manureWeight: number = 0;
   public amountOfChickenWeighted: number = 0;
   public totalWeight: number = 0;
   public averageWeight: number = 0;
@@ -75,6 +74,10 @@ export class SurveryDetailsComponent implements OnInit {
   public feedSurvey: FeedSurveyDto[] = [];
   public feedLines: FlockFeedLineDto[] = [];
 
+  //manure section
+  public manures: ManureDto[] = [];
+  public manureStockDtos: ManureStockFrontDto[] = [];
+
   public errorMessages = {
     tray: [
       { type: 'max', message: 'Tray cannot be more than 9' },
@@ -84,7 +87,10 @@ export class SurveryDetailsComponent implements OnInit {
     ],
     eggCategory: [
       { type: 'required', message: 'Egg category is required' },
-    ]
+    ],
+    bags: [
+      { type: 'required', message: 'Bags collected is required' },
+    ],
   };
 
   constructor(
@@ -96,11 +102,13 @@ export class SurveryDetailsComponent implements OnInit {
     private router: Router,
     private surveyApiService: SurveyApiService,
     private translateService: TranslateService,
+    private manureStockApiService: ManureStockApiService,
     private utilsService: UtilsService,
   ) {
   }
 
   ngOnInit(): void {
+    this.getManures();
     this.getAllEggCategories();
     this.initialiseFormGroup();
     this.findSurveyDtoForSelectedCage();
@@ -141,20 +149,21 @@ export class SurveryDetailsComponent implements OnInit {
       flockStockId: new FormControl({ value: this.flockStockId, disabled: false }, Validators.compose([])),
       eggStockId: new FormControl({ value: this.eggStockId, disabled: false }, Validators.compose([])),
       comment: new FormControl({ value: '', disabled: false }, Validators.compose([])),
-      manureBags: new FormControl({ value: null, disabled: false }, Validators.compose([])),
-      manureWeight: new FormControl({ value: null, disabled: false }, Validators.compose([])),
       amountOfChickenWeighted: new FormControl({ value: null, disabled: false }, Validators.compose([])),
       totalWeight: new FormControl({ value: null, disabled: false }, Validators.compose([])),
       averageWeight: new FormControl({ value: null, disabled: false }, Validators.compose([])),
       eggCategories: this.formBuilder.array([
         this.addEggCategoryFormGroup()
       ]),
+      manureStocks: this.formBuilder.array([
+        this.addManureStockFormGroup()
+      ]),
     });
   }
 
   addEggCategoryFormGroup() {
     return this.formBuilder.group({
-      eggCategoryId: new FormControl({ value: null, disabled: false }, Validators.compose([Validators.required])),
+      eggCategoryId: new FormControl({ value: null, disabled: false }, Validators.compose([])),
       tie: new FormControl(Validators.compose([])),
       tray: new FormControl({ value: null, disabled: false }, Validators.compose([Validators.max(9)])),
       item: new FormControl({ value: null, disabled: false }, Validators.compose([Validators.max(29)])),
@@ -171,6 +180,26 @@ export class SurveryDetailsComponent implements OnInit {
 
   get eggCategoryFields() {
     return this.surveyForm ? this.surveyForm.get('eggCategories') as FormArray : null;
+  }
+
+  addManureStockFormGroup() {
+    return this.formBuilder.group({
+      manureId: new FormControl({ value: null, disabled: false }, Validators.compose([])),
+      cageId: new FormControl({ value: this.cageId, disabled: false }, Validators.compose([])),
+      bags: new FormControl({ value: null, disabled: false }, Validators.compose([])),
+    })
+  }
+
+  addManureStock(): void {
+    (this.surveyForm.get('manureStocks') as FormArray).push(this.addManureStockFormGroup());
+  }
+
+  removeManureStock(manureStockGroupIndex: number): void {
+    (this.surveyForm.get('manureStocks') as FormArray).removeAt(manureStockGroupIndex);
+  }
+
+  get manureStockFields() {
+    return this.surveyForm ? this.surveyForm.get('manureStocks') as FormArray : null;
   }
 
   public searchHealthProduct(): void {
@@ -290,8 +319,6 @@ export class SurveryDetailsComponent implements OnInit {
           flockStockId: null,
           eggStockId: null,
           comment: null,
-          manureBags: this.manureBags,
-          manureWeight: this.manureWeight,
           amountOfChickenWeighted: this.amountOfChickenWeighted,
           totalWeight: this.totalWeight,
           averageWeight: this.averageWeight,
@@ -301,7 +328,12 @@ export class SurveryDetailsComponent implements OnInit {
               tie: null,
               tray: null,
               item: null
-            }]
+            }],
+          manureStocks: [{
+            manureId: null,
+            cageId: this.cageId,
+            bags: null
+          }]
         })
         this.findAllActiveFlockLinesByFlockId(surveyDetails.flockId);
       });
@@ -339,8 +371,6 @@ export class SurveryDetailsComponent implements OnInit {
           flockStockId: surveyDetails.flockStockId,
           eggStockId: surveyDetails.eggStockId,
           comment: surveyDetails.comment,
-          manureBags: this.manureBags,
-          manureWeight: this.manureWeight,
           amountOfChickenWeighted: this.amountOfChickenWeighted,
           totalWeight: this.totalWeight,
           averageWeight: this.averageWeight
@@ -402,9 +432,8 @@ export class SurveryDetailsComponent implements OnInit {
       healthSurveyDtos: [],
       feedSurveyDtos: [],
       surveyEggCountDtos: [],
+      manureStockDtos: [],
       comment: null,
-      manureBags: null,
-      manureWeight: null,
       amountOfChickenWeighted: null,
       totalWeight: null,
       averageWeight: null
@@ -419,6 +448,22 @@ export class SurveryDetailsComponent implements OnInit {
         quantity: (form.tie * 300) + (form.tray * 30) + form.item
       }
       return surveyEggCountDto;
+    });
+    this.manureStockDtos = [];
+    this.manureStockDtos = (this.surveyForm.get('manureStocks') as FormArray).value.map((form: any) => {
+      const manureStockDto: ManureStockFrontDto = {
+        id: null,
+        manureId: form.manureId,
+        cageId: this.cageId,
+        cageName: null,
+        weight: null,
+        bags: form.bags,
+        collectedById: null,
+        collectedByFirstName: null,
+        collectedByLastName: null,
+        collectedDate: null
+      }
+      return manureStockDto;
     });
     this.surveyDto = {
       cageId: this.surveyForm.value.cageId,
@@ -436,9 +481,8 @@ export class SurveryDetailsComponent implements OnInit {
       healthSurveyDtos: this.selectedHealthProducts,
       feedSurveyDtos: this.feedSurvey,
       surveyEggCountDtos: this.surveyEggCountDtos,
+      manureStockDtos: this.manureStockDtos,
       comment: this.surveyForm.value.comment,
-      manureBags: this.surveyForm.value.manureBags,
-      manureWeight: this.surveyForm.value.manureWeight,
       amountOfChickenWeighted: this.surveyForm.value.amountOfChickenWeighted,
       totalWeight: this.surveyForm.value.totalWeight,
       averageWeight: this.surveyForm.value.averageWeight
@@ -452,6 +496,13 @@ export class SurveryDetailsComponent implements OnInit {
       feedSurvey.flockFeedLineId = feedLine.id;
       feedSurvey.bagsEaten = feedLine.bagsEaten;
       this.feedSurvey.push(feedSurvey);
+    })
+  }
+
+  public getManures() {
+    this.manures = [];
+    this.manureStockApiService.findManures().subscribe(manures => {
+      this.manures = manures;
     })
   }
 }
