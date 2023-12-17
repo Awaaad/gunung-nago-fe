@@ -8,7 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { IonInfiniteScroll, IonModal } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { SalesInvoiceDto, UserDto, SalesInvoiceType, SalesInvoiceStatus, SalesInvoiceCategory, PaymentDto, BankAccountDto, PaymentModeDto, CustomerDto } from 'generated-src/model';
-import { SettleCustomerCreditPaymentFrontDto } from 'generated-src/model-front';
+import { CustomerCreditStatementOfAccountDto, SettleCustomerCreditPaymentFrontDto } from 'generated-src/model-front';
 import * as moment from 'moment';
 import { Subscription } from 'rxjs';
 import { PaymentApiService } from 'src/app/shared/apis/payment.api.service';
@@ -20,6 +20,7 @@ import { PaymentModeApiService } from 'src/app/shared/apis/payment-mode.api.serv
 import { BankAccountApiService } from 'src/app/shared/apis/bank-account.api.service';
 import { environment } from 'src/environments/environment';
 import { CustomerApiService } from 'src/app/shared/apis/customer.api.service';
+import { FileApiService } from 'src/app/shared/apis/file.api.service';
 
 @Component({
   selector: 'app-sales-invoice-customer-credit-list',
@@ -38,6 +39,7 @@ export class SalesInvoiceCustomerCreditListComponent implements OnInit {
   public salesInvoices = new MatTableDataSource<SalesInvoiceDto>;
   private infiniteSalesInvoices: SalesInvoiceDto[] = [];
   public salesInvoiceSearchSubscription!: Subscription;
+  public customerCreditStatementOfAccount!: CustomerCreditStatementOfAccountDto;
   private page: number = 0;
   private size: number = 50;
   public sortOrder: string = 'desc';
@@ -130,7 +132,8 @@ export class SalesInvoiceCustomerCreditListComponent implements OnInit {
     private translateService: TranslateService,
     private utilsService: UtilsService,
     private bankAccountApiService: BankAccountApiService,
-    private paymentModeApiService: PaymentModeApiService
+    private paymentModeApiService: PaymentModeApiService,
+    private readonly fileApiService: FileApiService,
   ) {
   }
 
@@ -140,6 +143,7 @@ export class SalesInvoiceCustomerCreditListComponent implements OnInit {
 
   ionViewWillEnter(): void {
     this.initialiseCustomer();
+    
     this.salesInvoiceTypes = Object.keys(SalesInvoiceType);
     this.salesInvoiceStatuses = Object.keys(SalesInvoiceStatus);
     this.salesInvoiceCategories = Object.keys(SalesInvoiceCategory);
@@ -149,6 +153,8 @@ export class SalesInvoiceCustomerCreditListComponent implements OnInit {
     this.getAllDrivers();
     this.getCustomerById();
     this.search();
+    this.initialiseCustomerCreditStatementOfAccount();
+    console.log(this.salesInvoices.data);
   }
 
   private initialiseCustomer(): void {
@@ -164,10 +170,31 @@ export class SalesInvoiceCustomerCreditListComponent implements OnInit {
     }
   }
 
+  private initialiseCustomerCreditStatementOfAccount(): void {
+    this.customerCreditStatementOfAccount = {
+      salesInvoiceDtos: this.salesInvoices.data,
+      customerDto: this.customer,
+      totalAmountPaid: 0,
+      totalReturnAmount: 0,
+      totalInvoicePrice: 0,
+      totalAmountDue: 0,
+      dateIssued: ''
+    }
+  }
+
   private getCustomerById(): void {
     this.customerApiService.findById(this.customerId).subscribe(customer => {
       this.customer = customer;
+      this.customerCreditStatementOfAccount.customerDto = customer;
     })
+  }
+
+  public generateCreditPdfFile(): void{
+    console.log(this.customerCreditStatementOfAccount);
+    this.fileApiService.generateCreditStatementOfAccountPdf(this.customerCreditStatementOfAccount).subscribe(fileResponse => {
+      
+      this.utilsService.openTemplateInNewTab(fileResponse);
+    });
   }
 
   public getAllPaymentModes() {
@@ -274,19 +301,29 @@ export class SalesInvoiceCustomerCreditListComponent implements OnInit {
     this.salesInvoiceSearchSubscription = this.salesInvoiceApiService.search(salesInvoiceSearchCriteriaDto).subscribe(salesInvoices => {
       this.infiniteSalesInvoices = [...this.infiniteSalesInvoices, ...salesInvoices.content];
       this.salesInvoices = new MatTableDataSource<SalesInvoiceDto>(this.infiniteSalesInvoices);
-
+      
       if (this.salesInvoices.data.length > 0) {
         this.initialTotalAmountDue = this.salesInvoices.data[0]?.totalAmountDue;
         this.totalAmountDue = this.salesInvoices.data[0]?.totalAmountDue;
         this.totalLockedAmountDue = this.salesInvoices.data[0]?.totalLockedAmountDue;
         this.totalUnlockedAmountDue = this.salesInvoices.data[0]?.totalUnlockedAmountDue;
       }
+      console.log(this.salesInvoices);
+      console.log(this.infiniteSalesInvoices);
+      this.customerCreditStatementOfAccount.salesInvoiceDtos = this.infiniteSalesInvoices;
+      this.customerCreditStatementOfAccount.totalInvoicePrice = this.getTotalInvoicePrice();
+      this.customerCreditStatementOfAccount.totalReturnAmount = this.getTableTotalReturnAmount();
+      this.customerCreditStatementOfAccount.totalAmountPaid = this.getTableTotalAmountPaid();
+      this.customerCreditStatementOfAccount.totalAmountDue = this.totalAmountDue;
+      this.customerCreditStatementOfAccount.dateIssued = this.today;
 
+      console.log(this.customerCreditStatementOfAccount);
       if (event) {
         event.target.complete();
         event.returnValue = false;
       }
     })
+    
   }
 
   public reset(): void {
@@ -331,7 +368,7 @@ export class SalesInvoiceCustomerCreditListComponent implements OnInit {
       this.search();
     })
   }
-
+ 
   public getTotalAmountPaidPerInvoice(paymentDto: PaymentDto[]): number {
     let sum = 0;
     paymentDto.forEach(payment => {

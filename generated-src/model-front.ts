@@ -1,4 +1,4 @@
-import { AquisitionType, CageCategory, EggCategoryStockDto, EggQuantityType, EggType, FarmDto, FeedCategory, FeedSurveyDto, FlockCategory, FlockSaleDetailsDto, FlockType, HealthSurveyDto, HealthType, PurchaseDetailsDto, PurchaseInvoiceType, ReturnInvoiceType, RoleDto, SaleDetailsDto, SalesInvoiceCategory, SalesInvoiceStatus, SalesInvoiceType, SurveyEggCountDto } from "./model";
+import { AquisitionType, CageCategory, CustomerDto, EggCategoryStockDto, EggQuantityType, EggType, FarmDto, FeedCategory, FeedSurveyDto, FlockCategory, FlockSaleDetailsDto, FlockType, HealthSurveyDto, HealthType, PurchaseDetailsDto, PurchaseInvoiceType, ReturnInvoiceType, RoleDto, SaleDetailsDto, SalesInvoiceCategory, SalesInvoiceDto, SalesInvoiceStatus, SalesInvoiceType, SurveyEggCountDto } from "./model";
 
 export class PageResult<T> {
     public content!: Array<T>;
@@ -503,4 +503,26 @@ export class ReturnInvoiceLineDetailsFrontDto {
     flockType: FlockType | null | undefined | any;
     manureStockId: number | null | undefined | any;
     manureWeightPerBag: number | null | undefined | any;
+}
+
+export class CustomerCreditStatementOfAccountDto{
+    salesInvoiceDtos!: SalesInvoiceDto[];
+    customerDto!: CustomerDto;
+    totalInvoicePrice!: number;
+    totalReturnAmount!: number;
+    totalAmountPaid!: number;
+    totalAmountDue!: number;
+    dateIssued!: Date | any;
+}
+
+export class StatementOfAccountDto{
+    dateFrom!: Date | any;
+    dateTo!: Date | any;
+    dateIssued!: Date | any;
+    salesInvoiceDtos!: SalesInvoiceDto[];
+    customerDto!: CustomerDto;
+    totalInvoicePrice!: number;
+    totalReturnAmount!: number;
+    totalAmountPaid!: number;
+    totalAmountDue!: number;
 }

@@ -52,7 +52,7 @@
               color="gunung-nago-report">Preview</ion-toggle>
 
             <div class="btn-container" *ngIf="totalAmountDue > 0">
-              <ion-button color="neutral-btn" class="make-purchase-btn">
+              <ion-button color="neutral-btn" class="make-purchase-btn" (click)="generateCreditPdfFile()">
                 Print
               </ion-button>
             </div>
@@ -199,7 +199,7 @@
               </tr>
             </tbody>
           </table>
-
+ 
           <div class="invoice-footer">
             <ion-row>
               <ion-col size-lg="6" size-md="12" size-xs="12">

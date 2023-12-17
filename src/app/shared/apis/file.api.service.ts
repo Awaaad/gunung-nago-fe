@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { CustomerCreditStatementOfAccountDto, StatementOfAccountDto } from 'generated-src/model-front';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
@@ -33,5 +34,15 @@ export class FileApiService {
     public generateReturnInvoicePdf(returnInvoiceId: number): Observable<any> {
         const headers = this.setHeaders();
         return this.http.get<any>(`${this.baseUrl}/return-invoice/${returnInvoiceId}`, { headers, responseType: 'blob' as 'json' });
+    }
+
+    public generateCreditStatementOfAccountPdf(customerCreditStatementOfAccountDto: CustomerCreditStatementOfAccountDto): Observable<any> {
+        const headers = this.setHeaders();
+        return this.http.post<any>(`${this.baseUrl}/credit-statement-of-account`, customerCreditStatementOfAccountDto, { headers, responseType: 'blob' as 'json' });
+    }
+
+    public generateStatementOfAccountPdf(customerStatementOfAccountDto: StatementOfAccountDto): Observable<any> {
+        const headers = this.setHeaders();
+        return this.http.post<any>(`${this.baseUrl}/statement-of-account`, customerStatementOfAccountDto, { headers, responseType: 'blob' as 'json' });
     }
 }
