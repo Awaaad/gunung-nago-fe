@@ -7,7 +7,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IonInfiniteScroll, IonModal } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { SalesInvoiceDto, UserDto, SalesInvoiceType, SalesInvoiceStatus, SalesInvoiceCategory, BankAccountDto, PaymentModeDto, PaymentDto, SalesInvoiceLineDto, ManureDto, EggQuantityType, EggCategoryDto } from 'generated-src/model';
+import { SalesInvoiceDto, UserDto, SalesInvoiceType, SalesInvoiceStatus, SalesInvoiceCategory, BankAccountDto, PaymentModeDto, PaymentDto, SalesInvoiceLineDto, ManureDto, EggQuantityType, EggCategoryDto, ReturnInvoiceLineDetailsDto, ReturnInvoiceType } from 'generated-src/model';
 import { SalesInvoiceSettleCreditPaymentFrontDto } from 'generated-src/model-front';
 import moment from 'moment';
 import { Subscription } from 'rxjs';
@@ -35,7 +35,7 @@ export class SalesInvoiceByTypeListComponent {
   @ViewChild(MatSort) sort!: MatSort;
   public returnInvoice = 'assets/flaticon/return-invoice-icon-list.svg';
   public language = "en";
-  public displayedColumns: string[] = ['id', 'name', 'createdBy', 'createdDate', 'category', 'quantity', 'price', 'totalPrice', 'soldAt'];
+  public displayedColumns: string[] = ['id', 'name', 'createdBy', 'createdDate', 'category', 'quantity', 'price', 'totalPrice', 'soldAt', 'return', 'returnTotalPrice', 'balance'];
   public salesInvoices = new MatTableDataSource<SalesInvoiceLineDto>;
   private infiniteSalesInvoices: SalesInvoiceLineDto[] = [];
   public salesInvoiceSearchSubscription!: Subscription;
@@ -467,6 +467,106 @@ export class SalesInvoiceByTypeListComponent {
     if (total != 0) {
       return total;
     }
+  }
+
+  public getTotalPriceForReturn(returns: ReturnInvoiceLineDetailsDto[]): number {
+    let sum = 0;
+    returns.forEach(returnInvoice => {
+      sum = sum + returnInvoice.totalPrice;
+    })
+    return sum;
+  }
+
+  public getBalance(soldAt: number, returns: ReturnInvoiceLineDetailsDto[]): number {
+    let sum = 0;
+    returns.forEach(returnInvoice => {
+      sum = sum + returnInvoice.totalPrice;
+    })
+    return soldAt - sum;
+  }
+
+  public getTableTotalPriceForReturn(): any {
+    const total = this.salesInvoices.data.filter(data => data.returnInvoiceLineDetailsDtos && data.returnInvoiceLineDetailsDtos.length > 0)
+      .map(data => data.returnInvoiceLineDetailsDtos)
+      .map(data => {
+        let sum = 0;
+        data.forEach(returnInvoice => {
+          sum = sum + returnInvoice.totalPrice;
+        })
+        return sum;
+      })
+      .reduce((acc, value) => acc + value, 0);
+    if (total != 0) {
+      return total;
+    }
+  }
+
+  public getTotalReturnQuantityEggPiece(): any {
+    const total = this.salesInvoices.data.filter(data => data.returnInvoiceLineDetailsDtos && data.returnInvoiceLineDetailsDtos.length > 0)
+      .map(data => data.returnInvoiceLineDetailsDtos)
+      .map(data => {
+        let sum = 0;
+        data.filter(data => data.returnInvoiceType === ReturnInvoiceType.EGG).forEach(returnInvoice => {
+          sum = sum + returnInvoice.quantity;
+        })
+        return sum;
+      })
+      .reduce((acc, value) => acc + value, 0);
+    if (total != 0) {
+      return total;
+    }
+  }
+
+  public getTotalReturnQuantityFlock(): any {
+    const total = this.salesInvoices.data.filter(data => data.returnInvoiceLineDetailsDtos && data.returnInvoiceLineDetailsDtos.length > 0)
+      .map(data => data.returnInvoiceLineDetailsDtos)
+      .map(data => {
+        let sum = 0;
+        data.filter(data => data.returnInvoiceType === ReturnInvoiceType.FLOCK).forEach(returnInvoice => {
+          sum = sum + returnInvoice.quantity;
+        })
+        return sum;
+      })
+      .reduce((acc, value) => acc + value, 0);
+    if (total != 0) {
+      return total;
+    }
+  }
+
+  public getTotalReturnQuantityManure(): any {
+    const total = this.salesInvoices.data.filter(data => data.returnInvoiceLineDetailsDtos && data.returnInvoiceLineDetailsDtos.length > 0)
+      .map(data => data.returnInvoiceLineDetailsDtos)
+      .map(data => {
+        let sum = 0;
+        data.filter(data => data.returnInvoiceType === ReturnInvoiceType.MANURE).forEach(returnInvoice => {
+          sum = sum + returnInvoice.quantity;
+        })
+        return sum;
+      })
+      .reduce((acc, value) => acc + value, 0);
+    if (total != 0) {
+      return total;
+    }
+  }
+
+  public getTotalReturnQuantityFeed(): any {
+    const total = this.salesInvoices.data.filter(data => data.returnInvoiceLineDetailsDtos && data.returnInvoiceLineDetailsDtos.length > 0)
+      .map(data => data.returnInvoiceLineDetailsDtos)
+      .map(data => {
+        let sum = 0;
+        data.filter(data => data.returnInvoiceType === ReturnInvoiceType.FEED).forEach(returnInvoice => {
+          sum = sum + returnInvoice.quantity;
+        })
+        return sum;
+      })
+      .reduce((acc, value) => acc + value, 0);
+    if (total != 0) {
+      return total;
+    }
+  }
+
+  public getTableTotalBalance(): any {
+    return this.getTotalSoldAt() - this.getTableTotalPriceForReturn();
   }
 }
 

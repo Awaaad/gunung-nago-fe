@@ -14,7 +14,7 @@ import { OverlayEventDetail } from '@ionic/core/components';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment';
-import { SalesInvoiceSettleCreditPaymentFrontDto, StatementOfAccountDto } from 'generated-src/model-front';
+import { SalesInvoiceSettleCreditPaymentFrontDto } from 'generated-src/model-front';
 import { PaymentApiService } from 'src/app/shared/apis/payment.api.service';
 import { PaymentModeApiService } from 'src/app/shared/apis/payment-mode.api.service';
 import { BankAccountApiService } from 'src/app/shared/apis/bank-account.api.service';
@@ -67,7 +67,8 @@ export class SalesInvoiceListComponent implements OnInit {
   public amountDue!: number;
   public lastName!: string;
   public firstName!: string;
-  public statementOfAccountDto!: StatementOfAccountDto;
+  public salesInvoiceNumber: string = '';
+  public searchValue!: any;
 
   public bankAccounts: BankAccountDto[] = [];
   public paymentModes: PaymentModeDto[] = [];
@@ -160,7 +161,6 @@ export class SalesInvoiceListComponent implements OnInit {
     this.getAllUsernames();
     this.getAllDrivers();
     this.search();
-    this.initialiseStatementOfAccount();
   }
 
   private getRouteParams(): void {
@@ -185,24 +185,9 @@ export class SalesInvoiceListComponent implements OnInit {
     }
   }
 
-  private initialiseStatementOfAccount(): void {
-    this.statementOfAccountDto = {
-      dateFrom: '',
-      dateTo: '',
-      dateIssued: '',
-      salesInvoiceDtos: this.salesInvoices.data,
-      customerDto: this.customer,
-      totalAmountPaid: 0,
-      totalReturnAmount: 0,
-      totalInvoicePrice: 0,
-      totalAmountDue: 0
-    }
-  }
-
   private getCustomerById(): void {
     this.customerApiService.findById(this.customerId).subscribe(customer => {
       this.customer = customer;
-      this.statementOfAccountDto.customerDto = customer;
     })
   }
 
@@ -239,6 +224,14 @@ export class SalesInvoiceListComponent implements OnInit {
     this.salesInvoices = new MatTableDataSource<SalesInvoiceDto>;
     this.page = 0;
     this.customerName = customerName;
+    this.search();
+  }
+
+  public searchBySalesInvoiceNumber(salesInvoiceNumber: any): void {
+    this.salesInvoiceSearchSubscription.unsubscribe();
+    this.salesInvoices = new MatTableDataSource<SalesInvoiceDto>;
+    this.page = 0;
+    this.salesInvoiceNumber = salesInvoiceNumber;
     this.search();
   }
 
@@ -336,6 +329,7 @@ export class SalesInvoiceListComponent implements OnInit {
       customerName: this.customerName,
       salesInvoiceStatus: this.salesInvoiceStatus,
       salesInvoiceCategory: this.salesInvoiceCategory,
+      id: this.salesInvoiceNumber,
 
       page: this.page,
       size: this.size,
@@ -395,26 +389,14 @@ export class SalesInvoiceListComponent implements OnInit {
     if (salesInvoiceSearchCriteriaDto.customerId === null) {
       delete salesInvoiceSearchCriteriaDto.customerId;
     }
-
+    this.searchValue = salesInvoiceSearchCriteriaDto;
     this.salesInvoiceSearchSubscription = this.salesInvoiceApiService.generateStatement(salesInvoiceSearchCriteriaDto).subscribe(salesInvoices => {
       this.statementInvoices = salesInvoices.content;
-      this.statementOfAccountDto.salesInvoiceDtos = this.statementInvoices;
-      this.statementOfAccountDto.dateFrom = this.statementOfAccountDateFrom;
-      this.statementOfAccountDto.dateTo = this.statementOfAccountDateTo;
-      this.statementOfAccountDto.dateIssued = this.today;
-      this.statementOfAccountDto.totalInvoicePrice = this.getTotalInvoicePrice();
-      this.statementOfAccountDto.totalReturnAmount = this.getTableTotalReturnAmount();
-      this.statementOfAccountDto.totalAmountPaid = this.getTableTotalAmountPaid();
-      this.statementOfAccountDto.totalAmountDue = this.getTableTotalAmountDue();
     })
-    
-    
-    console.log(this.statementOfAccountDto);
-    this.generateStatementPdf();
   }
 
   public generateStatementPdf() : void{
-    this.fileApiService.generateStatementOfAccountPdf(this.statementOfAccountDto).subscribe(fileResponse => {
+    this.fileApiService.generateStatementOfAccountPdf(this.searchValue).subscribe(fileResponse => {
       this.utilsService.openTemplateInNewTab(fileResponse);
     });
   }
@@ -446,7 +428,7 @@ export class SalesInvoiceListComponent implements OnInit {
     })
     return sum;
   }
-  
+
   public getTotalInvoicePrice(): number {
     let sum = 0;
     this.statementInvoices.forEach(salesInvoice => {

@@ -161,4 +161,8 @@
       </table>
     </div>
   </ion-card>
+  <ion-infinite-scroll threshold="100px" position="bottom" (ionInfinite)="loadData($event)">
+    <ion-infinite-scroll-content loadingSpinner="crescent" loadingText="Loading return invoices...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 </ion-content>

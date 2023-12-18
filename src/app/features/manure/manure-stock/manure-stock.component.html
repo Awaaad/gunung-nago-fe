@@ -40,7 +40,7 @@
               </ion-col>
             </ion-row>
             <ion-row>
-              <ion-col size-xs="12" size-md="6">
+              <ion-col size-xs="12" size-md="3">
                 <ion-select color="gunung-nago-primary" label="Weight (KG)" label-placement="floating" fill="outline"
                   interface="popover" required="true" formControlName="manureId">
                   <ion-select-option *ngFor="let manure of manures" [value]="manure.id">{{ manure.weight
@@ -50,6 +50,21 @@
                   <ng-container *ngFor="let error of errorMessages.weight">
                     <div class="error-message"
                       *ngIf="manureStockUpdateForm.get('weight')?.hasError(error.type) && (manureStockUpdateForm.get('weight')?.dirty || manureStockUpdateForm.get('weight')?.touched)">
+                      {{ error.message }}
+                    </div>
+                  </ng-container>
+                </div>
+              </ion-col>
+              <ion-col size-xs="12" size-md="3">
+                <ion-select color="gunung-nago-primary" label="Cage" label-placement="floating" fill="outline"
+                  interface="popover" required="true" formControlName="cageId">
+                  <ion-select-option *ngFor="let cage of cages" [value]="cage.id">{{ cage.name
+                    }}</ion-select-option>
+                </ion-select>
+                <div class="error-messages">
+                  <ng-container *ngFor="let error of errorMessages.cage">
+                    <div class="error-message"
+                      *ngIf="manureStockUpdateForm.get('cageId')?.hasError(error.type) && (manureStockUpdateForm.get('cageId')?.dirty || manureStockUpdateForm.get('cageId')?.touched)">
                       {{ error.message }}
                     </div>
                   </ng-container>

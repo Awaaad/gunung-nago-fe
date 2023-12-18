@@ -20,6 +20,9 @@ import { MY_FORMATS } from '../report/report.module';
 import { ManureStockComponent } from './manure-stock/manure-stock.component';
 import { ManureListComponent } from './manure-list/manure-list.component';
 import { ManureDetailsComponent } from './manure-details/manure-details.component';
+import { CageApiService } from 'src/app/shared/apis/cage.api.service';
+import { MatTableModule } from '@angular/material/table';
+import { MatSortModule } from '@angular/material/sort';
 
 
 @NgModule({
@@ -33,6 +36,8 @@ import { ManureDetailsComponent } from './manure-details/manure-details.componen
     TranslateModule,
     FormsModule,
     ReactiveFormsModule,
+    MatTableModule,
+    MatSortModule,
     MatInputModule,
     MatButtonModule,
     MatFormFieldModule,
@@ -40,7 +45,7 @@ import { ManureDetailsComponent } from './manure-details/manure-details.componen
     MatDatepickerModule,
     MatNativeDateModule,
   ],
-  providers: [CustomerApiService, ManureStockApiService, ManureSaleApiService,
+  providers: [CageApiService, CustomerApiService, ManureStockApiService, ManureSaleApiService,
     {
       provide: DateAdapter,
       useClass: MomentDateAdapter,

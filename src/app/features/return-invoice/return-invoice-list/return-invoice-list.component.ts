@@ -96,6 +96,13 @@ export class ReturnInvoiceListComponent implements OnInit {
     })
   }
 
+  public loadData(event: any) {
+    setTimeout(() => {
+      this.page++;
+      this.search(event, true);
+    }, 500);
+  }
+
   public routeToSalesInvoiceDetails(element: any) {
     this.router.navigate([`sales-invoice/sales-invoice-details/${element.salesInvoiceId}`]);
   }
@@ -111,6 +118,7 @@ export class ReturnInvoiceListComponent implements OnInit {
     this.customerName = customerName;
     this.search();
   }
+
   public searchBySalesInvoiceNumber(salesInvoiceNumber: any): void {
     this.returnInvoiceSearchSubscription.unsubscribe();
     this.returnInvoiceList = new MatTableDataSource<ReturnInvoiceListDto>;
@@ -133,6 +141,8 @@ export class ReturnInvoiceListComponent implements OnInit {
     this.selectedDriverId = '0';
     this.customerName = '';
     this.username = '';
+    this.salesInvoiceNumber = '';
+    this.returnInvoiceNumber = '';
     this.utilsService.presentLoadingDuration(500).then(() => {
       this.search();
     });

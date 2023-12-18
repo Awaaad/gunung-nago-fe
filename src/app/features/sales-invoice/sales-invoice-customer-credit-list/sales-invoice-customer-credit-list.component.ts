@@ -8,7 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { IonInfiniteScroll, IonModal } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { SalesInvoiceDto, UserDto, SalesInvoiceType, SalesInvoiceStatus, SalesInvoiceCategory, PaymentDto, BankAccountDto, PaymentModeDto, CustomerDto } from 'generated-src/model';
-import { CustomerCreditStatementOfAccountDto, SettleCustomerCreditPaymentFrontDto } from 'generated-src/model-front';
+import { SettleCustomerCreditPaymentFrontDto } from 'generated-src/model-front';
 import * as moment from 'moment';
 import { Subscription } from 'rxjs';
 import { PaymentApiService } from 'src/app/shared/apis/payment.api.service';
@@ -39,7 +39,6 @@ export class SalesInvoiceCustomerCreditListComponent implements OnInit {
   public salesInvoices = new MatTableDataSource<SalesInvoiceDto>;
   private infiniteSalesInvoices: SalesInvoiceDto[] = [];
   public salesInvoiceSearchSubscription!: Subscription;
-  public customerCreditStatementOfAccount!: CustomerCreditStatementOfAccountDto;
   private page: number = 0;
   private size: number = 50;
   public sortOrder: string = 'desc';
@@ -60,6 +59,7 @@ export class SalesInvoiceCustomerCreditListComponent implements OnInit {
   public paymentTypes: string[] = [];
   private settleCustomerCreditPaymentDto!: SettleCustomerCreditPaymentFrontDto;
   public amountDue!: number;
+  public searchValue!: any;
 
   public soldAt: number = 0;
   public amountPaid: number = 0;
@@ -153,8 +153,6 @@ export class SalesInvoiceCustomerCreditListComponent implements OnInit {
     this.getAllDrivers();
     this.getCustomerById();
     this.search();
-    this.initialiseCustomerCreditStatementOfAccount();
-    console.log(this.salesInvoices.data);
   }
 
   private initialiseCustomer(): void {
@@ -170,29 +168,16 @@ export class SalesInvoiceCustomerCreditListComponent implements OnInit {
     }
   }
 
-  private initialiseCustomerCreditStatementOfAccount(): void {
-    this.customerCreditStatementOfAccount = {
-      salesInvoiceDtos: this.salesInvoices.data,
-      customerDto: this.customer,
-      totalAmountPaid: 0,
-      totalReturnAmount: 0,
-      totalInvoicePrice: 0,
-      totalAmountDue: 0,
-      dateIssued: ''
-    }
-  }
+ 
 
   private getCustomerById(): void {
     this.customerApiService.findById(this.customerId).subscribe(customer => {
       this.customer = customer;
-      this.customerCreditStatementOfAccount.customerDto = customer;
     })
   }
 
   public generateCreditPdfFile(): void{
-    console.log(this.customerCreditStatementOfAccount);
-    this.fileApiService.generateCreditStatementOfAccountPdf(this.customerCreditStatementOfAccount).subscribe(fileResponse => {
-      
+    this.fileApiService.generateCreditStatementOfAccountPdf(this.searchValue).subscribe(fileResponse => {      
       this.utilsService.openTemplateInNewTab(fileResponse);
     });
   }
@@ -297,6 +282,7 @@ export class SalesInvoiceCustomerCreditListComponent implements OnInit {
     if (salesInvoiceSearchCriteriaDto.createdBy === null) {
       delete salesInvoiceSearchCriteriaDto.createdBy;
     }
+    this.searchValue = salesInvoiceSearchCriteriaDto;
 
     this.salesInvoiceSearchSubscription = this.salesInvoiceApiService.search(salesInvoiceSearchCriteriaDto).subscribe(salesInvoices => {
       this.infiniteSalesInvoices = [...this.infiniteSalesInvoices, ...salesInvoices.content];
@@ -308,16 +294,6 @@ export class SalesInvoiceCustomerCreditListComponent implements OnInit {
         this.totalLockedAmountDue = this.salesInvoices.data[0]?.totalLockedAmountDue;
         this.totalUnlockedAmountDue = this.salesInvoices.data[0]?.totalUnlockedAmountDue;
       }
-      console.log(this.salesInvoices);
-      console.log(this.infiniteSalesInvoices);
-      this.customerCreditStatementOfAccount.salesInvoiceDtos = this.infiniteSalesInvoices;
-      this.customerCreditStatementOfAccount.totalInvoicePrice = this.getTotalInvoicePrice();
-      this.customerCreditStatementOfAccount.totalReturnAmount = this.getTableTotalReturnAmount();
-      this.customerCreditStatementOfAccount.totalAmountPaid = this.getTableTotalAmountPaid();
-      this.customerCreditStatementOfAccount.totalAmountDue = this.totalAmountDue;
-      this.customerCreditStatementOfAccount.dateIssued = this.today;
-
-      console.log(this.customerCreditStatementOfAccount);
       if (event) {
         event.target.complete();
         event.returnValue = false;

@@ -46,6 +46,16 @@
           </div>
         </ion-col>
       </ion-row>
+      <ion-row>
+        <ion-col size-xs="12" size-md="3">
+          <ion-searchbar placeholder="Search by account number..." type="text" #accountNumber
+            (ionInput)="searchByAccountNumber(accountNumber.value)"></ion-searchbar>
+        </ion-col>
+        <ion-col size-xs="12" size-md="3">
+          <ion-searchbar placeholder="Search by bank name..." type="text" #bankName
+            (ionInput)="searchByBankName(bankName.value)"></ion-searchbar>
+        </ion-col>
+      </ion-row>
     </ion-card-content>
   </ion-card>
 
@@ -56,17 +66,23 @@
 
         <ng-container matColumnDef="accountHolder">
           <th mat-header-cell *matHeaderCellDef mat-sort-header="accountHolder"> Account Holder </th>
-          <td mat-cell *matCellDef="let element"> {{element.accountHolder | uppercase}} </td>
+          <td mat-cell *matCellDef="let element">
+            <span [ngClass]="element.id == 1 ? 'main' : ''">{{element.accountHolder | uppercase}} </span>
+          </td>
         </ng-container>
 
         <ng-container matColumnDef="accountNumber">
           <th mat-header-cell *matHeaderCellDef mat-sort-header="accountNumber"> Account Number </th>
-          <td mat-cell *matCellDef="let element"> {{element.accountNumber}} </td>
+          <td mat-cell *matCellDef="let element">
+            <span [ngClass]="element.id == 1 ? 'main' : ''">{{element.accountNumber}} </span>
+          </td>
         </ng-container>
 
         <ng-container matColumnDef="bankName">
           <th mat-header-cell *matHeaderCellDef mat-sort-header="bankName"> Bank Name </th>
-          <td mat-cell *matCellDef="let element"> {{element.bankName}} </td>
+          <td mat-cell *matCellDef="let element">
+            <span [ngClass]="element.id == 1 ? 'main' : ''">{{element.bankName}} </span>
+          </td>
         </ng-container>
 
         <ng-container matColumnDef="edit">
