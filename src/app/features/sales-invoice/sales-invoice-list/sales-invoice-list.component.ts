@@ -84,6 +84,8 @@ export class SalesInvoiceListComponent implements OnInit {
   public regNo = environment.regNo;
   public yoe = environment.yoe;
 
+  public isToJakarta: boolean | string = '';
+
   public errorMessages = {
     name: [
       { type: 'required', message: 'Name is required' },
@@ -267,6 +269,13 @@ export class SalesInvoiceListComponent implements OnInit {
     });
   }
 
+  public toggleToJakarta(event: any): void {
+    this.isToJakarta = event.detail.checked;
+    this.utilsService.presentLoadingDuration(500).then(value => {
+      this.search();
+    });
+  }
+
   public routeToSalesInvoiceDetails(salesInvoiceDto: SalesInvoiceDto): void {
     this.router.navigate([`sales-invoice/sales-invoice-details/${salesInvoiceDto.id}`]);
   }
@@ -327,6 +336,7 @@ export class SalesInvoiceListComponent implements OnInit {
       salesInvoiceStatus: this.salesInvoiceStatus,
       salesInvoiceCategory: this.salesInvoiceCategory,
       id: this.salesInvoiceNumber,
+      isToJakarta: this.isToJakarta,
 
       page: this.page,
       size: this.size,
@@ -339,6 +349,9 @@ export class SalesInvoiceListComponent implements OnInit {
     }
     if (salesInvoiceSearchCriteriaDto.customerId === null) {
       delete salesInvoiceSearchCriteriaDto.customerId;
+    }
+    if (!salesInvoiceSearchCriteriaDto.isToJakarta) {
+      delete salesInvoiceSearchCriteriaDto.isToJakarta;
     }
 
     this.salesInvoiceSearchSubscription = this.salesInvoiceApiService.search(salesInvoiceSearchCriteriaDto).subscribe(salesInvoices => {

@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2023-12-18 21:35:59.
+// Generated using typescript-generator version 3.2.1263 on 2023-12-19 13:07:46.
 
 export class BankAccountDto {
     id!: number;
@@ -134,8 +134,8 @@ export class EggSaleSaveDto {
     driverId!: number;
     comment!: string;
     eggCategorySaleDtos!: EggCategorySaleDto[];
-    toJakarta!: boolean;
     newCustomer!: boolean;
+    toJakarta!: boolean;
 }
 
 export class EggSaleSaveDtoBuilder {
@@ -573,8 +573,8 @@ export class SaleSaveDto {
     pricePerKg!: number;
     saleDetailsDtos!: SaleDetailsDto[];
     salesInvoiceId!: number;
-    toJakarta!: boolean;
     newCustomer!: boolean;
+    toJakarta!: boolean;
 }
 
 export class FeedPurchaseDto {
@@ -852,9 +852,9 @@ export class SalesInvoiceDetailsDto {
     salesInvoiceCategory!: SalesInvoiceCategory;
     salesInvoiceStatus!: SalesInvoiceStatus;
     comment!: string;
+    isToJakarta!: boolean;
     pricePerKg!: number;
     saleDetailsDtos!: SaleDetailsDto[];
-    toJakarta!: boolean;
 }
 
 export class SalesInvoiceDetailsForReturnDto {
@@ -898,6 +898,7 @@ export class SalesInvoiceDto {
     totalLockedAmountDue!: number;
     totalUnlockedAmountDue!: number;
     containsReturn!: boolean;
+    isToJakarta!: boolean;
 }
 
 export class SalesInvoiceSearchCriteriaDto {
@@ -918,10 +919,12 @@ export class SalesInvoiceSearchCriteriaDto {
     feedName!: string;
     eggCategoryId!: number;
     generateStatement!: boolean;
+    isToJakarta!: boolean;
 }
 
 export class SalesInvoiceLineDto {
     salesInvoiceId!: number;
+    isToJakarta!: boolean;
     salesInvoiceLineId!: number;
     salesInvoiceCategory!: SalesInvoiceCategory;
     salesInvoiceStatus!: SalesInvoiceStatus;
@@ -949,6 +952,7 @@ export class SalesInvoiceLineDto {
     feedWeightPerBag!: number;
     manureStockId!: number;
     manureWeightPerBag!: number;
+    eggWeight!: number;
     returnInvoiceLineDetailsDtos!: ReturnInvoiceLineDetailsDto[];
 }
 

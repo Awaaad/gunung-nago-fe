@@ -34,6 +34,8 @@ export class ManureListComponent {
   public sortBy: string = 'name';
   public active: boolean | string = '';
   public isModalOpen: boolean = false;
+  public stock = 'assets/flaticon/stock-table-icon.svg';
+
   public errorMessages = {
     weight: [
       { type: 'required', message: 'Weight is required' },

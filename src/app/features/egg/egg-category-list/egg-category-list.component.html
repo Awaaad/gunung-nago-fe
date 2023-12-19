@@ -64,8 +64,10 @@
         <ng-container matColumnDef="edit">
           <th mat-header-cell *matHeaderCellDef> </th>
           <td mat-cell *matCellDef="let element">
-            <div class="table-btn" *ngIf="element.id != 4">
-              <ion-icon class="table-edit-icon" color="neutral-btn" (click)="openModal(element)"
+            <div class="table-btn">
+              <ion-icon color="positive-btn" class="table-stock-icon" [src]="stock"></ion-icon>
+
+              <ion-icon *ngIf="element.id != 4" class="table-edit-icon ml-05" color="neutral-btn" (click)="openModal(element)"
                 name="create"></ion-icon>
             </div>
           </td>

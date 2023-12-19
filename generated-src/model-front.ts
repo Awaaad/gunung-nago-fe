@@ -63,10 +63,13 @@ export class EggCategorySaleFrontDto {
     eggCategoryId!: number | null | undefined;
     piece!: number | null | undefined;
     pricePerPiece!: number | null | undefined;
+    weightPerPiece!: number | null | undefined;
     tie!: number | null | undefined;
     pricePerTie!: number | null | undefined;
+    weightPerTie!: number | null | undefined;
     tray!: number | null | undefined;
     pricePerTray!: number | null | undefined;
+    weightPerTray!: number | null | undefined;
 }
 
 export class PaymentSaveFrontDto {
@@ -527,5 +530,5 @@ export class ManureStockFrontDto {
 export class EggSaleToJakartaFrontDto {
     eggCategoryId: number | null | undefined | any;
     eggQuantityType: EggQuantityType | null | undefined | any;
-    weight: number | null | undefined | any;
+    weights: number[] | [] | null | undefined;
 }

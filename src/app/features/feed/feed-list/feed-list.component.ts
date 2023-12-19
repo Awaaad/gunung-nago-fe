@@ -38,6 +38,8 @@ export class FeedListComponent {
   public feedCategory: FeedCategory | string = '';
   public suppliers: SupplierDto[] = [];
   public isModalOpen: boolean = false;
+  public stock = 'assets/flaticon/stock-table-icon.svg';
+
   public errorMessages = {
     name: [
       { type: 'required', message: 'Name is required' },

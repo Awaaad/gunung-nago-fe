@@ -1,23 +1,19 @@
-import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormGroup, FormBuilder, FormControl, Validators, FormArray } from '@angular/forms';
+import { Component, ViewChild } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IonInfiniteScroll, IonModal } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { SalesInvoiceDto, UserDto, SalesInvoiceType, SalesInvoiceStatus, SalesInvoiceCategory, BankAccountDto, PaymentModeDto, PaymentDto, SalesInvoiceLineDto, ManureDto, EggQuantityType, EggCategoryDto, ReturnInvoiceLineDetailsDto, ReturnInvoiceType } from 'generated-src/model';
+import { UserDto, SalesInvoiceType, SalesInvoiceStatus, SalesInvoiceCategory, BankAccountDto, PaymentModeDto, SalesInvoiceLineDto, ManureDto, EggQuantityType, EggCategoryDto, ReturnInvoiceLineDetailsDto, ReturnInvoiceType } from 'generated-src/model';
 import { SalesInvoiceSettleCreditPaymentFrontDto } from 'generated-src/model-front';
-import moment from 'moment';
 import { Subscription } from 'rxjs';
 import { BankAccountApiService } from 'src/app/shared/apis/bank-account.api.service';
 import { PaymentModeApiService } from 'src/app/shared/apis/payment-mode.api.service';
-import { PaymentApiService } from 'src/app/shared/apis/payment.api.service';
 import { SalesInvoiceApiService } from 'src/app/shared/apis/sales-invoice.api.service';
 import { SecurityApiService } from 'src/app/shared/apis/security.api.service';
 import { UtilsService } from 'src/app/shared/utils/utils.service';
-import { OverlayEventDetail } from '@ionic/core/components';
 import { ManureStockApiService } from 'src/app/shared/apis/manure-stock.api.service';
 import { EggCategoryApiService } from 'src/app/shared/apis/egg-category.api.service';
 
@@ -73,6 +69,9 @@ export class SalesInvoiceByTypeListComponent {
 
   public bankAccounts: BankAccountDto[] = [];
   public paymentModes: PaymentModeDto[] = [];
+
+  public isToJakarta: boolean | string = '';
+
 
   public errorMessages = {
     name: [
@@ -265,6 +264,13 @@ export class SalesInvoiceByTypeListComponent {
     });
   }
 
+  public toggleToJakarta(event: any): void {
+    this.isToJakarta = event.detail.checked;
+    this.utilsService.presentLoadingDuration(500).then(value => {
+      this.search();
+    });
+  }
+
   public routeToSalesInvoiceDetails(salesInvoiceLineDto: SalesInvoiceLineDto): void {
     this.router.navigate([`sales-invoice/sales-invoice-details/${salesInvoiceLineDto.salesInvoiceId}`]);
   }
@@ -328,6 +334,7 @@ export class SalesInvoiceByTypeListComponent {
       eggQuantityType: this.eggQuantityType,
       manureId: this.manureId === '0' || this.manureId === null ? '' : this.manureId,
       eggCategoryId: this.eggCategoryId === '0' || this.eggCategoryId === null ? '' : this.eggCategoryId,
+      isToJakarta: this.isToJakarta,
 
       page: this.page,
       size: this.size,
@@ -340,6 +347,9 @@ export class SalesInvoiceByTypeListComponent {
     }
     if (salesInvoiceSearchCriteriaDto.salesInvoiceType === null) {
       delete salesInvoiceSearchCriteriaDto.salesInvoiceType;
+    }
+    if (!salesInvoiceSearchCriteriaDto.isToJakarta) {
+      delete salesInvoiceSearchCriteriaDto.isToJakarta;
     }
 
     this.salesInvoiceSearchSubscription = this.salesInvoiceApiService.searchForType(salesInvoiceSearchCriteriaDto).subscribe(salesInvoices => {
