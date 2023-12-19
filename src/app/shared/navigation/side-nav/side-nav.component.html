@@ -81,65 +81,6 @@
       <ion-accordion-group>
         <ion-accordion value="first">
           <ion-item slot="header" color="light">
-            <ion-icon [src]="feed" class="font-size-60"></ion-icon>Feed
-          </ion-item>
-          <div class="accordion-sub" slot="content">
-            <ion-item routerLink="/feed/feed-list">
-              <ion-icon [src]="list" color="dark"></ion-icon>Feeds
-            </ion-item>
-            <ion-item routerLink="/feed/feed-details">
-              <ion-icon [src]="add" color="dark"></ion-icon>Add Feed
-            </ion-item>
-            <ion-item routerLink="/feed/feed-sale-details" routerDirection="forward">
-              <ion-icon [src]="sales" color="dark"></ion-icon><span>Feed Sale</span>
-            </ion-item>
-            <ion-item routerLink="/feed/feed-stock">
-              <ion-icon [src]="stock" class="font-size-60"></ion-icon>Update Feed Stock
-            </ion-item>
-            <ion-item routerLink="/feed/feed-allocation">
-              <ion-icon [src]="feedAllocation" color="dark"></ion-icon>Feed Allocation
-            </ion-item>
-            <ion-item routerLink="/sales-invoice/sales-invoice-by-type-list/FEED" routerDirection="forward">
-              <ion-icon [src]="salesRecord" class="font-size-60"></ion-icon><span>Feed Sales Record</span>
-            </ion-item>
-          </div>
-        </ion-accordion>
-      </ion-accordion-group>
-
-      <ion-accordion-group>
-        <ion-accordion value="first">
-          <ion-item slot="header" color="light">
-            <ion-icon [src]="flock" class="font-size-60"></ion-icon>Flock
-          </ion-item>
-          <div class="accordion-sub" slot="content">
-            <ion-item routerLink="/flock/flock-list">
-              <ion-icon [src]="list" color="dark"></ion-icon>Flocks
-            </ion-item>
-            <ion-item routerLink="/flock/flock-details">
-              <ion-icon [src]="add" color="dark"></ion-icon>Add Flock
-            </ion-item>
-            <ion-item routerLink="/flock/flock-sale-details">
-              <ion-icon [src]="sales" color="dark"></ion-icon><span>Flock Sale</span>
-            </ion-item>
-            <ion-item routerLink="/flock/flock-stock">
-              <ion-icon [src]="stock" class="font-size-60"></ion-icon>Update Flock Stock
-            </ion-item>
-            <ion-item routerLink="/flock/flock-transfer">
-              <ion-icon [src]="transfer" class="font-size-60"></ion-icon>Flock Transfer
-            </ion-item>
-            <ion-item routerLink="/flock/flock-cage-category-transfer">
-              <ion-icon [src]="transfer" class="font-size-60"></ion-icon>Flock Cage Category Transfer
-            </ion-item>
-            <ion-item routerLink="/sales-invoice/sales-invoice-by-type-list/FLOCK" routerDirection="forward">
-              <ion-icon [src]="salesRecord" class="font-size-60"></ion-icon><span>Flock Sales Record</span>
-            </ion-item>
-          </div>
-        </ion-accordion>
-      </ion-accordion-group>
-
-      <ion-accordion-group>
-        <ion-accordion value="first">
-          <ion-item slot="header" color="light">
             <ion-icon [src]="egg" class="font-size-60"></ion-icon>Egg
           </ion-item>
           <div class="accordion-sub" slot="content">
@@ -150,7 +91,7 @@
               <ion-icon [src]="add" color="dark"></ion-icon>Add Egg Category
             </ion-item>
             <ion-item routerLink="/egg/egg-sale-details" routerDirection="forward">
-              <ion-icon [src]="sales" color="dark"></ion-icon><span>Egg Sale</span>
+              <ion-icon [src]="pos" class="font-size-60"></ion-icon><span>Egg Point of Sale</span>
             </ion-item>
             <ion-item routerLink="/egg/egg-transfer">
               <ion-icon [src]="transfer" class="font-size-60"></ion-icon>Egg Transfer
@@ -171,6 +112,65 @@
       <ion-accordion-group>
         <ion-accordion value="first">
           <ion-item slot="header" color="light">
+            <ion-icon [src]="flock" class="font-size-60"></ion-icon>Flock
+          </ion-item>
+          <div class="accordion-sub" slot="content">
+            <ion-item routerLink="/flock/flock-list">
+              <ion-icon [src]="list" color="dark"></ion-icon>Flocks
+            </ion-item>
+            <ion-item routerLink="/flock/flock-details">
+              <ion-icon [src]="add" color="dark"></ion-icon>Add Flock
+            </ion-item>
+            <ion-item routerLink="/flock/flock-sale-details">
+              <ion-icon [src]="pos" class="font-size-60"></ion-icon><span>Flock Point of Sale</span>
+            </ion-item>
+            <ion-item routerLink="/flock/flock-stock">
+              <ion-icon [src]="stock" class="font-size-60"></ion-icon>Update Flock Stock
+            </ion-item>
+            <ion-item routerLink="/flock/flock-transfer">
+              <ion-icon [src]="transfer" class="font-size-60"></ion-icon>Flock Transfer
+            </ion-item>
+            <ion-item routerLink="/flock/flock-cage-category-transfer">
+              <ion-icon [src]="transfer" class="font-size-60"></ion-icon>Flock Cage Category Transfer
+            </ion-item>
+            <ion-item routerLink="/sales-invoice/sales-invoice-by-type-list/FLOCK" routerDirection="forward">
+              <ion-icon [src]="salesRecord" class="font-size-60"></ion-icon><span>Flock Sales Record</span>
+            </ion-item>
+          </div>
+        </ion-accordion>
+      </ion-accordion-group>
+
+      <ion-accordion-group>
+        <ion-accordion value="first">
+          <ion-item slot="header" color="light">
+            <ion-icon [src]="feed" class="font-size-60"></ion-icon>Feed
+          </ion-item>
+          <div class="accordion-sub" slot="content">
+            <ion-item routerLink="/feed/feed-list">
+              <ion-icon [src]="list" color="dark"></ion-icon>Feeds
+            </ion-item>
+            <ion-item routerLink="/feed/feed-details">
+              <ion-icon [src]="add" color="dark"></ion-icon>Add Feed
+            </ion-item>
+            <ion-item routerLink="/feed/feed-sale-details" routerDirection="forward">
+              <ion-icon [src]="pos" class="font-size-60"></ion-icon><span>Feed Point of Sale</span>
+            </ion-item>
+            <ion-item routerLink="/feed/feed-stock">
+              <ion-icon [src]="stock" class="font-size-60"></ion-icon>Update Feed Stock
+            </ion-item>
+            <ion-item routerLink="/feed/feed-allocation">
+              <ion-icon [src]="feedAllocation" color="dark"></ion-icon>Feed Allocation
+            </ion-item>
+            <ion-item routerLink="/sales-invoice/sales-invoice-by-type-list/FEED" routerDirection="forward">
+              <ion-icon [src]="salesRecord" class="font-size-60"></ion-icon><span>Feed Sales Record</span>
+            </ion-item>
+          </div>
+        </ion-accordion>
+      </ion-accordion-group>
+
+      <ion-accordion-group>
+        <ion-accordion value="first">
+          <ion-item slot="header" color="light">
             <ion-icon [src]="manure" class="font-size-60"></ion-icon>Fertilizer
           </ion-item>
           <div class="accordion-sub" slot="content">
@@ -181,7 +181,7 @@
               <ion-icon [src]="add" color="dark"></ion-icon>Add Fertilizer
             </ion-item>
             <ion-item routerLink="/manure/manure-sale-details" routerDirection="forward">
-              <ion-icon [src]="sales" color="dark"></ion-icon><span>Fertilizer Sale</span>
+              <ion-icon [src]="pos" class="font-size-60"></ion-icon><span>Fertilizer Point of Sale</span>
             </ion-item>
             <ion-item routerLink="/manure/manure-stock">
               <ion-icon [src]="stock" class="font-size-60"></ion-icon>Update Fertilizer Stock

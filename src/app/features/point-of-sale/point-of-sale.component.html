@@ -289,6 +289,21 @@
 
   <ion-card>
     <ion-card-content>
+      <ion-item-divider>
+        <ion-label>Sale To Jakarta</ion-label>
+      </ion-item-divider>
+      <ion-row>
+        <ion-col>
+          <ion-toggle labelPlacement="start" class="toggle" [(ngModel)]="isToJakarta" color="gunung-nago-report"
+            (ionChange)="changeIsToJakarta($event)"> Is Sale To Jakarta</ion-toggle>
+        </ion-col>
+      </ion-row>
+      <ion-row *ngIf="isToJakarta">
+        <ion-col size-xs="6" size-md="6">
+          <ion-input color="gunung-nago-survey" label="Price per KG*" label-placement="floating" fill="outline"
+            type="number" min="0" clear-input="true" [(ngModel)]="pricePerKg"></ion-input>
+        </ion-col>
+      </ion-row>
       <div *ngFor="let saleDetail of saleDetailsDto; let i = index">
         <!-- Type -->
         <ion-item-divider>
@@ -378,7 +393,8 @@
           <ion-col size-lg="2" size-md="3" size-xs="12"
             *ngIf="saleDetail.salesInvoiceType === 'EGG' && saleDetail.eggCategoryId != null">
             <ion-select color="gunung-nago-primary" label="Quantity Type" label-placement="floating" fill="outline"
-              interface="popover" clear-input="true" [(ngModel)]="saleDetail.eggQuantityType">
+              interface="popover" clear-input="true" [(ngModel)]="saleDetail.eggQuantityType"
+              (ngModelChange)="isToJakarta? saleDetail.quantity = 1 : null">
               <ion-select-option *ngFor="let eggQuantityType of eggQuantityTypes" [value]="eggQuantityType">{{
                 eggQuantityType | titlecase
                 }}</ion-select-option>
@@ -437,7 +453,7 @@
 
         <!-- Egg -->
         <div *ngIf="saleDetail.salesInvoiceType === 'EGG' && saleDetail.eggCategoryId != null">
-          <ion-row class="quantity-qp">
+          <ion-row class="quantity-qp" *ngIf="!isToJakarta">
             <ion-col size-lg="2" size-md="3" size-xs="12">
               <div class="quantity-count-section">
                 <div class="quantity-section">
@@ -476,6 +492,44 @@
             <ion-col size-lg="2" size-md="3" size-xs="12" *ngIf="saleDetail.quantity > 0 && saleDetail.price > 0">
               <div class="total-per ml-05">
                 <strong>Amount: {{saleDetail.price * saleDetail.quantity}}</strong>
+              </div>
+            </ion-col>
+          </ion-row>
+
+          <ion-row class="quantity-qp" *ngIf="isToJakarta">
+            <ion-col size-lg="2" size-md="3" size-xs="12">
+              <div class="quantity-count-section">
+                <div class="quantity-section">
+                  <div>
+                    <strong>Quantity In Stock</strong>
+                  </div>
+                  <img class="quantities" src='./assets/flaticon/eggs.png'>
+
+                  <div class="quantity-count" *ngIf="saleDetail.eggQuantityType != null">
+                    <strong *ngIf="saleDetail.eggQuantityType === 'TIE'">{{saleDetail.eggInitialQuantity -
+                      (saleDetail.quantity *
+                      300)}}</strong>
+                    <strong *ngIf="saleDetail.eggQuantityType === 'TRAY'">{{saleDetail.eggInitialQuantity -
+                      (saleDetail.quantity *
+                      30)}}</strong>
+                    <strong *ngIf="saleDetail.eggQuantityType === 'PIECE'">{{saleDetail.eggInitialQuantity -
+                      saleDetail.quantity}}</strong>
+                  </div>
+                  <div class="quantity-count" *ngIf="saleDetail.eggQuantityType === null">
+                    <strong>{{saleDetail.eggInitialQuantity}}</strong>
+                  </div>
+                </div>
+              </div>
+            </ion-col>
+            <ion-col size-lg="2" size-md="3" size-xs="12"
+              *ngIf="(saleDetail.salesInvoiceType === 'EGG' && saleDetail.eggQuantityType != null)">
+              <ion-input color="gunung-nago-survey" label="Weight Per {{saleDetail.eggQuantityType | titlecase}} (KG)"
+                label-placement="floating" fill="outline" type="number" min="0" clear-input="true"
+                [(ngModel)]="saleDetail.eggWeight" (ngModelChange)="calculateTotalPrice()"></ion-input>
+            </ion-col>
+            <ion-col size-lg="2" size-md="3" size-xs="12" *ngIf="saleDetail.eggWeight > 0 && pricePerKg > 0">
+              <div class="total-per ml-05">
+                <strong>Amount: {{saleDetail.eggWeight * pricePerKg}}</strong>
               </div>
             </ion-col>
           </ion-row>
@@ -633,7 +687,7 @@
                 <th scope="col">No.</th>
                 <th scope="col">Product</th>
                 <th scope="col">Quantity</th>
-                <th scope="col">Unit Price</th>
+                <th scope="col">Unit Price<span *ngIf="isToJakarta"> - EGG Per KG </span></th>
                 <th scope="col">Amount</th>
               </tr>
             </thead>
@@ -659,21 +713,35 @@
                 <td data-label="Quantity" *ngIf="saleDetail.salesInvoiceType === 'FLOCK'">{{saleDetail.quantity}}</td>
                 <td data-label="Quantity"
                   *ngIf="saleDetail.salesInvoiceType === 'EGG' && saleDetail.eggQuantityType === 'TIE'">
-                  {{saleDetail.quantity}} - <strong>TIE</strong></td>
+                  {{saleDetail.quantity}} - <strong>TIE</strong> <span> - {{saleDetail.eggWeight}} KG</span></td>
                 <td data-label="Quantity"
                   *ngIf="saleDetail.salesInvoiceType === 'EGG' && saleDetail.eggQuantityType === 'TRAY'">
-                  {{saleDetail.quantity}} - <strong>TRAY</strong></td>
+                  {{saleDetail.quantity}} - <strong>TRAY</strong> <span> - {{saleDetail.eggWeight}} KG</span></td>
                 <td data-label="Quantity"
                   *ngIf="saleDetail.salesInvoiceType === 'EGG' && saleDetail.eggQuantityType === 'PIECE'">
-                  {{saleDetail.quantity}} - <strong>PIECE</strong></td>
+                  {{saleDetail.quantity}} - <strong>PIECE</strong> <span> - {{saleDetail.eggWeight}} KG</span></td>
 
                 <td data-label="Quantity" *ngIf="saleDetail.salesInvoiceType === 'FEED'">
                   {{saleDetail.quantity}} - <strong>BAG(S)</strong> - {{saleDetail.feedWeightPerBag}} KG</td>
                 <td data-label="Quantity" *ngIf="saleDetail.salesInvoiceType === 'MANURE'">
                   {{saleDetail.quantity}} - <strong>BAG(S)</strong> - {{saleDetail.manureWeightPerBag}} KG</td>
 
-                <td data-label="Unit Price">Rp {{saleDetail.price | number : '1.2-2'}}</td>
-                <td data-label="Amount">Rp {{saleDetail.quantity * saleDetail.price | number : '1.2-2'}}</td>
+                <td data-label="Unit Price" *ngIf="saleDetail.salesInvoiceType !== 'EGG'">Rp {{saleDetail.price | number
+                  : '1.2-2'}}</td>
+                <td data-label="Unit Price" *ngIf="saleDetail.salesInvoiceType === 'EGG' && isToJakarta">Rp {{pricePerKg
+                  | number : '1.2-2'}}</td>
+                <td data-label="Unit Price" *ngIf="saleDetail.salesInvoiceType === 'EGG' && !isToJakarta">Rp
+                  {{saleDetail.price | number : '1.2-2'}}</td>
+
+
+                <td data-label="Amount" *ngIf="saleDetail.salesInvoiceType !== 'EGG'">Rp {{saleDetail.quantity *
+                  saleDetail.price | number : '1.2-2'}}</td>
+                <td data-label="Amount" *ngIf="saleDetail.salesInvoiceType === 'EGG' && isToJakarta">Rp
+                  {{saleDetail.eggWeight *
+                  pricePerKg | number :
+                  '1.2-2'}}</td>
+                <td data-label="Amount" *ngIf="saleDetail.salesInvoiceType === 'EGG' && !isToJakarta">Rp
+                  {{saleDetail.quantity * saleDetail.price | number : '1.2-2'}}</td>
               </tr>
             </tbody>
           </table>

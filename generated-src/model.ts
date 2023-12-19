@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2023-12-13 16:45:28.
+// Generated using typescript-generator version 3.2.1263 on 2023-12-18 21:35:59.
 
 export class BankAccountDto {
     id!: number;
@@ -70,10 +70,13 @@ export class EggCategorySaleDto {
     eggCategoryId!: number;
     piece!: number;
     pricePerPiece!: number;
+    weightPerPiece!: number;
     tie!: number;
     pricePerTie!: number;
+    weightPerTie!: number;
     tray!: number;
     pricePerTray!: number;
+    weightPerTray!: number;
 }
 
 export class EggCategorySaleDtoBuilder {
@@ -122,6 +125,7 @@ export class EggReportSearchCriteriaDto {
 }
 
 export class EggSaleSaveDto {
+    pricePerKg!: number;
     soldAt!: number;
     discount!: number;
     customerDto!: CustomerDto;
@@ -130,6 +134,7 @@ export class EggSaleSaveDto {
     driverId!: number;
     comment!: string;
     eggCategorySaleDtos!: EggCategorySaleDto[];
+    toJakarta!: boolean;
     newCustomer!: boolean;
 }
 
@@ -453,9 +458,6 @@ export class ManureDto {
     bags!: number;
 }
 
-export class ManureDtoBuilder {
-}
-
 export class ManureSaleDetailsDto {
     manureStockId!: number;
     quantity!: number;
@@ -477,9 +479,16 @@ export class ManureSaleSaveDto {
 export class ManureSaleSaveDtoBuilder {
 }
 
+export class ManureSearchCriteriaDto {
+    weight!: number;
+    farmId!: number;
+}
+
 export class ManureStockDto {
     id!: number;
     manureId!: number;
+    cageId!: number;
+    cageName!: string;
     weight!: number;
     bags!: number;
     collectedById!: number;
@@ -544,6 +553,7 @@ export class SaleDetailsDto {
     eggCategoryId!: number;
     eggType!: string;
     eggQuantityType!: EggQuantityType;
+    eggWeight!: number;
     transferToBad!: boolean;
     cageId!: number;
     flockId!: number;
@@ -560,8 +570,10 @@ export class SaleSaveDto {
     salesInvoiceCategory!: SalesInvoiceCategory;
     driverId!: number;
     comment!: string;
+    pricePerKg!: number;
     saleDetailsDtos!: SaleDetailsDto[];
     salesInvoiceId!: number;
+    toJakarta!: boolean;
     newCustomer!: boolean;
 }
 
@@ -769,7 +781,7 @@ export class ReturnInvoiceLineDetailsDto {
     quantity!: number;
     salesInvoiceLineId!: number;
     eggQuantityType!: EggQuantityType;
-    eggCategory!: number;
+    eggCategory!: string;
     eggType!: string;
     cageId!: number;
     flockId!: number;
@@ -840,7 +852,9 @@ export class SalesInvoiceDetailsDto {
     salesInvoiceCategory!: SalesInvoiceCategory;
     salesInvoiceStatus!: SalesInvoiceStatus;
     comment!: string;
+    pricePerKg!: number;
     saleDetailsDtos!: SaleDetailsDto[];
+    toJakarta!: boolean;
 }
 
 export class SalesInvoiceDetailsForReturnDto {
@@ -887,6 +901,7 @@ export class SalesInvoiceDto {
 }
 
 export class SalesInvoiceSearchCriteriaDto {
+    id!: number;
     salesInvoiceType!: SalesInvoiceType;
     customerName!: string;
     createdBy!: string;
@@ -902,6 +917,7 @@ export class SalesInvoiceSearchCriteriaDto {
     manureId!: number;
     feedName!: string;
     eggCategoryId!: number;
+    generateStatement!: boolean;
 }
 
 export class SalesInvoiceLineDto {

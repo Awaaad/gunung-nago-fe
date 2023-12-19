@@ -103,6 +103,9 @@ export class PointOfSaleComponent implements OnInit {
   public minLengthTermFeed = 1;
   public radioColor = "#cf9d06";
 
+  public isToJakarta: boolean = false;
+  public pricePerKg!: number;
+
   public errorMessages = {
     firstName: [{ type: "required", message: "First name is required" }],
     lastName: [{ type: "required", message: "Last name is required" }],
@@ -195,6 +198,11 @@ export class PointOfSaleComponent implements OnInit {
     })
   }
 
+  public changeIsToJakarta(event: any): void {
+    this.reset();
+    this.isToJakarta = event.detail.checked;
+  }
+
   public findSalesInvoiceDetailsById(): void {
     this.salesInvoiceApiService.findSalesInvoiceDetailsById(this.salesInvoiceId).subscribe(salesInvoiceDetailsFrontDto => {
       this.salesInvoiceDetailsFrontDto = salesInvoiceDetailsFrontDto;
@@ -255,6 +263,7 @@ export class PointOfSaleComponent implements OnInit {
       feedStocks: [],
       feedBags: null,
       feedId: null,
+      eggWeight: null,
       feeds: [],
     }
   }
@@ -406,7 +415,11 @@ export class PointOfSaleComponent implements OnInit {
   public calculateTotalPrice(): void {
     this.totalPrice = 0;
     this.saleDetailsDto.forEach(saleDetailDto => {
-      this.totalPrice = this.totalPrice + (saleDetailDto.quantity * saleDetailDto.price);
+      if (this.isToJakarta) {
+        this.totalPrice = this.totalPrice + (saleDetailDto.quantity * saleDetailDto.price) + (saleDetailDto.eggWeight * this.pricePerKg);
+      } else {
+        this.totalPrice = this.totalPrice + (saleDetailDto.quantity * saleDetailDto.price);
+      }
     })
   }
 
@@ -431,6 +444,8 @@ export class PointOfSaleComponent implements OnInit {
   private initialiseFormBuilder(): void {
     this.saleForm = this.formBuilder.group({
       newCustomer: new FormControl(this.isNewCustomer, Validators.compose([Validators.required])),
+      isToJakarta: new FormControl(this.isToJakarta, Validators.compose([Validators.required])),
+      pricePerKg: new FormControl({ value: this.pricePerKg, disabled: false }, Validators.compose([])),
       customer: this.formBuilder.group({
         id: this.selectedCustomer?.id,
         firstName: new FormControl({ value: '', disabled: !this.isNewCustomer }, Validators.compose([Validators.required])),
@@ -600,6 +615,8 @@ export class PointOfSaleComponent implements OnInit {
         telephoneNumber: null,
         totalAmountDue: null,
       },
+      toJakarta: this.isToJakarta,
+      pricePerKg: this.pricePerKg,
       driverId: null,
       salesInvoiceCategory: null,
       comment: null,
@@ -621,6 +638,8 @@ export class PointOfSaleComponent implements OnInit {
         telephoneNumber: this.saleForm?.get("customer.telephoneNumber")?.value,
         totalAmountDue: null,
       },
+      toJakarta: this.isToJakarta,
+      pricePerKg: this.pricePerKg,
       driverId: this.selectedDriver ? this.selectedDriver.id : null,
       salesInvoiceCategory: this.salesInvoiceCategory,
       comment: this.comment,
@@ -690,6 +709,8 @@ export class PointOfSaleComponent implements OnInit {
     this.quantity = 0;
     this.price = 0;
     this.totalPrice = 0;
+    this.isToJakarta = false;
+    this.pricePerKg = 0;
     this.saleDetailsDto = [];
     this.initialiseFormBuilder();
     this.setCustomerNewValue(this.isNewCustomer);
