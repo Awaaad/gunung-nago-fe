@@ -61,7 +61,9 @@ export class FeedAllocationComponent implements OnInit {
       feedCategory: FeedCategory.NORM,
       feedId: 0,
       quantity: 0,
-      recommendedPrice: 0
+      recommendedPrice: 0,
+      bagsSold: 0,
+      bagsAllocated: 0
     }
   }
 

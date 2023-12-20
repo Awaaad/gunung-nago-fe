@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { EggCategoryDto } from "generated-src/model";
+import { EggCategoryDto, EggCategoryStockDto } from "generated-src/model";
 import { PageResult } from "generated-src/model-front";
 import { Observable } from "rxjs";
 import { environment } from "src/environments/environment";
@@ -19,8 +19,8 @@ export class EggCategoryApiService {
     return this.http.get<PageResult<EggCategoryDto>>(`${this.baseUrl}/search`, { params: searchValues });
   }
 
-  public searchEggCategoryStock(searchValues: any): Observable<PageResult<EggCategoryDto>> {
-    return this.http.get<PageResult<EggCategoryDto>>(`${this.baseUrl}/stock/search`, { params: searchValues });
+  public searchEggCategoryStock(searchValues: any): Observable<PageResult<EggCategoryStockDto>> {
+    return this.http.get<PageResult<EggCategoryStockDto>>(`${this.baseUrl}/stock/search`, { params: searchValues });
   }
 
   public edit(eggCategory: EggCategoryDto): Observable<any> {

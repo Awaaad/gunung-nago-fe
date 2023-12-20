@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { FlockCageTransferDto, FlockDto, FlockStockCountDto } from 'generated-src/model';
+import { FlockCageTransferDto, FlockDto, FlockStockCountDto, FlockStockDto } from 'generated-src/model';
 import { FlockCageIncompatibleFrontDto, FlockFrontDto, FlockSaveFrontDto, PageResult } from 'generated-src/model-front';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -17,6 +17,10 @@ export class FlockApiService {
 
   public search(searchValues: any): Observable<PageResult<FlockDto>> {
     return this.http.get<PageResult<FlockDto>>(`${this.baseUrl}/search`, { params: searchValues });
+  }
+
+  public searchFlockStock(searchValues: any): Observable<PageResult<FlockStockDto>> {
+    return this.http.get<PageResult<FlockStockDto>>(`${this.baseUrl}/stock/search`, { params: searchValues });
   }
 
   public findTotalFlockStockCount(): Observable<FlockStockCountDto> {

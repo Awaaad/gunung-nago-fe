@@ -28,7 +28,7 @@ export class SurveyFrontDto {
     healthSurveyDtos: HealthSurveyDto[] | null | undefined;
     feedSurveyDtos: FeedSurveyDto[] | null | undefined;
     surveyEggCountDtos!: SurveyEggCountDto[] | null | undefined;
-    manureStockDtos!: ManureStockDto[] | null | undefined;
+    manureStockDtos!: ManureStockFrontDto[] | null | undefined;
     comment: string | null | undefined;
     amountOfChickenWeighted!: number | null | undefined;
     totalWeight!: number | null | undefined;

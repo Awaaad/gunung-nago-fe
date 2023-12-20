@@ -23,6 +23,10 @@ export class FeedApiService {
     return this.http.get<PageResult<FeedDto>>(`${this.baseUrl}/search`, { params: searchValues });
   }
 
+  public searchFeedStock(searchValues: any): Observable<PageResult<FeedStockDto>> {
+    return this.http.get<PageResult<FeedStockDto>>(`${this.baseUrl}stock/search`, { params: searchValues });
+  }
+
   public findFeedStockByFeedId(id: number): Observable<FeedStockSaveDto> {
     return this.http.get<FeedStockSaveDto>(`${this.baseUrl}/stock/${id}`);
   }

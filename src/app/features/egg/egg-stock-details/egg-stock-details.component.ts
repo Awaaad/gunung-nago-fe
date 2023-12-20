@@ -26,7 +26,7 @@ export class EggStockDetailsComponent  implements OnInit {
       // this.infiniteEggCategories = [];
       // this.eggCategories = new MatTableDataSource<EggCategoryDto>([]);
     }
-    const eggCategorySearchCriteriaDto = {
+    const eggCategoryStockSearchCriteriaDto = {
       eggCategoryId: this.eggCategoryId,
       page: this.page,
       size: this.size,
@@ -36,8 +36,8 @@ export class EggStockDetailsComponent  implements OnInit {
       // active: this.active
     }
 
-    this.eggCategoryApiService.searchEggCategoryStock(eggCategorySearchCriteriaDto).subscribe(eggCategories => {
-      console.log(eggCategories)
+    this.eggCategoryApiService.searchEggCategoryStock(eggCategoryStockSearchCriteriaDto).subscribe(eggCategoryStocks => {
+      console.log(eggCategoryStocks)
       // this.infiniteEggCategories = [...this.infiniteEggCategories, ...eggCategories.content];
       // this.eggCategories = new MatTableDataSource<EggCategoryDto>(this.infiniteEggCategories);
 

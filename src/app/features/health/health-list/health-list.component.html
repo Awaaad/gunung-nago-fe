@@ -81,6 +81,16 @@
           <td mat-cell *matCellDef="let element"> {{element.description}} </td>
         </ng-container>
 
+        <ng-container matColumnDef="totalQuantity">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="totalQuantity"> Boxes in Stock </th>
+          <td mat-cell *matCellDef="let element"> {{element.totalQuantity}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="totalUnits">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="totalUnits"> Units in Stock </th>
+          <td mat-cell *matCellDef="let element"> {{element.totalUnits}} </td>
+        </ng-container>
+
         <ng-container matColumnDef="healthType">
           <th mat-header-cell *matHeaderCellDef mat-sort-header="healthType"> Health Type </th>
           <td mat-cell *matCellDef="let element"> {{element.healthType | titlecase}} </td>

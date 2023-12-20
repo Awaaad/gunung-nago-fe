@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2023-12-19 21:44:50.
+// Generated using typescript-generator version 3.2.1263 on 2023-12-20 22:55:36.
 
 export class AuditDto {
     createdBy!: string;
@@ -96,6 +96,7 @@ export class EggCategorySearchCriteriaDto {
 }
 
 export class EggCategoryStockDto extends AuditDto {
+    eggCategoryStockId!: number;
     eggCategoryId!: number;
     name!: string;
     eggType!: EggType;
@@ -103,6 +104,13 @@ export class EggCategoryStockDto extends AuditDto {
 }
 
 export class EggCategoryStockSearchCriteriaDto {
+    eggCategoryId!: number;
+    createdBy!: string;
+    createdDateFrom!: Date;
+    createdDateTo!: Date;
+    lastModifiedBy!: string;
+    lastModifiedDateFrom!: Date;
+    lastModifiedDateTo!: Date;
 }
 
 export class EggReportDto {
@@ -145,8 +153,8 @@ export class EggSaleSaveDto {
     driverId!: number;
     comment!: string;
     eggCategorySaleDtos!: EggCategorySaleDto[];
-    toJakarta!: boolean;
     newCustomer!: boolean;
+    toJakarta!: boolean;
 }
 
 export class EggSaleSaveDtoBuilder {
@@ -243,6 +251,8 @@ export class FeedStockAllocationDto {
 export class FeedStockDto {
     feedStockId!: number;
     bags!: number;
+    bagsSold!: number;
+    bagsAllocated!: number;
     createdDate!: Date;
     recommendedPrice!: number;
     weight!: number;
@@ -266,6 +276,16 @@ export class FeedStockSaveDto {
     feedId!: number;
     name!: string;
     feedCategory!: FeedCategory;
+}
+
+export class FeedStockSearchCriteriaDto {
+    feedId!: number;
+    createdBy!: string;
+    createdDateFrom!: Date;
+    createdDateTo!: Date;
+    lastModifiedBy!: string;
+    lastModifiedDateFrom!: Date;
+    lastModifiedDateTo!: Date;
 }
 
 export class FeedSurveyDto {
@@ -380,7 +400,7 @@ export class FlockStockCountDto {
     dead!: number;
 }
 
-export class FlockStockDto {
+export class FlockStockDto extends AuditDto {
     id!: number;
     surveyDate!: Date;
     age!: number;
@@ -391,7 +411,18 @@ export class FlockStockDto {
     good!: number;
     totalWeight!: number;
     amountOfChickenWeighted!: number;
+    cageName!: string;
     flockDto!: FlockDto;
+}
+
+export class FlockStockSearchCriteriaDto {
+    flockId!: number;
+    createdBy!: string;
+    createdDateFrom!: Date;
+    createdDateTo!: Date;
+    lastModifiedBy!: string;
+    lastModifiedDateFrom!: Date;
+    lastModifiedDateTo!: Date;
 }
 
 export class HealthProductDto {
@@ -495,7 +526,7 @@ export class ManureSearchCriteriaDto {
     farmId!: number;
 }
 
-export class ManureStockDto {
+export class ManureStockDto extends AuditDto {
     id!: number;
     manureId!: number;
     cageId!: number;
@@ -509,6 +540,16 @@ export class ManureStockDto {
 }
 
 export class ManureStockDtoBuilder {
+}
+
+export class ManureStockSearchCriteriaDto {
+    manureId!: number;
+    createdBy!: string;
+    createdDateFrom!: Date;
+    createdDateTo!: Date;
+    lastModifiedBy!: string;
+    lastModifiedDateFrom!: Date;
+    lastModifiedDateTo!: Date;
 }
 
 export class PaymentDto {
@@ -585,8 +626,8 @@ export class SaleSaveDto {
     pricePerKg!: number;
     saleDetailsDtos!: SaleDetailsDto[];
     salesInvoiceId!: number;
-    toJakarta!: boolean;
     newCustomer!: boolean;
+    toJakarta!: boolean;
 }
 
 export class FeedPurchaseDto {
@@ -764,8 +805,8 @@ export class ReturnInvoiceDetailsDto {
     id!: number;
     totalPrice!: number;
     comment!: string;
-    createdBy!: string;
     createdDate!: Date;
+    createdBy!: string;
     customerFirstName!: string;
     customerLastName!: string;
     customerAddress!: string;

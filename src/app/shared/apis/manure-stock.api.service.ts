@@ -19,6 +19,10 @@ export class ManureStockApiService {
         return this.http.get<PageResult<ManureDto>>(`${this.baseUrl}/search`, { params: searchValues });
     }
 
+    public searchManureStock(searchValues: any): Observable<PageResult<ManureStockDto>> {
+        return this.http.get<PageResult<ManureStockDto>>(`${this.baseUrl}/stock/search`, { params: searchValues });
+    }
+
     public edit(manureDto: ManureDto): Observable<any> {
         return this.http.put(`${this.baseUrl}`, manureDto);
     }
