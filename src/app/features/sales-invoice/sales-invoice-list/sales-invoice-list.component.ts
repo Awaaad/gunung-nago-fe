@@ -20,6 +20,7 @@ import { PaymentModeApiService } from 'src/app/shared/apis/payment-mode.api.serv
 import { BankAccountApiService } from 'src/app/shared/apis/bank-account.api.service';
 import { CustomerApiService } from 'src/app/shared/apis/customer.api.service';
 import { environment } from 'src/environments/environment';
+import { FileApiService } from 'src/app/shared/apis/file.api.service';
 
 @Component({
   selector: 'app-sales-invoice-list',
@@ -67,6 +68,7 @@ export class SalesInvoiceListComponent implements OnInit {
   public lastName!: string;
   public firstName!: string;
   public salesInvoiceNumber: string = '';
+  public searchValue!: any;
 
   public bankAccounts: BankAccountDto[] = [];
   public paymentModes: PaymentModeDto[] = [];
@@ -134,7 +136,8 @@ export class SalesInvoiceListComponent implements OnInit {
     private translateService: TranslateService,
     private utilsService: UtilsService,
     private bankAccountApiService: BankAccountApiService,
-    private paymentModeApiService: PaymentModeApiService
+    private paymentModeApiService: PaymentModeApiService,
+    private fileApiService: FileApiService
   ) {
   }
 
@@ -399,10 +402,16 @@ export class SalesInvoiceListComponent implements OnInit {
     if (salesInvoiceSearchCriteriaDto.customerId === null) {
       delete salesInvoiceSearchCriteriaDto.customerId;
     }
-
+    this.searchValue = salesInvoiceSearchCriteriaDto;
     this.salesInvoiceSearchSubscription = this.salesInvoiceApiService.generateStatement(salesInvoiceSearchCriteriaDto).subscribe(salesInvoices => {
       this.statementInvoices = salesInvoices.content;
     })
+  }
+
+  public generateStatementPdf() : void{
+    this.fileApiService.generateStatementOfAccountPdf(this.searchValue).subscribe(fileResponse => {
+      this.utilsService.openTemplateInNewTab(fileResponse);
+    });
   }
 
   public getTotalReturn(paymentDto: PaymentDto[]): number {

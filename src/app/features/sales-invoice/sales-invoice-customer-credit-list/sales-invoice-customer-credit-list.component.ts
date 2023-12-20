@@ -20,6 +20,7 @@ import { PaymentModeApiService } from 'src/app/shared/apis/payment-mode.api.serv
 import { BankAccountApiService } from 'src/app/shared/apis/bank-account.api.service';
 import { environment } from 'src/environments/environment';
 import { CustomerApiService } from 'src/app/shared/apis/customer.api.service';
+import { FileApiService } from 'src/app/shared/apis/file.api.service';
 
 @Component({
   selector: 'app-sales-invoice-customer-credit-list',
@@ -58,6 +59,7 @@ export class SalesInvoiceCustomerCreditListComponent implements OnInit {
   public paymentTypes: string[] = [];
   private settleCustomerCreditPaymentDto!: SettleCustomerCreditPaymentFrontDto;
   public amountDue!: number;
+  public searchValue!: any;
 
   public soldAt: number = 0;
   public amountPaid: number = 0;
@@ -130,7 +132,8 @@ export class SalesInvoiceCustomerCreditListComponent implements OnInit {
     private translateService: TranslateService,
     private utilsService: UtilsService,
     private bankAccountApiService: BankAccountApiService,
-    private paymentModeApiService: PaymentModeApiService
+    private paymentModeApiService: PaymentModeApiService,
+    private fileApiService: FileApiService
   ) {
   }
 
@@ -168,6 +171,12 @@ export class SalesInvoiceCustomerCreditListComponent implements OnInit {
     this.customerApiService.findById(this.customerId).subscribe(customer => {
       this.customer = customer;
     })
+  }
+
+  public generateCreditPdfFile(): void{
+    this.fileApiService.generateCreditStatementOfAccountPdf(this.searchValue).subscribe(fileResponse => {
+      this.utilsService.openTemplateInNewTab(fileResponse);
+    });
   }
 
   public getAllPaymentModes() {
@@ -270,6 +279,7 @@ export class SalesInvoiceCustomerCreditListComponent implements OnInit {
     if (salesInvoiceSearchCriteriaDto.createdBy === null) {
       delete salesInvoiceSearchCriteriaDto.createdBy;
     }
+    this.searchValue = salesInvoiceSearchCriteriaDto;
 
     this.salesInvoiceSearchSubscription = this.salesInvoiceApiService.search(salesInvoiceSearchCriteriaDto).subscribe(salesInvoices => {
       this.infiniteSalesInvoices = [...this.infiniteSalesInvoices, ...salesInvoices.content];
