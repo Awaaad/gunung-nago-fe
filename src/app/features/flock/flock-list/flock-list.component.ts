@@ -21,7 +21,7 @@ export class FlockListComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   public language = "en";
-  public displayedColumns: string[] = ['name', 'cageName', 'active', 'initialAge', 'initialFlockCategory', 'initialQuantity', 'aquisitionDate', 'aquisitionType'];
+  public displayedColumns: string[] = ['name', 'cageName', 'active', 'initialAge', 'initialFlockCategory', 'initialQuantity', 'aquisitionDate', 'aquisitionType', 'edit'];
   public flocks = new MatTableDataSource<FlockDto>;
   private infiniteFlocks: FlockDto[] = [];
   public flockSearchSubscription!: Subscription;
@@ -29,6 +29,7 @@ export class FlockListComponent {
   private size: number = 20;
   public sortOrder: string = 'asc';
   public sortBy: string = 'name';
+  public stock = 'assets/flaticon/stock-table-icon.svg';
 
   constructor(
     private flockApiService: FlockApiService,

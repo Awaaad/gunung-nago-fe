@@ -341,7 +341,7 @@ export class ReturnInvoiceComponent implements OnInit {
         manureStockId: sale.manureStockId,
         manureWeightPerBag: sale.manureWeightPerBag,
         newPrice: new FormControl({ value: unitSoldAt, disabled: false }),
-        quantity: new FormControl({ value: salesQuantity - sale.quantityReturned, disabled: false }, Validators.compose([Validators.max(maxQuantity), Validators.min(0)])),
+        quantity: new FormControl({ value: null, disabled: false }, Validators.compose([Validators.max(maxQuantity), Validators.min(0)])),
         salesInvoiceType: sale.salesInvoiceType,
         transferToBad: new FormControl({ value: false, disabled: false }),
       })
@@ -408,6 +408,7 @@ export class ReturnInvoiceComponent implements OnInit {
         manureWeightPerBag: sale.manureWeightPerBag,
         manureStocks: [],
         feedStocks: [],
+        eggWeight: null,
         manureBags: null,
         feedBags: null,
         feedId: null,

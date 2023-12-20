@@ -50,21 +50,26 @@ export class EggSaleSaveFrontDto {
     customerDto!: CustomerFrontDto | null | undefined;
     paymentSaveDtos!: PaymentSaveFrontDto[] | [] | null | undefined;
     soldAt!: number | null | undefined;
+    pricePerKg!: number | null | undefined;
     salesInvoiceCategory!: SalesInvoiceCategory | null | undefined;
     driverId!: number | null | undefined;
     comment!: string | null | undefined;
     eggCategorySaleDtos!: EggCategorySaleFrontDto[] | [] | null | undefined;
     newCustomer!: boolean | null | undefined;
+    isToJakarta!: boolean | null | undefined;
 }
 
 export class EggCategorySaleFrontDto {
     eggCategoryId!: number | null | undefined;
     piece!: number | null | undefined;
     pricePerPiece!: number | null | undefined;
+    weightPerPiece!: number | null | undefined;
     tie!: number | null | undefined;
     pricePerTie!: number | null | undefined;
+    weightPerTie!: number | null | undefined;
     tray!: number | null | undefined;
     pricePerTray!: number | null | undefined;
+    weightPerTray!: number | null | undefined;
 }
 
 export class PaymentSaveFrontDto {
@@ -160,6 +165,8 @@ export class SaleSaveFrontDto {
     newCustomer!: boolean | null | undefined;
     soldAt!: number | null | undefined;
     salesInvoiceId!: number | null | undefined;
+    pricePerKg!: number | null | undefined;
+    toJakarta!: boolean | null | undefined;
 }
 
 export class SaleDetailsFrontDto {
@@ -185,6 +192,7 @@ export class SaleDetailsFrontDto {
     feedWeightPerBag!: number | null | undefined | any;
     manureStockId!: number | null | undefined | any;
     manureWeightPerBag!: number | null | undefined | any;
+    eggWeight!: number | null | undefined | any;
     manureStocks: any[] = [];
     feeds: any[] = [];
     feedStocks: any[] = [];
@@ -208,6 +216,8 @@ export class SalesInvoiceDetailsFrontDto {
     salesInvoiceCategory!: SalesInvoiceCategory | null | undefined | any;
     salesInvoiceStatus!: SalesInvoiceStatus | null | undefined | any;
     comment: string | null | undefined | any;
+    isToJakarta: boolean | null | undefined | any;
+    pricePerKg: number | null | undefined | any;
     saleDetailsDtos!: SaleDetailsDto[] | [] | null | undefined;
 }
 
@@ -515,4 +525,10 @@ export class ManureStockFrontDto {
     collectedByFirstName: string | null | undefined | any;
     collectedByLastName: string | null | undefined | any;
     collectedDate: Date | null | undefined | any;
+}
+
+export class EggSaleToJakartaFrontDto {
+    eggCategoryId: number | null | undefined | any;
+    eggQuantityType: EggQuantityType | null | undefined | any;
+    weights: number[] | [] | null | undefined;
 }

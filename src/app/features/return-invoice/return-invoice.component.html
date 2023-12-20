@@ -95,7 +95,8 @@
           <span>{{element.salesInvoiceType | titlecase}}
             <span *ngIf="element.eggCategoryName"> - <strong>{{element.eggCategoryName}}</strong> </span>
             <span *ngIf="element.salesInvoiceType === 'MANURE'"> - {{element.manureWeightPerBag}} (KG)</span>
-            <span *ngIf="element.salesInvoiceType === 'FEED'"> - <strong>{{element.feedName}}</strong> - {{element.feedWeightPerBag}} (KG)</span>
+            <span *ngIf="element.salesInvoiceType === 'FEED'"> - <strong>{{element.feedName}}</strong> -
+              {{element.feedWeightPerBag}} (KG)</span>
           </span>
         </td>
       </ng-container>
@@ -408,7 +409,9 @@
                         <th scope="col">No.</th>
                         <th scope="col">Product</th>
                         <th scope="col">Quantity</th>
-                        <th scope="col">Unit Price</th>
+                        <th scope="col">Unit Price <span
+                            *ngIf="salesInvoiceDetailsFrontDtoForSalesInvoice?.isToJakarta"> - EGG Per KG
+                          </span></th>
                         <th scope="col">Amount</th>
                       </tr>
                     </thead>
@@ -423,7 +426,8 @@
                         <td data-label="Amount">Rp {{invoiceDetail.quantity * invoiceDetail.price | number : '1.2-2'}}
                         </td>
                       </tr>
-                      <tr *ngIf="invoiceDetail.salesInvoiceType === 'EGG'">
+                      <tr
+                        *ngIf="invoiceDetail.salesInvoiceType === 'EGG' && !salesInvoiceDetailsFrontDtoForSalesInvoice?.isToJakarta">
                         <td data-label="No.">{{i + 1}}</td>
                         <td data-label="Product">EGG - <strong>{{invoiceDetail?.eggType | uppercase}}</strong></td>
                         <td data-label="Quantity">{{invoiceDetail?.quantity}} - <strong>{{invoiceDetail.eggQuantityType
@@ -432,6 +436,19 @@
                         <td data-label="Unit Price">Rp {{invoiceDetail?.price | number : '1.2-2'}}</td>
                         <td data-label="Amount">Rp {{invoiceDetail.quantity * invoiceDetail.price | number : '1.2-2'}}
                         </td>
+                      </tr>
+                      <tr
+                        *ngIf="invoiceDetail.salesInvoiceType === 'EGG' && salesInvoiceDetailsFrontDtoForSalesInvoice?.isToJakarta">
+                        <td data-label="No.">{{i + 1}}</td>
+                        <td data-label="Product">EGG - <strong>{{invoiceDetail?.eggType | uppercase}}</strong></td>
+                        <td data-label="Quantity">{{invoiceDetail?.quantity}} - <strong>{{invoiceDetail.eggQuantityType
+                            |
+                            uppercase}}</strong> - {{invoiceDetail.eggWeight}} KG</td>
+                        <td data-label="Unit Price">Rp {{salesInvoiceDetailsFrontDtoForSalesInvoice?.pricePerKg | number
+                          : '1.2-2'}}</td>
+                        <td data-label="Amount">Rp {{invoiceDetail.eggWeight *
+                          salesInvoiceDetailsFrontDtoForSalesInvoice?.pricePerKg | number :
+                          '1.2-2'}}</td>
                       </tr>
                       <tr *ngIf="invoiceDetail.salesInvoiceType === 'FLOCK'">
                         <td data-label="No.">{{i + 1}}</td>
@@ -544,7 +561,8 @@
                       </tr>
                     </thead>
                     <tbody *ngFor="let invoiceDetail of returnFormGroupDetail?.controls let i = index">
-                      <tr *ngIf="invoiceDetail.get('salesInvoiceType')?.value === 'MANURE'">
+                      <tr
+                        *ngIf="invoiceDetail.get('salesInvoiceType')?.value === 'MANURE' && invoiceDetail?.get('quantity')?.value > 0">
                         <td data-label="No.">{{i + 1}}</td>
                         <td data-label="Product">FERTILIZER</td>
                         <td data-label="Quantity">{{invoiceDetail?.get('quantity')?.value}} - <strong>BAG(S)</strong> -
@@ -554,7 +572,8 @@
                         <td data-label="Amount">Rp {{(invoiceDetail?.get('newPrice')?.value *
                           invoiceDetail?.get('quantity')?.value) | number : '1.2-2'}}</td>
                       </tr>
-                      <tr *ngIf="invoiceDetail.get('salesInvoiceType')?.value === 'EGG'">
+                      <tr
+                        *ngIf="invoiceDetail.get('salesInvoiceType')?.value === 'EGG' && invoiceDetail?.get('quantity')?.value > 0">
                         <td data-label="No.">{{i + 1}}</td>
                         <td data-label="Product">EGG - <strong>{{invoiceDetail?.get('eggCategoryName')?.value |
                             uppercase}}</strong></td>
@@ -565,7 +584,8 @@
                         <td data-label="Amount">Rp {{(invoiceDetail?.get('newPrice')?.value *
                           invoiceDetail?.get('quantity')?.value) | number : '1.2-2'}}</td>
                       </tr>
-                      <tr *ngIf="invoiceDetail.get('salesInvoiceType')?.value === 'FLOCK'">
+                      <tr
+                        *ngIf="invoiceDetail.get('salesInvoiceType')?.value === 'FLOCK' && invoiceDetail?.get('quantity')?.value > 0">
                         <td data-label="No.">{{i + 1}}</td>
                         <td data-label="Product">CHICKEN - <strong>{{invoiceDetail.get('flockType')?.value |
                             uppercase}}</strong></td>
@@ -574,7 +594,8 @@
                         <td data-label="Amount">Rp {{(invoiceDetail?.get('newPrice')?.value *
                           invoiceDetail?.get('quantity')?.value) | number : '1.2-2'}}</td>
                       </tr>
-                      <tr *ngIf="invoiceDetail.get('salesInvoiceType')?.value === 'FEED'">
+                      <tr
+                        *ngIf="invoiceDetail.get('salesInvoiceType')?.value === 'FEED' && invoiceDetail?.get('quantity')?.value > 0">
                         <td data-label="No.">{{i + 1}}</td>
                         <td data-label="Product">FEED - <strong>{{invoiceDetail.get('feedName')?.value |
                             uppercase}}</strong></td>

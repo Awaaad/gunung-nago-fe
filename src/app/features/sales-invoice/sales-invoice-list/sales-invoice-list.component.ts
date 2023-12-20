@@ -68,7 +68,6 @@ export class SalesInvoiceListComponent implements OnInit {
   public lastName!: string;
   public firstName!: string;
   public salesInvoiceNumber: string = '';
-  public searchValue!: any;
 
   public bankAccounts: BankAccountDto[] = [];
   public paymentModes: PaymentModeDto[] = [];
@@ -85,6 +84,8 @@ export class SalesInvoiceListComponent implements OnInit {
   public email = environment.email;
   public regNo = environment.regNo;
   public yoe = environment.yoe;
+
+  public isToJakarta: boolean | string = '';
 
   public errorMessages = {
     name: [
@@ -270,6 +271,13 @@ export class SalesInvoiceListComponent implements OnInit {
     });
   }
 
+  public toggleToJakarta(event: any): void {
+    this.isToJakarta = event.detail.checked;
+    this.utilsService.presentLoadingDuration(500).then(value => {
+      this.search();
+    });
+  }
+
   public routeToSalesInvoiceDetails(salesInvoiceDto: SalesInvoiceDto): void {
     this.router.navigate([`sales-invoice/sales-invoice-details/${salesInvoiceDto.id}`]);
   }
@@ -330,6 +338,7 @@ export class SalesInvoiceListComponent implements OnInit {
       salesInvoiceStatus: this.salesInvoiceStatus,
       salesInvoiceCategory: this.salesInvoiceCategory,
       id: this.salesInvoiceNumber,
+      isToJakarta: this.isToJakarta,
 
       page: this.page,
       size: this.size,
@@ -342,6 +351,9 @@ export class SalesInvoiceListComponent implements OnInit {
     }
     if (salesInvoiceSearchCriteriaDto.customerId === null) {
       delete salesInvoiceSearchCriteriaDto.customerId;
+    }
+    if (!salesInvoiceSearchCriteriaDto.isToJakarta) {
+      delete salesInvoiceSearchCriteriaDto.isToJakarta;
     }
 
     this.salesInvoiceSearchSubscription = this.salesInvoiceApiService.search(salesInvoiceSearchCriteriaDto).subscribe(salesInvoices => {
@@ -389,14 +401,25 @@ export class SalesInvoiceListComponent implements OnInit {
     if (salesInvoiceSearchCriteriaDto.customerId === null) {
       delete salesInvoiceSearchCriteriaDto.customerId;
     }
-    this.searchValue = salesInvoiceSearchCriteriaDto;
     this.salesInvoiceSearchSubscription = this.salesInvoiceApiService.generateStatement(salesInvoiceSearchCriteriaDto).subscribe(salesInvoices => {
       this.statementInvoices = salesInvoices.content;
     })
   }
 
   public generateStatementPdf() : void{
-    this.fileApiService.generateStatementOfAccountPdf(this.searchValue).subscribe(fileResponse => {
+    const salesInvoiceSearchCriteriaDto: any = {
+      customerId: this.customerId === '' || this.customerId === null ? null : this.customerId,
+      dateFrom: this.statementOfAccountDateFrom === null ? '' : moment(this.statementOfAccountDateFrom).startOf('day').format(moment.HTML5_FMT.DATETIME_LOCAL),
+      dateTo: this.statementOfAccountDateTo === null ? '' : moment(this.statementOfAccountDateTo).startOf('day').format(moment.HTML5_FMT.DATETIME_LOCAL),
+
+      sortBy: this.sortBy,
+      sortOrder: this.sortOrder.toUpperCase(),
+    }
+
+    if (salesInvoiceSearchCriteriaDto.customerId === null) {
+      delete salesInvoiceSearchCriteriaDto.customerId;
+    }
+    this.fileApiService.generateStatementOfAccountPdf(salesInvoiceSearchCriteriaDto).subscribe(fileResponse => {
       this.utilsService.openTemplateInNewTab(fileResponse);
     });
   }

@@ -89,6 +89,8 @@ export class SalesInvoiceDetailsComponent implements OnInit {
       salesInvoiceCategory: null,
       salesInvoiceStatus: null,
       comment: null,
+      isToJakarta: null,
+      pricePerKg: null,
       saleDetailsDtos: []
     }
   }

@@ -4,7 +4,7 @@ import { FormGroup, FormControl, FormBuilder, Validators, FormArray } from '@ang
 import { IonModal } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { CustomerDto, SalesInvoiceCategory, UserDto, EggCategoryStockDto, EggType, BankAccountDto, PaymentModeDto } from 'generated-src/model';
-import { CustomerFrontDto, EggSaleSaveFrontDto, EggStockFrontDto } from 'generated-src/model-front';
+import { CustomerFrontDto, EggCategorySaleFrontDto, EggSaleSaveFrontDto, EggSaleToJakartaFrontDto, EggStockFrontDto } from 'generated-src/model-front';
 import * as moment from 'moment';
 import { Subscription, filter, distinctUntilChanged, debounceTime, tap, switchMap, finalize } from 'rxjs';
 import { CustomerApiService } from 'src/app/shared/apis/customer.api.service';
@@ -38,6 +38,7 @@ export class EggSaleDetailsComponent implements OnInit {
   public disableSave: boolean = false;
 
   public isNewCustomer: boolean = false;
+  public isToJakarta: boolean = false;
   private searchCustomerSubscription!: Subscription;
   public searchCustomerCtrl = new FormControl();
   public filteredCustomers: CustomerFrontDto[] = [];
@@ -70,6 +71,9 @@ export class EggSaleDetailsComponent implements OnInit {
   public bankAccounts: BankAccountDto[] = [];
   public paymentModes: PaymentModeDto[] = [];
   public completePaymentModes: PaymentModeDto[] = [];
+
+  public eggCategoryStockBtn: EggCategoryStockDto[] = [];
+  public eggSaleToJakartaFrontDto: EggSaleToJakartaFrontDto[] = [];
 
   public errorMessages = {
     firstName: [{ type: "required", message: "First name is required" }],
@@ -169,13 +173,18 @@ export class EggSaleDetailsComponent implements OnInit {
     const url = this.router.serializeUrl(
       this.router.createUrlTree([`sales-invoice/sales-invoice-customer-credit-list/${this.selectedCustomer.id}`], { queryParams: { lastName: this.selectedCustomer.lastName, firstName: this.selectedCustomer.firstName } })
     );
-  
+
     window.open(url, '_blank');
   }
 
   public newCustomerChange(event: any): void {
     this.isNewCustomer = event.detail.checked;
     this.setCustomerNewValue(this.isNewCustomer);
+  }
+
+  public changeIsToJakarta(event: any): void {
+    this.isToJakarta = event.detail.checked;
+    this.reset();
   }
 
   private setCustomerNewValue(isNewCustomer: boolean): void {
@@ -194,6 +203,8 @@ export class EggSaleDetailsComponent implements OnInit {
   private initialiseFormBuilder(): void {
     this.eggSaleForm = this.formBuilder.group({
       newCustomer: new FormControl(this.isNewCustomer, Validators.compose([Validators.required])),
+      isToJakarta: new FormControl(this.isToJakarta, Validators.compose([Validators.required])),
+      pricePerKg: new FormControl({ value: null, disabled: false }, Validators.compose([])),
       customer: this.formBuilder.group({
         id: this.selectedCustomer?.id,
         firstName: new FormControl({ value: '', disabled: !this.isNewCustomer }, Validators.compose([Validators.required])),
@@ -206,33 +217,140 @@ export class EggSaleDetailsComponent implements OnInit {
     });
   }
 
-  addEggCategoryFormGroup(eggCategory: EggCategoryStockDto) {
-    return this.formBuilder.group({
-      eggCategoryId: new FormControl(eggCategory.eggCategoryId, Validators.compose([Validators.required])),
-      name: new FormControl(eggCategory.name, Validators.compose([])),
-      eggType: new FormControl(eggCategory.eggType, Validators.compose([])),
-      quantity: new FormControl(eggCategory.quantity, Validators.compose([])),
-      piece: new FormControl(null, Validators.compose([Validators.min(0)])),
-      pricePerPiece: new FormControl(null, Validators.compose([, Validators.min(0)])),
-      tie: new FormControl(null, Validators.compose([Validators.min(0)])),
-      pricePerTie: new FormControl(null, Validators.compose([Validators.min(0)])),
-      tray: new FormControl(null, Validators.compose([Validators.min(0)])),
-      pricePerTray: new FormControl(null, Validators.compose([Validators.min(0)]))
-    })
+  getWeightControlsTie(index: number) {
+    return (this.eggCategoriesFields?.at(index).get('weightsForTie') as FormArray);
+  }
+  getWeightControlsTray(index: number) {
+    return (this.eggCategoriesFields?.at(index).get('weightsForTray') as FormArray);
+  }
+  getWeightControlsPiece(index: number) {
+    return (this.eggCategoriesFields?.at(index).get('weightsForPiece') as FormArray);
   }
 
-  addEggCategory(event: any, eggCategory: EggCategoryStockDto): void {
-    if (!((this.eggSaleForm.get('eggCategorySaleDtos') as FormArray).value.find((form: any) => form.eggCategoryId == eggCategory.eggCategoryId))) {
-      (this.eggSaleForm.get('eggCategorySaleDtos') as FormArray).push(this.addEggCategoryFormGroup(eggCategory));
+  addEggCategoryFormGroup(eggCategory: EggCategoryStockDto, tie: boolean, tray: boolean, piece: boolean) {
+    if (this.isToJakarta) {
+      const jakartaForm = this.formBuilder.group({
+        eggCategoryId: new FormControl(eggCategory.eggCategoryId, Validators.compose([Validators.required])),
+        name: new FormControl(eggCategory.name, Validators.compose([])),
+        eggType: new FormControl(eggCategory.eggType, Validators.compose([])),
+        quantity: new FormControl(eggCategory.quantity, Validators.compose([])),
+        tie: new FormControl(tie, Validators.compose([])),
+        tray: new FormControl(tray, Validators.compose([])),
+        piece: new FormControl(piece, Validators.compose([])),
+        weightsForTie: this.formBuilder.array([]),
+        weightsForTray: this.formBuilder.array([]),
+        weightsForPiece: this.formBuilder.array([]),
+      })
+      return jakartaForm;
     } else {
-      const index = (this.eggSaleForm.get('eggCategorySaleDtos') as FormArray).value.findIndex((form: any) => form.eggCategoryId == eggCategory.eggCategoryId);
-      this.removeEggCategory(index);
+      return this.formBuilder.group({
+        eggCategoryId: new FormControl(eggCategory.eggCategoryId, Validators.compose([Validators.required])),
+        name: new FormControl(eggCategory.name, Validators.compose([])),
+        eggType: new FormControl(eggCategory.eggType, Validators.compose([])),
+        quantity: new FormControl(eggCategory.quantity, Validators.compose([])),
+        piece: new FormControl({ value: this.eggSaleForm.get('isToJakarta')?.value ? 1 : null, disabled: this.eggSaleForm.get('isToJakarta')?.value }, Validators.compose([Validators.min(0)])),
+        pricePerPiece: new FormControl(null, Validators.compose([, Validators.min(0)])),
+        tie: new FormControl({ value: this.eggSaleForm.get('isToJakarta')?.value ? 1 : null, disabled: this.eggSaleForm.get('isToJakarta')?.value }, Validators.compose([Validators.min(0)])),
+        pricePerTie: new FormControl(null, Validators.compose([Validators.min(0)])),
+        tray: new FormControl({ value: this.eggSaleForm.get('isToJakarta')?.value ? 1 : null, disabled: this.eggSaleForm.get('isToJakarta')?.value }, Validators.compose([Validators.min(0)])),
+        pricePerTray: new FormControl(null, Validators.compose([Validators.min(0)])),
+        weightPerTie: new FormControl(null, Validators.compose([Validators.min(0)])),
+        weightPerTray: new FormControl(null, Validators.compose([Validators.min(0)])),
+        weightPerPiece: new FormControl(null, Validators.compose([Validators.min(0)]))
+      })
+    }
+  }
+
+  private findIndexes(array: any[], targetValue: number): number[] {
+    return array.map((element: any, index: any) => element.eggCategoryId === targetValue ? index : undefined)
+      .filter((index: undefined) => index !== undefined)
+      .sort((a, b) => b - a);
+  }
+
+  addEggCategory(eggCategory: EggCategoryStockDto): void {
+    if (!((this.eggSaleForm.get('eggCategorySaleDtos') as FormArray).value.find((form: any) => form.eggCategoryId == eggCategory.eggCategoryId))) {
+      (this.eggSaleForm.get('eggCategorySaleDtos') as FormArray).push(this.addEggCategoryFormGroup(eggCategory, false, false, false));
+      if (this.isToJakarta) {
+        this.eggCategoryStockBtn.push(eggCategory);
+      }
+    } else {
+      this.findIndexes((this.eggSaleForm.get('eggCategorySaleDtos') as FormArray).value, eggCategory.eggCategoryId).forEach(index => {
+        this.removeEggCategory(index);
+        if (this.isToJakarta) {
+          for (let i = 0; i < this.eggCategoryStockBtn.length; i++) {
+            if (this.eggCategoryStockBtn[i].eggCategoryId === eggCategory.eggCategoryId) {
+              this.eggCategoryStockBtn.splice(i, 1);
+            }
+          }
+        }
+      })
     }
     this.showFormArray = (this.eggSaleForm.get('eggCategorySaleDtos') as FormArray).length > 0;
   }
 
+  addEggCategoryForJakarta(eggCategory: any, tie: boolean, tray: boolean, piece: boolean): void {
+    (this.eggSaleForm.get('eggCategorySaleDtos') as FormArray).push(this.addEggCategoryFormGroup(eggCategory, tie, tray, piece));
+  }
+
+  addWeightForTie(index: number, event: any) {
+    (this.eggSaleForm.get('eggCategorySaleDtos') as FormArray).controls[index].get("tie")?.setValue(event.detail.checked);
+
+    if (!event.detail.checked) {
+      const weightsArray = (this.eggSaleForm.get('eggCategorySaleDtos') as FormArray).controls[index].get("weightsForTie") as FormArray;
+      weightsArray.clear();
+    } else {
+      const weightsArray = (this.eggSaleForm.get('eggCategorySaleDtos') as FormArray).controls[index].get("weightsForTie") as FormArray;
+      for (let i = 0; i < 10; i++) {
+        weightsArray.push(this.formBuilder.control(null));
+      }
+    }
+  }
+  addSingleAdditionalWeightForTie(index: number) {
+    const weightsArray = this.getWeightControlsTie(index);
+    weightsArray.push(this.formBuilder.control(null));
+  }
+  addWeightForTray(index: number, event: any) {
+    (this.eggSaleForm.get('eggCategorySaleDtos') as FormArray).controls[index].get("tray")?.setValue(event.detail.checked);
+
+    if (!event.detail.checked) {
+      const weightsArray = (this.eggSaleForm.get('eggCategorySaleDtos') as FormArray).controls[index].get("weightsForTray") as FormArray;
+      weightsArray.clear();
+    } else {
+      const weightsArray = (this.eggSaleForm.get('eggCategorySaleDtos') as FormArray).controls[index].get("weightsForTray") as FormArray;
+      for (let i = 0; i < 10; i++) {
+        weightsArray.push(this.formBuilder.control(null));
+      }
+    }
+  }
+  addSingleAdditionalWeightForTray(index: number) {
+    const weightsArray = this.getWeightControlsTray(index);
+    weightsArray.push(this.formBuilder.control(null));
+  }
+  addWeightForPiece(index: number, event: any) {
+    (this.eggSaleForm.get('eggCategorySaleDtos') as FormArray).controls[index].get("piece")?.setValue(event.detail.checked);
+
+    if (!event.detail.checked) {
+      const weightsArray = (this.eggSaleForm.get('eggCategorySaleDtos') as FormArray).controls[index].get("weightsForPiece") as FormArray;
+      weightsArray.clear();
+    } else {
+      const weightsArray = (this.eggSaleForm.get('eggCategorySaleDtos') as FormArray).controls[index].get("weightsForPiece") as FormArray;
+      for (let i = 0; i < 10; i++) {
+        weightsArray.push(this.formBuilder.control(null));
+      }
+    }
+  }
+  addSingleAdditionalWeightForPiece(index: number) {
+    const weightsArray = this.getWeightControlsPiece(index);
+    weightsArray.push(this.formBuilder.control(null));
+  }
+
   removeEggCategory(eggCategoryGroupIndex: number): void {
     (this.eggSaleForm.get('eggCategorySaleDtos') as FormArray).removeAt(eggCategoryGroupIndex);
+    if (this.isToJakarta) {
+      this.calculateTotalPriceForJakarta();
+    } else {
+      this.calculateTotalPrice();
+    }
   }
 
   get eggCategoriesFields() {
@@ -272,6 +390,73 @@ export class EggSaleDetailsComponent implements OnInit {
     (this.eggSaleForm.get('eggCategorySaleDtos') as FormArray).value.forEach((form: any) => {
       this.totalPrice = this.totalPrice + ((form.tie * form.pricePerTie) + (form.tray * form.pricePerTray) + (form.piece * form.pricePerPiece));
     })
+  }
+
+  public calculateTotalPriceForJakarta(): void {
+    const eggCategorySaleDtoList: EggCategorySaleFrontDto[] = [];
+    this.eggSaleForm?.get("eggCategorySaleDtos")?.value.forEach((eggCategory: any) => {
+      if (eggCategory.weightsForTie) {
+        eggCategory.weightsForTie.filter((weight: any) => weight).forEach((weight: number) => {
+          const eggCategorySaleDto = {
+            eggCategoryId: eggCategory.eggCategoryId,
+            piece: null,
+            pricePerPiece: null,
+            weightPerPiece: null,
+            tie: 1,
+            pricePerTie: null,
+            weightPerTie: weight,
+            tray: null,
+            pricePerTray: null,
+            weightPerTray: null
+          }
+
+          eggCategorySaleDtoList.push(eggCategorySaleDto);
+        })
+      }
+      if (eggCategory.weightsForTray) {
+        eggCategory.weightsForTray.filter((weight: any) => weight).forEach((weight: number) => {
+          const eggCategorySaleDto = {
+            eggCategoryId: eggCategory.eggCategoryId,
+            piece: null,
+            pricePerPiece: null,
+            weightPerPiece: null,
+            tie: null,
+            pricePerTie: null,
+            weightPerTie: null,
+            tray: 1,
+            pricePerTray: null,
+            weightPerTray: weight
+          }
+
+          eggCategorySaleDtoList.push(eggCategorySaleDto);
+        })
+      }
+      if (eggCategory.weightsForPiece) {
+        eggCategory.weightsForPiece.filter((weight: any) => weight).forEach((weight: number) => {
+          const eggCategorySaleDto = {
+            eggCategoryId: eggCategory.eggCategoryId,
+            piece: 1,
+            pricePerPiece: null,
+            weightPerPiece: weight,
+            tie: null,
+            pricePerTie: null,
+            weightPerTie: null,
+            tray: null,
+            pricePerTray: null,
+            weightPerTray: null
+          }
+
+          eggCategorySaleDtoList.push(eggCategorySaleDto);
+        })
+      }
+    })
+
+    let totalWeight = 0;
+    eggCategorySaleDtoList.forEach((eggCategorySaleDto: EggCategorySaleFrontDto) => {
+      totalWeight = totalWeight + (eggCategorySaleDto.weightPerTie ? eggCategorySaleDto.weightPerTie : 0) + (eggCategorySaleDto.weightPerTray ? eggCategorySaleDto.weightPerTray : 0) + (eggCategorySaleDto.weightPerPiece ? eggCategorySaleDto.weightPerPiece : 0)
+    })
+
+    this.totalPrice = totalWeight * this.eggSaleForm.get('pricePerKg')?.value;
   }
 
   public searchCustomerAutoComplete(): void {
@@ -360,11 +545,13 @@ export class EggSaleDetailsComponent implements OnInit {
         totalAmountDue: null,
       },
       soldAt: null,
+      pricePerKg: null,
       driverId: null,
       salesInvoiceCategory: null,
       comment: null,
       paymentSaveDtos: [],
       newCustomer: false,
+      isToJakarta: false,
       eggCategorySaleDtos: []
     }
   }
@@ -383,10 +570,11 @@ export class EggSaleDetailsComponent implements OnInit {
       salesInvoiceCategory: this.salesInvoiceCategory,
       comment: this.comment,
       soldAt: this.paymentForm?.get("soldAt")?.value,
+      pricePerKg: this.eggSaleForm?.get("pricePerKg")?.value,
       paymentSaveDtos: this.paymentForm.value.payments,
       newCustomer: this.isNewCustomer,
-
-      eggCategorySaleDtos: this.eggSaleForm?.get("eggCategorySaleDtos")?.value
+      isToJakarta: this.eggSaleForm?.get("isToJakarta")?.value,
+      eggCategorySaleDtos: this.eggSaleForm?.get("isToJakarta")?.value ? this.populateJakartaEggCategories() : this.eggSaleForm?.get("eggCategorySaleDtos")?.value
     }
   }
 
@@ -450,6 +638,67 @@ export class EggSaleDetailsComponent implements OnInit {
     }
   }
 
+  public populateJakartaEggCategories(): EggCategorySaleFrontDto[] {
+    const eggCategorySaleDtoList: EggCategorySaleFrontDto[] = [];
+    this.eggSaleForm?.get("eggCategorySaleDtos")?.value.forEach((eggCategory: any) => {
+      if (eggCategory.weightsForTie) {
+        eggCategory.weightsForTie.filter((weight: any) => weight).forEach((weight: number) => {
+          const eggCategorySaleDto = {
+            eggCategoryId: eggCategory.eggCategoryId,
+            piece: null,
+            pricePerPiece: null,
+            weightPerPiece: null,
+            tie: 1,
+            pricePerTie: null,
+            weightPerTie: weight,
+            tray: null,
+            pricePerTray: null,
+            weightPerTray: null
+          }
+
+          eggCategorySaleDtoList.push(eggCategorySaleDto);
+        })
+      }
+      if (eggCategory.weightsForTray) {
+        eggCategory.weightsForTray.filter((weight: any) => weight).forEach((weight: number) => {
+          const eggCategorySaleDto = {
+            eggCategoryId: eggCategory.eggCategoryId,
+            piece: null,
+            pricePerPiece: null,
+            weightPerPiece: null,
+            tie: null,
+            pricePerTie: null,
+            weightPerTie: null,
+            tray: 1,
+            pricePerTray: null,
+            weightPerTray: weight
+          }
+
+          eggCategorySaleDtoList.push(eggCategorySaleDto);
+        })
+      }
+      if (eggCategory.weightsForPiece) {
+        eggCategory.weightsForPiece.filter((weight: any) => weight).forEach((weight: number) => {
+          const eggCategorySaleDto = {
+            eggCategoryId: eggCategory.eggCategoryId,
+            piece: 1,
+            pricePerPiece: null,
+            weightPerPiece: weight,
+            tie: null,
+            pricePerTie: null,
+            weightPerTie: null,
+            tray: null,
+            pricePerTray: null,
+            weightPerTray: null
+          }
+
+          eggCategorySaleDtoList.push(eggCategorySaleDto);
+        })
+      }
+    })
+    return eggCategorySaleDtoList;
+  }
+
   public save(): void {
     this.utilsService.presentLoading();
     this.initialiseEggSaleSaveDto();
@@ -475,6 +724,7 @@ export class EggSaleDetailsComponent implements OnInit {
   }
 
   public reset(): void {
+    this.eggCategoryStockBtn = [];
     this.initialiseSelectedCustomer();
     this.totalPrice = 0;
     this.totalRemainingEggs = 0;

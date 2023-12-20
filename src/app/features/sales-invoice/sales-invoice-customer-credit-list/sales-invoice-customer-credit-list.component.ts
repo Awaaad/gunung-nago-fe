@@ -143,7 +143,6 @@ export class SalesInvoiceCustomerCreditListComponent implements OnInit {
 
   ionViewWillEnter(): void {
     this.initialiseCustomer();
-    
     this.salesInvoiceTypes = Object.keys(SalesInvoiceType);
     this.salesInvoiceStatuses = Object.keys(SalesInvoiceStatus);
     this.salesInvoiceCategories = Object.keys(SalesInvoiceCategory);
@@ -167,8 +166,6 @@ export class SalesInvoiceCustomerCreditListComponent implements OnInit {
       totalAmountDue: 0
     }
   }
-
- 
 
   private getCustomerById(): void {
     this.customerApiService.findById(this.customerId).subscribe(customer => {
@@ -287,7 +284,7 @@ export class SalesInvoiceCustomerCreditListComponent implements OnInit {
     this.salesInvoiceSearchSubscription = this.salesInvoiceApiService.search(salesInvoiceSearchCriteriaDto).subscribe(salesInvoices => {
       this.infiniteSalesInvoices = [...this.infiniteSalesInvoices, ...salesInvoices.content];
       this.salesInvoices = new MatTableDataSource<SalesInvoiceDto>(this.infiniteSalesInvoices);
-      
+
       if (this.salesInvoices.data.length > 0) {
         this.initialTotalAmountDue = this.salesInvoices.data[0]?.totalAmountDue;
         this.totalAmountDue = this.salesInvoices.data[0]?.totalAmountDue;
@@ -299,7 +296,6 @@ export class SalesInvoiceCustomerCreditListComponent implements OnInit {
         event.returnValue = false;
       }
     })
-    
   }
 
   public reset(): void {
@@ -344,7 +340,7 @@ export class SalesInvoiceCustomerCreditListComponent implements OnInit {
       this.search();
     })
   }
- 
+
   public getTotalAmountPaidPerInvoice(paymentDto: PaymentDto[]): number {
     let sum = 0;
     paymentDto.forEach(payment => {

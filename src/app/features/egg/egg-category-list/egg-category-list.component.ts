@@ -35,6 +35,8 @@ export class EggCategoryListComponent {
   public active: boolean | string = '';
   public isModalOpen: boolean = false;
   public eggTypes!: string[];
+  public stock = 'assets/flaticon/stock-table-icon.svg';
+
   public errorMessages = {
     name: [
       { type: 'required', message: 'Name is required' },

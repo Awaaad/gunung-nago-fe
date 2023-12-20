@@ -78,7 +78,8 @@
               <th scope="col">No.</th>
               <th scope="col">Product</th>
               <th scope="col">Quantity</th>
-              <th scope="col">Unit Price</th>
+              <th scope="col">Unit Price <span *ngIf="salesInvoiceDetailsFrontDto.isToJakarta"> - EGG Per KG </span>
+              </th>
               <th scope="col">Amount</th>
             </tr>
           </thead>
@@ -86,17 +87,27 @@
             <tr *ngIf="invoiceDetail.salesInvoiceType === 'MANURE'">
               <td data-label="No.">{{i + 1}}</td>
               <td data-label="Product">FERTILIZER</td>
-              <td data-label="Quantity">{{invoiceDetail?.quantity}} - <strong>BAG(S)</strong> - {{invoiceDetail.manureWeightPerBag}} KG</td>
+              <td data-label="Quantity">{{invoiceDetail?.quantity}} - <strong>BAG(S)</strong> -
+                {{invoiceDetail.manureWeightPerBag}} KG</td>
               <td data-label="Unit Price">Rp {{invoiceDetail?.price | number : '1.2-2'}}</td>
               <td data-label="Amount">Rp {{invoiceDetail.quantity * invoiceDetail.price | number : '1.2-2'}}</td>
             </tr>
-            <tr *ngIf="invoiceDetail.salesInvoiceType === 'EGG'">
+            <tr *ngIf="invoiceDetail.salesInvoiceType === 'EGG' && !salesInvoiceDetailsFrontDto.isToJakarta">
               <td data-label="No.">{{i + 1}}</td>
               <td data-label="Product">EGG - <strong>{{invoiceDetail?.eggType | uppercase}}</strong></td>
               <td data-label="Quantity">{{invoiceDetail?.quantity}} - <strong>{{invoiceDetail.eggQuantityType |
                   uppercase}}</strong></td>
               <td data-label="Unit Price">Rp {{invoiceDetail?.price | number : '1.2-2'}}</td>
               <td data-label="Amount">Rp {{invoiceDetail.quantity * invoiceDetail.price | number : '1.2-2'}}</td>
+            </tr>
+            <tr *ngIf="invoiceDetail.salesInvoiceType === 'EGG' && salesInvoiceDetailsFrontDto.isToJakarta">
+              <td data-label="No.">{{i + 1}}</td>
+              <td data-label="Product">EGG - <strong>{{invoiceDetail?.eggType | uppercase}}</strong></td>
+              <td data-label="Quantity">{{invoiceDetail?.quantity}} - <strong>{{invoiceDetail.eggQuantityType |
+                  uppercase}}</strong> - {{invoiceDetail.eggWeight}} KG</td>
+              <td data-label="Unit Price">Rp {{salesInvoiceDetailsFrontDto.pricePerKg | number : '1.2-2'}}</td>
+              <td data-label="Amount">Rp {{invoiceDetail.eggWeight * salesInvoiceDetailsFrontDto.pricePerKg | number :
+                '1.2-2'}}</td>
             </tr>
             <tr *ngIf="invoiceDetail.salesInvoiceType === 'FLOCK'">
               <td data-label="No.">{{i + 1}}</td>
