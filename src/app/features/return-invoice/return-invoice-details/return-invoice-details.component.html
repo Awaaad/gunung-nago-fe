@@ -152,11 +152,7 @@
           </div>
         </div>
 
-        <!-- <textarea name="" id="" cols="30" rows="3" [disabled]="true"></textarea> -->
-        <mat-form-field appearance="outline" class="comments-area" >
-          <textarea [disabled]="true" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
-          cdkAutosizeMinRows="1" matInput>{{returnInvoiceFront.comment}}</textarea>
-        </mat-form-field>
+        <textarea name="" id="" cols="30" rows="3" [disabled]="true">{{returnInvoiceFront.comment}}</textarea>
       </ion-card-content>
     </ion-card>
     <ion-button color="neutral-btn" class="print" (click)="generateReturnInvoicePdf()">Print</ion-button>
