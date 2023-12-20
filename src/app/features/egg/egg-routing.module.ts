@@ -6,6 +6,7 @@ import { EggStockComponent } from './egg-stock/egg-stock.component';
 import { EggReportComponent } from './egg-report/egg-report.component';
 import { EggCategoryDetailsComponent } from './egg-category-details/egg-category-details.component';
 import { EggCategoryListComponent } from './egg-category-list/egg-category-list.component';
+import { EggStockDetailsComponent } from './egg-stock-details/egg-stock-details.component';
 
 const routes: Routes = [
   {
@@ -19,6 +20,10 @@ const routes: Routes = [
   {
     path: 'egg-stock',
     component: EggStockComponent
+  },
+  {
+    path: 'egg-stock-details/:id',
+    component: EggStockDetailsComponent
   },
   {
     path: 'egg-report',

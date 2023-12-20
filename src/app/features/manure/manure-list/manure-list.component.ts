@@ -11,6 +11,7 @@ import { Subscription } from 'rxjs';
 import { UtilsService } from 'src/app/shared/utils/utils.service';
 import { OverlayEventDetail } from '@ionic/core/components';
 import { ManureStockApiService } from 'src/app/shared/apis/manure-stock.api.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-manure-list',
@@ -45,7 +46,8 @@ export class ManureListComponent {
   constructor(
     private manureStockApiService: ManureStockApiService,
     private translateService: TranslateService,
-    private utilsService: UtilsService
+    private utilsService: UtilsService,
+    private router: Router
   ) {
   }
 
@@ -155,5 +157,9 @@ export class ManureListComponent {
         this.utilsService.unsuccessMsg('Error', 'gunung-nago-warehouse');
       }
     });
+  }
+
+  public routeToStockDetails(id: number): void {
+    this.router.navigate([`manure/manure-stock-details/${id}`]);
   }
 }

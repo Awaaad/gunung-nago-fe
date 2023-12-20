@@ -68,6 +68,7 @@ export class SalesInvoiceListComponent implements OnInit {
   public lastName!: string;
   public firstName!: string;
   public salesInvoiceNumber: string = '';
+  public searchValue!: any;
 
   public bankAccounts: BankAccountDto[] = [];
   public paymentModes: PaymentModeDto[] = [];
@@ -136,7 +137,7 @@ export class SalesInvoiceListComponent implements OnInit {
     private utilsService: UtilsService,
     private bankAccountApiService: BankAccountApiService,
     private paymentModeApiService: PaymentModeApiService,
-    private readonly fileApiService: FileApiService,
+    private fileApiService: FileApiService
   ) {
   }
 

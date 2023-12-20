@@ -14,6 +14,7 @@ export class SideNavComponent  implements OnInit {
   public salesInvoice = 'assets/flaticon/sales-invoice-icon.svg';
   public purchaseInvoice = 'assets/flaticon/purchase-invoice-icon.svg';
   public stock = 'assets/flaticon/stock-icon.svg';
+  public purchase = 'assets/flaticon/purchase-icon.svg';
   public manure = 'assets/flaticon/manure-icon.svg';
   public egg = 'assets/flaticon/egg-icon.svg';
   public eggTransfer = 'assets/flaticon/egg-transfer-icon.svg';

@@ -4,6 +4,7 @@ import { ManureSaleDetailsComponent } from './manure-sale-details/manure-sale-de
 import { ManureStockComponent } from './manure-stock/manure-stock.component';
 import { ManureListComponent } from './manure-list/manure-list.component';
 import { ManureDetailsComponent } from './manure-details/manure-details.component';
+import { ManureStockDetailsComponent } from './manure-stock-details/manure-stock-details.component';
 
 const routes: Routes = [
   {
@@ -13,6 +14,10 @@ const routes: Routes = [
   {
     path: 'manure-stock',
     component: ManureStockComponent
+  },
+  {
+    path: 'manure-stock-details/:id',
+    component: ManureStockDetailsComponent
   },
   {
     path: 'manure-list',

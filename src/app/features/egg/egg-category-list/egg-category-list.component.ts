@@ -4,6 +4,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { Router } from '@angular/router';
 import { IonInfiniteScroll, IonModal } from '@ionic/angular';
 import { OverlayEventDetail } from '@ionic/core/components';
 import { TranslateService } from '@ngx-translate/core';
@@ -24,7 +25,7 @@ export class EggCategoryListComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   public language = "en";
-  public displayedColumns: string[] = ['name', 'eggType', 'edit'];
+  public displayedColumns: string[] = ['name', 'eggType', 'quantity', 'edit'];
   public eggCategories = new MatTableDataSource<EggCategoryDto>;
   private infiniteEggCategories: EggCategoryDto[] = [];
   public eggCategorySearchSubscription!: Subscription;
@@ -49,7 +50,8 @@ export class EggCategoryListComponent {
   constructor(
     private eggCategoryApiService: EggCategoryApiService,
     private translateService: TranslateService,
-    private utilsService: UtilsService
+    private utilsService: UtilsService,
+    private router: Router
   ) {
     this.eggTypes = Object.keys(EggType);
   }
@@ -164,5 +166,9 @@ export class EggCategoryListComponent {
         this.utilsService.unsuccessMsg('Error', 'gunung-nago-warehouse');
       }
     });
+  }
+
+  public routeToStockDetails(id: number): void {
+    this.router.navigate([`egg/egg-stock-details/${id}`]);
   }
 }

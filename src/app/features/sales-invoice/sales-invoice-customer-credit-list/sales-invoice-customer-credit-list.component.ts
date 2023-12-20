@@ -133,7 +133,7 @@ export class SalesInvoiceCustomerCreditListComponent implements OnInit {
     private utilsService: UtilsService,
     private bankAccountApiService: BankAccountApiService,
     private paymentModeApiService: PaymentModeApiService,
-    private readonly fileApiService: FileApiService,
+    private fileApiService: FileApiService
   ) {
   }
 
@@ -174,7 +174,7 @@ export class SalesInvoiceCustomerCreditListComponent implements OnInit {
   }
 
   public generateCreditPdfFile(): void{
-    this.fileApiService.generateCreditStatementOfAccountPdf(this.searchValue).subscribe(fileResponse => {      
+    this.fileApiService.generateCreditStatementOfAccountPdf(this.searchValue).subscribe(fileResponse => {
       this.utilsService.openTemplateInNewTab(fileResponse);
     });
   }

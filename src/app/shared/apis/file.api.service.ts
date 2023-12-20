@@ -13,10 +13,10 @@ export class FileApiService {
 
     private setHeaders(): HttpHeaders {
         return new HttpHeaders({
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
         });
-      }
+    }
 
     public generatePurchaseInvoicePdf(purchaseInvoiceId: number): Observable<any> {
         const headers = this.setHeaders();
@@ -39,9 +39,11 @@ export class FileApiService {
 
     public generateStatementOfAccountPdf(searchValues: any): Observable<PageResult<SalesInvoiceDto>> {
         const headers = this.setHeaders();
-        return this.http.get<PageResult<SalesInvoiceDto>>(`${this.baseUrl}/generate-statement`, { params: searchValues, headers, responseType: 'blob' as 'json' });    }
+        return this.http.get<PageResult<SalesInvoiceDto>>(`${this.baseUrl}/generate-statement`, { params: searchValues, headers, responseType: 'blob' as 'json' });
+    }
 
-    public generateCreditStatementOfAccountPdf(searchValues: any): Observable<PageResult<SalesInvoiceDto>> {        
+    public generateCreditStatementOfAccountPdf(searchValues: any): Observable<PageResult<SalesInvoiceDto>> {
         const headers = this.setHeaders();
-        return this.http.get<PageResult<SalesInvoiceDto>>(`${this.baseUrl}/generate-credit-statement`, { params: searchValues, headers, responseType: 'blob' as 'json' });    }
+        return this.http.get<PageResult<SalesInvoiceDto>>(`${this.baseUrl}/generate-credit-statement`, { params: searchValues, headers, responseType: 'blob' as 'json' });
+    }
 }

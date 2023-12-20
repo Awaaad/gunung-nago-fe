@@ -12,6 +12,7 @@ import { FeedApiService } from 'src/app/shared/apis/feed.api.service';
 import { SupplierApiService } from 'src/app/shared/apis/supplier.api.service';
 import { UtilsService } from 'src/app/shared/utils/utils.service';
 import { OverlayEventDetail } from '@ionic/core/components';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-feed-list',
@@ -25,7 +26,7 @@ export class FeedListComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   public language = "en";
-  public displayedColumns: string[] = ['name', 'feedCategory', 'recommendedWeight', 'supplier', 'edit'];
+  public displayedColumns: string[] = ['name', 'feedCategory', 'recommendedWeight', 'quantity', 'supplier', 'edit'];
   public feeds = new MatTableDataSource<FeedDto>;
   private infiniteFeeds: FeedDto[] = [];
   public feedSearchSubscription!: Subscription;
@@ -59,7 +60,8 @@ export class FeedListComponent {
     private feedApiService: FeedApiService,
     private supplierApiService: SupplierApiService,
     private translateService: TranslateService,
-    private utilsService: UtilsService
+    private utilsService: UtilsService,
+    private router: Router
   ) { }
 
   ionViewWillEnter(): void {
@@ -143,7 +145,7 @@ export class FeedListComponent {
       this.search();
     })
   }
-  
+
   private findAllSuppliers(): void {
     this.supplierApiService.findAll().subscribe((data: SupplierDto[]) => {
       this.suppliers = data;
@@ -199,5 +201,9 @@ export class FeedListComponent {
         this.utilsService.unsuccessMsg('Error', 'gunung-nago-warehouse');
       }
     });
+  }
+
+  public routeToStockDetails(id: number): void {
+    this.router.navigate([`feed/feed-stock-details/${id}`]);
   }
 }

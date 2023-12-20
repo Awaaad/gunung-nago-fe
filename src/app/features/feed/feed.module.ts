@@ -30,10 +30,11 @@ import { MaskitoModule } from '@maskito/angular';
 import { FeedSaleDetailsComponent } from './feed-sale-details/feed-sale-details.component';
 import { CustomerApiService } from 'src/app/shared/apis/customer.api.service';
 import { FeedSaleApiService } from 'src/app/shared/apis/feed-sale.api.service';
+import { FeedStockDetailsComponent } from './feed-stock-details/feed-stock-details.component';
 
 
 @NgModule({
-  declarations: [FeedDetailsComponent, FeedListComponent, FeedStockComponent, FeedAllocationComponent, FeedSaleDetailsComponent],
+  declarations: [FeedDetailsComponent, FeedListComponent, FeedStockComponent, FeedAllocationComponent, FeedSaleDetailsComponent, FeedStockDetailsComponent],
   imports: [
     MaskitoModule,
     CommonModule,

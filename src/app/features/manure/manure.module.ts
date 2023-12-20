@@ -23,11 +23,12 @@ import { ManureDetailsComponent } from './manure-details/manure-details.componen
 import { CageApiService } from 'src/app/shared/apis/cage.api.service';
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
+import { ManureStockDetailsComponent } from './manure-stock-details/manure-stock-details.component';
 
 
 @NgModule({
   declarations: [
-    ManureSaleDetailsComponent, ManureStockComponent, ManureListComponent, ManureDetailsComponent
+    ManureSaleDetailsComponent, ManureStockComponent, ManureListComponent, ManureDetailsComponent, ManureStockDetailsComponent
   ],
   imports: [
     CommonModule,
