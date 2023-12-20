@@ -21,7 +21,7 @@ export class FlockListComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   public language = "en";
-  public displayedColumns: string[] = ['name', 'cageName', 'active', 'initialAge', 'initialFlockCategory', 'initialQuantity', 'aquisitionDate', 'aquisitionType', 'edit'];
+  public displayedColumns: string[] = ['name', 'cageName', 'active', 'initialAge', 'actualAge', 'initialFlockCategory', 'actualFlockCategory', 'initialQuantity', 'actualQuantity', 'actualGood', 'actualSterile', 'aquisitionDate', 'aquisitionType', 'edit'];
   public flocks = new MatTableDataSource<FlockDto>;
   private infiniteFlocks: FlockDto[] = [];
   public flockSearchSubscription!: Subscription;
@@ -91,5 +91,9 @@ export class FlockListComponent {
     this.utilService.presentLoadingDuration(500).then(value => {
       this.search();
     })
+  }
+
+  public routeToStockDetails(id: number): void {
+    this.router.navigate([`flock/flock-stock-details/${id}`]);
   }
 }

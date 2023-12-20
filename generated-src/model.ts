@@ -1,6 +1,13 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2023-12-19 13:07:46.
+// Generated using typescript-generator version 3.2.1263 on 2023-12-19 21:44:50.
+
+export class AuditDto {
+    createdBy!: string;
+    createdDate!: Date;
+    lastModifiedBy!: string;
+    lastModifiedDate!: Date;
+}
 
 export class BankAccountDto {
     id!: number;
@@ -56,6 +63,7 @@ export class EggCategoryDto {
     id!: number;
     name!: string;
     eggType!: EggType;
+    quantity!: number;
 }
 
 export class EggCategoryReportDto {
@@ -87,11 +95,14 @@ export class EggCategorySearchCriteriaDto {
     eggType!: EggType;
 }
 
-export class EggCategoryStockDto {
+export class EggCategoryStockDto extends AuditDto {
     eggCategoryId!: number;
     name!: string;
     eggType!: EggType;
     quantity!: number;
+}
+
+export class EggCategoryStockSearchCriteriaDto {
 }
 
 export class EggReportDto {
@@ -134,8 +145,8 @@ export class EggSaleSaveDto {
     driverId!: number;
     comment!: string;
     eggCategorySaleDtos!: EggCategorySaleDto[];
-    newCustomer!: boolean;
     toJakarta!: boolean;
+    newCustomer!: boolean;
 }
 
 export class EggSaleSaveDtoBuilder {
@@ -560,6 +571,7 @@ export class SaleDetailsDto {
     flockType!: FlockType;
     manureStockId!: number;
     manureWeightPerBag!: number;
+    exchange!: boolean;
 }
 
 export class SaleSaveDto {
@@ -573,8 +585,8 @@ export class SaleSaveDto {
     pricePerKg!: number;
     saleDetailsDtos!: SaleDetailsDto[];
     salesInvoiceId!: number;
-    newCustomer!: boolean;
     toJakarta!: boolean;
+    newCustomer!: boolean;
 }
 
 export class FeedPurchaseDto {

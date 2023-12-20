@@ -78,14 +78,36 @@
           <td mat-cell *matCellDef="let element"> {{element.initialAge}} </td>
         </ng-container>
 
+        <ng-container matColumnDef="actualAge">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="actualAge"> Current Age </th>
+          <td mat-cell *matCellDef="let element"> {{element.actualAge}} </td>
+        </ng-container>
+
         <ng-container matColumnDef="initialFlockCategory">
           <th mat-header-cell *matHeaderCellDef mat-sort-header="initialFlockCategory"> Initial Flock Category </th>
           <td mat-cell *matCellDef="let element"> {{element.initialFlockCategory}} </td>
         </ng-container>
 
+        <ng-container matColumnDef="actualFlockCategory">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="actualFlockCategory"> Current Flock Category </th>
+          <td mat-cell *matCellDef="let element"> {{element.actualFlockCategory}} </td>
+        </ng-container>
+
         <ng-container matColumnDef="initialQuantity">
           <th mat-header-cell *matHeaderCellDef mat-sort-header="initialQuantity"> Initial Population </th>
           <td mat-cell *matCellDef="let element"> {{element.initialQuantity}} </td>
+        </ng-container>
+        <ng-container matColumnDef="actualQuantity">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="actualQuantity"> Current Population </th>
+          <td mat-cell *matCellDef="let element"> {{element.actualQuantity}} </td>
+        </ng-container>
+        <ng-container matColumnDef="actualGood">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="actualGood"> Current Good Population </th>
+          <td mat-cell *matCellDef="let element"> {{element.actualGood}} </td>
+        </ng-container>
+        <ng-container matColumnDef="actualSterile">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="actualSterile"> Current Sterile Population </th>
+          <td mat-cell *matCellDef="let element"> {{element.actualSterile}} </td>
         </ng-container>
 
         <ng-container matColumnDef="aquisitionDate">
@@ -102,7 +124,7 @@
           <th mat-header-cell *matHeaderCellDef> </th>
           <td mat-cell *matCellDef="let element">
             <div class="table-btn">
-              <ion-icon color="positive-btn" class="table-stock-icon" [src]="stock"></ion-icon>
+              <ion-icon color="positive-btn" class="table-stock-icon" [src]="stock" (click)="routeToStockDetails(element.id)"></ion-icon>
 
               <ion-icon class="table-edit-icon ml-05" color="neutral-btn" name="create"></ion-icon>
             </div>

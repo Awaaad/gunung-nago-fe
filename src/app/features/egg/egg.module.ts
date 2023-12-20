@@ -25,10 +25,11 @@ import { EggCategoryDetailsComponent } from './egg-category-details/egg-category
 import { EggCategoryListComponent } from './egg-category-list/egg-category-list.component';
 import { EggCategoryApiService } from 'src/app/shared/apis/egg-category.api.service';
 import { ReportApiService } from 'src/app/shared/apis/report.api.service';
+import { EggStockDetailsComponent } from './egg-stock-details/egg-stock-details.component';
 
 
 @NgModule({
-  declarations: [EggSaleDetailsComponent, EggTransferComponent, EggStockComponent, EggReportComponent, EggCategoryDetailsComponent, EggCategoryListComponent],
+  declarations: [EggSaleDetailsComponent, EggTransferComponent, EggStockComponent, EggReportComponent, EggCategoryDetailsComponent, EggCategoryListComponent, EggStockDetailsComponent],
   imports: [
     CommonModule,
     EggRoutingModule,

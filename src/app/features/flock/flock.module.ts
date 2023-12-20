@@ -28,10 +28,11 @@ import { FlockStockApiService } from 'src/app/shared/apis/flock-stock.api.servic
 import { FlockTransferComponent } from './flock-transfer/flock-transfer.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { FlockCageCategoryTransferComponent } from './flock-cage-category-transfer/flock-cage-category-transfer.component';
+import { FlockStockDetailsComponent } from './flock-stock-details/flock-stock-details.component';
 export const MY_FORMATS = ConstantHelper.dateFormat;
 
 @NgModule({
-  declarations: [FlockListComponent, FlockDetailsComponent, FlockSaleDetailsComponent, FlockStockComponent, FlockTransferComponent, FlockCageCategoryTransferComponent],
+  declarations: [FlockListComponent, FlockDetailsComponent, FlockSaleDetailsComponent, FlockStockComponent, FlockTransferComponent, FlockCageCategoryTransferComponent, FlockStockDetailsComponent],
   imports: [
     CommonModule,
     FlockRoutingModule,

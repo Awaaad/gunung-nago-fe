@@ -65,3 +65,16 @@ tbody {
 .mdc-data-table__header-cell {
     color: white;
 }
+
+.mat-column-initialQuantity {
+    text-align: right;
+}
+.mat-column-actualQuantity {
+    text-align: right;
+}
+.mat-column-actualGood {
+    text-align: right;
+}
+.mat-column-actualSterile {
+    text-align: right;
+}

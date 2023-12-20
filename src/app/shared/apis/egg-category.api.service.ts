@@ -19,6 +19,10 @@ export class EggCategoryApiService {
     return this.http.get<PageResult<EggCategoryDto>>(`${this.baseUrl}/search`, { params: searchValues });
   }
 
+  public searchEggCategoryStock(searchValues: any): Observable<PageResult<EggCategoryDto>> {
+    return this.http.get<PageResult<EggCategoryDto>>(`${this.baseUrl}/stock/search`, { params: searchValues });
+  }
+
   public edit(eggCategory: EggCategoryDto): Observable<any> {
     return this.http.put(`${this.baseUrl}`, eggCategory);
   }

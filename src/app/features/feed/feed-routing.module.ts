@@ -5,6 +5,7 @@ import { FeedDetailsComponent } from './feed-details/feed-details.component';
 import { FeedStockComponent } from './feed-stock/feed-stock.component';
 import { FeedAllocationComponent } from './feed-allocation/feed-allocation.component';
 import { FeedSaleDetailsComponent } from './feed-sale-details/feed-sale-details.component';
+import { FeedStockDetailsComponent } from './feed-stock-details/feed-stock-details.component';
 
 const routes: Routes = [
   {
@@ -18,6 +19,10 @@ const routes: Routes = [
   {
     path: 'feed-stock',
     component: FeedStockComponent
+  },
+  {
+    path: 'feed-stock-details/:id',
+    component: FeedStockDetailsComponent
   },
   {
     path: 'feed-allocation',
