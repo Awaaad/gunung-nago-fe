@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { HealthProductDto, HealthProductStockSaveDto, HealthSurveyDto } from 'generated-src/model';
+import { HealthProductDto, HealthProductStockDto, HealthProductStockSaveDto, HealthSurveyDto } from 'generated-src/model';
 import { PageResult } from 'generated-src/model-front';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -37,6 +37,10 @@ export class HealthProductApiService {
 
   public search(searchValues: any): Observable<PageResult<HealthProductDto>> {
     return this.http.get<PageResult<HealthProductDto>>(`${this.baseUrl}/search`, { params: searchValues });
+  }
+
+  public searchHealthProductStock(searchValues: any): Observable<PageResult<HealthProductStockDto>> {
+    return this.http.get<PageResult<HealthProductStockDto>>(`${this.baseUrl}/stock/search`, { params: searchValues });
   }
 
   public searchHealthProduct(searchValues: any): Observable<HealthProductDto[]> {

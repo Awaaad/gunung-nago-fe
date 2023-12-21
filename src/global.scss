@@ -381,6 +381,18 @@ strong {
     border-radius: 4px;
 }
 
+.table-sale-report-icon {
+    border: 2px solid transparent;
+    padding: 2px;
+    border-radius: 4px;
+}
+
+.table-sale-report-icon:hover {
+    border: 2px solid var(--ion-color-gunung-nago-report);
+    padding: 2px;
+    border-radius: 4px;
+}
+
 ion-radio {
     font-size: 15px;
 }
@@ -425,4 +437,8 @@ ion-toggle {
 .mat-column-number-amount {
     display: flex;
     justify-content: space-between;
+}
+
+.search-checkbox {
+    margin: 10px;
 }

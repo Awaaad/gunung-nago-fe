@@ -1,3 +1,165 @@
-<p>
-  egg-stock-details works!
-</p>
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      <div class="router-links">
+        <div class="title">
+          <img class="header-logo" src='./assets/flaticon/egg-stock.png'>
+          <h3 class="header-nav-products">{{name}} - Egg Stocks</h3>
+        </div>
+        <div>
+          <ion-item class="language-selection">
+            <ion-select aria-label="language" interface="popover" placeholder="Select language" [(ngModel)]="language"
+              (ionChange)="ionChangeLanguage($event)">
+              <ion-select-option value="en">English</ion-select-option>
+              <ion-select-option value="id">Indonesian</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </div>
+      </div>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="false" class="ion-padding" [scrollEvents]="true">
+  <ion-card>
+    <ion-card-content>
+      <ion-row>
+        <ion-col size-xs="12" size-md="4">
+          <ion-select color="gunung-nago-primary" label="Created By" label-placement="floating" fill="outline"
+            interface="popover" [(ngModel)]="createdBy" (ionChange)="ionChangeCreatedBy($event)">
+            <ion-select-option value='' selected="true">All</ion-select-option>
+            <ion-select-option *ngFor="let username of usernames" [value]="username">{{username}}</ion-select-option>
+          </ion-select>
+          <ion-row>
+            <ion-col size-xs="12" size-md="6">
+              <ion-label>Created Date Issued From </ion-label>
+              <div class="date-time-picker-container">
+                <ion-datetime-button datetime="createdDatetimeFrom"></ion-datetime-button>
+                <ion-chip class="date-time-picer-clear" (click)="clearCreatedDateFrom()" *ngIf="createdDateFrom">
+                  <ion-icon class="date-time-picker-clear-icon" name="close-outline"></ion-icon>
+                </ion-chip>
+              </div>
+
+              <ion-popover [keepContentsMounted]="true">
+                <ng-template>
+                  <ion-datetime id="createdDatetimeFrom" hourCycle="h23" [(ngModel)]="createdDateFrom"
+                    (ngModelChange)="selectCreatedDateFrom()"></ion-datetime>
+                </ng-template>
+              </ion-popover>
+            </ion-col>
+
+            <ion-col size-xs="12" size-md="6">
+              <ion-label>Created Date Issued To </ion-label>
+              <div class="date-time-picker-container">
+                <ion-datetime-button datetime="createdDatetimeTo"></ion-datetime-button>
+                <ion-chip class="date-time-picer-clear" (click)="clearCreatedDateTo()" *ngIf="createdDateTo">
+                  <ion-icon class="date-time-picker-clear-icon" name="close-outline"></ion-icon>
+                </ion-chip>
+              </div>
+
+              <ion-popover [keepContentsMounted]="true">
+                <ng-template>
+                  <ion-datetime id="createdDatetimeTo" hourCycle="h23" [(ngModel)]="createdDateTo"
+                    (ngModelChange)="selectCreatedDateTo()"></ion-datetime>
+                </ng-template>
+              </ion-popover>
+            </ion-col>
+          </ion-row>
+        </ion-col>
+        <ion-col size-xs="12" size-md="4">
+          <ion-select color="gunung-nago-primary" label="Last Modified By" label-placement="floating" fill="outline"
+            interface="popover" [(ngModel)]="lastModifiedBy" (ionChange)="ionChangeLastModifiedBy($event)">
+            <ion-select-option value='' selected="true">All</ion-select-option>
+            <ion-select-option *ngFor="let username of usernames" [value]="username">{{username}}</ion-select-option>
+          </ion-select>
+          <ion-row>
+            <ion-col size-xs="12" size-md="6">
+              <ion-label>Last Modified Date Issued From </ion-label>
+              <div class="date-time-picker-container">
+                <ion-datetime-button datetime="lastModifiedDatetimeFrom"></ion-datetime-button>
+                <ion-chip class="date-time-picer-clear" (click)="clearLastModifiedDateFrom()"
+                  *ngIf="lastModifiedDateFrom">
+                  <ion-icon class="date-time-picker-clear-icon" name="close-outline"></ion-icon>
+                </ion-chip>
+              </div>
+
+              <ion-popover [keepContentsMounted]="true">
+                <ng-template>
+                  <ion-datetime id="lastModifiedDatetimeFrom" hourCycle="h23" [(ngModel)]="lastModifiedDateFrom"
+                    (ngModelChange)="selectLastModifiedDateFrom()"></ion-datetime>
+                </ng-template>
+              </ion-popover>
+            </ion-col>
+
+            <ion-col size-xs="12" size-md="6">
+              <ion-label>Last Modified Date Issued To </ion-label>
+              <div class="date-time-picker-container">
+                <ion-datetime-button datetime="lastModifiedDatetimeTo"></ion-datetime-button>
+                <ion-chip class="date-time-picer-clear" (click)="clearLastModifiedDateTo()" *ngIf="lastModifiedDateTo">
+                  <ion-icon class="date-time-picker-clear-icon" name="close-outline"></ion-icon>
+                </ion-chip>
+              </div>
+
+              <ion-popover [keepContentsMounted]="true">
+                <ng-template>
+                  <ion-datetime id="lastModifiedDatetimeTo" hourCycle="h23" [(ngModel)]="lastModifiedDateTo"
+                    (ngModelChange)="selectLastModifiedDateTo()"></ion-datetime>
+                </ng-template>
+              </ion-popover>
+            </ion-col>
+          </ion-row>
+        </ion-col>
+        <ion-col size-xs="12" size-md="4">
+          <div class="filters">
+            <div>
+
+            </div>
+            <div>
+              <ion-button class="reset" (click)="reset()">Reset Filters</ion-button>
+            </div>
+          </div>
+        </ion-col>
+      </ion-row>
+
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <div class="mat-elevation-z8 table-responsive">
+      <table mat-table [dataSource]="eggCategoryStocks">
+
+        <ng-container matColumnDef="quantity">
+          <th mat-header-cell *matHeaderCellDef> Quantity </th>
+          <td mat-cell *matCellDef="let element"> {{element.quantity ? element.quantity : 0}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="createdBy">
+          <th mat-header-cell *matHeaderCellDef> Created By </th>
+          <td mat-cell *matCellDef="let element"> {{element.createdBy}} </td>
+        </ng-container>
+        <ng-container matColumnDef="createdDate">
+          <th mat-header-cell *matHeaderCellDef> Created Date </th>
+          <td mat-cell *matCellDef="let element"> {{element.createdDate | date:'dd-MM-yyyy HH:mm'}} </td>
+        </ng-container>
+        <ng-container matColumnDef="lastModifiedBy">
+          <th mat-header-cell *matHeaderCellDef> Last Modified By </th>
+          <td mat-cell *matCellDef="let element"> {{element.lastModifiedBy}} </td>
+        </ng-container>
+        <ng-container matColumnDef="lastModifiedDate">
+          <th mat-header-cell *matHeaderCellDef> Last Modified Date </th>
+          <td mat-cell *matCellDef="let element"> {{element.lastModifiedDate | date:'dd-MM-yyyy HH:mm'}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+  </ion-card>
+  <ion-infinite-scroll threshold="100px" position="bottom" (ionInfinite)="loadData($event)">
+    <ion-infinite-scroll-content loadingSpinner="crescent" loadingText="Loading more egg category stocks...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>

@@ -1,0 +1,150 @@
+.input {
+    width: 100%;
+    padding-right: 10px;
+}
+
+table {
+    width: 100%;
+}
+
+th.mat-header-cell,
+td.mat-cell {
+    text-align: center;
+    border: 1px solid #CCC;
+    padding: 0 !important;
+}
+
+.table-responsive {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+}
+
+tbody {
+    overflow-x: scroll;
+}
+
+// .mat-mdc-table tbody,
+// .mat-mdc-table tfoot,
+.mat-mdc-table thead,
+.mat-mdc-cell,
+// .mat-mdc-footer-cell,
+// .mat-mdc-header-row,
+// .mat-mdc-row,
+// .mat-mdc-footer-row,
+// .mat-mdc-table 
+.mat-mdc-header-cell {
+    border: 1px solid #CCC;
+}
+
+.mat-mdc-cell:first-child {
+    border-left: 0;
+}
+
+.mat-mdc-cell:last-child {
+    border-right: 0;
+}
+
+.mdc-data-table__header-cell {
+    border-top: 0;
+}
+
+.mdc-data-table__header-cell:first-child {
+    border-left: 0;
+}
+
+.mdc-data-table__header-cell:last-child {
+    border-right: 0;
+}
+
+.mat-mdc-table .mdc-data-table__header-row {
+    background: var(--ion-color-gunung-nago-report);
+    color: white;
+}
+
+.mdc-data-table__header-cell {
+    color: white;
+}
+
+// expandable table row 
+.mat-table {
+    width: 100%;
+    margin-top: 2em;
+}
+
+.mat-row.example-detail-row {
+    min-height: 0;
+}
+
+.mat-row.example-element-row:not(.example-expanded-row):hover {
+    background: rgb(216, 216, 216);
+    cursor: pointer;
+}
+
+.mat-row.example-element-row:not(.example-expanded-row):active {
+    background: #efefef;
+}
+
+.flight-info-expanded {
+    display: flex;
+
+    .flight-expanded {
+        display: flex;
+
+        .departure-expanded {
+            padding: 2em;
+        }
+
+        .arrival-expanded {
+            padding: 2em;
+        }
+
+        .from-to {
+            padding-top: 2.5em;
+        }
+    }
+
+    .booking-info-expanded {
+        display: block;
+        padding: 2em;
+        padding-left: 15em;
+
+        .seats-expanded {
+            display: flex;
+        }
+
+        .seats {
+            padding-top: 4px;
+        }
+    }
+}
+
+.example-detail-row {
+    height: 0;
+    min-height: auto;
+    width: 100%;
+}
+
+.health-product-modal {
+    --height: 34em;
+}
+
+.mat-column-quantity {
+    text-align: right;
+}
+
+.mat-column-unitsPerBox {
+    text-align: right;
+}
+
+.mat-column-unitsTotal {
+    text-align: right;
+}
+
+.mat-column-pricePerBox {
+    text-align: right;
+}
+
+.mat-mdc-table .mat-mdc-header-cell {
+    text-align: left;
+}

@@ -8,7 +8,14 @@
         <div class="title">
           <img class="header-logo" src='./assets/flaticon/record.png'>
           <h3 *ngIf="!type" class="header-nav-products">Sales Record</h3>
-          <h3 *ngIf="type" class="header-nav-products">{{type | titlecase}} Sales Record</h3>
+          <h3 *ngIf="type && !id" class="header-nav-products">{{type | titlecase}} Sales Record</h3>
+          <h3 *ngIf="type === 'EGG' && id" class="header-nav-products">{{name}} - {{type | titlecase}} Sales Record</h3>
+          <h3 *ngIf="type === 'FLOCK' && id" class="header-nav-products">{{name}} - {{type | titlecase}} Sales Record</h3>
+          <h3 *ngIf="type === 'FEED' && id" class="header-nav-products">{{name}} - {{weight}} KG - {{type | titlecase}}
+            Sales Record</h3>
+          <h3 *ngIf="type === 'MANURE' && id" class="header-nav-products">{{weight}} KG - {{'Fertilizer' | titlecase}}
+            Sales
+            Record</h3>
         </div>
         <div>
           <ion-item class="language-selection">
@@ -99,13 +106,13 @@
         </ion-col>
 
         <ion-col size-xs="12" size-md="2">
-            <ion-checkbox [indeterminate]="isToJakarta === ''" [(ngModel)]="isToJakarta" color="gunung-nago-report"
-              (ionChange)="toggleToJakarta($event)">To Jakarta</ion-checkbox>
+          <ion-checkbox [indeterminate]="isToJakarta === ''" [(ngModel)]="isToJakarta" color="gunung-nago-report"
+            (ionChange)="toggleToJakarta($event)">To Jakarta</ion-checkbox>
         </ion-col>
       </ion-row>
 
       <ion-row>
-        <ion-col size-xs="12" size-md="3" *ngIf="salesInvoiceType === 'MANURE'">
+        <ion-col size-xs="12" size-md="3" *ngIf="salesInvoiceType === 'MANURE' && !id">
           <ion-select color="gunung-nago-primary" label="Weight (KG)" label-placement="floating" fill="outline"
             interface="popover" required="true" (ionChange)="ionChangeManure($event)" [(ngModel)]="manureId">
             <ion-select-option value='0' selected="true">All</ion-select-option>
@@ -114,7 +121,7 @@
           </ion-select>
         </ion-col>
 
-        <ion-col size-xs="12" size-md="3" *ngIf="salesInvoiceType === 'EGG'">
+        <ion-col size-xs="12" size-md="3" *ngIf="salesInvoiceType === 'EGG' && !id">
           <ion-select color="gunung-nago-primary" label="Egg Category" label-placement="floating" fill="outline"
             interface="popover" clear-input="true" [(ngModel)]="eggCategoryId"
             (ionChange)="ionChangeEggCategory($event)">
@@ -134,7 +141,7 @@
               }}</ion-select-option>
           </ion-select>
         </ion-col>
-        <ion-col size-xs="12" size-md="3" *ngIf="salesInvoiceType === 'FEED'">
+        <ion-col size-xs="12" size-md="3" *ngIf="salesInvoiceType === 'FEED' && !id">
           <ion-searchbar placeholder="Search by feed name..." type="text" #feedName
             (ionInput)="searchByFeedName(feedName.value)"></ion-searchbar>
         </ion-col>

@@ -38,7 +38,7 @@
         </ng-container>
 
         <ng-container matColumnDef="bags">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header="bags"> Bags </th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="bags"> Quantity in Stock (Bag) </th>
           <td mat-cell *matCellDef="let element"> {{element.bags}} </td>
         </ng-container>
 
@@ -46,7 +46,7 @@
           <th mat-header-cell *matHeaderCellDef> </th>
           <td mat-cell *matCellDef="let element">
             <div class="table-btn">
-              <ion-icon color="positive-btn" class="table-stock-icon" [src]="stock" (click)="routeToStockDetails(element.id)"></ion-icon>
+              <ion-icon color="positive-btn" class="table-stock-icon" [src]="stock" (click)="routeToStockDetails(element)"></ion-icon>
 
               <ion-icon class="table-edit-icon ml-05"
                 color="neutral-btn" (click)="openModal(element)" name="create"></ion-icon>

@@ -159,7 +159,7 @@ export class ManureListComponent {
     });
   }
 
-  public routeToStockDetails(id: number): void {
-    this.router.navigate([`manure/manure-stock-details/${id}`]);
+  public routeToStockDetails(manure: ManureDto): void {
+    this.router.navigate([`manure/manure-stock-details/${manure.id}`], { queryParams: { weight: manure.weight } });
   }
 }

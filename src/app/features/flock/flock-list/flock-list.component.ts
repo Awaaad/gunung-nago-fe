@@ -6,10 +6,12 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { IonInfiniteScroll } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { CageDto, FlockDto } from 'generated-src/model';
+import { AquisitionType, CageDto, FlockCategory, FlockDto } from 'generated-src/model';
 import { Subscription } from 'rxjs';
 import { UtilsService } from 'src/app/shared/utils/utils.service';
 import { FlockApiService } from '../../../shared/apis/flock.api.service';
+import { CageApiService } from 'src/app/shared/apis/cage.api.service';
+import moment from 'moment';
 
 @Component({
   selector: 'app-flock-list',
@@ -29,21 +31,84 @@ export class FlockListComponent {
   private size: number = 20;
   public sortOrder: string = 'asc';
   public sortBy: string = 'name';
+  public cages: CageDto[] = [];
   public stock = 'assets/flaticon/stock-table-icon.svg';
+  public saleReport = 'assets/flaticon/money-icon.svg';
+  public cageId: number | string = '';
+  public flockCategory: FlockCategory | string = '';
+  public flockCategories: string[] = [];
+  public acquisitionType: AquisitionType | string = '';
+  public acquisitionTypes: string[] = [];
+  public active: boolean | string = '';
+  public acquisitionDate!: Date | null;
+  public today: Date = new Date();
+  public flockName: string = '';
 
   constructor(
+    private cageApiService: CageApiService,
     private flockApiService: FlockApiService,
     private translateService: TranslateService,
     private router: Router,
-    private utilService: UtilsService
+    private utilsService: UtilsService
   ) { }
 
   ionViewWillEnter(): void {
+    this.flockCategories = Object.keys(FlockCategory);
+    this.acquisitionTypes = Object.keys(AquisitionType);
+    this.getAllActiveCages();
+    this.search();
+  }
+
+  public searchByFlockName(flockName: any): void {
+    this.flockSearchSubscription.unsubscribe();
+    this.flocks = new MatTableDataSource<FlockDto>([]);
+    this.page = 0;
+    this.flockName = flockName;
     this.search();
   }
 
   public ionChangeLanguage(event: any): void {
     this.translateService.use(event.detail.value);
+  }
+
+  public ionChangeCage(event: any): void {
+    this.cageId = event.detail.value;
+    this.utilsService.presentLoadingDuration(500).then(() => {
+      this.search();
+    });
+  }
+
+  public ionChangeFlockCategory(event: any): void {
+    this.flockCategory = event.detail.value;
+    this.utilsService.presentLoadingDuration(500).then(() => {
+      this.search();
+    });
+  }
+
+  public ionChangeAcquisitionType(event: any): void {
+    this.acquisitionType = event.detail.value;
+    this.utilsService.presentLoadingDuration(500).then(() => {
+      this.search();
+    });
+  }
+
+  public changeAcquisitionDate(event: any): void {
+    this.acquisitionDate = event;
+    this.search();
+  }
+
+  public toggleActive(event: any): void {
+    this.active = event.detail.checked;
+    this.utilsService.presentLoadingDuration(500).then(value => {
+      this.search();
+    });
+  }
+
+  public getAllActiveCages() {
+    this.cages = [];
+    this.cageApiService.getAllActiveCages().subscribe(cages => {
+      this.cages = cages;
+    })
   }
 
   public flockForm = new FormGroup({
@@ -62,8 +127,14 @@ export class FlockListComponent {
       size: this.size,
       sortBy: this.sortBy,
       sortOrder: this.sortOrder.toUpperCase(),
+      cageId: this.cageId,
+      actualFlockCategory: this.flockCategory,
+      aquisitionType: this.acquisitionType,
+      active: this.active,
+      name: this.flockName,
+      aquisitionDate: this.acquisitionDate ? moment(this.acquisitionDate).startOf('day').format(moment.HTML5_FMT.DATE) : '',
     }
-    this.flockApiService.search(flocksSearchCriteriaDto).subscribe(flocks => {
+    this.flockSearchSubscription = this.flockApiService.search(flocksSearchCriteriaDto).subscribe(flocks => {
       this.infiniteFlocks = [...this.infiniteFlocks, ...flocks.content];
       this.flocks = new MatTableDataSource<FlockDto>(this.infiniteFlocks);
 
@@ -88,12 +159,28 @@ export class FlockListComponent {
     this.sortBy = sort.active;
     this.sortOrder = sort.direction.toUpperCase();
 
-    this.utilService.presentLoadingDuration(500).then(value => {
+    this.utilsService.presentLoadingDuration(500).then(value => {
       this.search();
     })
   }
 
-  public routeToStockDetails(id: number): void {
-    this.router.navigate([`flock/flock-stock-details/${id}`]);
+  public routeToStockDetails(flock: FlockDto): void {
+    this.router.navigate([`flock/flock-stock-details/${flock.id}`], { queryParams: { name: flock.name } });
+  }
+
+  public routeToFlockSaleReport(flock: FlockDto): void {
+    this.router.navigate([`/sales-invoice/sales-invoice-by-type-list/FLOCK/${flock.id}`], { queryParams: { name: flock.name } });
+  }
+
+  public reset(): void {
+    this.acquisitionDate = null;
+    this.cageId = '';
+    this.flockCategory = '';
+    this.acquisitionType = '';
+    this.active = '';
+    this.flockName = '';
+    this.utilsService.presentLoadingDuration(500).then(() => {
+      this.search();
+    });
   }
 }

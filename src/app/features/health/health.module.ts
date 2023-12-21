@@ -22,9 +22,10 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MaskitoModule } from '@maskito/angular';
+import { HealthStockDetailsComponent } from './health-stock-details/health-stock-details.component';
 
 @NgModule({
-  declarations: [HealthDetailsComponent, HealthListComponent, HealthStockComponent],
+  declarations: [HealthDetailsComponent, HealthListComponent, HealthStockComponent, HealthStockDetailsComponent],
   imports: [
     MaskitoModule,
     CommonModule,
