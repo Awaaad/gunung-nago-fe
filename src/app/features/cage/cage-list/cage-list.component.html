@@ -50,8 +50,10 @@
       </ion-row>
       <ion-row>
         <ion-col size-xs="12" size-md="3">
-          <ion-checkbox [indeterminate]="active === ''" [(ngModel)]="active" color="gunung-nago-report"
-            (ionChange)="toggleActive($event)">{{'cage.cage-details.active' | translate }}</ion-checkbox>
+          <div class="search-checkbox">
+            <ion-checkbox [indeterminate]="active === ''" [(ngModel)]="active" color="gunung-nago-report"
+              (ionChange)="toggleActive($event)">{{'cage.cage-details.active' | translate }}</ion-checkbox>
+          </div>
         </ion-col>
       </ion-row>
     </ion-card-content>

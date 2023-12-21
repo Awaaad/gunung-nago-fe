@@ -30,6 +30,10 @@ const routes: Routes = [
     component: EggReportComponent
   },
   {
+    path: 'egg-report/:id',
+    component: EggReportComponent
+  },
+  {
     path: 'egg-category-list',
     component: EggCategoryListComponent
   },

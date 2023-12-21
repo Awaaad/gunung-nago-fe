@@ -52,6 +52,7 @@ export class FeedAllocationComponent implements OnInit {
 
   private initialiseSelectedFeedStock(): void {
     this.selectedFeedStock = {
+      initialBags: 0,
       feedStockId: 0,
       bags: 0,
       createdDate: new Date(),
@@ -63,7 +64,10 @@ export class FeedAllocationComponent implements OnInit {
       quantity: 0,
       recommendedPrice: 0,
       bagsSold: 0,
-      bagsAllocated: 0
+      bagsAllocated: 0,
+      createdBy: '',
+      lastModifiedBy: '',
+      lastModifiedDate: new Date(),
     }
   }
 

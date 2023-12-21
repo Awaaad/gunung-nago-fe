@@ -203,7 +203,7 @@ export class FeedListComponent {
     });
   }
 
-  public routeToStockDetails(id: number): void {
-    this.router.navigate([`feed/feed-stock-details/${id}`]);
+  public routeToStockDetails(feed: FeedDto): void {
+    this.router.navigate([`feed/feed-stock-details/${feed.id}`], { queryParams: { name: feed.name, weight: feed.recommendedWeight } });
   }
 }

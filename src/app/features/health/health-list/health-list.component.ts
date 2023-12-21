@@ -13,6 +13,7 @@ import { UtilsService } from 'src/app/shared/utils/utils.service';
 import { OverlayEventDetail } from '@ionic/core/components';
 import { HttpErrorResponse } from '@angular/common/http';
 import { SupplierApiService } from 'src/app/shared/apis/supplier.api.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-health-list',
@@ -71,7 +72,8 @@ export class HealthListComponent {
     private healthProductApiService: HealthProductApiService,
     private supplierApiService: SupplierApiService,
     private translateService: TranslateService,
-    private utilsService: UtilsService
+    private utilsService: UtilsService,
+    private router: Router
   ) {
   }
 
@@ -234,6 +236,10 @@ export class HealthListComponent {
         this.utilsService.unsuccessMsg('Error', 'gunung-nago-warehouse');
       }
     });
+  }
+
+  public routeToStockDetails(healthProduct: HealthProductDto): void {
+    this.router.navigate([`health/health-stock-details/${healthProduct.id}`], { queryParams: { name: healthProduct.name, type: healthProduct.healthType } });
   }
 }
 

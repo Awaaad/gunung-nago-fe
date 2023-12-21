@@ -37,6 +37,7 @@ export class EggCategoryListComponent {
   public isModalOpen: boolean = false;
   public eggTypes!: string[];
   public stock = 'assets/flaticon/stock-table-icon.svg';
+  public saleReport = 'assets/flaticon/money-icon.svg';
 
   public errorMessages = {
     name: [
@@ -168,7 +169,11 @@ export class EggCategoryListComponent {
     });
   }
 
-  public routeToStockDetails(id: number): void {
-    this.router.navigate([`egg/egg-stock-details/${id}`]);
+  public routeToStockDetails(eggCategory: EggCategoryDto): void {
+    this.router.navigate([`egg/egg-stock-details/${eggCategory.id}`], { queryParams: { name: eggCategory.name, type: eggCategory.eggType } });
+  }
+
+  public routeToEggSaleReport(eggCategory: EggCategoryDto): void {
+    this.router.navigate([`/sales-invoice/sales-invoice-by-type-list/EGG/${eggCategory.id}`], { queryParams: { name: eggCategory.name, type: eggCategory.eggType } });
   }
 }

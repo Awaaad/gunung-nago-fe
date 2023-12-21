@@ -149,7 +149,9 @@
       <ion-row>
         <ion-col size-xs="12" size-md="3">
           <ion-select color="gunung-nago-primary" label="Feed Category" label-placement="floating" fill="outline"
-            interface="popover" placeholder="Feed Category" (ionChange)="ionChangeFeedCategory($event)">
+            interface="popover" [(ngModel)]="feedCategory" placeholder="Feed Category"
+            (ionChange)="ionChangeFeedCategory($event)">
+            <ion-select-option value='' selected="true">All</ion-select-option>
             <ion-select-option *ngFor="let feedCategory of feedCategories" [value]="feedCategory">{{ feedCategory
               }}</ion-select-option>
           </ion-select>
@@ -179,7 +181,7 @@
 
 
         <ng-container matColumnDef="quantity">
-          <th mat-header-cell *matHeaderCellDef> Quantity in Stock (BAGS) </th>
+          <th mat-header-cell *matHeaderCellDef> Quantity in Stock (Bag) </th>
           <td mat-cell *matCellDef="let element"> {{element.bags}} </td>
         </ng-container>
 

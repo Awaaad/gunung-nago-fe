@@ -34,6 +34,7 @@ export class SideNavComponent  implements OnInit {
   public list = 'assets/flaticon/list-icon.svg';
   public add = 'assets/flaticon/add-icon.svg';
   public dashboard = 'assets/flaticon/dashboard-icon.svg';
+  public collection = 'assets/flaticon/collection-icon.svg';
 
   constructor() { }
 

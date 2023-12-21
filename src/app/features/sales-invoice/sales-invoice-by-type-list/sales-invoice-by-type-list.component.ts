@@ -24,6 +24,7 @@ import { EggCategoryApiService } from 'src/app/shared/apis/egg-category.api.serv
 })
 export class SalesInvoiceByTypeListComponent {
   public type: any = this.activatedRoute.snapshot.paramMap.get('type');
+  public id: any = this.activatedRoute.snapshot.paramMap.get('id');
   @ViewChild('picker') picker: any;
   @ViewChild(IonInfiniteScroll, { static: true }) infiniteScroll!: IonInfiniteScroll;
   @ViewChild(IonModal) modal!: IonModal;
@@ -48,6 +49,9 @@ export class SalesInvoiceByTypeListComponent {
   public drivers: UserDto[] = [];
   public selectedDriverId: number | any = '0';
   public manureId: number | any = '0';
+  public manureStockId: number | any = '0';
+  public feedStockId: number | any = '0';
+  public flockId: number | any = '0';
   public eggCategoryId: number | any = '0';
   public salesInvoiceTypes: string[] = [];
   public salesInvoiceType: SalesInvoiceType | string = '';
@@ -71,7 +75,8 @@ export class SalesInvoiceByTypeListComponent {
   public paymentModes: PaymentModeDto[] = [];
 
   public isToJakarta: boolean | string = '';
-
+  public name!: string;
+  public weight!: number;
 
   public errorMessages = {
     name: [
@@ -125,6 +130,7 @@ export class SalesInvoiceByTypeListComponent {
   }
 
   ionViewWillEnter(): void {
+    this.getRouteParams();
     this.isStatusModalOpen = false;
     this.salesInvoiceTypes = Object.keys(SalesInvoiceType);
     this.salesInvoiceStatuses = Object.keys(SalesInvoiceStatus);
@@ -138,12 +144,32 @@ export class SalesInvoiceByTypeListComponent {
       this.salesInvoiceType = this.type;
       if (this.type === SalesInvoiceType.MANURE) {
         this.getManures();
+        if (this.id) {
+          this.manureStockId = this.id;
+        }
       }
       if (this.type === SalesInvoiceType.EGG) {
         this.getEggCategories();
+        if (this.id) {
+          this.eggCategoryId = this.id;
+        }
+      }
+      if (this.type === SalesInvoiceType.FEED) {
+        this.feedStockId = this.id;
+      }
+      if (this.type === SalesInvoiceType.FLOCK) {
+        this.flockId = this.id;
       }
     }
     this.search();
+  }
+
+  private getRouteParams(): void {
+    this.activatedRoute.queryParams
+      .subscribe(params => {
+        this.name = params['name'];
+        this.weight = params['weight'];
+      });
   }
 
   public getAllPaymentModes() {
@@ -334,6 +360,9 @@ export class SalesInvoiceByTypeListComponent {
       eggQuantityType: this.eggQuantityType,
       manureId: this.manureId === '0' || this.manureId === null ? '' : this.manureId,
       eggCategoryId: this.eggCategoryId === '0' || this.eggCategoryId === null ? '' : this.eggCategoryId,
+      manureStockId: this.manureStockId === '0' || this.manureStockId === null ? '' : this.manureStockId,
+      feedStockId: this.feedStockId === '0' || this.feedStockId === null ? '' : this.feedStockId,
+      flockId: this.flockId === '0' || this.flockId === null ? '' : this.flockId,
       isToJakarta: this.isToJakarta,
 
       page: this.page,
@@ -378,6 +407,27 @@ export class SalesInvoiceByTypeListComponent {
     this.feedName = '';
     this.username = '';
     this.amountDue = 0;
+    if (this.type) {
+      this.salesInvoiceType = this.type;
+      if (this.type === SalesInvoiceType.MANURE) {
+        this.getManures();
+        if (this.id) {
+          this.manureStockId = this.id;
+        }
+      }
+      if (this.type === SalesInvoiceType.EGG) {
+        this.getEggCategories();
+        if (this.id) {
+          this.eggCategoryId = this.id;
+        }
+      }
+      if (this.type === SalesInvoiceType.FEED) {
+        this.feedStockId = this.id;
+      }
+      if (this.type === SalesInvoiceType.FLOCK) {
+        this.flockId = this.id;
+      }
+    }
     this.utilsService.presentLoadingDuration(500).then(() => {
       this.search();
     });

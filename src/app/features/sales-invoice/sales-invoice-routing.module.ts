@@ -30,6 +30,10 @@ const routes: Routes = [
     path: 'sales-invoice-by-type-list/:type',
     component: SalesInvoiceByTypeListComponent
   },
+  {
+    path: 'sales-invoice-by-type-list/:type/:id',
+    component: SalesInvoiceByTypeListComponent
+  },
 ];
 
 @NgModule({

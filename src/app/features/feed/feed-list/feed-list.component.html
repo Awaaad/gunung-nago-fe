@@ -51,7 +51,8 @@
       <ion-row>
         <ion-col size-xs="12" size-md="3">
           <ion-select color="gunung-nago-primary" label="Feed Category" label-placement="floating" fill="outline"
-            interface="popover" (ionChange)="ionChangeFeedCategory($event)">
+            interface="popover" [(ngModel)]="feedCategory" (ionChange)="ionChangeFeedCategory($event)">
+            <ion-select-option value='' selected="true">All</ion-select-option>
             <ion-select-option *ngFor="let feedCategory of feedCategories" [value]="feedCategory">{{ feedCategory
               }}</ion-select-option>
           </ion-select>
@@ -80,7 +81,7 @@
         </ng-container>
 
         <ng-container matColumnDef="quantity">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header="quantity"> Quantity in Stock (BAGS)  </th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="quantity"> Quantity in Stock (Bag) </th>
           <td mat-cell *matCellDef="let element"> {{element.bags}} </td>
         </ng-container>
 
@@ -93,7 +94,8 @@
           <th mat-header-cell *matHeaderCellDef></th>
           <td mat-cell *matCellDef="let element">
             <div class="table-btn">
-              <ion-icon color="positive-btn" class="table-stock-icon" [src]="stock" (click)="routeToStockDetails(element.id)"></ion-icon>
+              <ion-icon color="positive-btn" class="table-stock-icon" [src]="stock"
+                (click)="routeToStockDetails(element)"></ion-icon>
 
               <ion-icon class="table-edit-icon ml-05" color="neutral-btn" (click)="openModal(element)"
                 name="create"></ion-icon>

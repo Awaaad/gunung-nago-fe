@@ -24,7 +24,7 @@ export class FeedApiService {
   }
 
   public searchFeedStock(searchValues: any): Observable<PageResult<FeedStockDto>> {
-    return this.http.get<PageResult<FeedStockDto>>(`${this.baseUrl}stock/search`, { params: searchValues });
+    return this.http.get<PageResult<FeedStockDto>>(`${this.baseUrl}/stock/search`, { params: searchValues });
   }
 
   public findFeedStockByFeedId(id: number): Observable<FeedStockSaveDto> {

@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2023-12-20 22:55:36.
+// Generated using typescript-generator version 3.2.1263 on 2023-12-21 11:13:59.
 
 export class AuditDto {
     createdBy!: string;
@@ -248,12 +248,12 @@ export class FeedStockAllocationDto {
     bagsAllocated!: number;
 }
 
-export class FeedStockDto {
+export class FeedStockDto extends AuditDto {
     feedStockId!: number;
+    initialBags!: number;
     bags!: number;
     bagsSold!: number;
     bagsAllocated!: number;
-    createdDate!: Date;
     recommendedPrice!: number;
     weight!: number;
     name!: string;
@@ -434,6 +434,8 @@ export class HealthProductDto {
     unitsPerBox!: number;
     supplierId!: number;
     supplierName!: string;
+    totalQuantity!: number;
+    totalUnits!: number;
 }
 
 export class HealthProductSearchCriteriaDto {
@@ -444,14 +446,13 @@ export class HealthProductSearchCriteriaDto {
     farmId!: number;
 }
 
-export class HealthProductStockDto {
+export class HealthProductStockDto extends AuditDto {
     id!: number;
     quantity!: number;
     unitsPerBox!: number;
     unitsTotal!: number;
     pricePerBox!: number;
     expiryDate!: Date;
-    createdDate!: Date;
     healthProductId!: number;
 }
 
@@ -469,6 +470,16 @@ export class HealthProductStockSaveDto {
     discount!: number;
     tax!: number;
     createdDate!: Date;
+}
+
+export class HealthProductStockSearchCriteriaDto {
+    healthProductId!: number;
+    createdBy!: string;
+    createdDateFrom!: Date;
+    createdDateTo!: Date;
+    lastModifiedBy!: string;
+    lastModifiedDateFrom!: Date;
+    lastModifiedDateTo!: Date;
 }
 
 export class HealthReportDto {
@@ -537,9 +548,6 @@ export class ManureStockDto extends AuditDto {
     collectedByFirstName!: string;
     collectedByLastName!: string;
     collectedDate!: Date;
-}
-
-export class ManureStockDtoBuilder {
 }
 
 export class ManureStockSearchCriteriaDto {
