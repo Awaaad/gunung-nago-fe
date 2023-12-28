@@ -163,7 +163,8 @@ export class SalesInvoiceCustomerCreditListComponent implements OnInit {
       telephoneNumber: 0,
       telephoneNumberTwo: 0,
       telephoneNumberThree: 0,
-      totalAmountDue: 0
+      totalAmountDue: 0,
+      internal: false
     }
   }
 

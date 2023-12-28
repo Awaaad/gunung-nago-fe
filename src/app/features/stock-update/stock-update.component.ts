@@ -5,7 +5,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { IonModal } from '@ionic/angular';
 import { MaskitoElementPredicateAsync, MaskitoOptions } from '@maskito/core';
 import { TranslateService } from '@ngx-translate/core';
-import { FeedCategory, FeedDto, HealthProductDto, HealthType, PurchaseInvoiceType, SupplierDto } from 'generated-src/model';
+import { FeedCategory, FeedDto, HealthProductDto, HealthType, PurchaseInvoiceType, PurchaseType, SupplierDto } from 'generated-src/model';
 import { Subscription, filter, distinctUntilChanged, debounceTime, tap, switchMap, finalize } from 'rxjs';
 import { HealthProductApiService } from 'src/app/shared/apis/health-product.api.service';
 import { SupplierApiService } from 'src/app/shared/apis/supplier.api.service';
@@ -72,6 +72,8 @@ export class StockUpdateComponent implements OnInit {
       { type: "required", message: "Invoice number is required" },
     ]
   };
+  public type: PurchaseType = PurchaseType.PURCHASE;
+  public purchaseTypes: string[] = [];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -86,6 +88,7 @@ export class StockUpdateComponent implements OnInit {
 
   ngOnInit(): void {
     this.searchSupplier();
+    this.purchaseTypes = Object.keys(PurchaseType);
   }
 
   ionViewWillEnter(): void {
@@ -134,6 +137,11 @@ export class StockUpdateComponent implements OnInit {
 
   public onSupplierSelected(): void {
     this.selectedSupplier = this.selectedSupplier;
+    if (this.selectedSupplier.internal) {
+      this.type = PurchaseType.TRANSFER;
+    } else {
+      this.type = PurchaseType.PURCHASE;
+    }
     this.showSearchBar = true;
     this.reset();
   }
@@ -379,7 +387,8 @@ export class StockUpdateComponent implements OnInit {
       supplierId: this.selectedSupplier.id,
       discount: null,
       comment: this.confirmInvoiceForm.value.comment,
-      purchaseDetailsDtos: this.productsInStockTable.data
+      purchaseDetailsDtos: this.productsInStockTable.data,
+      type: this.type
     }
     this.utilsService.presentLoading();
     this.purchaseApiService.save(productPurchaseDto).subscribe({

@@ -26,7 +26,7 @@ export class CustomerListComponent {
   @ViewChild(MatSort) sort!: MatSort;
   public language = "en";
   public invoice = 'assets/flaticon/invoice-icon.svg';
-  public displayedColumns: string[] = ['firstName', 'lastName', 'email', 'telephoneNumber', 'address', 'edit'];
+  public displayedColumns: string[] = ['firstName', 'lastName', 'email', 'telephoneNumber', 'address', 'internal', 'edit'];
   public customers = new MatTableDataSource<CustomerDto>;
   private infiniteCustomers: CustomerDto[] = [];
   public customerSearchSubscription!: Subscription;
@@ -132,6 +132,7 @@ export class CustomerListComponent {
       telephoneNumber: new FormControl({ value: customerDetails.telephoneNumber, disabled: false }, Validators.compose([Validators.required])),
       telephoneNumberTwo: new FormControl({ value: customerDetails.telephoneNumberTwo, disabled: false }),
       telephoneNumberThree: new FormControl({ value: customerDetails.telephoneNumberThree, disabled: false }),
+      internal: new FormControl({ value: customerDetails.internal, disabled: false }),
     })
   }
 

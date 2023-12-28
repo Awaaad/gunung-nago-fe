@@ -88,6 +88,8 @@ export class SalesInvoiceListComponent implements OnInit {
 
   public isToJakarta: boolean | string = '';
 
+  public showSummary: boolean = false;
+
   public errorMessages = {
     name: [
       { type: 'required', message: 'Name is required' },
@@ -183,7 +185,8 @@ export class SalesInvoiceListComponent implements OnInit {
       telephoneNumber: 0,
       telephoneNumberTwo: 0,
       telephoneNumberThree: 0,
-      totalAmountDue: 0
+      totalAmountDue: 0,
+      internal: false
     }
   }
 

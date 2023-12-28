@@ -5,6 +5,7 @@ import { SecurityRoutingModule } from './security-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { LoginComponent } from './login/login.component';
+import { MatRadioModule } from '@angular/material/radio';
 
 
 @NgModule({
@@ -14,7 +15,8 @@ import { LoginComponent } from './login/login.component';
     FormsModule,
     IonicModule,
     SecurityRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatRadioModule
   ]
 })
 export class SecurityModule { }

@@ -31,8 +31,8 @@
     <ion-card-content>
       <ion-row>
         <ion-col size-xs="12" size-md="6">
-          <ion-searchbar placeholder="Search by customer name..." type="text" #customerName
-            (ionInput)="searchByUserName(customerName.value)"></ion-searchbar>
+          <ion-searchbar placeholder="Search by username, first name, last name..." type="text" #username
+            (ionInput)="searchByUserName(username.value)"></ion-searchbar>
         </ion-col>
         <ion-col size-xs="12" size-md="6">
           <div class="filters">
@@ -79,7 +79,7 @@
 
         <ng-container matColumnDef="telephoneNumber">
           <th mat-header-cell *matHeaderCellDef mat-sort-header="telephoneNumber"> Telephone Number </th>
-          <td mat-cell *matCellDef="let element"> {{element.telephoneNumber}} </td>
+          <td mat-cell *matCellDef="let element"> {{element.phone}} </td>
         </ng-container>
 
         <ng-container matColumnDef="dob">
@@ -127,19 +127,45 @@
     </ion-infinite-scroll-content>
   </ion-infinite-scroll>
 
-  <ion-modal (willDismiss)="onWillDismiss($event)" [isOpen]="isModalOpen" cssClass="customer-modal"
-    backdropDismiss="true">
+  <ion-modal (willDismiss)="onWillDismiss($event)" [isOpen]="isModalOpen" cssClass="user-modal" backdropDismiss="true">
     <ng-template>
       <ion-header>
         <ion-toolbar>
           <div class="title">
             <img class="header-logo ml-15" src='./assets/flaticon/edit.png'>
-            <h3 class="modal-header-text">Edit Customer</h3>
+            <h3 class="modal-header-text">Edit User</h3>
           </div>
         </ion-toolbar>
       </ion-header>
       <ion-content [fullscreen]="false" class="ion-padding">
         <form [formGroup]="userEditForm">
+          <ion-row>
+            <ion-col size-xs="12" size-md="6">
+              <ion-input color="gunung-nago-primary" label="Username*" label-placement="floating" fill="outline"
+                type="text" clear-input="true" formControlName="username" required="true"></ion-input>
+              <div class="error-messages">
+                <ng-container *ngFor="let error of errorMessages.username">
+                  <div class="error-message"
+                    *ngIf="userEditForm.get('username')?.hasError(error.type) && (userEditForm.get('username')?.dirty || userEditForm.get('username')?.touched)">
+                    {{ error.message }}
+                  </div>
+                </ng-container>
+              </div>
+            </ion-col>
+            <ion-col size-xs="12" size-md="6">
+              <ion-input color="gunung-nago-primary" label="Password*" label-placement="floating" fill="outline"
+                type="password" clear-input="true" formControlName="password" required="true"></ion-input>
+              <div class="error-messages">
+                <ng-container *ngFor="let error of errorMessages.password">
+                  <div class="error-message"
+                    *ngIf="userEditForm.get('password')?.hasError(error.type) && (userEditForm.get('password')?.dirty || userEditForm.get('password')?.touched)">
+                    {{ error.message }}
+                  </div>
+                </ng-container>
+              </div>
+            </ion-col>
+          </ion-row>
+
           <ion-row>
             <ion-col size-xs="12" size-md="6">
               <ion-input color="gunung-nago-primary" label="First Name*" label-placement="floating" fill="outline"
@@ -167,17 +193,22 @@
             </ion-col>
           </ion-row>
           <ion-row>
-            <ion-col size-xs="12" size-md="12">
-              <ion-input color="gunung-nago-primary" label="Address" label-placement="floating" fill="outline"
-                type="text" clear-input="true" formControlName="address"></ion-input>
+            <ion-col size-xs="12" size-md="6">
+              <mat-form-field class="date-full-width" appearance="outline">
+                <mat-label>Date of Birth</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="dateOfBirth">
+                <mat-hint>DD/MM/YYYY</mat-hint>
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
             </ion-col>
-            <ion-col size-xs="12" size-md="12">
+            <ion-col size-xs="12" size-md="6">
               <ion-input color="gunung-nago-primary" label="Telephone Number*" label-placement="floating" fill="outline"
-                type="text" clear-input="true" formControlName="telephoneNumber" required="true"></ion-input>
+                type="text" clear-input="true" formControlName="phone" required="true"></ion-input>
               <div class="error-messages">
-                <ng-container *ngFor="let error of errorMessages.telephoneNumber">
+                <ng-container *ngFor="let error of errorMessages.phone">
                   <div class="error-message"
-                    *ngIf="userEditForm.get('telephoneNumber')?.hasError(error.type) && (userEditForm.get('telephoneNumber')?.dirty || userEditForm.get('telephoneNumber')?.touched)">
+                    *ngIf="userEditForm.get('phone')?.hasError(error.type) && (userEditForm.get('phone')?.dirty || userEditForm.get('phone')?.touched)">
                     {{ error.message }}
                   </div>
                 </ng-container>
@@ -186,18 +217,63 @@
           </ion-row>
           <ion-row>
             <ion-col size-xs="12" size-md="6">
-              <ion-input color="gunung-nago-primary" label="Telephone Number 2" label-placement="floating"
-                fill="outline" type="text" clear-input="true" formControlName="telephoneNumberTwo"></ion-input>
+              <ion-input color="gunung-nago-primary" label="Email" label-placement="floating" fill="outline" type="text"
+                clear-input="true" formControlName="email"></ion-input>
+              <div class="error-messages">
+                <ng-container *ngFor="let error of errorMessages.email">
+                  <div class="error-message"
+                    *ngIf="userEditForm.get('email')?.hasError(error.type) && (userEditForm.get('email')?.dirty || userEditForm.get('email')?.touched)">
+                    {{ error.message }}
+                  </div>
+                </ng-container>
+              </div>
             </ion-col>
             <ion-col size-xs="12" size-md="6">
-              <ion-input color="gunung-nago-primary" label="Telephone Number 3" label-placement="floating"
-                fill="outline" type="text" clear-input="true" formControlName="telephoneNumberThree"></ion-input>
+              <ion-input color="gunung-nago-primary" label="Address" label-placement="floating" fill="outline"
+                type="text" clear-input="true" formControlName="address" required="true"></ion-input>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size-xs="12" size-md="12">
+              <ion-select color="gunung-nago-primary" label="Role*" label-placement="floating" fill="outline"
+                interface="popover" required="true" formControlName="roles" [multiple]="true">
+                <ion-select-option *ngFor="let farm of roles" [value]="farm.roleId">
+                  {{farm.role}}
+                </ion-select-option>
+              </ion-select>
+              <div class="error-messages">
+                <ng-container *ngFor="let error of errorMessages.farm">
+                  <div class="error-message"
+                    *ngIf="userEditForm.get('roles')?.hasError(error.type) && (userEditForm.get('roles')?.dirty || userEditForm.get('roles')?.touched)">
+                    {{ error.message }}
+                  </div>
+                </ng-container>
+              </div>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size-xs="12" size-md="12">
+              <ion-select color="gunung-nago-primary" label="Farm*" label-placement="floating" fill="outline"
+                interface="popover" required="true" formControlName="farms" [multiple]="true">
+                <ion-select-option *ngFor="let farm of farms" [value]="farm.id">
+                  <strong>Name: </strong>{{farm.name}} |
+                  <strong>Address: </strong>{{farm.name}}
+                </ion-select-option>
+              </ion-select>
+              <div class="error-messages">
+                <ng-container *ngFor="let error of errorMessages.farm">
+                  <div class="error-message"
+                    *ngIf="userEditForm.get('farm')?.hasError(error.type) && (userEditForm.get('farm')?.dirty || userEditForm.get('farm')?.touched)">
+                    {{ error.message }}
+                  </div>
+                </ng-container>
+              </div>
             </ion-col>
           </ion-row>
         </form>
         <div class="modal-btn-container ion-text-right">
           <ion-button class="cancel-btn" (click)="cancel()">Cancel</ion-button>
-          <ion-button color="positive-btn" (click)="confirm()">Save</ion-button>
+          <ion-button color="positive-btn" [disabled]="userEditForm.invalid" (click)="confirm()">Save</ion-button>
         </div>
       </ion-content>
     </ng-template>

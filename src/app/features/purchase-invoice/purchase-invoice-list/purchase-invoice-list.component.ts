@@ -42,6 +42,7 @@ export class PurchaseInvoiceListComponent {
   public username: string = '';
   public purchaseInvoiceTypes: string[] = [];
   public purchaseInvoiceType: PurchaseInvoiceType | string = '';
+  public showSummary: boolean = false;
 
   public selectedSupplier: any = "";
   public selectedSuppliers: SupplierDto[] = [];

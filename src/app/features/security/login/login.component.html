@@ -6,7 +6,7 @@
     <ion-title>
       <div class="router-links">
         <div class="title">
-          <img class="header-logo" routerLink="/home" src='./assets/flaticon/enter.png'>
+          <img class="header-logo" routerLink="/home" src='./assets/flaticon/login.png'>
           <h3 class="header-nav-home" routerLink="/home">Login</h3>
         </div>
       </div>
@@ -21,60 +21,76 @@
           <h3 class="somedico-text">{{company | uppercase}}</h3>
         </div>
       </ion-row>
-      <ion-row class="ion-justify-content-center ion-align-items-center login-sub-container">
-        <ion-col size="8" size-md size="12" size-sm>
-          <div class="login-content__img">
-            <img src='./assets/flaticon/farm-chicken.png'>
-          </div>
-        </ion-col>
-        <ion-col size="4" size-md size="12" size-sm>
-          <ion-card class="login-card ion-no-margin">
-            <ion-card-header class="ion-text-center ion-no-padding">
-              <h3>Log in</h3>
-            </ion-card-header>
-            <form [formGroup]="formLogin" (onSubmit)="login()" (keyup.enter)="login()">
-              <ion-card-content>
-                <div class="login-content__field">
-                  <ion-item class="login-content__input">
-                    <ion-label position="floating">Username</ion-label>
-                    <ion-input formControlName="username" name="username" id="username" type="text"></ion-input>
-                  </ion-item>
 
-                  <div class="error-messages">
-                    <ng-container *ngFor="let error of errorMessages.username">
-                      <div class="error-message"
-                        *ngIf="formLogin.get('username')?.hasError(error.type) && (formLogin.get('username')?.dirty || formLogin.get('username')?.touched)">
-                        {{ error.message }}
-                      </div>
-                    </ng-container>
-                  </div>
+      <ion-row class="ion-justify-content-center ion-align-items-center">
+        <ion-card class="login-card ion-no-margin">
+          <ion-card-header class="ion-text-center ion-no-padding card-login-header">
+            <h3>Log in</h3>
+          </ion-card-header>
+          <form [formGroup]="formLogin" (onSubmit)="getFarmsByUsername()" (keyup.enter)="getFarmsByUsername()">
+            <ion-card-content>
+              <div class="login-content__field">
+                <ion-item class="login-content__input">
+                  <ion-label position="floating">Username</ion-label>
+                  <ion-input formControlName="username" name="username" id="username" type="text"></ion-input>
+                </ion-item>
 
-                  <ion-item class="login-content__input">
-                    <ion-label position="floating">Password</ion-label>
-                    <ion-input formControlName="password" name="password" id="password" type="password"></ion-input>
-                  </ion-item>
-
-                  <div class="error-messages">
-                    <ng-container *ngFor="let error of errorMessages.password">
-                      <div class="error-message"
-                        *ngIf="formLogin.get('password')?.hasError(error.type) && (formLogin.get('password')?.dirty || formLogin.get('password')?.touched)">
-                        {{ error.message }}
-                      </div>
-                    </ng-container>
-                  </div>
-
-                  <ion-row center>
-                    <ion-col class="ion-text-center ion-padding">
-                      <ion-button name="login" type="submit" color="positive-btn" (click)="login()">Grant
-                        Access</ion-button>
-                    </ion-col>
-                  </ion-row>
+                <div class="error-messages">
+                  <ng-container *ngFor="let error of errorMessages.username">
+                    <div class="error-message"
+                      *ngIf="formLogin.get('username')?.hasError(error.type) && (formLogin.get('username')?.dirty || formLogin.get('username')?.touched)">
+                      {{ error.message }}
+                    </div>
+                  </ng-container>
                 </div>
-              </ion-card-content>
-            </form>
-          </ion-card>
-        </ion-col>
+
+                <ion-item class="login-content__input">
+                  <ion-label position="floating">Password</ion-label>
+                  <ion-input formControlName="password" name="password" id="password" type="password"></ion-input>
+                </ion-item>
+
+                <div class="error-messages">
+                  <ng-container *ngFor="let error of errorMessages.password">
+                    <div class="error-message"
+                      *ngIf="formLogin.get('password')?.hasError(error.type) && (formLogin.get('password')?.dirty || formLogin.get('password')?.touched)">
+                      {{ error.message }}
+                    </div>
+                  </ng-container>
+                </div>
+
+                <ion-row center>
+                  <ion-col class="ion-text-center ion-padding">
+                    <ion-button name="login" type="submit" color="positive-btn"
+                      (click)="getFarmsByUsername()">Login</ion-button>
+                  </ion-col>
+                </ion-row>
+              </div>
+            </ion-card-content>
+          </form>
+
+          <mat-radio-group *ngIf="farms.length > 1" class="radio-group-farm" [(ngModel)]="selectedFarm">
+            <mat-radio-button color="primary" *ngFor="let farm of farms" [value]="farm.id" class="radio-btn-farm">
+              <div class="farm-section">
+                <div>
+                  <strong>{{ farm.name }}</strong>
+                </div>
+                <img class="farm" src='./assets/flaticon/login-farm.png'>
+                <div class="egg-count">
+                  <strong>Address: {{farm.address}}</strong>
+                </div>
+              </div>
+            </mat-radio-button>
+          </mat-radio-group>
+
+          <ion-row center *ngIf="selectedFarm && farms.length > 0">
+            <ion-col class="ion-text-center ion-padding">
+              <ion-button name="login" type="submit" color="positive-btn" (click)="login()">Grant Access To
+                Farm</ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-card>
       </ion-row>
+
     </div>
   </div>
 </ion-content>

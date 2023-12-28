@@ -2,7 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatFooterRowDef, MatTable, MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IonInfiniteScroll, IonModal } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
@@ -32,7 +32,7 @@ export class SalesInvoiceByTypeListComponent {
   @ViewChild(MatSort) sort!: MatSort;
   public returnInvoice = 'assets/flaticon/return-invoice-icon-list.svg';
   public language = "en";
-  public displayedColumns: string[] = ['id', 'name', 'createdBy', 'createdDate', 'category', 'quantity', 'price', 'totalPrice', 'soldAt', 'return', 'returnTotalPrice', 'balance'];
+  public displayedColumns: string[] = ['id', 'name', 'createdBy', 'createdDate', 'category', 'quantity', 'price', 'totalPrice', 'soldAt', 'return', 'internal', 'returnTotalPrice', 'balance'];
   public salesInvoices = new MatTableDataSource<SalesInvoiceLineDto>;
   private infiniteSalesInvoices: SalesInvoiceLineDto[] = [];
   public salesInvoiceSearchSubscription!: Subscription;
@@ -77,6 +77,8 @@ export class SalesInvoiceByTypeListComponent {
   public isToJakarta: boolean | string = '';
   public name!: string;
   public weight!: number;
+
+  public showSummary: boolean = false;
 
   public errorMessages = {
     name: [
@@ -487,6 +489,14 @@ export class SalesInvoiceByTypeListComponent {
     }
   }
 
+  public getTotalInternal(): any {
+    const filteredSalesInvoiceDtos = this.removeDuplicates(this.salesInvoices.data);
+    const total = filteredSalesInvoiceDtos.filter(salesInvoice => salesInvoice.internal).map(data => data.invoiceSoldAt).reduce((acc, value) => acc + value, 0);
+    if (total != 0) {
+      return total * -1;
+    }
+  }
+
   public getTotalQuantityManure(): any {
     const total = this.salesInvoices.data.filter(data => data.salesInvoiceType === SalesInvoiceType.MANURE).map(data => data.quantity).reduce((acc, value) => acc + value, 0);
     if (total != 0) {
@@ -537,8 +547,11 @@ export class SalesInvoiceByTypeListComponent {
     return sum;
   }
 
-  public getBalance(soldAt: number, returns: ReturnInvoiceLineDetailsDto[]): number {
+  public getBalance(internal: boolean, soldAt: number, returns: ReturnInvoiceLineDetailsDto[]): number {
     let sum = 0;
+    if (internal) {
+      return soldAt * -1;
+    }
     returns.forEach(returnInvoice => {
       sum = sum + returnInvoice.totalPrice;
     })
@@ -626,7 +639,7 @@ export class SalesInvoiceByTypeListComponent {
   }
 
   public getTableTotalBalance(): any {
-    return this.getTotalSoldAt() - this.getTableTotalPriceForReturn();
+    return this.getTotalSoldAt() - (this.getTableTotalPriceForReturn() - this.getTotalInternal());
   }
 }
 

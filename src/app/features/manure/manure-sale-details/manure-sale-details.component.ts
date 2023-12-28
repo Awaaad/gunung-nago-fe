@@ -170,11 +170,13 @@ export class ManureSaleDetailsComponent implements OnInit {
     isNewCustomer ? this.manureSaleForm?.get("customer.lastName")?.enable() : this.manureSaleForm?.get("customer.lastName")?.disable();
     isNewCustomer ? this.manureSaleForm?.get("customer.address")?.enable() : this.manureSaleForm?.get("customer.address")?.disable();
     isNewCustomer ? this.manureSaleForm?.get("customer.telephoneNumber")?.enable() : this.manureSaleForm?.get("customer.telephoneNumber")?.disable();
+    isNewCustomer ? this.manureSaleForm?.get("customer.internal")?.enable() : this.manureSaleForm?.get("customer.internal")?.disable();
     if (this.isNewCustomer) {
       this.manureSaleForm?.get("customer.firstName")?.setValue("");
       this.manureSaleForm?.get("customer.lastName")?.setValue("");
       this.manureSaleForm?.get("customer.address")?.setValue("");
       this.manureSaleForm?.get("customer.telephoneNumber")?.setValue("");
+      this.manureSaleForm?.get("customer.internal")?.setValue(false);
     }
   }
 
@@ -186,7 +188,8 @@ export class ManureSaleDetailsComponent implements OnInit {
         firstName: new FormControl({ value: '', disabled: !this.isNewCustomer }, Validators.compose([Validators.required])),
         lastName: new FormControl({ value: '', disabled: !this.isNewCustomer }, Validators.compose([Validators.required])),
         address: new FormControl({ value: '', disabled: !this.isNewCustomer }),
-        telephoneNumber: new FormControl({ value: '', disabled: !this.isNewCustomer }, Validators.compose([Validators.required, Validators.pattern("^[0-9]*$"),]))
+        telephoneNumber: new FormControl({ value: '', disabled: !this.isNewCustomer }, Validators.compose([Validators.required, Validators.pattern("^[0-9]*$")])),
+        internal: new FormControl({ value: false, disabled: !this.isNewCustomer }, Validators.compose([Validators.required])),
       }),
       manureSaleDetailsDtos: this.formBuilder.array([
       ])
@@ -268,7 +271,7 @@ export class ManureSaleDetailsComponent implements OnInit {
             size: this.size,
             sortBy: this.sortBy,
             sortOrder: this.sortOrder.toUpperCase(),
-            name: value
+            nameTel: value
           }
           return this.customerApiService.search(name).pipe(
             finalize(() => {
@@ -297,7 +300,8 @@ export class ManureSaleDetailsComponent implements OnInit {
       lastName: null,
       address: null,
       telephoneNumber: null,
-      totalAmountDue: null
+      totalAmountDue: null,
+      internal: null
     };
   }
 
@@ -307,6 +311,7 @@ export class ManureSaleDetailsComponent implements OnInit {
     this.manureSaleForm?.get("customer.lastName")?.setValue("");
     this.manureSaleForm?.get("customer.address")?.setValue("");
     this.manureSaleForm?.get("customer.telephoneNumber")?.setValue("");
+    this.manureSaleForm?.get("customer.internal")?.setValue(false);
     this.initialiseSelectedCustomer();
   }
 
@@ -318,6 +323,7 @@ export class ManureSaleDetailsComponent implements OnInit {
     this.manureSaleForm?.get("customer.lastName")?.setValue(event.option.value.lastName);
     this.manureSaleForm?.get("customer.address")?.setValue(event.option.value.address);
     this.manureSaleForm?.get("customer.telephoneNumber")?.setValue(event.option.value.telephoneNumber);
+    this.manureSaleForm?.get("customer.internal")?.setValue(event.option.value.internal);
     this.manureSaleForm?.get("newCustomer")?.setValue(false);
   }
 
@@ -329,8 +335,10 @@ export class ManureSaleDetailsComponent implements OnInit {
         lastName: null,
         address: null,
         telephoneNumber: null,
+        internal: null,
         totalAmountDue: null,
       },
+      internal: null,
       manureSaleDetailsDtos: [],
       paymentSaveDtos: [],
       newCustomer: false,
@@ -349,10 +357,12 @@ export class ManureSaleDetailsComponent implements OnInit {
         lastName: this.manureSaleForm?.get("customer.lastName")?.value,
         address: this.manureSaleForm?.get("customer.address")?.value,
         telephoneNumber: this.manureSaleForm?.get("customer.telephoneNumber")?.value,
+        internal: this.manureSaleForm?.get("customer.internal")?.value,
         totalAmountDue: null,
       },
       manureSaleDetailsDtos: this.manureSaleForm?.get("manureSaleDetailsDtos")?.value.filter((manure: any) => manure.quantity != null && manure.quantity > 0),
-      paymentSaveDtos: this.paymentForm.value.payments,
+      internal: this.paymentForm?.get("internal")?.value,
+      paymentSaveDtos: !this.paymentForm?.get("internal")?.value ? this.paymentForm.value.payments : [],
       newCustomer: this.isNewCustomer,
       driverId: this.selectedDriver?.id,
       salesInvoiceCategory: this.salesInvoiceCategory,
@@ -363,6 +373,10 @@ export class ManureSaleDetailsComponent implements OnInit {
 
   private checkIfCreditAllowed(): boolean {
     return (this.selectedCustomer != null && this.selectedCustomer.id != null) || (this.isNewCustomer && this.manureSaleForm?.get("customer.telephoneNumber")?.value != '');
+  }
+
+  public checkIfInternal(): boolean {
+    return (this.selectedCustomer != null && this.selectedCustomer.id != null && this.selectedCustomer.internal) || (this.isNewCustomer && this.manureSaleForm?.get("customer.telephoneNumber")?.value != '' && this.manureSaleForm?.get("customer.internal")?.value);
   }
 
   addPaymentFormGroup() {
@@ -468,6 +482,7 @@ export class ManureSaleDetailsComponent implements OnInit {
         Validators.min(0),
         Validators.max(this.totalPrice),
       ])),
+      internal: new FormControl({ value: this.checkIfInternal(), disabled: false }, Validators.compose([Validators.required])),
       payments: this.formBuilder.array([
         this.addPaymentFormGroup()
       ])

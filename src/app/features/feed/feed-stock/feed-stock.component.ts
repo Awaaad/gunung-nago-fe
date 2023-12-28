@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core';
-import { FeedCategory, FeedDto, PurchaseInvoiceType, SupplierDto } from 'generated-src/model';
+import { FeedCategory, FeedDto, PurchaseInvoiceType, PurchaseType, SupplierDto } from 'generated-src/model';
 import { FeedStockApiService } from 'src/app/shared/apis/feed-stock.api.service';
 import { FeedApiService } from 'src/app/shared/apis/feed.api.service';
 import { UtilsService } from 'src/app/shared/utils/utils.service';
@@ -54,6 +54,8 @@ export class FeedStockComponent implements OnInit {
   private searchSupplierSubscription!: Subscription;
   readonly predicate: MaskitoElementPredicateAsync = async (el) => (el as HTMLIonInputElement).getInputElement();
   readonly maskitoOptions: MaskitoOptions = { mask: [/\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, '-', /\d/, /\d/] };
+  public type: PurchaseType = PurchaseType.PURCHASE;
+  public purchaseTypes: string[] = [];
   public errorMessages = {
     invoiceNumber: [
       { type: "required", message: "Invoice number is required" },
@@ -72,6 +74,7 @@ export class FeedStockComponent implements OnInit {
 
   ngOnInit(): void {
     this.searchSupplier();
+    this.purchaseTypes = Object.keys(PurchaseType);
   }
 
   ionViewWillEnter(): void {
@@ -119,6 +122,11 @@ export class FeedStockComponent implements OnInit {
 
   public onSupplierSelected(): void {
     this.selectedSupplier = this.selectedSupplier;
+    if (this.selectedSupplier.internal) {
+      this.type = PurchaseType.TRANSFER;
+    } else {
+      this.type = PurchaseType.PURCHASE;
+    }
     this.showFeedSearchBar = true;
     this.reset();
   }
@@ -231,7 +239,8 @@ export class FeedStockComponent implements OnInit {
       supplierId: this.selectedSupplier.id,
       discount: null,
       comment: this.confirmInvoiceForm.value.comment,
-      purchaseDetailsDtos: this.feedsInStockTable.data
+      purchaseDetailsDtos: this.feedsInStockTable.data,
+      type: this.type
     }
     this.utilsService.presentLoading();
     this.feedStockApiService.save(feedPurchaseDto).subscribe({

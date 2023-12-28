@@ -5,7 +5,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { IonModal } from '@ionic/angular';
 import { MaskitoElementPredicateAsync, MaskitoOptions } from '@maskito/core';
 import { TranslateService } from '@ngx-translate/core';
-import { HealthProductDto, HealthType, PurchaseInvoiceType, SupplierDto } from 'generated-src/model';
+import { HealthProductDto, HealthType, PurchaseInvoiceType, PurchaseType, SupplierDto } from 'generated-src/model';
 import { Subscription, debounceTime, distinctUntilChanged, filter, finalize, switchMap, tap } from 'rxjs';
 import { HealthProductStockApiService } from 'src/app/shared/apis/health-product-stock.api.service';
 import { HealthProductApiService } from 'src/app/shared/apis/health-product.api.service';
@@ -54,6 +54,8 @@ export class HealthStockComponent implements OnInit {
   public today: Date = new Date();
   readonly predicate: MaskitoElementPredicateAsync = async (el) => (el as HTMLIonInputElement).getInputElement();
   readonly maskitoOptions: MaskitoOptions = { mask: [/\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, '-', /\d/, /\d/] };
+  public type: PurchaseType = PurchaseType.PURCHASE;
+  public purchaseTypes: string[] = [];
   public errorMessages = {
     invoiceNumber: [
       { type: "required", message: "Invoice number is required" },
@@ -72,6 +74,7 @@ export class HealthStockComponent implements OnInit {
 
   ngOnInit(): void {
     this.searchSupplier();
+    this.purchaseTypes = Object.keys(PurchaseType);
   }
 
   ionViewWillEnter(): void {
@@ -120,6 +123,11 @@ export class HealthStockComponent implements OnInit {
 
   public onSupplierSelected(): void {
     this.selectedSupplier = this.selectedSupplier;
+    if (this.selectedSupplier.internal) {
+      this.type = PurchaseType.TRANSFER;
+    } else {
+      this.type = PurchaseType.PURCHASE;
+    }
     this.showHealthSearchBar = true;
     this.reset();
   }
@@ -233,7 +241,8 @@ export class HealthStockComponent implements OnInit {
       supplierId: this.selectedSupplier.id,
       discount: null,
       comment: this.confirmInvoiceForm.value.comment,
-      purchaseDetailsDtos: this.healthProductsInStockTable.data
+      purchaseDetailsDtos: this.healthProductsInStockTable.data,
+      type: this.type
     }
     this.utilsService.presentLoading();
     this.healthProductStockApiService.save(healthProductPurchaseDto).subscribe({

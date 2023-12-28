@@ -8,8 +8,8 @@
         <div class="header-section">
           <img class="menu-logo" routerLink="/home" src='./assets/icon/chicken/icons8-chicken-64.png' width="22px">
           <h5 class="side-nav-home" routerLink="/home">C.V-GN</h5>
-          <a *ngIf="false" routerLink="login">Login</a>
-          <a *ngIf="true" routerLink="login">Logout</a>
+          <a *ngIf="!isloggedIn" routerLink="security/login">Login</a>
+          <a *ngIf="isloggedIn" routerLink="security/login" (click)="logout()">Logout</a>
         </div>
       </ion-toolbar>
     </ion-header>
@@ -62,25 +62,6 @@
       <ion-accordion-group>
         <ion-accordion value="first">
           <ion-item slot="header" color="light">
-            <ion-icon [src]="healthProducts" color="dark"></ion-icon>Health
-          </ion-item>
-          <div class="accordion-sub" slot="content">
-            <ion-item routerLink="/health/health-list">
-              <ion-icon [src]="list" color="dark"></ion-icon>Health Products
-            </ion-item>
-            <ion-item routerLink="/health/health-details">
-              <ion-icon [src]="add" color="dark"></ion-icon>Add Health Product
-            </ion-item>
-            <ion-item routerLink="/health/health-stock">
-              <ion-icon [src]="purchase" class="font-size-60"></ion-icon>Health Product Purchase
-            </ion-item>
-          </div>
-        </ion-accordion>
-      </ion-accordion-group>
-
-      <ion-accordion-group>
-        <ion-accordion value="first">
-          <ion-item slot="header" color="light">
             <ion-icon [src]="egg" class="font-size-60"></ion-icon>Egg
           </ion-item>
           <div class="accordion-sub" slot="content">
@@ -125,7 +106,7 @@
               <ion-icon [src]="pos" class="font-size-60"></ion-icon><span>Flock Point of Sale</span>
             </ion-item>
             <ion-item routerLink="/flock/flock-stock">
-              <ion-icon [src]="purchase" class="font-size-60"></ion-icon>Flock Purchase
+              <ion-icon [src]="purchase" class="font-size-60"></ion-icon>Flock Purchase / Transfer
             </ion-item>
             <ion-item routerLink="/flock/flock-transfer">
               <ion-icon [src]="transfer" class="font-size-60"></ion-icon>Flock Transfer
@@ -156,7 +137,7 @@
               <ion-icon [src]="pos" class="font-size-60"></ion-icon><span>Feed Point of Sale</span>
             </ion-item>
             <ion-item routerLink="/feed/feed-stock">
-              <ion-icon [src]="purchase" class="font-size-60"></ion-icon>Feed Purchase
+              <ion-icon [src]="purchase" class="font-size-60"></ion-icon>Feed Purchase / Transfer
             </ion-item>
             <ion-item routerLink="/feed/feed-allocation">
               <ion-icon [src]="feedAllocation" color="dark"></ion-icon>Feed Allocation
@@ -188,6 +169,25 @@
             </ion-item>
             <ion-item routerLink="/sales-invoice/sales-invoice-by-type-list/MANURE" routerDirection="forward">
               <ion-icon [src]="salesRecord" class="font-size-60"></ion-icon><span>Fertilizer Sales Record</span>
+            </ion-item>
+          </div>
+        </ion-accordion>
+      </ion-accordion-group>
+
+      <ion-accordion-group>
+        <ion-accordion value="first">
+          <ion-item slot="header" color="light">
+            <ion-icon [src]="healthProducts" color="dark"></ion-icon>Health
+          </ion-item>
+          <div class="accordion-sub" slot="content">
+            <ion-item routerLink="/health/health-list">
+              <ion-icon [src]="list" color="dark"></ion-icon>Health Products
+            </ion-item>
+            <ion-item routerLink="/health/health-details">
+              <ion-icon [src]="add" color="dark"></ion-icon>Add Health Product
+            </ion-item>
+            <ion-item routerLink="/health/health-stock">
+              <ion-icon [src]="purchase" class="font-size-60"></ion-icon>Health Product Purchase / Transfer
             </ion-item>
           </div>
         </ion-accordion>
@@ -239,6 +239,22 @@
             </ion-item>
           </div>
         </ion-accordion>
+
+        <ion-accordion-group>
+          <ion-accordion value="first">
+            <ion-item slot="header" color="light">
+              <ion-icon [src]="farm" color="dark"></ion-icon>Farm
+            </ion-item>
+            <div class="accordion-sub" slot="content">
+              <ion-item routerLink="/farm/farm-list">
+                <ion-icon [src]="list" color="dark"></ion-icon>Farms
+              </ion-item>
+              <ion-item routerLink="/farm/farm-details">
+                <ion-icon [src]="add" color="dark"></ion-icon>Add Farm
+              </ion-item>
+            </div>
+          </ion-accordion>
+        </ion-accordion-group>
 
         <ion-accordion-group>
           <ion-accordion value="first">

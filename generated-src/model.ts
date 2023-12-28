@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2023-12-21 11:13:59.
+// Generated using typescript-generator version 3.2.1263 on 2023-12-27 17:46:20.
 
 export class AuditDto {
     createdBy!: string;
@@ -50,6 +50,7 @@ export class CustomerDto {
     telephoneNumberTwo!: number;
     telephoneNumberThree!: number;
     totalAmountDue!: number;
+    internal!: boolean;
 }
 
 export class CustomerSearchCriteriaDto {
@@ -57,6 +58,8 @@ export class CustomerSearchCriteriaDto {
     address!: string;
     telephoneNumber!: number;
     credit!: boolean;
+    isInternal!: boolean;
+    nameTel!: string;
 }
 
 export class EggCategoryDto {
@@ -153,6 +156,7 @@ export class EggSaleSaveDto {
     driverId!: number;
     comment!: string;
     eggCategorySaleDtos!: EggCategorySaleDto[];
+    internal!: boolean;
     newCustomer!: boolean;
     toJakarta!: boolean;
 }
@@ -228,6 +232,7 @@ export class FeedSaleSaveDto {
     salesInvoiceCategory!: SalesInvoiceCategory;
     driverId!: number;
     comment!: string;
+    internal!: boolean;
     newCustomer!: boolean;
 }
 
@@ -293,6 +298,16 @@ export class FeedSurveyDto {
     bagsEaten!: number;
 }
 
+export class FlockFeedLineReportDto {
+    name!: string;
+    weight!: number;
+    feedCategory!: FeedCategory;
+    bagsAllocated!: number;
+    bagsEaten!: number;
+    bagsLeft!: number;
+    createdDate!: Date;
+}
+
 export class FlockCageIncompatibleDto {
     cageId!: number;
     flockId!: number;
@@ -326,6 +341,7 @@ export class FlockDto {
     actualSterile!: number;
     aquisitionDate!: Date;
     aquisitionType!: AquisitionType;
+    cageId!: number;
     cageName!: string;
 }
 
@@ -355,6 +371,7 @@ export class FlockSaleSaveDto {
     salesInvoiceCategory!: SalesInvoiceCategory;
     driverId!: number;
     comment!: string;
+    internal!: boolean;
     newCustomer!: boolean;
 }
 
@@ -383,13 +400,14 @@ export class FlockSaveDto {
 }
 
 export class FlockSearchCriteriaDto {
+    name!: string;
     active!: boolean;
-    initialAge!: number;
-    initialFlockCategory!: FlockCategory;
-    initialQuantity!: number;
+    actualAge!: number;
+    actualFlockCategory!: FlockCategory;
+    actualQuantity!: number;
     aquisitionDate!: Date;
     aquisitionType!: AquisitionType;
-    cageName!: string;
+    cageId!: number;
     farmId!: number;
 }
 
@@ -526,6 +544,7 @@ export class ManureSaleSaveDto {
     salesInvoiceCategory!: SalesInvoiceCategory;
     driverId!: number;
     comment!: string;
+    internal!: boolean;
     newCustomer!: boolean;
 }
 
@@ -608,19 +627,22 @@ export class SaleDetailsDto {
     quantity!: number;
     price!: number;
     feedStockId!: number;
+    refundFeedStockId!: number;
     feedName!: string;
     feedWeightPerBag!: number;
     eggCategoryId!: number;
     eggType!: string;
     eggQuantityType!: EggQuantityType;
     eggWeight!: number;
-    transferToBad!: boolean;
+    transfer!: boolean;
+    transferEggCategoryId!: number;
+    refundProduct!: boolean;
     cageId!: number;
     flockId!: number;
+    refundFlockId!: number;
     flockType!: FlockType;
     manureStockId!: number;
     manureWeightPerBag!: number;
-    exchange!: boolean;
 }
 
 export class SaleSaveDto {
@@ -634,6 +656,7 @@ export class SaleSaveDto {
     pricePerKg!: number;
     saleDetailsDtos!: SaleDetailsDto[];
     salesInvoiceId!: number;
+    internal!: boolean;
     newCustomer!: boolean;
     toJakarta!: boolean;
 }
@@ -692,6 +715,7 @@ export class PurchaseSaveDto {
     discount!: number;
     supplierId!: number;
     comment!: string;
+    type!: PurchaseType;
     purchaseDetailsDtos!: PurchaseDetailsDto[];
 }
 
@@ -774,6 +798,8 @@ export class DailyFlockReportDto {
 }
 
 export class DailyProductionReportDto {
+    flockId!: number;
+    flockStockId!: number;
     configurationEggTie!: number;
     configurationEggTray!: number;
     cageName!: string;
@@ -805,8 +831,11 @@ export class DailyProductionReportDto {
     amountOfChickenWeighted!: number;
     totalWeight!: number;
     averageWeight!: number;
+    aliveChicken!: number;
     healthReportDtos!: HealthReportDto[];
     eggCategoryStocks!: EggCategoryStockDto[];
+    flockFeedLineReportDtos!: FlockFeedLineReportDto[];
+    manureStockDtos!: ManureStockDto[];
 }
 
 export class ReturnInvoiceDetailsDto {
@@ -960,6 +989,9 @@ export class SalesInvoiceDto {
     totalUnlockedAmountDue!: number;
     containsReturn!: boolean;
     isToJakarta!: boolean;
+    salesInvoiceId!: number;
+    refundInvoice!: boolean;
+    internal!: boolean;
 }
 
 export class SalesInvoiceSearchCriteriaDto {
@@ -981,6 +1013,9 @@ export class SalesInvoiceSearchCriteriaDto {
     eggCategoryId!: number;
     generateStatement!: boolean;
     isToJakarta!: boolean;
+    flockId!: number;
+    manureStockId!: number;
+    feedStockId!: number;
 }
 
 export class SalesInvoiceLineDto {
@@ -1014,7 +1049,9 @@ export class SalesInvoiceLineDto {
     manureStockId!: number;
     manureWeightPerBag!: number;
     eggWeight!: number;
+    invoiceId!: number;
     returnInvoiceLineDetailsDtos!: ReturnInvoiceLineDetailsDto[];
+    internal!: boolean;
 }
 
 export class SalesInvoiceLineForReturnDto {
@@ -1030,6 +1067,7 @@ export class SalesInvoiceLineForReturnDto {
     flockId!: number;
     flockType!: FlockType;
     quantityReturned!: number;
+    feedId!: number;
     feedStockId!: number;
     feedName!: string;
     feedWeightPerBag!: number;
@@ -1064,6 +1102,7 @@ export class UserDto {
     username!: string;
     firstName!: string;
     lastName!: string;
+    address!: string;
     dateOfBirth!: Date;
     email!: string;
     phone!: number;
@@ -1084,6 +1123,7 @@ export class SupplierDto {
     telephoneNumberTwo!: number;
     telephoneNumberThree!: number;
     address!: string;
+    internal!: boolean;
 }
 
 export class SupplierSearchCriteriaDto {
@@ -1196,6 +1236,11 @@ export enum PurchaseInvoiceType {
     FLOCK = 'FLOCK',
     FEED = 'FEED',
     HEALTH_PRODUCT = 'HEALTH_PRODUCT',
+}
+
+export enum PurchaseType {
+    PURCHASE = 'PURCHASE',
+    TRANSFER = 'TRANSFER',
 }
 
 export enum SalesInvoiceStatus {

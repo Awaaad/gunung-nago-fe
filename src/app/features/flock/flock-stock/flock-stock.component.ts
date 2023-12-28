@@ -4,7 +4,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { IonModal } from '@ionic/angular';
 import { MaskitoElementPredicateAsync, MaskitoOptions } from '@maskito/core';
 import { TranslateService } from '@ngx-translate/core';
-import { AquisitionType, PurchaseInvoiceType, SupplierDto } from 'generated-src/model';
+import { AquisitionType, PurchaseInvoiceType, PurchaseType, SupplierDto } from 'generated-src/model';
 import { FlockSaveFrontDto, PurchaseDetailsFrontDto } from 'generated-src/model-front';
 import { filter, distinctUntilChanged, debounceTime, tap, switchMap, finalize, Subscription } from 'rxjs';
 import { SupplierApiService } from 'src/app/shared/apis/supplier.api.service';
@@ -46,6 +46,8 @@ export class FlockStockComponent implements OnInit {
   public flocksInStock: PurchaseDetailsFrontDto[] = [];
   public flocksInStockTable = new MatTableDataSource<PurchaseDetailsFrontDto>;
   public displayedColumnsStock: string[] = ['name', 'age', 'quantity', 'bonus', 'wholesalePrice', 'price', 'discount', 'tax', 'remove'];
+  public type: PurchaseType = PurchaseType.PURCHASE;
+  public purchaseTypes: string[] = [];
 
   public errorMessages = {
     invoiceNumber: [
@@ -63,6 +65,7 @@ export class FlockStockComponent implements OnInit {
 
   ngOnInit(): void {
     this.searchSupplier();
+    this.purchaseTypes = Object.keys(PurchaseType);
   }
 
   ionViewWillEnter(): void {
@@ -110,6 +113,11 @@ export class FlockStockComponent implements OnInit {
 
   public onSupplierSelected(): void {
     this.selectedSupplier = this.selectedSupplier;
+    if (this.selectedSupplier.internal) {
+      this.type = PurchaseType.TRANSFER;
+    } else {
+      this.type = PurchaseType.PURCHASE;
+    }
     this.showStock = true;
   }
 
@@ -169,7 +177,8 @@ export class FlockStockComponent implements OnInit {
       supplierId: this.selectedSupplier.id,
       discount: null,
       comment: this.confirmInvoiceForm.value.comment,
-      purchaseDetailsDtos: this.flocksInStockTable.data
+      purchaseDetailsDtos: this.flocksInStockTable.data,
+      type: this.type
     }
     this.utilsService.presentLoading();
     this.flockApiService.updateFlockStock(flockPurchaseDto).subscribe({

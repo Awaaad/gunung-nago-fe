@@ -15,7 +15,7 @@ export class FeedStockApiService {
     return this.http.post(`${this.baseUrl}`, feedStocks, { responseType: 'text' });
   }
 
-  public findFeedStockByFeedId(feedId: number): Observable<FeedStockFrontDto[]> {
-    return this.http.get<FeedStockFrontDto[]>(`${this.baseUrl}/${feedId}`);
+  public findFeedStockByFeedId(feedId: number | any): Observable<FeedStockFrontDto[] | any> {
+    return this.http.get<FeedStockFrontDto[] | any>(`${this.baseUrl}/${feedId}`);
   }
 }

@@ -33,6 +33,7 @@ export class ReturnInvoiceListComponent implements OnInit {
   public drivers: UserDto[] = [];
   public selectedDriverId: number | any = '0';
   public returnInvoiceSearchSubscription!: Subscription;
+  public showSummary: boolean = false;
 
   constructor(
     private readonly activatedRoute: ActivatedRoute,

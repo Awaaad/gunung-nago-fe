@@ -105,6 +105,12 @@
           </ion-popover>
         </ion-col>
       </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-toggle labelPlacement="start" class="toggle" [(ngModel)]="showSummary" color="gunung-nago-report">Show
+            Table Summary</ion-toggle>
+        </ion-col>
+      </ion-row>
     </ion-card-content>
   </ion-card>
 
@@ -157,7 +163,7 @@
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-        <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+        <tr mat-footer-row *matFooterRowDef="displayedColumns" [hidden]="!showSummary"></tr>
       </table>
     </div>
   </ion-card>

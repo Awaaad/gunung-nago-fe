@@ -23,6 +23,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MaskitoModule } from '@maskito/angular';
 import { HealthStockDetailsComponent } from './health-stock-details/health-stock-details.component';
+import { MatRadioModule } from '@angular/material/radio';
 
 @NgModule({
   declarations: [HealthDetailsComponent, HealthListComponent, HealthStockComponent, HealthStockDetailsComponent],
@@ -44,6 +45,7 @@ import { HealthStockDetailsComponent } from './health-stock-details/health-stock
     MatSortModule,
     MatButtonModule,
     MatAutocompleteModule,
+    MatRadioModule
   ],
   providers: [HealthProductApiService, HealthProductStockApiService, SupplierApiService]
 })

@@ -57,11 +57,6 @@ tbody {
     border-right: 0;
 }
 
-.mat-mdc-table .mdc-data-table__header-row {
-    background: var(--ion-color-gunung-nago-report);
-    color: white;
-}
-
 .mdc-data-table__header-cell {
     color: white;
 }
@@ -73,3 +68,47 @@ tbody {
 // .mdc-data-table__row:last-child .mat-mdc-cell {
 //     border-left: none;
 // }
+
+.margin-x-0 {
+    margin-right: 3px;
+    margin-left: 3px;
+}
+
+.daily-report {
+    .mat-mdc-table .mdc-data-table__header-row {
+        background: var(--ion-color-gunung-nago-report);
+        color: white;
+    }
+}
+
+.daily-egg-report {
+    .mat-mdc-table .mdc-data-table__header-row {
+        background: var(--ion-color-gunung-nago-report);
+        color: white;
+    }
+}
+
+.daily-feed-report {
+    .mat-mdc-table .mdc-data-table__header-row {
+        background: var(--ion-color-gunung-nago-report);
+        color: white;
+    }
+}
+
+.daily-flock-report {
+    .mat-mdc-table .mdc-data-table__header-row {
+        background: var(--ion-color-gunung-nago-report);
+        color: white;
+    }
+}
+
+.daily-health-report {
+    .mat-mdc-table .mdc-data-table__header-row {
+        background: var(--ion-color-gunung-nago-report);
+        color: white;
+    }
+}
+
+.survey-divider-img {
+    width: 3em;
+}

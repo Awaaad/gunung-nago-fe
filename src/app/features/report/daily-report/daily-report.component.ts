@@ -14,6 +14,11 @@ import * as moment from 'moment';
 export class DailyReportComponent {
   public language = "en";
   public displayedColumns: string[] = ['cageName', 'surveyDate', 'flockAge', 'flockCategory', 'initialFlockQuantity', 'deadChicken', 'sterileChicken', 'goodChicken', 'goodEggsInTie', 'goodEggsNotInTie', 'badEggsNotInTray', 'totalEggs', 'percentageHD', 'productionRate', 'healthReportDtos', 'goodEggsInTray', 'bagsEaten', 'comment'];
+  public displayedEggColumns: string[] = ['cageName', 'surveyDate', 'flockCategory', 'ikat', 'piece'];
+  public displayedHealthColumns: string[] = ['cageName', 'surveyDate', 'flockCategory', 'healthReportDtos'];
+  public displayedFlockColumns: string[] = ['cageName', 'surveyDate', 'flockAge', 'flockCategory', 'initialFlockQuantity', 'deadChicken', 'sterileChicken', 'goodChicken', 'aliveChicken', 'amountOfChickenWeighted', 'totalWeight', 'averageWeight'];
+  public displayedFeedColumns: string[] = ['cageName', 'surveyDate', 'flockCategory', 'flockFeedLineReportDtos'];
+  public displayedManureColumns: string[] = ['cageName', 'surveyDate', 'flockCategory', 'manureStockDtos'];
   public dailyReport = new MatTableDataSource<DailyProductionReportDto>;
   public cageSearchSubscription!: Subscription;
   public date: Date = new Date();
@@ -57,6 +62,13 @@ export class DailyReportComponent {
 
   public getTotalGoodChicken(): any {
     const total = this.dailyReport.data.map(data => data.goodChicken).reduce((acc, value) => acc + value, 0);
+    if (total != 0) {
+      return total;
+    }
+  }
+
+  public getTotalAliveChicken(): any {
+    const total = this.dailyReport.data.map(data => data.aliveChicken).reduce((acc, value) => acc + value, 0);
     if (total != 0) {
       return total;
     }

@@ -7,7 +7,7 @@
       <div class="router-links">
         <div class="title">
           <img class="header-logo" src='./assets/flaticon/add-users.png'>
-          <h3 class="header-nav-products">Add Customer</h3>
+          <h3 class="header-nav-products">Add User</h3>
         </div>
         <div>
           <ion-item class="language-selection">
@@ -24,18 +24,45 @@
 </ion-header>
 
 <ion-content [fullscreen]="false" class="ion-padding">
-  <form [formGroup]="customerDetailsForm">
-    <div formArrayName="customerDetails" *ngFor="let customerDetails of customerDetailsFields?.controls; let i = index">
+  <form [formGroup]="userDetailsForm">
+    <div formArrayName="userDetails" *ngFor="let userDetails of userDetailsFields?.controls; let i = index">
       <div [formGroupName]="i">
         <ion-card>
           <ion-card-content>
             <div class="form-array-index">
-              <h6>Customer {{i + 1}}</h6>
-              <ion-button *ngIf="customerDetailsFields != null && customerDetailsFields.length > 1"
-                (click)="removeCustomerDetails(i)" class="delete-product-btn" color="gunung-nago-warehouse"><span class="material-icons">delete</span></ion-button>
+              <h6>User {{i + 1}}</h6>
+              <ion-button *ngIf="userDetailsFields != null && userDetailsFields.length > 1"
+                (click)="removeUserDetails(i)" class="delete-product-btn" color="gunung-nago-warehouse"><span
+                  class="material-icons">delete</span></ion-button>
             </div>
             <ion-row>
               <ion-col size-xs="12" size-md="3">
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size-xs="12" size-md="3">
+                <ion-input color="gunung-nago-primary" label="Username*" label-placement="floating" fill="outline"
+                  type="text" clear-input="true" formControlName="username" required="true"></ion-input>
+                <div class="error-messages">
+                  <ng-container *ngFor="let error of errorMessages.username">
+                    <div class="error-message"
+                      *ngIf="userDetails.get('username')?.hasError(error.type) && (userDetails.get('username')?.dirty || userDetails.get('username')?.touched)">
+                      {{ error.message }}
+                    </div>
+                  </ng-container>
+                </div>
+              </ion-col>
+              <ion-col size-xs="12" size-md="3">
+                <ion-input color="gunung-nago-primary" label="Password*" label-placement="floating" fill="outline"
+                  type="password" clear-input="true" formControlName="password" required="true"></ion-input>
+                <div class="error-messages">
+                  <ng-container *ngFor="let error of errorMessages.password">
+                    <div class="error-message"
+                      *ngIf="userDetails.get('password')?.hasError(error.type) && (userDetails.get('password')?.dirty || userDetails.get('password')?.touched)">
+                      {{ error.message }}
+                    </div>
+                  </ng-container>
+                </div>
               </ion-col>
             </ion-row>
             <ion-row>
@@ -45,7 +72,7 @@
                 <div class="error-messages">
                   <ng-container *ngFor="let error of errorMessages.firstName">
                     <div class="error-message"
-                      *ngIf="customerDetails.get('firstName')?.hasError(error.type) && (customerDetails.get('firstName')?.dirty || customerDetails.get('firstName')?.touched)">
+                      *ngIf="userDetails.get('firstName')?.hasError(error.type) && (userDetails.get('firstName')?.dirty || userDetails.get('firstName')?.touched)">
                       {{ error.message }}
                     </div>
                   </ng-container>
@@ -57,19 +84,28 @@
                 <div class="error-messages">
                   <ng-container *ngFor="let error of errorMessages.lastName">
                     <div class="error-message"
-                      *ngIf="customerDetails.get('lastName')?.hasError(error.type) && (customerDetails.get('lastName')?.dirty || customerDetails.get('lastName')?.touched)">
+                      *ngIf="userDetails.get('lastName')?.hasError(error.type) && (userDetails.get('lastName')?.dirty || userDetails.get('lastName')?.touched)">
                       {{ error.message }}
                     </div>
                   </ng-container>
                 </div>
               </ion-col>
               <ion-col size-xs="12" size-md="3">
+                <mat-form-field class="date-full-width" appearance="outline">
+                  <mat-label>Date of Birth</mat-label>
+                  <input matInput [matDatepicker]="picker" formControlName="dateOfBirth">
+                  <mat-hint>DD/MM/YYYY</mat-hint>
+                  <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+              </ion-col>
+              <ion-col size-xs="12" size-md="3">
                 <ion-input color="gunung-nago-primary" label="Email" label-placement="floating" fill="outline"
-                  type="text" clear-input="true" formControlName="email" required="true"></ion-input>
+                  type="text" clear-input="true" formControlName="email"></ion-input>
                 <div class="error-messages">
                   <ng-container *ngFor="let error of errorMessages.email">
                     <div class="error-message"
-                      *ngIf="customerDetails.get('email')?.hasError(error.type) && (customerDetails.get('email')?.dirty || customerDetails.get('email')?.touched)">
+                      *ngIf="userDetails.get('email')?.hasError(error.type) && (userDetails.get('email')?.dirty || userDetails.get('email')?.touched)">
                       {{ error.message }}
                     </div>
                   </ng-container>
@@ -81,29 +117,53 @@
                 <ion-input color="gunung-nago-primary" label="Address" label-placement="floating" fill="outline"
                   type="text" clear-input="true" formControlName="address"></ion-input>
               </ion-col>
-            </ion-row>
-
-            <ion-row>
-              <ion-col size-xs="12" size-md="4">
+              <ion-col size-xs="12" size-md="6">
                 <ion-input color="gunung-nago-primary" label="Telephone Number*" label-placement="floating"
-                  fill="outline" type="text" clear-input="true" formControlName="telephoneNumber"
-                  required="true"></ion-input>
+                  fill="outline" type="text" clear-input="true" formControlName="phone" required="true"></ion-input>
                 <div class="error-messages">
-                  <ng-container *ngFor="let error of errorMessages.telephoneNumber">
+                  <ng-container *ngFor="let error of errorMessages.phone">
                     <div class="error-message"
-                      *ngIf="customerDetails.get('telephoneNumber')?.hasError(error.type) && (customerDetails.get('telephoneNumber')?.dirty || customerDetails.get('telephoneNumber')?.touched)">
+                      *ngIf="userDetails.get('phone')?.hasError(error.type) && (userDetails.get('phone')?.dirty || userDetails.get('phone')?.touched)">
                       {{ error.message }}
                     </div>
                   </ng-container>
                 </div>
               </ion-col>
-              <ion-col size-xs="12" size-md="4">
-                <ion-input color="gunung-nago-primary" label="Telephone Number 2" label-placement="floating"
-                  fill="outline" type="text" clear-input="true" formControlName="telephoneNumberTwo"></ion-input>
+            </ion-row>
+
+            <ion-row>
+              <ion-col size-xs="12" size-md="6">
+                <ion-select color="gunung-nago-primary" label="Role*" label-placement="floating" fill="outline"
+                  interface="popover" required="true" formControlName="roles" [multiple]="true">
+                  <ion-select-option *ngFor="let farm of roles" [value]="farm.roleId">
+                    {{farm.role}}
+                  </ion-select-option>
+                </ion-select>
+                <div class="error-messages">
+                  <ng-container *ngFor="let error of errorMessages.farm">
+                    <div class="error-message"
+                      *ngIf="userDetails.get('roles')?.hasError(error.type) && (userDetails.get('roles')?.dirty || userDetails.get('roles')?.touched)">
+                      {{ error.message }}
+                    </div>
+                  </ng-container>
+                </div>
               </ion-col>
-              <ion-col size-xs="12" size-md="4">
-                <ion-input color="gunung-nago-primary" label="Telephone Number 3" label-placement="floating"
-                  fill="outline" type="text" clear-input="true" formControlName="telephoneNumberThree"></ion-input>
+              <ion-col size-xs="12" size-md="6">
+                <ion-select color="gunung-nago-primary" label="Farm*" label-placement="floating" fill="outline"
+                  interface="popover" required="true" formControlName="farms" [multiple]="true">
+                  <ion-select-option *ngFor="let farm of farms" [value]="farm.id">
+                    <strong>Name: </strong>{{farm.name}} |
+                    <strong>Address: </strong>{{farm.name}}
+                  </ion-select-option>
+                </ion-select>
+                <div class="error-messages">
+                  <ng-container *ngFor="let error of errorMessages.farm">
+                    <div class="error-message"
+                      *ngIf="userDetails.get('farm')?.hasError(error.type) && (userDetails.get('farm')?.dirty || userDetails.get('farm')?.touched)">
+                      {{ error.message }}
+                    </div>
+                  </ng-container>
+                </div>
               </ion-col>
             </ion-row>
           </ion-card-content>
@@ -111,8 +171,8 @@
       </div>
     </div>
     <div class="btn-container">
-      <ion-button color="neutral-btn mr-05" (click)="addCustomerDetails()">Add Customer</ion-button>
-      <ion-button color="positive-btn" [disabled]="customerDetailsForm.invalid" (click)="save()">Save</ion-button>
+      <ion-button color="neutral-btn mr-05" (click)="addUserDetails()">Add User</ion-button>
+      <ion-button color="positive-btn" [disabled]="userDetailsForm.invalid" (click)="save()">Save</ion-button>
     </div>
   </form>
 </ion-content>

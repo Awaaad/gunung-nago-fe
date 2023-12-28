@@ -11,6 +11,10 @@ export class FlockApiService {
 
   constructor(private http: HttpClient) { }
 
+  public findAllActive(): Observable<FlockFrontDto[]> {
+    return this.http.get<FlockFrontDto[]>(`${this.baseUrl}/all/active`);
+  }
+
   public save(flockSaveDto: FlockSaveFrontDto): Observable<any> {
     return this.http.post(`${this.baseUrl}`, flockSaveDto, { responseType: 'text' });
   }

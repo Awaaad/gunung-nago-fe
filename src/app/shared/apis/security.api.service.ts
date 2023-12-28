@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { AuthenticatedUserDto, LoginParamDto, UserDto } from 'generated-src/model';
+import { AuthenticatedUserDto, FarmDto, LoginParamDto, UserDto } from 'generated-src/model';
 
 @Injectable({
     providedIn: 'root'
@@ -15,6 +15,10 @@ export class SecurityApiService {
 
     public authenticateUser(loginParam: LoginParamDto): Observable<AuthenticatedUserDto> {
         return this.http.post<AuthenticatedUserDto>(`${this.baseUrl}/authenticate`, loginParam);
+    }
+
+    public findAllFarmsByUsername(username: string): Observable<FarmDto[]> {
+        return this.http.get<FarmDto[]>(`${this.baseUrl}/${username}/farms`);
     }
 
     public getAllUsernames(): Observable<string[]> {

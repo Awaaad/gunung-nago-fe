@@ -173,13 +173,75 @@
         </td>
       </ng-container>
 
-      <ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef> Actions </th>
+      <ng-container matColumnDef="transfer">
+        <th mat-header-cell *matHeaderCellDef> Transfer </th>
         <td mat-cell *matCellDef="let element; let i =index;" formGroupName={{i}}>
           <tr *ngIf="element.salesInvoiceType === 'EGG' && element.eggType != 'BAD'">
-            <ion-toggle labelPlacement="start" class="toggle" formControlName="transferToBad"
-              (ionChange)="transferToBad($event, i)" color="gunung-nago-report">Transfer To Bad
-            </ion-toggle>
+            <div class="mt-10">
+              <ion-toggle labelPlacement="start" class="toggle" formControlName="transfer"
+                (ionChange)="transfer($event, i)" color="gunung-nago-report">Transfer
+              </ion-toggle>
+            </div>
+
+            <div class="select-area" *ngIf="returnFormGroupDetail.at(i).get('transfer')?.value">
+              <ion-select color="gunung-nago-primary" label="Egg Category" label-placement="floating" fill="solid"
+                interface="popover" clear-input="true" formControlName="transferEggCategoryId">
+                <ion-select-option *ngFor="let eggCategory of eggCategories" [value]="eggCategory.id">{{
+                  eggCategory.name
+                  }}</ion-select-option>
+              </ion-select>
+            </div>
+          </tr>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="refund products">
+        <th mat-header-cell *matHeaderCellDef> Refund Products </th>
+        <td mat-cell *matCellDef="let element; let i =index;" formGroupName={{i}}>
+          <tr *ngIf="element.salesInvoiceType === 'EGG' && element.eggType != 'BAD'">
+            <div class="mt-10">
+              <ion-toggle labelPlacement="start" class="toggle" formControlName="refund"
+                color="gunung-nago-report">Refund
+              </ion-toggle>
+            </div>
+          </tr>
+          <tr *ngIf="element.salesInvoiceType === 'FEED'">
+            <div class="mt-10">
+              <ion-toggle labelPlacement="start" class="toggle" formControlName="refund" color="gunung-nago-report"
+                (ionChange)="ionSelectRefundFeed($event, i)">Refund
+              </ion-toggle>
+            </div>
+
+            <div class="feed-select-area" *ngIf="returnFormGroupDetail.at(i).get('refund')?.value">
+              <ion-select color="gunung-nago-primary" label="Feed Stock" label-placement="floating" fill="solid"
+                interface="popover" required="true" formControlName="refundFeedStockId">
+                <ion-select-option *ngFor=" let feedStock of returnFormGroupDetail.at(i).get('feeds')?.value"
+                  [value]="feedStock.feedStockId">
+                  {{feedStock.bags}} - BAGS in stock | Price: {{feedStock.recommendedPrice}} </ion-select-option>
+              </ion-select>
+            </div>
+          </tr>
+          <tr *ngIf="element.salesInvoiceType === 'FLOCK'">
+            <div class="mt-10">
+              <ion-toggle labelPlacement="start" class="toggle" formControlName="refund" color="gunung-nago-report"
+                (ionChange)="ionSelectRefundFlock($event, i)">Refund
+              </ion-toggle>
+            </div>
+
+            <div class="flock-select-area" *ngIf="returnFormGroupDetail.at(i).get('refund')?.value">
+              <ion-select color="gunung-nago-primary" label="Feed Stock" label-placement="floating" fill="solid"
+                interface="popover" required="true" formControlName="refundFlockId">
+                <ion-select-option *ngFor=" let cage of returnFormGroupDetail.at(i).get('cages')?.value"
+                  [value]="cage.id">
+                  <span *ngIf="element.flockType === 'GOOD'">
+                    Cage: {{cage.cageName}} | GOOD in stock: {{cage.actualGood}}
+                  </span>
+                  <span *ngIf="element.flockType === 'STERILE'">
+                    Cage: {{cage.cageName}} | STERILE in stock: {{cage.recommendedPrice}}
+                  </span>
+                </ion-select-option>
+              </ion-select>
+            </div>
           </tr>
         </td>
       </ng-container>
@@ -195,7 +257,7 @@
     <ion-button color="positive-btn" [disabled]="!quantityAllowed" (click)="openModal()">Save</ion-button>
   </div>
 
-  <div class="ion-text-left existing-invoices" *ngIf="returnInvoiceDetails.length > 0">
+  <div class="ion-text-left existing-invoices">
     <ion-toggle labelPlacement="start" class="toggle" [(ngModel)]="showReturnInvoices" color="gunung-nago-report">Show
       Previous Return Invoices
     </ion-toggle>
@@ -673,7 +735,7 @@
             </ion-col>
           </ion-row>
 
-          <div class="add-payment-area">
+          <div class="add-payment-area" *ngIf="paymentForm.get('totalPrice')?.value > 0">
             <div>
 
             </div>
@@ -683,65 +745,67 @@
             </div>
           </div>
 
-          <div formArrayName="payments" *ngFor="let payment of paymentsFields?.controls; let i = index">
-            <ion-item-divider>
-              <ion-label>Return Payment</ion-label>
-            </ion-item-divider>
-            <span [formGroupName]="i">
-              <ion-button *ngIf="paymentsFields != null && paymentsFields.length > 1" (click)="removePayment(i)"
-                class="remove-payment-btn" color="gunung-nago-warehouse"><span
-                  class="material-icons">delete</span></ion-button>
-              <ion-row>
-                <ion-col size="6" size-sm>
-                  <ion-input color="gunung-nago-primary" label="Amount Returned" label-placement="floating"
-                    fill="outline" type="number" formControlName="amountPaid"></ion-input>
-                  <div class="error-messages">
-                    <ng-container *ngFor="let error of errorMessages.amountPaid">
-                      <div class="error-message"
-                        *ngIf="payment.get('amountPaid')?.hasError(error.type) && (payment.get('amountPaid')?.dirty || payment.get('amountPaid')?.touched)">
-                        {{ error.message }}
-                      </div>
-                    </ng-container>
-                  </div>
-                </ion-col>
+          <span *ngIf="paymentForm.get('totalPrice')?.value > 0">
+            <div formArrayName="payments" *ngFor="let payment of paymentsFields?.controls; let i = index">
+              <ion-item-divider>
+                <ion-label>Return Payment</ion-label>
+              </ion-item-divider>
+              <span [formGroupName]="i">
+                <ion-button *ngIf="paymentsFields != null && paymentsFields.length > 1" (click)="removePayment(i)"
+                  class="remove-payment-btn" color="gunung-nago-warehouse"><span
+                    class="material-icons">delete</span></ion-button>
+                <ion-row>
+                  <ion-col size="6" size-sm>
+                    <ion-input color="gunung-nago-primary" label="Amount Returned" label-placement="floating"
+                      fill="outline" type="number" formControlName="amountPaid"></ion-input>
+                    <div class="error-messages">
+                      <ng-container *ngFor="let error of errorMessages.amountPaid">
+                        <div class="error-message"
+                          *ngIf="payment.get('amountPaid')?.hasError(error.type) && (payment.get('amountPaid')?.dirty || payment.get('amountPaid')?.touched)">
+                          {{ error.message }}
+                        </div>
+                      </ng-container>
+                    </div>
+                  </ion-col>
 
-                <ion-col size="6">
-                  <ion-select color="gunung-nago-primary" label="Return Payment Mode" label-placement="floating"
-                    fill="outline" interface="popover" formControlName="paymentModeId">
-                    <ion-select-option *ngFor="let paymentMode of paymentModes" [value]="paymentMode">{{
-                      paymentMode.name| titlecase}}</ion-select-option>
-                  </ion-select>
-                  <div class="error-messages">
-                    <ng-container *ngFor="let error of errorMessages.paymentModeId">
-                      <div class="error-message"
-                        *ngIf="payment.get('paymentModeId')?.hasError(error.type) && (payment.get('paymentModeId')?.dirty || payment.get('paymentModeId')?.touched)">
-                        {{ error.message }}
-                      </div>
-                    </ng-container>
-                  </div>
-                </ion-col>
-              </ion-row>
+                  <ion-col size="6">
+                    <ion-select color="gunung-nago-primary" label="Return Payment Mode" label-placement="floating"
+                      fill="outline" interface="popover" formControlName="paymentModeId">
+                      <ion-select-option *ngFor="let paymentMode of paymentModes" [value]="paymentMode">{{
+                        paymentMode.name| titlecase}}</ion-select-option>
+                    </ion-select>
+                    <div class="error-messages">
+                      <ng-container *ngFor="let error of errorMessages.paymentModeId">
+                        <div class="error-message"
+                          *ngIf="payment.get('paymentModeId')?.hasError(error.type) && (payment.get('paymentModeId')?.dirty || payment.get('paymentModeId')?.touched)">
+                          {{ error.message }}
+                        </div>
+                      </ng-container>
+                    </div>
+                  </ion-col>
+                </ion-row>
 
-              <ion-row *ngIf="payment.get('paymentModeId')?.value?.requireBankAccount">
-                <ion-col size="6">
-                  <ion-select color="gunung-nago-primary" label="Bank Account" label-placement="floating" fill="outline"
-                    interface="popover" formControlName="bankAccountId">
-                    <ion-select-option *ngFor="let bankAccount of bankAccounts" [value]="bankAccount.id">{{
-                      bankAccount.accountHolder| uppercase}} - {{bankAccount.accountNumber}} -
-                      {{bankAccount.bankName}}</ion-select-option>
-                  </ion-select>
-                  <div class="error-messages">
-                    <ng-container *ngFor="let error of errorMessages.bankAccountId">
-                      <div class="error-message"
-                        *ngIf="payment.get('bankAccountId')?.hasError(error.type) && (payment.get('bankAccountId')?.dirty || payment.get('bankAccountId')?.touched)">
-                        {{ error.message }}
-                      </div>
-                    </ng-container>
-                  </div>
-                </ion-col>
-              </ion-row>
-            </span>
-          </div>
+                <ion-row *ngIf="payment.get('paymentModeId')?.value?.requireBankAccount">
+                  <ion-col size="6">
+                    <ion-select color="gunung-nago-primary" label="Bank Account" label-placement="floating"
+                      fill="outline" interface="popover" formControlName="bankAccountId">
+                      <ion-select-option *ngFor="let bankAccount of bankAccounts" [value]="bankAccount.id">{{
+                        bankAccount.accountHolder| uppercase}} - {{bankAccount.accountNumber}} -
+                        {{bankAccount.bankName}}</ion-select-option>
+                    </ion-select>
+                    <div class="error-messages">
+                      <ng-container *ngFor="let error of errorMessages.bankAccountId">
+                        <div class="error-message"
+                          *ngIf="payment.get('bankAccountId')?.hasError(error.type) && (payment.get('bankAccountId')?.dirty || payment.get('bankAccountId')?.touched)">
+                          {{ error.message }}
+                        </div>
+                      </ng-container>
+                    </div>
+                  </ion-col>
+                </ion-row>
+              </span>
+            </div>
+          </span>
         </form>
 
         <ion-row>
@@ -752,9 +816,10 @@
         </ion-row>
         <div class="modal-btn-container ion-text-right">
           <ion-button class="cancel-btn" (click)="cancel()">Cancel</ion-button>
-          <ion-button color="positive-btn"
+          <ion-button *ngIf="totalPrice > 0" color="positive-btn"
             [disabled]="!checkPaymentLessThanSoldAt() || paymentForm.get('totalPrice')?.value < 1 || !checkPaymentCompleted() || checkCreditCompleted()"
             (click)="confirm()">Save</ion-button>
+          <ion-button color="positive-btn" *ngIf="!(totalPrice > 0)" (click)="confirm()">Save</ion-button>
         </div>
       </ion-content>
     </ng-template>

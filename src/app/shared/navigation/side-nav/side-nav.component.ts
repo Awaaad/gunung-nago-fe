@@ -1,11 +1,14 @@
 import { Component, OnInit } from '@angular/core';
+import { LoginLogoutService } from '../../auths/login.logout.service';
+import { EmitterService } from '../../emitters/emitter.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-side-nav',
   templateUrl: './side-nav.component.html',
   styleUrls: ['./side-nav.component.scss'],
 })
-export class SideNavComponent  implements OnInit {
+export class SideNavComponent implements OnInit {
   public flock = 'assets/flaticon/chicken-icon.svg';
   public survey = 'assets/flaticon/survey-icon.svg';
   public supplier = 'assets/flaticon/supplier-icon.svg';
@@ -35,9 +38,44 @@ export class SideNavComponent  implements OnInit {
   public add = 'assets/flaticon/add-icon.svg';
   public dashboard = 'assets/flaticon/dashboard-icon.svg';
   public collection = 'assets/flaticon/collection-icon.svg';
+  public farm = 'assets/flaticon/farm-icon.svg';
 
-  constructor() { }
+  public isloggedIn = false;
+  public sessionSubscription!: Subscription;
+  public isAdmin = false;
 
-  ngOnInit() {}
+  constructor(
+    private readonly loginLogoutService: LoginLogoutService,
+    private readonly emittersService: EmitterService
+  ) { }
 
+  ngOnInit() {
+    const roles: any = localStorage.getItem('role');
+    if (JSON.parse(roles).includes('ADMIN')){
+      this.isAdmin = true;
+      this.isloggedIn = true;
+    } else {
+      this.isAdmin = false;
+      this.isloggedIn = false;
+    }
+
+    this.sessionSubscription = this.emittersService.sessionStateEmitter.subscribe((data: any) => {
+      console.log(data);
+      if (data.role.includes('ADMIN')) {
+        this.isAdmin = true;
+        this.isloggedIn = true;
+      } else {
+        this.isAdmin = false;
+        this.isloggedIn = false;
+      }
+    })
+  }
+
+  ngOnDestroy() {
+    this.sessionSubscription.unsubscribe();
+  }
+
+  public logout() {
+    this.loginLogoutService.logoutUser();
+  }
 }

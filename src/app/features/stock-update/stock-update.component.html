@@ -51,6 +51,16 @@
       </ion-row>
 
       <ion-row *ngIf="showSearchBar">
+        <div class="mt-10">
+          <mat-radio-group class="radio-feed" [(ngModel)]="type">
+            <mat-radio-button color="primary" *ngFor="let type of purchaseTypes" [value]="type">
+              {{ type | titlecase }}
+            </mat-radio-button>
+          </mat-radio-group>
+        </div>
+      </ion-row>
+
+      <ion-row *ngIf="showSearchBar">
         <ion-col size-xs="12" size-md="6">
           <div class="product-wrapper">
             <div class="product-health">
@@ -342,7 +352,10 @@
     </div>
     <div class="btn-container-stock">
       <ion-button class="cancel-btn" (click)="reset()">Cancel</ion-button>
-      <ion-button color="positive-btn" (click)="openModal()" [disabled]="subTotal < 1">Update Stock</ion-button>
+      <ion-button *ngIf="type === 'PURCHASE'" color="positive-btn" (click)="openModal()"
+        [disabled]="subTotal < 1">Update
+        Stock</ion-button>
+      <ion-button *ngIf="type === 'TRANSFER'" color="positive-btn" (click)="openModal()">Update Stock</ion-button>
     </div>
   </div>
 

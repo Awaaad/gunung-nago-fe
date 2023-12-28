@@ -265,6 +265,8 @@ export class PointOfSaleComponent implements OnInit {
       feedId: null,
       eggWeight: null,
       feeds: [],
+      transfer: null, 
+      refund: null
     }
   }
 
@@ -433,11 +435,13 @@ export class PointOfSaleComponent implements OnInit {
     isNewCustomer ? this.saleForm?.get("customer.lastName")?.enable() : this.saleForm?.get("customer.lastName")?.disable();
     isNewCustomer ? this.saleForm?.get("customer.address")?.enable() : this.saleForm?.get("customer.address")?.disable();
     isNewCustomer ? this.saleForm?.get("customer.telephoneNumber")?.enable() : this.saleForm?.get("customer.telephoneNumber")?.disable();
+    isNewCustomer ? this.saleForm?.get("customer.internal")?.enable() : this.saleForm?.get("customer.internal")?.disable();
     if (this.isNewCustomer) {
       this.saleForm?.get("customer.firstName")?.setValue("");
       this.saleForm?.get("customer.lastName")?.setValue("");
       this.saleForm?.get("customer.address")?.setValue("");
       this.saleForm?.get("customer.telephoneNumber")?.setValue("");
+      this.saleForm?.get("customer.internal")?.setValue(false);
     }
   }
 
@@ -451,7 +455,8 @@ export class PointOfSaleComponent implements OnInit {
         firstName: new FormControl({ value: '', disabled: !this.isNewCustomer }, Validators.compose([Validators.required])),
         lastName: new FormControl({ value: '', disabled: !this.isNewCustomer }, Validators.compose([Validators.required])),
         address: new FormControl({ value: '', disabled: !this.isNewCustomer }),
-        telephoneNumber: new FormControl({ value: '', disabled: !this.isNewCustomer }, Validators.compose([Validators.required, Validators.pattern("^[0-9]*$"),]))
+        telephoneNumber: new FormControl({ value: '', disabled: !this.isNewCustomer }, Validators.compose([Validators.required, Validators.pattern("^[0-9]*$")])),
+        internal: new FormControl({ value: false, disabled: !this.isNewCustomer }, Validators.compose([Validators.required])),
       }),
       quantity: new FormControl(this.quantity, Validators.compose([Validators.min(0)])),
       price: new FormControl(this.price, Validators.compose([Validators.min(0)]))
@@ -480,7 +485,7 @@ export class PointOfSaleComponent implements OnInit {
             size: this.size,
             sortBy: this.sortBy,
             sortOrder: this.sortOrder.toUpperCase(),
-            name: value
+            nameTel: value
           }
           return this.customerApiService.search(name).pipe(
             finalize(() => {
@@ -509,7 +514,8 @@ export class PointOfSaleComponent implements OnInit {
       lastName: null,
       address: null,
       telephoneNumber: null,
-      totalAmountDue: null
+      totalAmountDue: null,
+      internal: null
     };
   }
 
@@ -520,7 +526,8 @@ export class PointOfSaleComponent implements OnInit {
       lastName: this.salesInvoiceDetailsFrontDto.customerLastName,
       address: this.salesInvoiceDetailsFrontDto.customerAddress,
       telephoneNumber: this.salesInvoiceDetailsFrontDto.customerTelephoneNumber,
-      totalAmountDue: this.salesInvoiceDetailsFrontDto.totalPrice
+      totalAmountDue: this.salesInvoiceDetailsFrontDto.totalPrice,
+      internal: false
     };
 
   }
@@ -531,6 +538,7 @@ export class PointOfSaleComponent implements OnInit {
     this.saleForm?.get("customer.lastName")?.setValue("");
     this.saleForm?.get("customer.address")?.setValue("");
     this.saleForm?.get("customer.telephoneNumber")?.setValue("");
+    this.saleForm?.get("customer.internal")?.setValue(false);
     this.initialiseSelectedCustomer();
   }
 
@@ -542,11 +550,16 @@ export class PointOfSaleComponent implements OnInit {
     this.saleForm?.get("customer.lastName")?.setValue(event.option.value.lastName);
     this.saleForm?.get("customer.address")?.setValue(event.option.value.address);
     this.saleForm?.get("customer.telephoneNumber")?.setValue(event.option.value.telephoneNumber);
+    this.saleForm?.get("customer.internal")?.setValue(event.option.value.internal);
     this.saleForm?.get("newCustomer")?.setValue(false);
   }
 
   private checkIfCreditAllowed(): boolean {
     return (this.selectedCustomer != null && this.selectedCustomer.id != null) || (this.isNewCustomer && this.saleForm?.get("customer.telephoneNumber")?.value != '');
+  }
+
+  public checkIfInternal(): boolean {
+    return (this.selectedCustomer != null && this.selectedCustomer.id != null && this.selectedCustomer.internal) || (this.isNewCustomer && this.saleForm?.get("customer.telephoneNumber")?.value != '' && this.saleForm?.get("customer.internal")?.value);
   }
 
   addPaymentFormGroup() {
@@ -614,8 +627,10 @@ export class PointOfSaleComponent implements OnInit {
         address: null,
         telephoneNumber: null,
         totalAmountDue: null,
+        internal: null
       },
       toJakarta: this.isToJakarta,
+      internal: null,
       pricePerKg: this.pricePerKg,
       driverId: null,
       salesInvoiceCategory: null,
@@ -636,14 +651,16 @@ export class PointOfSaleComponent implements OnInit {
         lastName: this.saleForm?.get("customer.lastName")?.value,
         address: this.saleForm?.get("customer.address")?.value,
         telephoneNumber: this.saleForm?.get("customer.telephoneNumber")?.value,
+        internal: this.saleForm?.get("customer.internal")?.value,
         totalAmountDue: null,
       },
       toJakarta: this.isToJakarta,
       pricePerKg: this.pricePerKg,
       driverId: this.selectedDriver ? this.selectedDriver.id : null,
       salesInvoiceCategory: this.salesInvoiceCategory,
-      comment: this.comment,
-      paymentSaveDtos: this.paymentForm.value.payments,
+      comment: this.comment,      
+      internal: this.paymentForm?.get("internal")?.value,
+      paymentSaveDtos: !this.paymentForm?.get("internal")?.value ? this.paymentForm.value.payments : [],
       newCustomer: this.isNewCustomer,
       saleDetailsDtos: this.saleDetailsDto,
       soldAt: this.paymentForm?.get("soldAt")?.value,
@@ -731,6 +748,7 @@ export class PointOfSaleComponent implements OnInit {
         Validators.min(0),
         Validators.max(this.totalPrice),
       ])),
+      internal: new FormControl({ value: this.checkIfInternal(), disabled: false }, Validators.compose([Validators.required])),
       payments: this.formBuilder.array([
         this.addPaymentFormGroup()
       ])

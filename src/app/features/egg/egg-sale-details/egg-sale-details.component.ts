@@ -192,11 +192,13 @@ export class EggSaleDetailsComponent implements OnInit {
     isNewCustomer ? this.eggSaleForm?.get("customer.lastName")?.enable() : this.eggSaleForm?.get("customer.lastName")?.disable();
     isNewCustomer ? this.eggSaleForm?.get("customer.address")?.enable() : this.eggSaleForm?.get("customer.address")?.disable();
     isNewCustomer ? this.eggSaleForm?.get("customer.telephoneNumber")?.enable() : this.eggSaleForm?.get("customer.telephoneNumber")?.disable();
+    isNewCustomer ? this.eggSaleForm?.get("customer.internal")?.enable() : this.eggSaleForm?.get("customer.internal")?.disable();
     if (this.isNewCustomer) {
       this.eggSaleForm?.get("customer.firstName")?.setValue("");
       this.eggSaleForm?.get("customer.lastName")?.setValue("");
       this.eggSaleForm?.get("customer.address")?.setValue("");
       this.eggSaleForm?.get("customer.telephoneNumber")?.setValue("");
+      this.eggSaleForm?.get("customer.internal")?.setValue(false);
     }
   }
 
@@ -210,7 +212,8 @@ export class EggSaleDetailsComponent implements OnInit {
         firstName: new FormControl({ value: '', disabled: !this.isNewCustomer }, Validators.compose([Validators.required])),
         lastName: new FormControl({ value: '', disabled: !this.isNewCustomer }, Validators.compose([Validators.required])),
         address: new FormControl({ value: '', disabled: !this.isNewCustomer }),
-        telephoneNumber: new FormControl({ value: '', disabled: !this.isNewCustomer }, Validators.compose([Validators.required, Validators.pattern("^[0-9]*$"),]))
+        telephoneNumber: new FormControl({ value: '', disabled: !this.isNewCustomer }, Validators.compose([Validators.required, Validators.pattern("^[0-9]*$")])),
+        internal: new FormControl({ value: false, disabled: !this.isNewCustomer }, Validators.compose([Validators.required]))
       }),
       eggCategorySaleDtos: this.formBuilder.array([
       ])
@@ -481,7 +484,7 @@ export class EggSaleDetailsComponent implements OnInit {
             size: this.size,
             sortBy: this.sortBy,
             sortOrder: this.sortOrder.toUpperCase(),
-            name: value
+            nameTel: value
           }
           return this.customerApiService.search(name).pipe(
             finalize(() => {
@@ -510,7 +513,8 @@ export class EggSaleDetailsComponent implements OnInit {
       lastName: null,
       address: null,
       telephoneNumber: null,
-      totalAmountDue: null
+      totalAmountDue: null,
+      internal: null,
     };
   }
 
@@ -520,6 +524,7 @@ export class EggSaleDetailsComponent implements OnInit {
     this.eggSaleForm?.get("customer.lastName")?.setValue("");
     this.eggSaleForm?.get("customer.address")?.setValue("");
     this.eggSaleForm?.get("customer.telephoneNumber")?.setValue("");
+    this.eggSaleForm?.get("customer.internal")?.setValue(false);
     this.initialiseSelectedCustomer();
   }
 
@@ -531,6 +536,7 @@ export class EggSaleDetailsComponent implements OnInit {
     this.eggSaleForm?.get("customer.lastName")?.setValue(event.option.value.lastName);
     this.eggSaleForm?.get("customer.address")?.setValue(event.option.value.address);
     this.eggSaleForm?.get("customer.telephoneNumber")?.setValue(event.option.value.telephoneNumber);
+    this.eggSaleForm?.get("customer.internal")?.setValue(event.option.value.internal);
     this.eggSaleForm?.get("newCustomer")?.setValue(false);
   }
 
@@ -543,7 +549,9 @@ export class EggSaleDetailsComponent implements OnInit {
         address: null,
         telephoneNumber: null,
         totalAmountDue: null,
+        internal: null,
       },
+      internal: null,
       soldAt: null,
       pricePerKg: null,
       driverId: null,
@@ -565,13 +573,15 @@ export class EggSaleDetailsComponent implements OnInit {
         address: this.eggSaleForm?.get("customer.address")?.value,
         telephoneNumber: this.eggSaleForm?.get("customer.telephoneNumber")?.value,
         totalAmountDue: null,
+        internal: this.eggSaleForm?.get("customer.internal")?.value,
       },
       driverId: this.selectedDriver ? this.selectedDriver.id : null,
       salesInvoiceCategory: this.salesInvoiceCategory,
       comment: this.comment,
       soldAt: this.paymentForm?.get("soldAt")?.value,
+      internal: this.paymentForm?.get("internal")?.value,
       pricePerKg: this.eggSaleForm?.get("pricePerKg")?.value,
-      paymentSaveDtos: this.paymentForm.value.payments,
+      paymentSaveDtos: !this.paymentForm?.get("internal")?.value ? this.paymentForm.value.payments : [],
       newCustomer: this.isNewCustomer,
       isToJakarta: this.eggSaleForm?.get("isToJakarta")?.value,
       eggCategorySaleDtos: this.eggSaleForm?.get("isToJakarta")?.value ? this.populateJakartaEggCategories() : this.eggSaleForm?.get("eggCategorySaleDtos")?.value
@@ -580,6 +590,10 @@ export class EggSaleDetailsComponent implements OnInit {
 
   private checkIfCreditAllowed(): boolean {
     return (this.selectedCustomer != null && this.selectedCustomer.id != null) || (this.isNewCustomer && this.eggSaleForm?.get("customer.telephoneNumber")?.value != '');
+  }
+
+  public checkIfInternal(): boolean {
+    return (this.selectedCustomer != null && this.selectedCustomer.id != null && this.selectedCustomer.internal) || (this.isNewCustomer && this.eggSaleForm?.get("customer.telephoneNumber")?.value != '' && this.eggSaleForm?.get("customer.internal")?.value);
   }
 
   addPaymentFormGroup() {
@@ -759,6 +773,7 @@ export class EggSaleDetailsComponent implements OnInit {
         Validators.min(0),
         Validators.max(this.totalPrice),
       ])),
+      internal: new FormControl({ value: this.checkIfInternal(), disabled: false }, Validators.compose([Validators.required])),
       payments: this.formBuilder.array([
         this.addPaymentFormGroup()
       ])

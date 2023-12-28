@@ -38,9 +38,26 @@ td.mat-cell {
     }
 
     ion-select {
-        border-bottom: 1px solid gray;
-        color: red;
-        font-weight: 500;
+        --background: none;
+    }
+
+    .select-area {
+        width: 10em;
+        margin: 1em;
+        margin-left: 0; 
+
+    }
+
+    .feed-select-area {
+        width: 16em;
+        margin: 1em;
+        margin-left: 0; 
+    }
+
+    .flock-select-area {
+        width: 20em;
+        margin: 1em;
+        margin-left: 0; 
     }
 }
 
@@ -316,4 +333,8 @@ ion-card-content {
     width: 40px;
     margin-top: 23px;
     margin-right: 5px;
+}
+
+.mt-10 {
+    margin-top: 10px;
 }

@@ -152,7 +152,7 @@ export class FlockSaleDetailsComponent implements OnInit {
     const url = this.router.serializeUrl(
       this.router.createUrlTree([`sales-invoice/sales-invoice-customer-credit-list/${this.selectedCustomer.id}`], { queryParams: { lastName: this.selectedCustomer.lastName, firstName: this.selectedCustomer.firstName } })
     );
-  
+
     window.open(url, '_blank');
   }
 
@@ -201,11 +201,13 @@ export class FlockSaleDetailsComponent implements OnInit {
     isNewCustomer ? this.flockSaleForm?.get("customer.lastName")?.enable() : this.flockSaleForm?.get("customer.lastName")?.disable();
     isNewCustomer ? this.flockSaleForm?.get("customer.address")?.enable() : this.flockSaleForm?.get("customer.address")?.disable();
     isNewCustomer ? this.flockSaleForm?.get("customer.telephoneNumber")?.enable() : this.flockSaleForm?.get("customer.telephoneNumber")?.disable();
+    isNewCustomer ? this.flockSaleForm?.get("customer.internal")?.enable() : this.flockSaleForm?.get("customer.internal")?.disable();
     if (this.isNewCustomer) {
       this.flockSaleForm?.get("customer.firstName")?.setValue("");
       this.flockSaleForm?.get("customer.lastName")?.setValue("");
       this.flockSaleForm?.get("customer.address")?.setValue("");
       this.flockSaleForm?.get("customer.telephoneNumber")?.setValue("");
+      this.flockSaleForm?.get("customer.internal")?.setValue(false);
     }
   }
 
@@ -217,7 +219,8 @@ export class FlockSaleDetailsComponent implements OnInit {
         firstName: new FormControl({ value: '', disabled: !this.isNewCustomer }, Validators.compose([Validators.required])),
         lastName: new FormControl({ value: '', disabled: !this.isNewCustomer }, Validators.compose([Validators.required])),
         address: new FormControl({ value: '', disabled: !this.isNewCustomer }),
-        telephoneNumber: new FormControl({ value: '', disabled: !this.isNewCustomer }, Validators.compose([Validators.required, Validators.pattern("^[0-9]*$"),]))
+        telephoneNumber: new FormControl({ value: '', disabled: !this.isNewCustomer }, Validators.compose([Validators.required, Validators.pattern("^[0-9]*$")])),
+        internal: new FormControl({ value: false, disabled: !this.isNewCustomer }, Validators.compose([Validators.required])),
       }),
       flockSaleDetails: this.formBuilder.array([
         this.addFlockSaleFormGroup()
@@ -247,7 +250,7 @@ export class FlockSaleDetailsComponent implements OnInit {
             size: this.size,
             sortBy: this.sortBy,
             sortOrder: this.sortOrder.toUpperCase(),
-            name: value
+            nameTel: value
           }
           return this.customerApiService.search(name).pipe(
             finalize(() => {
@@ -276,7 +279,8 @@ export class FlockSaleDetailsComponent implements OnInit {
       lastName: null,
       address: null,
       telephoneNumber: null,
-      totalAmountDue: null
+      totalAmountDue: null,
+      internal: null,
     };
   }
 
@@ -286,6 +290,7 @@ export class FlockSaleDetailsComponent implements OnInit {
     this.flockSaleForm?.get("customer.lastName")?.setValue("");
     this.flockSaleForm?.get("customer.address")?.setValue("");
     this.flockSaleForm?.get("customer.telephoneNumber")?.setValue("");
+    this.flockSaleForm?.get("customer.internal")?.setValue(false);
     this.initialiseSelectedCustomer();
   }
 
@@ -297,6 +302,7 @@ export class FlockSaleDetailsComponent implements OnInit {
     this.flockSaleForm?.get("customer.lastName")?.setValue(event.option.value.lastName);
     this.flockSaleForm?.get("customer.address")?.setValue(event.option.value.address);
     this.flockSaleForm?.get("customer.telephoneNumber")?.setValue(event.option.value.telephoneNumber);
+    this.flockSaleForm?.get("customer.internal")?.setValue(event.option.value.internal);
     this.flockSaleForm?.get("newCustomer")?.setValue(false);
   }
 
@@ -406,7 +412,9 @@ export class FlockSaleDetailsComponent implements OnInit {
         address: null,
         telephoneNumber: null,
         totalAmountDue: null,
+        internal: null,
       },
+      internal: null,
       flockSaleDetailsDtos: [],
       paymentSaveDtos: [],
       newCustomer: false,
@@ -425,10 +433,12 @@ export class FlockSaleDetailsComponent implements OnInit {
         lastName: this.flockSaleForm?.get("customer.lastName")?.value,
         address: this.flockSaleForm?.get("customer.address")?.value,
         telephoneNumber: this.flockSaleForm?.get("customer.telephoneNumber")?.value,
+        internal: this.flockSaleForm?.get("customer.internal")?.value,
         totalAmountDue: null,
       },
       flockSaleDetailsDtos: this.flockSaleForm.value.flockSaleDetails,
-      paymentSaveDtos: this.paymentForm.value.payments,
+      internal: this.paymentForm?.get("internal")?.value,
+      paymentSaveDtos: !this.paymentForm?.get("internal")?.value ? this.paymentForm.value.payments : [],
       newCustomer: this.isNewCustomer,
       driverId: this.selectedDriver?.id,
       salesInvoiceCategory: this.salesInvoiceCategory,
@@ -439,6 +449,10 @@ export class FlockSaleDetailsComponent implements OnInit {
 
   private checkIfCreditAllowed(): boolean {
     return (this.selectedCustomer != null && this.selectedCustomer.id != null) || (this.isNewCustomer && this.flockSaleForm?.get("customer.telephoneNumber")?.value != '');
+  }
+
+  public checkIfInternal(): boolean {
+    return (this.selectedCustomer != null && this.selectedCustomer.id != null && this.selectedCustomer.internal) || (this.isNewCustomer && this.flockSaleForm?.get("customer.telephoneNumber")?.value != '' && this.flockSaleForm?.get("customer.internal")?.value);
   }
 
   addPaymentFormGroup() {
@@ -522,6 +536,7 @@ export class FlockSaleDetailsComponent implements OnInit {
   }
 
   public reset(): void {
+    this.totalPrice = 0;
     this.initialiseSelectedCustomer();
     this.flockSaleForm.reset();
     (this.flockSaleForm.get('flockSaleDetails') as FormArray).clear();
@@ -535,6 +550,7 @@ export class FlockSaleDetailsComponent implements OnInit {
     if (this.searchCustomerCtrl) {
       this.searchCustomerCtrl.setValue(null);
     }
+    this.findTotalFlockStockCount();
   }
 
   private initialisePaymentFormBuilder(): void {
@@ -545,6 +561,7 @@ export class FlockSaleDetailsComponent implements OnInit {
         Validators.min(0),
         Validators.max(this.totalPrice),
       ])),
+      internal: new FormControl({ value: this.checkIfInternal(), disabled: false }, Validators.compose([Validators.required])),
       payments: this.formBuilder.array([
         this.addPaymentFormGroup()
       ])

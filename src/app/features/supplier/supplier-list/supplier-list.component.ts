@@ -24,7 +24,7 @@ export class SupplierListComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   public language = "en";
-  public displayedColumns: string[] = ['name', 'email', 'address', 'telephoneNumber', 'edit'];
+  public displayedColumns: string[] = ['name', 'email', 'address', 'telephoneNumber', 'internal', 'edit'];
   public suppliers = new MatTableDataSource<SupplierDto>;
   private infiniteSuppliers: SupplierDto[] = [];
   public supplierSearchSubscription!: Subscription;
@@ -39,7 +39,8 @@ export class SupplierListComponent {
       { type: 'required', message: 'Name is required' },
     ],
     email: [
-      { type: 'required', message: 'Last Name is required' },
+      { type: 'required', message: 'Email is required' },
+      { type: 'email', message: 'Email is invalid' },
     ],
     telephoneNumber: [
       { type: 'required', message: 'Telephone Number is required' },
@@ -125,11 +126,12 @@ export class SupplierListComponent {
     this.supplierEditForm = new FormGroup({
       id: new FormControl({ value: supplierDetails.id, disabled: false }, Validators.compose([Validators.required])),
       name: new FormControl({ value: supplierDetails.name, disabled: false }, Validators.compose([Validators.required])),
-      email: new FormControl({ value: supplierDetails.email, disabled: false }, Validators.compose([Validators.required])),
+      email: new FormControl({ value: supplierDetails.email, disabled: false }, Validators.compose([Validators.required, Validators.email])),
       address: new FormControl({ value: supplierDetails.address, disabled: false }),
       telephoneNumber: new FormControl({ value: supplierDetails.telephoneNumber, disabled: false }, Validators.compose([Validators.required])),
       telephoneNumberTwo: new FormControl({ value: supplierDetails.telephoneNumberTwo, disabled: false }),
       telephoneNumberThree: new FormControl({ value: supplierDetails.telephoneNumberThree, disabled: false }),
+      internal: new FormControl({ value: supplierDetails.internal, disabled: false }),
     })
   }
 

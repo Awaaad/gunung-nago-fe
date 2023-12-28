@@ -29,6 +29,7 @@ import { FlockTransferComponent } from './flock-transfer/flock-transfer.componen
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { FlockCageCategoryTransferComponent } from './flock-cage-category-transfer/flock-cage-category-transfer.component';
 import { FlockStockDetailsComponent } from './flock-stock-details/flock-stock-details.component';
+import { MatRadioModule } from '@angular/material/radio';
 export const MY_FORMATS = ConstantHelper.dateFormat;
 
 @NgModule({
@@ -48,7 +49,8 @@ export const MY_FORMATS = ConstantHelper.dateFormat;
     MatAutocompleteModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    DragDropModule
+    DragDropModule,
+    MatRadioModule
   ],
   providers: [FlockApiService, FlockSaleApiService, SurveyApiService, CageApiService, CustomerApiService, SupplierApiService, FlockStockApiService,
     {

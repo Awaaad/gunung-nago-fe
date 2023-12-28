@@ -22,6 +22,7 @@ import { MaskitoModule } from '@maskito/angular';
 import { StockUpdateComponent } from './stock-update.component';
 import { FeedApiService } from 'src/app/shared/apis/feed.api.service';
 import { PurchaseApiService } from 'src/app/shared/apis/purchase.api.service';
+import { MatRadioModule } from '@angular/material/radio';
 
 
 @NgModule({
@@ -44,6 +45,7 @@ import { PurchaseApiService } from 'src/app/shared/apis/purchase.api.service';
     MatSortModule,
     MatButtonModule,
     MatAutocompleteModule,
+    MatRadioModule
   ],
   providers: [HealthProductApiService, HealthProductStockApiService, FeedApiService, SupplierApiService, PurchaseApiService]
 })

@@ -81,6 +81,14 @@
           </td>
         </ng-container>
 
+        <ng-container matColumnDef="internal">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="internal"> Internal </th>
+          <td mat-cell *matCellDef="let element">
+            <img *ngIf="element.internal" src='./assets/flaticon/tick.png'>
+            <img *ngIf="!element.internal" src='./assets/flaticon/cross.png'>
+          </td>
+        </ng-container>
+
 
         <ng-container matColumnDef="edit">
           <th mat-header-cell *matHeaderCellDef> </th>
@@ -116,6 +124,10 @@
       <ion-content [fullscreen]="false" class="ion-padding">
         <form [formGroup]="supplierEditForm">
           <ion-row>
+            <ion-col size-xs="12" size-md="12">
+              <ion-toggle labelPlacement="start" class="toggle" formControlName="internal"
+                color="gunung-nago-report">Internal*</ion-toggle>
+            </ion-col>
             <ion-col size-xs="12" size-md="12">
               <ion-input color="gunung-nago-primary" label="Name*" label-placement="floating" fill="outline" type="text"
                 clear-input="true" formControlName="name" required="true"></ion-input>

@@ -31,6 +31,7 @@ import { FeedSaleDetailsComponent } from './feed-sale-details/feed-sale-details.
 import { CustomerApiService } from 'src/app/shared/apis/customer.api.service';
 import { FeedSaleApiService } from 'src/app/shared/apis/feed-sale.api.service';
 import { FeedStockDetailsComponent } from './feed-stock-details/feed-stock-details.component';
+import { MatRadioModule } from '@angular/material/radio';
 
 
 @NgModule({
@@ -56,6 +57,7 @@ import { FeedStockDetailsComponent } from './feed-stock-details/feed-stock-detai
     MatTooltipModule,
     MatNativeDateModule,
     MatDatepickerModule,
+    MatRadioModule
   ],
   providers: [FeedApiService, FeedStockApiService, FlockFeedLineApiService, SupplierApiService, CustomerApiService, FeedSaleApiService]
 })

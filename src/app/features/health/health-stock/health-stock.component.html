@@ -7,7 +7,7 @@
       <div class="router-links">
         <div class="title">
           <img class="header-logo" src='./assets/flaticon/health-products-stock.png'>
-          <h3 class="header-nav-products">Health Stock</h3>
+          <h3 class="header-nav-products">Health Stock / Transfer</h3>
         </div>
         <div>
           <ion-item class="language-selection">
@@ -45,6 +45,16 @@
             </mat-autocomplete>
           </mat-form-field>
         </ion-col>
+      </ion-row>
+
+      <ion-row *ngIf="showHealthSearchBar">
+        <div class="mt-10">
+          <mat-radio-group class="radio-feed" [(ngModel)]="type">
+            <mat-radio-button color="primary" *ngFor="let type of purchaseTypes" [value]="type">
+              {{ type | titlecase }}
+            </mat-radio-button>
+          </mat-radio-group>
+        </div>
       </ion-row>
 
       <ion-row *ngIf="showHealthSearchBar">
@@ -206,7 +216,10 @@
     </div>
     <div class="btn-container-stock">
       <ion-button class="cancel-btn" (click)="reset()">Cancel</ion-button>
-      <ion-button color="positive-btn" (click)="openModal()" [disabled]="subTotal < 1">Update Stock</ion-button>
+      <ion-button *ngIf="type === 'PURCHASE'" color="positive-btn" (click)="openModal()"
+        [disabled]="subTotal < 0">Update
+        Stock</ion-button>
+      <ion-button *ngIf="type === 'TRANSFER'" color="positive-btn" (click)="openModal()">Update Stock</ion-button>
     </div>
   </div>
 

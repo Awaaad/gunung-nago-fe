@@ -27,11 +27,11 @@ export class FlockTransferComponent {
 
   // flock form
   public flockDetailsForm!: FormGroup;
-  public initialQuantity: number = 0;
-  public actualGood: number = 0;
-  public actualSterile: number = 0;
-  public initialAge: number = 0;
-  public actualAge: number = 0;
+  public initialQuantity: number | null = null;
+  public actualGood: number | null = null;
+  public actualSterile: number | null = null;
+  public initialAge: number | null = null;
+  public actualAge: number | null = null;
   public aquisitionDate: Date = new Date();
   public aquisitionType: string = '';
   public cageId: number = 0;

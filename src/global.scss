@@ -263,11 +263,15 @@ strong {
 }
 
 .supplier-modal {
-    --height: 36em;
+    --height: 38em;
 }
 
 .customer-modal {
-    --height: 32em;
+    --height: 33em;
+}
+
+.user-modal {
+    --height: 44em;
 }
 
 .btn-container-stock {
@@ -441,4 +445,19 @@ ion-toggle {
 
 .search-checkbox {
     margin: 10px;
+}
+
+.mat-mdc-radio-button.mat-primary {
+    --mdc-radio-disabled-selected-icon-color: #000;
+    --mdc-radio-disabled-unselected-icon-color: #000;
+    --mdc-radio-unselected-hover-icon-color: #212121;
+    --mdc-radio-unselected-icon-color: rgba(0, 0, 0, 0.54);
+    --mdc-radio-unselected-pressed-icon-color: rgba(0, 0, 0, 0.54);
+    --mdc-radio-selected-focus-icon-color: var(--ion-color-positive-btn);
+    --mdc-radio-selected-hover-icon-color: var(--ion-color-positive-btn);
+    --mdc-radio-selected-icon-color: var(--ion-color-positive-btn);
+    --mdc-radio-selected-pressed-icon-color: var(--ion-color-positive-btn);
+    --mat-radio-ripple-color: #000;
+    --mat-radio-checked-ripple-color: var(--ion-color-positive-btn);
+    --mat-radio-disabled-label-color: rgba(0, 0, 0, 0.38);
 }

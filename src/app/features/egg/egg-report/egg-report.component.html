@@ -39,8 +39,8 @@
             </mat-datepicker>
           </mat-form-field>
 
-          <ion-toggle labelPlacement="start" class="toggle" (ionChange)="detailedReportChange($event)" [(ngModel)]="showDetailedReport"
-            color="gunung-nago-report">Category Report</ion-toggle>
+          <ion-toggle labelPlacement="start" class="toggle" (ionChange)="detailedReportChange($event)"
+            [(ngModel)]="showDetailedReport" color="gunung-nago-report">Category Report</ion-toggle>
         </ion-col>
         <ion-col>
           <div class="filters">
@@ -56,10 +56,8 @@
       <ion-row>
         <ion-col size-lg="2" size-md="3" size-xs="12" *ngIf="showDetailedReport">
           <ion-select color="gunung-nago-primary" label="Egg Type" label-placement="floating" fill="outline"
-            interface="popover" clear-input="true"
-            (ionChange)="ionSelectEggCategory($event)">
-            <ion-select-option *ngFor="let eggType of eggStock.eggCategoryStockDtos"
-              [value]="eggType.eggCategoryId">{{
+            interface="popover" clear-input="true" (ionChange)="ionSelectEggCategory($event)">
+            <ion-select-option *ngFor="let eggType of eggStock.eggCategoryStockDtos" [value]="eggType.eggCategoryId">{{
               eggType.name | titlecase
               }}</ion-select-option>
           </ion-select>
@@ -80,73 +78,74 @@
 
         <ng-container matColumnDef="yesterdayTie">
           <th mat-header-cell *matHeaderCellDef> Ikat</th>
-          <td mat-cell *matCellDef="let element"> {{element.yesterdayTie}} </td>
+          <td mat-cell *matCellDef="let element"> {{element.yesterdayTie ? element.yesterdayTie : null}} </td>
           <td mat-footer-cell *matFooterCellDef></td>
         </ng-container>
 
         <ng-container matColumnDef="yesterdayPiece">
           <th mat-header-cell *matHeaderCellDef> Butir </th>
-          <td mat-cell *matCellDef="let element"> {{element.yesterdayPiece}} </td>
+          <td mat-cell *matCellDef="let element"> {{element.yesterdayPiece ? element.yesterdayPiece : null}} </td>
           <td mat-footer-cell *matFooterCellDef></td>
         </ng-container>
 
         <ng-container matColumnDef="yesterdayBad">
           <th mat-header-cell *matHeaderCellDef> Pecah </th>
-          <td mat-cell *matCellDef="let element"> {{element.yesterdayBad}} </td>
+          <td mat-cell *matCellDef="let element"> {{element.yesterdayBad ? element.yesterdayBad : null}} </td>
           <td mat-footer-cell *matFooterCellDef></td>
         </ng-container>
 
         <ng-container matColumnDef="todayInTie">
           <th mat-header-cell *matHeaderCellDef> Ikat</th>
-          <td mat-cell *matCellDef="let element"> {{element.todayInTie}} </td>
+          <td mat-cell *matCellDef="let element"> {{element.todayInTie? element.todayInTie : null}} </td>
           <td mat-footer-cell *matFooterCellDef></td>
         </ng-container>
 
         <ng-container matColumnDef="todayInPiece">
           <th mat-header-cell *matHeaderCellDef> Butir </th>
-          <td mat-cell *matCellDef="let element"> {{element.todayInPiece}} </td>
+          <td mat-cell *matCellDef="let element"> {{element.todayInPiece ? element.todayInPiece : null}} </td>
           <td mat-footer-cell *matFooterCellDef></td>
         </ng-container>
 
         <ng-container matColumnDef="todayInBad">
           <th mat-header-cell *matHeaderCellDef> Pecah </th>
-          <td mat-cell *matCellDef="let element"> {{element.todayInBad}} </td>
+          <td mat-cell *matCellDef="let element"> {{element.todayInBad ? element.todayInBad : null}} </td>
           <td mat-footer-cell *matFooterCellDef></td>
         </ng-container>
 
         <ng-container matColumnDef="todayOutTie">
           <th mat-header-cell *matHeaderCellDef> Ikat</th>
-          <td mat-cell *matCellDef="let element"> {{element.todayOutTie}} </td>
+          <td mat-cell *matCellDef="let element"> {{element.todayOutTie ? element.todayOutTie : null}} </td>
           <td mat-footer-cell *matFooterCellDef></td>
         </ng-container>
 
         <ng-container matColumnDef="todayOutPiece">
           <th mat-header-cell *matHeaderCellDef> Butir </th>
-          <td mat-cell *matCellDef="let element"> {{element.todayOutPiece}} </td>
+          <td mat-cell *matCellDef="let element"> {{element.todayOutPiece ? element.todayOutPiece : null}} </td>
           <td mat-footer-cell *matFooterCellDef></td>
         </ng-container>
 
         <ng-container matColumnDef="todayOutBad">
           <th mat-header-cell *matHeaderCellDef> Pecah </th>
-          <td mat-cell *matCellDef="let element"> {{element.todayOutBad}} </td>
+          <td mat-cell *matCellDef="let element"> {{element.todayOutBad ? element.todayOutBad : null}} </td>
           <td mat-footer-cell *matFooterCellDef></td>
         </ng-container>
 
         <ng-container matColumnDef="todayRemainingTie">
           <th mat-header-cell *matHeaderCellDef> Ikat</th>
-          <td mat-cell *matCellDef="let element"> {{element.todayRemainingTie}} </td>
+          <td mat-cell *matCellDef="let element"> {{element.todayRemainingTie ? element.todayRemainingTie : null}} </td>
           <td mat-footer-cell *matFooterCellDef></td>
         </ng-container>
 
         <ng-container matColumnDef="todayRemainingPiece">
           <th mat-header-cell *matHeaderCellDef> Butir </th>
-          <td mat-cell *matCellDef="let element"> {{element.todayRemainingPiece}} </td>
+          <td mat-cell *matCellDef="let element"> {{element.todayRemainingPiece ? element.todayRemainingPiece : null}}
+          </td>
           <td mat-footer-cell *matFooterCellDef></td>
         </ng-container>
 
         <ng-container matColumnDef="todayRemainingBad">
           <th mat-header-cell *matHeaderCellDef> Pecah </th>
-          <td mat-cell *matCellDef="let element"> {{element.todayRemainingBad}} </td>
+          <td mat-cell *matCellDef="let element"> {{element.todayRemainingBad ? element.todayRemainingBad : null}} </td>
           <td mat-footer-cell *matFooterCellDef></td>
         </ng-container>
 
@@ -195,73 +194,74 @@
 
         <ng-container matColumnDef="yesterdayTie">
           <th mat-header-cell *matHeaderCellDef> Ikat</th>
-          <td mat-cell *matCellDef="let element"> {{element.yesterdayTie}} </td>
+          <td mat-cell *matCellDef="let element"> {{element.yesterdayTie ? element.yesterdayTie : null}} </td>
           <td mat-footer-cell *matFooterCellDef></td>
         </ng-container>
 
         <ng-container matColumnDef="yesterdayPiece">
           <th mat-header-cell *matHeaderCellDef> Butir </th>
-          <td mat-cell *matCellDef="let element"> {{element.yesterdayPiece}} </td>
+          <td mat-cell *matCellDef="let element"> {{element.yesterdayPiece ? element.yesterdayPiece : null}} </td>
           <td mat-footer-cell *matFooterCellDef></td>
         </ng-container>
 
         <ng-container matColumnDef="yesterdayBad">
           <th mat-header-cell *matHeaderCellDef> Pecah </th>
-          <td mat-cell *matCellDef="let element"> {{element.yesterdayBad}} </td>
+          <td mat-cell *matCellDef="let element"> {{element.yesterdayBad ? element.yesterdayBad : null}} </td>
           <td mat-footer-cell *matFooterCellDef></td>
         </ng-container>
 
         <ng-container matColumnDef="todayInTie">
           <th mat-header-cell *matHeaderCellDef> Ikat</th>
-          <td mat-cell *matCellDef="let element"> {{element.todayInTie}} </td>
+          <td mat-cell *matCellDef="let element"> {{element.todayInTie ? element.todayInTie : null}} </td>
           <td mat-footer-cell *matFooterCellDef></td>
         </ng-container>
 
         <ng-container matColumnDef="todayInPiece">
           <th mat-header-cell *matHeaderCellDef> Butir </th>
-          <td mat-cell *matCellDef="let element"> {{element.todayInPiece}} </td>
+          <td mat-cell *matCellDef="let element"> {{element.todayInPiece ? element.todayInPiece : null}} </td>
           <td mat-footer-cell *matFooterCellDef></td>
         </ng-container>
 
         <ng-container matColumnDef="todayInBad">
           <th mat-header-cell *matHeaderCellDef> Pecah </th>
-          <td mat-cell *matCellDef="let element"> {{element.todayInBad}} </td>
+          <td mat-cell *matCellDef="let element"> {{element.todayInBad ? element.todayInBad : null}} </td>
           <td mat-footer-cell *matFooterCellDef></td>
         </ng-container>
 
         <ng-container matColumnDef="todayOutTie">
           <th mat-header-cell *matHeaderCellDef> Ikat</th>
-          <td mat-cell *matCellDef="let element"> {{element.todayOutTie}} </td>
+          <td mat-cell *matCellDef="let element"> {{element.todayOutTie ? element.todayOutTie : null}} </td>
           <td mat-footer-cell *matFooterCellDef></td>
         </ng-container>
 
         <ng-container matColumnDef="todayOutPiece">
           <th mat-header-cell *matHeaderCellDef> Butir </th>
-          <td mat-cell *matCellDef="let element"> {{element.todayOutPiece}} </td>
+          <td mat-cell *matCellDef="let element"> {{element.todayOutPiece ? element.todayOutPiece : null}} </td>
           <td mat-footer-cell *matFooterCellDef></td>
         </ng-container>
 
         <ng-container matColumnDef="todayOutBad">
           <th mat-header-cell *matHeaderCellDef> Pecah </th>
-          <td mat-cell *matCellDef="let element"> {{element.todayOutBad}} </td>
+          <td mat-cell *matCellDef="let element"> {{element.todayOutBad ? element.todayOutBad : null}} </td>
           <td mat-footer-cell *matFooterCellDef></td>
         </ng-container>
 
         <ng-container matColumnDef="todayRemainingTie">
           <th mat-header-cell *matHeaderCellDef> Ikat</th>
-          <td mat-cell *matCellDef="let element"> {{element.todayRemainingTie}} </td>
+          <td mat-cell *matCellDef="let element"> {{element.todayRemainingTie ? element.todayRemainingTie : null}} </td>
           <td mat-footer-cell *matFooterCellDef></td>
         </ng-container>
 
         <ng-container matColumnDef="todayRemainingPiece">
           <th mat-header-cell *matHeaderCellDef> Butir </th>
-          <td mat-cell *matCellDef="let element"> {{element.todayRemainingPiece}} </td>
+          <td mat-cell *matCellDef="let element"> {{element.todayRemainingPiece ? element.todayRemainingPiece : null}}
+          </td>
           <td mat-footer-cell *matFooterCellDef></td>
         </ng-container>
 
         <ng-container matColumnDef="todayRemainingBad">
           <th mat-header-cell *matHeaderCellDef> Pecah </th>
-          <td mat-cell *matCellDef="let element"> {{element.todayRemainingBad}} </td>
+          <td mat-cell *matCellDef="let element"> {{element.todayRemainingBad ? element.todayRemainingBad : null}} </td>
           <td mat-footer-cell *matFooterCellDef></td>
         </ng-container>
 

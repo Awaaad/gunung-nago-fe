@@ -10,7 +10,8 @@
           <h3 *ngIf="!type" class="header-nav-products">Sales Record</h3>
           <h3 *ngIf="type && !id" class="header-nav-products">{{type | titlecase}} Sales Record</h3>
           <h3 *ngIf="type === 'EGG' && id" class="header-nav-products">{{name}} - {{type | titlecase}} Sales Record</h3>
-          <h3 *ngIf="type === 'FLOCK' && id" class="header-nav-products">{{name}} - {{type | titlecase}} Sales Record</h3>
+          <h3 *ngIf="type === 'FLOCK' && id" class="header-nav-products">{{name}} - {{type | titlecase}} Sales Record
+          </h3>
           <h3 *ngIf="type === 'FEED' && id" class="header-nav-products">{{name}} - {{weight}} KG - {{type | titlecase}}
             Sales Record</h3>
           <h3 *ngIf="type === 'MANURE' && id" class="header-nav-products">{{weight}} KG - {{'Fertilizer' | titlecase}}
@@ -146,6 +147,12 @@
             (ionInput)="searchByFeedName(feedName.value)"></ion-searchbar>
         </ion-col>
       </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-toggle labelPlacement="start" class="toggle" [(ngModel)]="showSummary" color="gunung-nago-report">Show
+            Table Summary</ion-toggle>
+        </ion-col>
+      </ion-row>
     </ion-card-content>
   </ion-card>
 
@@ -158,7 +165,9 @@
           <th mat-header-cell *matHeaderCellDef mat-sort-header="id"> Sales Invoice Number </th>
           <td mat-cell *matCellDef="let element"> <span class="table-link"
               (click)="routeToSalesInvoiceDetails(element)">{{ element.salesInvoiceId }}</span></td>
-          <td mat-footer-cell *matFooterCellDef><strong>Total: </strong></td>
+          <ng-container>
+            <td mat-footer-cell *matFooterCellDef><strong>Total: </strong></td>
+          </ng-container>
         </ng-container>
 
         <ng-container matColumnDef="name">
@@ -174,19 +183,25 @@
               <div class="table-content-text">To Jakarta</div>
             </div>
           </td>
-          <td mat-footer-cell *matFooterCellDef></td>
+          <ng-container>
+            <td mat-footer-cell *matFooterCellDef></td>
+          </ng-container>
         </ng-container>
 
         <ng-container matColumnDef="createdBy">
           <th mat-header-cell *matHeaderCellDef mat-sort-header="createdBy"> Salesperson </th>
           <td mat-cell *matCellDef="let element"> {{element.createdBy | titlecase}} </td>
-          <td mat-footer-cell *matFooterCellDef></td>
+          <ng-container>
+            <td mat-footer-cell *matFooterCellDef></td>
+          </ng-container>
         </ng-container>
 
         <ng-container matColumnDef="createdDate">
           <th mat-header-cell *matHeaderCellDef mat-sort-header="createdDate"> Date Issued </th>
           <td mat-cell *matCellDef="let element"> {{element.createdDate | date:'dd-MM-yyyy HH:mm'}} </td>
-          <td mat-footer-cell *matFooterCellDef></td>
+          <ng-container>
+            <td mat-footer-cell *matFooterCellDef></td>
+          </ng-container>
         </ng-container>
 
         <ng-container matColumnDef="category">
@@ -202,7 +217,8 @@
             </div>
             <div *ngIf="element.salesInvoiceType === 'MANURE'" class="table-content-wrapper">
               <img class="table-content-icon" src='./assets/flaticon/manure-bag.png'>
-              <div class="table-content-text">Fertilizer - <strong>{{element.manureWeightPerBag}} Kg</strong></div>
+              <div class="table-content-text">Fertilizer - <strong>{{element.manureWeightPerBag}} Kg</strong>
+              </div>
             </div>
             <div *ngIf="element.salesInvoiceType === 'FEED'" class="table-content-wrapper">
               <img class="table-content-icon" src='./assets/flaticon/feed.png'>
@@ -211,7 +227,9 @@
               </div>
             </div>
           </td>
-          <td mat-footer-cell *matFooterCellDef></td>
+          <ng-container>
+            <td mat-footer-cell *matFooterCellDef></td>
+          </ng-container>
         </ng-container>
 
         <ng-container matColumnDef="quantity">
@@ -228,44 +246,62 @@
               {{element.quantity}}
             </div>
           </td>
-          <td mat-footer-cell *matFooterCellDef>
-            <div *ngIf="salesInvoiceType === 'EGG' || !salesInvoiceType">
-              <span><strong>Eggs:</strong> </span>
-              <div class="ml-1 mtx-5"><strong>Tie:</strong> {{getTotalQuantityEggTie()}}</div>
-              <div class="ml-1 mtx-5"><strong>Tray:</strong> {{getTotalQuantityEggTray()}}</div>
-              <div class="ml-1 mtx-5 mbx-5"><strong>Piece:</strong> {{getTotalQuantityEggPiece()}}</div>
-            </div>
+          <ng-container>
+            <td mat-footer-cell *matFooterCellDef>
+              <div *ngIf="salesInvoiceType === 'EGG' || !salesInvoiceType">
+                <span><strong>Eggs:</strong> </span>
+                <div class="ml-1 mtx-5"><strong>Tie:</strong> {{getTotalQuantityEggTie()}}</div>
+                <div class="ml-1 mtx-5"><strong>Tray:</strong> {{getTotalQuantityEggTray()}}</div>
+                <div class="ml-1 mtx-5 mbx-5"><strong>Piece:</strong> {{getTotalQuantityEggPiece()}}</div>
+              </div>
 
-            <div class="mbx-5" *ngIf="salesInvoiceType === 'FLOCK' || !salesInvoiceType">
-              <span><strong>Flock:</strong> {{getTotalQuantityFlock()}}</span>
-            </div>
+              <div class="mbx-5" *ngIf="salesInvoiceType === 'FLOCK' || !salesInvoiceType">
+                <span><strong>Flock:</strong> {{getTotalQuantityFlock()}}</span>
+              </div>
 
-            <div class="mbx-5" *ngIf="salesInvoiceType === 'FEED' || !salesInvoiceType">
-              <span><strong>Feed:</strong> {{getTotalQuantityFeed()}} - Bags</span>
-            </div>
+              <div class="mbx-5" *ngIf="salesInvoiceType === 'FEED' || !salesInvoiceType">
+                <span><strong>Feed:</strong> {{getTotalQuantityFeed()}} - Bags</span>
+              </div>
 
-            <div class="mbx-5" *ngIf="salesInvoiceType === 'MANURE' || !salesInvoiceType">
-              <span><strong>Fertilizer:</strong> {{getTotalQuantityManure()}} - Bags</span>
-            </div>
-          </td>
+              <div class="mbx-5" *ngIf="salesInvoiceType === 'MANURE' || !salesInvoiceType">
+                <span><strong>Fertilizer:</strong> {{getTotalQuantityManure()}} - Bags</span>
+              </div>
+            </td>
+          </ng-container>
         </ng-container>
 
         <ng-container matColumnDef="price">
           <th mat-header-cell *matHeaderCellDef mat-sort-header="price"> Price </th>
           <td mat-cell *matCellDef="let element"> {{element.price | number :'1.2-2'}} </td>
-          <td mat-footer-cell *matFooterCellDef>{{getTotalPrice() | number :'1.2-2'}}</td>
+          <ng-container>
+            <td mat-footer-cell *matFooterCellDef>{{getTotalPrice() | number :'1.2-2'}}</td>
+          </ng-container>
         </ng-container>
 
         <ng-container matColumnDef="totalPrice">
           <th mat-header-cell *matHeaderCellDef mat-sort-header="totalPrice"> Total Price </th>
           <td mat-cell *matCellDef="let element"> {{element.totalPrice | number :'1.2-2'}} </td>
-          <td mat-footer-cell *matFooterCellDef>{{getTotalTotalPrice() | number :'1.2-2'}}</td>
+          <ng-container>
+            <td mat-footer-cell *matFooterCellDef>{{getTotalTotalPrice() | number :'1.2-2'}}</td>
+          </ng-container>
         </ng-container>
 
         <ng-container matColumnDef="soldAt">
           <th mat-header-cell *matHeaderCellDef mat-sort-header="soldAt"> Sold At </th>
           <td mat-cell *matCellDef="let element"> {{element.soldAt | number :'1.2-2'}} </td>
-          <td mat-footer-cell *matFooterCellDef>{{getTotalSoldAt() | number :'1.2-2'}}</td>
+          <ng-container>
+            <td mat-footer-cell *matFooterCellDef>{{getTotalSoldAt() | number :'1.2-2'}}</td>
+          </ng-container>\
+        </ng-container>
+
+        <ng-container matColumnDef="internal">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="internal"> Internal </th>
+          <td mat-cell *matCellDef="let element">
+            <span *ngIf="element.internal">{{element.soldAt * -1 | number :'1.2-2'}}</span>
+          </td>
+          <ng-container>
+            <td mat-footer-cell *matFooterCellDef>{{getTotalInternal() | number :'1.2-2'}}</td>
+          </ng-container>
         </ng-container>
 
         <ng-container matColumnDef="return">
@@ -284,44 +320,58 @@
               </div>
             </div>
           </td>
-          <td mat-footer-cell *matFooterCellDef>
-            <div *ngIf="salesInvoiceType === 'EGG' || !salesInvoiceType">
-              <span><strong>Eggs:</strong> </span>
-              <div class="ml-1 mtx-5 mbx-5"><strong>Piece:</strong> {{getTotalReturnQuantityEggPiece()}}</div>
-            </div>
+          <ng-container>
+            <td mat-footer-cell *matFooterCellDef>
+              <div *ngIf="salesInvoiceType === 'EGG' || !salesInvoiceType">
+                <span><strong>Eggs:</strong> </span>
+                <div class="ml-1 mtx-5 mbx-5"><strong>Piece:</strong>
+                  {{getTotalReturnQuantityEggPiece()}}</div>
+              </div>
 
-            <div class="mbx-5" *ngIf="salesInvoiceType === 'FLOCK' || !salesInvoiceType">
-              <span><strong>Flock:</strong> {{getTotalReturnQuantityFlock()}}</span>
-            </div>
+              <div class="mbx-5" *ngIf="salesInvoiceType === 'FLOCK' || !salesInvoiceType">
+                <span><strong>Flock:</strong> {{getTotalReturnQuantityFlock()}}</span>
+              </div>
 
-            <div class="mbx-5" *ngIf="salesInvoiceType === 'FEED' || !salesInvoiceType">
-              <span><strong>Feed:</strong> {{getTotalReturnQuantityFeed()}} - Bags</span>
-            </div>
+              <div class="mbx-5" *ngIf="salesInvoiceType === 'FEED' || !salesInvoiceType">
+                <span><strong>Feed:</strong> {{getTotalReturnQuantityFeed()}} - Bags</span>
+              </div>
 
-            <div class="mbx-5" *ngIf="salesInvoiceType === 'MANURE' || !salesInvoiceType">
-              <span><strong>Fertilizer:</strong> {{getTotalReturnQuantityManure()}} - Bags</span>
-            </div>
-          </td>
+              <div class="mbx-5" *ngIf="salesInvoiceType === 'MANURE' || !salesInvoiceType">
+                <span><strong>Fertilizer:</strong> {{getTotalReturnQuantityManure()}} - Bags</span>
+              </div>
+            </td>
+          </ng-container>
         </ng-container>
 
         <ng-container matColumnDef="returnTotalPrice">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header="returnTotalPrice"> Returns Total Price </th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="returnTotalPrice"> Returns Total
+            Price </th>
           <td mat-cell *matCellDef="let element">
             {{getTotalPriceForReturn(element.returnInvoiceLineDetailsDtos) | number :'1.2-2'}}
           </td>
-          <td mat-footer-cell *matFooterCellDef>{{getTableTotalPriceForReturn() | number :'1.2-2'}}</td>
+          <ng-container>
+            <td mat-footer-cell *matFooterCellDef>{{getTableTotalPriceForReturn() | number :'1.2-2'}}
+            </td>
+          </ng-container>
+
         </ng-container>
 
         <ng-container matColumnDef="balance">
           <th mat-header-cell *matHeaderCellDef mat-sort-header="balance"> Balance </th>
-          <td mat-cell *matCellDef="let element"> {{getBalance(element.soldAt,element.returnInvoiceLineDetailsDtos) |
-            number :'1.2-2'}} </td>
-          <td mat-footer-cell *matFooterCellDef>{{getTableTotalBalance() | number :'1.2-2'}}</td>
+          <td mat-cell *matCellDef="let element">
+            {{getBalance(element.internal, element.soldAt, element.returnInvoiceLineDetailsDtos) |
+            number :'1.2-2'}}
+          </td>
+          <ng-container>
+            <td mat-footer-cell *matFooterCellDef>{{getTableTotalBalance() | number :'1.2-2'}}</td>
+          </ng-container>
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-        <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+        <ng-container>
+          <tr mat-footer-row *matFooterRowDef="displayedColumns" [hidden]="!showSummary"></tr>
+        </ng-container>
       </table>
     </div>
   </ion-card>

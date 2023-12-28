@@ -177,11 +177,13 @@ export class FeedSaleDetailsComponent implements OnInit {
     isNewCustomer ? this.feedSaleForm?.get("customer.lastName")?.enable() : this.feedSaleForm?.get("customer.lastName")?.disable();
     isNewCustomer ? this.feedSaleForm?.get("customer.address")?.enable() : this.feedSaleForm?.get("customer.address")?.disable();
     isNewCustomer ? this.feedSaleForm?.get("customer.telephoneNumber")?.enable() : this.feedSaleForm?.get("customer.telephoneNumber")?.disable();
+    isNewCustomer ? this.feedSaleForm?.get("customer.internal")?.enable() : this.feedSaleForm?.get("customer.internal")?.disable();
     if (this.isNewCustomer) {
       this.feedSaleForm?.get("customer.firstName")?.setValue("");
       this.feedSaleForm?.get("customer.lastName")?.setValue("");
       this.feedSaleForm?.get("customer.address")?.setValue("");
       this.feedSaleForm?.get("customer.telephoneNumber")?.setValue("");
+      this.feedSaleForm?.get("customer.internal")?.setValue(false);
     }
   }
 
@@ -193,7 +195,8 @@ export class FeedSaleDetailsComponent implements OnInit {
         firstName: new FormControl({ value: '', disabled: !this.isNewCustomer }, Validators.compose([Validators.required])),
         lastName: new FormControl({ value: '', disabled: !this.isNewCustomer }, Validators.compose([Validators.required])),
         address: new FormControl({ value: '', disabled: !this.isNewCustomer }),
-        telephoneNumber: new FormControl({ value: '', disabled: !this.isNewCustomer }, Validators.compose([Validators.required, Validators.pattern("^[0-9]*$"),]))
+        telephoneNumber: new FormControl({ value: '', disabled: !this.isNewCustomer }, Validators.compose([Validators.required, Validators.pattern("^[0-9]*$")])),
+        internal: new FormControl({ value: false, disabled: !this.isNewCustomer }, Validators.compose([Validators.required])),
       })
     });
   }
@@ -220,7 +223,7 @@ export class FeedSaleDetailsComponent implements OnInit {
             size: this.size,
             sortBy: this.sortBy,
             sortOrder: this.sortOrder.toUpperCase(),
-            name: value
+            nameTel: value
           }
           return this.customerApiService.search(name).pipe(
             finalize(() => {
@@ -249,7 +252,8 @@ export class FeedSaleDetailsComponent implements OnInit {
       lastName: null,
       address: null,
       telephoneNumber: null,
-      totalAmountDue: null
+      totalAmountDue: null,
+      internal: null,
     };
   }
 
@@ -259,6 +263,7 @@ export class FeedSaleDetailsComponent implements OnInit {
     this.feedSaleForm?.get("customer.lastName")?.setValue("");
     this.feedSaleForm?.get("customer.address")?.setValue("");
     this.feedSaleForm?.get("customer.telephoneNumber")?.setValue("");
+    this.feedSaleForm?.get("customer.internal")?.setValue(false);
     this.initialiseSelectedCustomer();
   }
 
@@ -270,6 +275,7 @@ export class FeedSaleDetailsComponent implements OnInit {
     this.feedSaleForm?.get("customer.lastName")?.setValue(event.option.value.lastName);
     this.feedSaleForm?.get("customer.address")?.setValue(event.option.value.address);
     this.feedSaleForm?.get("customer.telephoneNumber")?.setValue(event.option.value.telephoneNumber);
+    this.feedSaleForm?.get("customer.internal")?.setValue(event.option.value.internal);
     this.feedSaleForm?.get("newCustomer")?.setValue(false);
   }
 
@@ -416,6 +422,10 @@ export class FeedSaleDetailsComponent implements OnInit {
     return (this.selectedCustomer != null && this.selectedCustomer.id != null) || (this.isNewCustomer && this.feedSaleForm?.get("customer.telephoneNumber")?.value != '');
   }
 
+  public checkIfInternal(): boolean {
+    return (this.selectedCustomer != null && this.selectedCustomer.id != null && this.selectedCustomer.internal) || (this.isNewCustomer && this.feedSaleForm?.get("customer.telephoneNumber")?.value != '' && this.feedSaleForm?.get("customer.internal")?.value);
+  }
+
   addPaymentFormGroup() {
     return this.formBuilder.group({
       amountPaid: new FormControl(0, Validators.compose([
@@ -480,6 +490,7 @@ export class FeedSaleDetailsComponent implements OnInit {
         Validators.min(0),
         Validators.max(this.subTotal),
       ])),
+      internal: new FormControl({ value: this.checkIfInternal(), disabled: false }, Validators.compose([Validators.required])),
       payments: this.formBuilder.array([
         this.addPaymentFormGroup()
       ])
@@ -538,9 +549,11 @@ export class FeedSaleDetailsComponent implements OnInit {
         firstName: null,
         lastName: null,
         address: null,
+        internal: null,
         telephoneNumber: null,
         totalAmountDue: null,
       },
+      internal: null,
       paymentSaveDtos: [],
       newCustomer: false,
       driverId: null,
@@ -562,7 +575,8 @@ export class FeedSaleDetailsComponent implements OnInit {
         totalAmountDue: null,
       },
       feedSaleDetailsDtos: this.initialiseFeedSaleStocks(),
-      paymentSaveDtos: this.paymentForm.value.payments,
+      internal: this.paymentForm?.get("internal")?.value,
+      paymentSaveDtos: !this.paymentForm?.get("internal")?.value ? this.paymentForm.value.payments : [],
       newCustomer: this.isNewCustomer,
       driverId: this.selectedDriver?.id,
       salesInvoiceCategory: this.salesInvoiceCategory,

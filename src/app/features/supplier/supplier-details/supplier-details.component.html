@@ -32,13 +32,18 @@
             <div class="form-array-index">
               <h6>Supplier {{i + 1}}</h6>
               <ion-button *ngIf="supplierDetailsFields != null && supplierDetailsFields.length > 1"
-                (click)="removeSupplierDetails(i)" class="delete-product-btn" color="gunung-nago-warehouse"><span class="material-icons">delete</span></ion-button>
+                (click)="removeSupplierDetails(i)" class="delete-product-btn" color="gunung-nago-warehouse"><span
+                  class="material-icons">delete</span></ion-button>
             </div>
             <ion-row>
               <ion-col size-xs="12" size-md="6">
               </ion-col>
             </ion-row>
             <ion-row>
+              <ion-col size-xs="12" size-md="12">
+                <ion-toggle labelPlacement="start" class="toggle" formControlName="internal"
+                  color="gunung-nago-report">Internal*</ion-toggle>
+              </ion-col>
               <ion-col size-xs="12" size-md="6">
                 <ion-input color="gunung-nago-primary" label="Name*" label-placement="floating" fill="outline"
                   type="text" clear-input="true" formControlName="name" required="true"></ion-input>

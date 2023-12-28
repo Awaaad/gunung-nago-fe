@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { LoginParamDto } from 'generated-src/model';
+import { FarmDto, LoginParamDto } from 'generated-src/model';
 import { SecurityApiService } from 'src/app/shared/apis/security.api.service';
 import { LoginLogoutService } from 'src/app/shared/auths/login.logout.service';
 import { EmitterService } from 'src/app/shared/emitters/emitter.service';
@@ -18,6 +18,8 @@ export class LoginComponent implements OnInit {
   formLogin: FormGroup;
   loggedIn: boolean = false;
   submitted = false;
+  public farms: FarmDto[] = [];
+  public selectedFarm!: number;
 
   errorMessages = {
     username: [
@@ -48,16 +50,28 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.farms = [];
+  }
+
+  ionViewWillEnter() {
+    this.farms = [];
+  }
+
+  public getFarmsByUsername(): void {
+    this.securityApiService.findAllFarmsByUsername(this.formLogin.get('username')?.value).subscribe(farms => {
+      this.farms = farms;
+      if (this.farms.length === 1) {
+        this.loginSingleFarm(this.farms[0].id);
+      }
+    })
+  }
 
   public login(): void {
     const loginParam: LoginParamDto = {
       username: this.formLogin.get('username')?.value,
       password: this.formLogin.get('password')?.value,
-      farmId: 1
-    }
-    if (loginParam.username === 'enggi') {
-      loginParam.farmId = 2
+      farmId: this.selectedFarm
     }
     this.submitted = true;
     if (this.formLogin.invalid) {
@@ -69,25 +83,58 @@ export class LoginComponent implements OnInit {
           localStorage.setItem('id', JSON.stringify(data.userDto.id));
           localStorage.setItem('username', data.userDto.username);
           localStorage.setItem('cashier', data.userDto.firstName);
-          localStorage.setItem('role', data.userDto.roles[0].role);
+          localStorage.setItem('role', JSON.stringify(data.userDto.roles.map(role => role.role)));
           localStorage.setItem('token', data.token);
-          if (data.userDto.username === 'enggi') {
-            const user = {
-              username: data.userDto.username,
-              role: ['ADMIN'],
-              farmId: 2
-            }
-            this.loginLogoutService.loginUser(user);
-          } else {
-            const user = {
-              username: data.userDto.username,
-              role: ['ADMIN'],
-              farmId: 1
-            }
-            this.loginLogoutService.loginUser(user);
+          const user = {
+            username: data.userDto.username,
+            role: data.userDto.roles.map(role => role.role),
+            farmId: this.selectedFarm
           }
+          this.loginLogoutService.loginUser(user);
 
-          if (localStorage.getItem('role') === 'ADMIN') {
+          const roles: any = localStorage.getItem('role');
+          if (JSON.parse(roles).includes('ADMIN')) {
+            this.router.navigateByUrl('/home');
+          } else if (localStorage.getItem('role') === 'CASHIER') {
+            this.router.navigateByUrl(`/point-of-sale/pos/${data.userDto.firstName}/${data.userDto.roles[0].role}`);
+          }
+        }
+      }, error => {
+        localStorage.clear();
+        this.utilService.unsuccessMsg('Invalid Username or Password', 'danger');
+      }
+      );
+    }
+  }
+
+  public loginSingleFarm(farmId: number): void {
+    const loginParam: LoginParamDto = {
+      username: this.formLogin.get('username')?.value,
+      password: this.formLogin.get('password')?.value,
+      farmId: farmId
+    }
+    this.submitted = true;
+    if (this.formLogin.invalid) {
+      this.utilService.unsuccessMsg('Invalid Username or Password', 'danger');
+    } else {
+      this.loggedIn = true;
+      this.securityApiService.authenticateUser(loginParam).subscribe(data => {
+        {
+          localStorage.setItem('id', JSON.stringify(data.userDto.id));
+          localStorage.setItem('username', data.userDto.username);
+          localStorage.setItem('cashier', data.userDto.firstName);
+          localStorage.setItem('role', JSON.stringify(data.userDto.roles.map(role => role.role)));
+          localStorage.setItem('token', data.token);
+          const user = {
+            username: data.userDto.username,
+            role: data.userDto.roles.map(role => role.role),
+            farmId: farmId
+          }
+          this.loginLogoutService.loginUser(user);
+
+          const roles: any = localStorage.getItem('role');
+          console.log(JSON.parse(roles).includes('ADMIN'));
+          if (JSON.parse(roles).includes('ADMIN')) {
             this.router.navigateByUrl('/home');
           } else if (localStorage.getItem('role') === 'CASHIER') {
             this.router.navigateByUrl(`/point-of-sale/pos/${data.userDto.firstName}/${data.userDto.roles[0].role}`);

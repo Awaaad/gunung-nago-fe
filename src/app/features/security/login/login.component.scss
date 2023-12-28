@@ -5,6 +5,15 @@
     // background-attachment: fixed;
     // background-size: 100% 100%;
 
+    ::ng-deep .mdc-label {
+        margin: 0 !important;
+    }
+    
+    ::ng-deep .mat-mdc-radio-button .mdc-form-field {
+        display: flex;
+        flex-direction: column-reverse;
+    }
+    
     .login-wrapper {
         margin: 0;
         position: absolute;
@@ -88,6 +97,7 @@
         @media only screen and (min-width: 992px) {
             max-width: 75%;
             margin: 0 auto;
+            min-width: 33em;
         }
 
     }
@@ -119,4 +129,47 @@ ion-card-header {
         font-weight: 500;
         font-size: 1.5em;
     }
+}
+
+.farm {
+    width: 7em;
+
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+.farm-section {
+    text-align: center;
+    color: black;
+    width: 11em;
+}
+
+.radio-group-farm {
+    display: flex;
+    justify-content: center;
+}
+
+.radio-btn-farm {
+    margin-right: 3em;
+    margin-left: 3em;
+}
+
+.login-card {
+    justify-content: center;
+}
+
+.mat-mdc-radio-button.mat-primary {
+    --mdc-radio-disabled-selected-icon-color: #000;
+    --mdc-radio-disabled-unselected-icon-color: #000;
+    --mdc-radio-unselected-hover-icon-color: #212121;
+    --mdc-radio-unselected-icon-color: rgba(0, 0, 0, 0.54);
+    --mdc-radio-unselected-pressed-icon-color: rgba(0, 0, 0, 0.54);
+    --mdc-radio-selected-focus-icon-color: var(--ion-color-positive-btn);
+    --mdc-radio-selected-hover-icon-color: var(--ion-color-positive-btn);
+    --mdc-radio-selected-icon-color: var(--ion-color-positive-btn);
+    --mdc-radio-selected-pressed-icon-color: var(--ion-color-positive-btn);
+    --mat-radio-ripple-color: #000;
+    --mat-radio-checked-ripple-color: var(--ion-color-positive-btn);
+    --mat-radio-disabled-label-color: rgba(0, 0, 0, 0.38);
 }

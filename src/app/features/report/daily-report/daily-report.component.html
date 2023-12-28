@@ -30,7 +30,7 @@
       <ion-row>
         <ion-col size-xs="12" size-md="3">
           <mat-form-field class="date-full-width" appearance="outline">
-            <mat-label>Choose a date</mat-label>
+            <mat-label>Report Date</mat-label>
             <input matInput [matDatepicker]="picker" [max]="today" [(ngModel)]="date"
               (ngModelChange)="changeReportDate($event)">
             <mat-hint>DD/MM/YYYY</mat-hint>
@@ -53,7 +53,7 @@
   </ion-card>
 
   <ion-card>
-    <div class="mat-elevation-z8 table-responsive">
+    <div class="mat-elevation-z8 table-responsive daily-report">
       <table mat-table [dataSource]="dailyReport">
 
         <ng-container matColumnDef="cageName">
@@ -75,50 +75,50 @@
         </ng-container>
 
         <ng-container matColumnDef="flockAge">
-          <th mat-header-cell *matHeaderCellDef> Umur Ayam </th>
+          <th mat-header-cell *matHeaderCellDef> Flock Age </th>
           <td mat-cell *matCellDef="let element"> {{element.flockAge}} </td>
           <td mat-footer-cell *matFooterCellDef></td>
         </ng-container>
 
         <ng-container matColumnDef="initialFlockQuantity">
-          <th mat-header-cell *matHeaderCellDef> Populasi </th>
+          <th mat-header-cell *matHeaderCellDef> Initial Population </th>
           <td mat-cell *matCellDef="let element"> {{element.deadChicken + element.sterileChicken + element.goodChicken}}
           </td>
           <td mat-footer-cell *matFooterCellDef></td>
         </ng-container>
 
         <ng-container matColumnDef="deadChicken">
-          <th mat-header-cell *matHeaderCellDef> Mati </th>
+          <th mat-header-cell *matHeaderCellDef> Dead </th>
           <td mat-cell *matCellDef="let element"> {{element.deadChicken}} </td>
           <td mat-footer-cell *matFooterCellDef> {{getTotalDeadChicken()}} </td>
         </ng-container>
 
         <ng-container matColumnDef="sterileChicken">
-          <th mat-header-cell *matHeaderCellDef> Afkir </th>
+          <th mat-header-cell *matHeaderCellDef> Sterile </th>
           <td mat-cell *matCellDef="let element"> {{element.sterileChicken}} </td>
           <td mat-footer-cell *matFooterCellDef> {{getTotalSterileChicken()}} </td>
         </ng-container>
 
         <ng-container matColumnDef="goodChicken">
-          <th mat-header-cell *matHeaderCellDef> Sisa </th>
+          <th mat-header-cell *matHeaderCellDef> Good </th>
           <td mat-cell *matCellDef="let element"> {{element.goodChicken}} </td>
           <td mat-footer-cell *matFooterCellDef> {{getTotalGoodChicken()}} </td>
         </ng-container>
 
         <ng-container matColumnDef="goodEggsInTie">
-          <th mat-header-cell *matHeaderCellDef> Ikat </th>
+          <th mat-header-cell *matHeaderCellDef> Tie </th>
           <td mat-cell *matCellDef="let element"> {{element.goodEggsInTie}} </td>
           <td mat-footer-cell *matFooterCellDef> {{getTotalGoodEggsInTie()}} </td>
         </ng-container>
 
         <ng-container matColumnDef="goodEggsNotInTie">
-          <th mat-header-cell *matHeaderCellDef> Butir </th>
+          <th mat-header-cell *matHeaderCellDef> Piece </th>
           <td mat-cell *matCellDef="let element"> {{element.goodEggsNotInTie}} </td>
           <td mat-footer-cell *matFooterCellDef> {{getTotalGoodEggsNotInTie()}} </td>
         </ng-container>
 
         <ng-container matColumnDef="badEggsNotInTray">
-          <th mat-header-cell *matHeaderCellDef> Pcah </th>
+          <th mat-header-cell *matHeaderCellDef> Bad </th>
           <td mat-cell *matCellDef="let element"> {{element.badEggsNotInTray}} </td>
           <td mat-footer-cell *matFooterCellDef> {{getTotalBadEggsNotInTray()}} </td>
         </ng-container>
@@ -130,7 +130,7 @@
         </ng-container>
 
         <ng-container matColumnDef="totalEggs">
-          <th mat-header-cell *matHeaderCellDef>Total Butir </th>
+          <th mat-header-cell *matHeaderCellDef>Total Eggs (Pieces) </th>
           <td mat-cell *matCellDef="let element"> {{element.totalEggs}} </td>
           <td mat-footer-cell *matFooterCellDef> {{getTotalEggs()}} </td>
           <td mat-footer-cell *matFooterCellDef></td>
@@ -166,33 +166,33 @@
           <td mat-footer-cell *matFooterCellDef></td>
         </ng-container>
 
-
         <ng-container matColumnDef="healthReportDtos">
           <th mat-header-cell *matHeaderCellDef> Health </th>
           <td mat-cell *matCellDef="let element">
             <div *ngFor="let item of element.healthReportDtos">
               {{item.healthProductName}}
               <!-- <span *ngIf="item.boxesUsed > 0 && item.boxesUsed != null">| Boxes used: {{item.boxesUsed}} </span><br> -->
-              <span *ngIf="item.unitsUsed > 0 && item.unitsUsed != null">| Units used: {{item.unitsUsed}}</span>
+              <span *ngIf="item.unitsUsed > 0 && item.unitsUsed != null">| <strong>Units used:</strong>
+                {{item.unitsUsed}}</span>
             </div>
           </td>
           <td mat-footer-cell *matFooterCellDef></td>
         </ng-container>
 
         <ng-container matColumnDef="goodEggsInTray">
-          <th mat-header-cell *matHeaderCellDef> egg Tray </th>
+          <th mat-header-cell *matHeaderCellDef> Egg Tray </th>
           <td mat-cell *matCellDef="let element"> {{element.eggTray}} </td>
           <td mat-footer-cell *matFooterCellDef></td>
         </ng-container>
 
         <ng-container matColumnDef="bagsEaten">
-          <th mat-header-cell *matHeaderCellDef> pakan <br> (karung) </th>
+          <th mat-header-cell *matHeaderCellDef> Feed (Bags eaten) <br> (karung) </th>
           <td mat-cell *matCellDef="let element"> {{element.bagsEaten}} </td>
           <td mat-footer-cell *matFooterCellDef></td>
         </ng-container>
 
         <ng-container matColumnDef="comment">
-          <th mat-header-cell *matHeaderCellDef> comment </th>
+          <th mat-header-cell *matHeaderCellDef> Comments </th>
           <td mat-cell *matCellDef="let element"> {{element.comment}} </td>
           <td mat-footer-cell *matFooterCellDef></td>
         </ng-container>
@@ -205,16 +205,16 @@
 
         <!-- Header row second group -->
         <ng-container matColumnDef="header-row-second-group">
-          <th mat-header-cell *matHeaderCellDef [attr.colspan]="3"> Moralitas </th>
+          <th mat-header-cell *matHeaderCellDef [attr.colspan]="3"> Morality </th>
         </ng-container>
         <ng-container matColumnDef="header-row-third-group">
-          <th mat-header-cell *matHeaderCellDef [attr.colspan]="3"> Produksi </th>
+          <th mat-header-cell *matHeaderCellDef [attr.colspan]="3"> Production </th>
         </ng-container>
         <ng-container matColumnDef="header-row-forth-group">
           <th mat-header-cell *matHeaderCellDef [attr.colspan]="3"> </th>
         </ng-container>
         <ng-container matColumnDef="header-row-fifth-group">
-          <th mat-header-cell *matHeaderCellDef [attr.colspan]="3"> Pemakalan </th>
+          <th mat-header-cell *matHeaderCellDef [attr.colspan]="3"> Usage </th>
         </ng-container>
         <ng-container matColumnDef="header-row-sixth-group">
           <th mat-header-cell *matHeaderCellDef [attr.colspan]="1"> </th>
@@ -231,4 +231,315 @@
       </table>
     </div>
   </ion-card>
+
+  <ion-row>
+    <ion-col ion-col size-xs="12" size-md="12">
+      <div class="divider-wrapper">
+        <div class="flock-section">
+          <img class="survey-divider-img" src='./assets/flaticon/flock.png'>
+        </div>
+        <div class="divider-text">
+          <ion-item-divider>
+            <ion-label>Flock</ion-label>
+          </ion-item-divider>
+        </div>
+      </div>
+      <ion-card class="margin-x-0">
+        <div class="mat-elevation-z8 table-responsive daily-flock-report">
+          <table mat-table [dataSource]="dailyReport">
+
+            <ng-container matColumnDef="cageName">
+              <th mat-header-cell *matHeaderCellDef> Cage Name</th>
+              <td mat-cell *matCellDef="let element"> {{element.cageName}} </td>
+              <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+
+            <ng-container matColumnDef="surveyDate">
+              <th mat-header-cell *matHeaderCellDef> Survey Date </th>
+              <td mat-cell *matCellDef="let element"> {{element.surveyDate | date:'dd-MM-yyyy'}} </td>
+              <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+
+            <ng-container matColumnDef="flockCategory">
+              <th mat-header-cell *matHeaderCellDef> Category </th>
+              <td mat-cell *matCellDef="let element"> {{element.flockCategory}} </td>
+              <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+
+            <ng-container matColumnDef="flockAge">
+              <th mat-header-cell *matHeaderCellDef> Flock Age </th>
+              <td mat-cell *matCellDef="let element"> {{element.flockAge}} </td>
+              <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+
+            <ng-container matColumnDef="initialFlockQuantity">
+              <th mat-header-cell *matHeaderCellDef> Initial Population </th>
+              <td mat-cell *matCellDef="let element"> {{element.deadChicken + element.sterileChicken +
+                element.goodChicken}}
+              </td>
+              <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+
+            <ng-container matColumnDef="deadChicken">
+              <th mat-header-cell *matHeaderCellDef> Dead </th>
+              <td mat-cell *matCellDef="let element"> {{element.deadChicken}} </td>
+              <td mat-footer-cell *matFooterCellDef> {{getTotalDeadChicken()}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="sterileChicken">
+              <th mat-header-cell *matHeaderCellDef> Sterile </th>
+              <td mat-cell *matCellDef="let element"> {{element.sterileChicken}} </td>
+              <td mat-footer-cell *matFooterCellDef> {{getTotalSterileChicken()}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="goodChicken">
+              <th mat-header-cell *matHeaderCellDef> Good </th>
+              <td mat-cell *matCellDef="let element"> {{element.goodChicken}} </td>
+              <td mat-footer-cell *matFooterCellDef> {{getTotalGoodChicken()}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="aliveChicken">
+              <th mat-header-cell *matHeaderCellDef> Alive </th>
+              <td mat-cell *matCellDef="let element"> {{element.aliveChicken}} </td>
+              <td mat-footer-cell *matFooterCellDef> {{getTotalAliveChicken()}} </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedFlockColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedFlockColumns;"></tr>
+            <tr mat-footer-row *matFooterRowDef="displayedFlockColumns"></tr>
+
+            <ng-container matColumnDef="amountOfChickenWeighted">
+              <th mat-header-cell *matHeaderCellDef> Amount of Chicken Weighted </th>
+              <td mat-cell *matCellDef="let element"> {{element.amountOfChickenWeighted}} </td>
+              <td mat-footer-cell *matFooterCellDef> </td>
+            </ng-container>
+
+            <ng-container matColumnDef="totalWeight">
+              <th mat-header-cell *matHeaderCellDef> Total Weight (KG)</th>
+              <td mat-cell *matCellDef="let element"> {{element.totalWeight}} </td>
+              <td mat-footer-cell *matFooterCellDef> </td>
+            </ng-container>
+
+            <ng-container matColumnDef="averageWeight">
+              <th mat-header-cell *matHeaderCellDef> Average Weight (KG)</th>
+              <td mat-cell *matCellDef="let element"> {{element.averageWeight}} </td>
+              <td mat-footer-cell *matFooterCellDef> </td>
+            </ng-container>
+
+          </table>
+        </div>
+      </ion-card>
+    </ion-col>
+  </ion-row>
+
+  <ion-row>
+    <ion-col ion-col size-xs="12" size-md="6">
+      <div class="divider-wrapper">
+        <div class="flock-section">
+          <img class="survey-divider-img" src='./assets/flaticon/eggs.png'>
+        </div>
+        <div class="divider-text">
+          <ion-item-divider>
+            <ion-label>Egg</ion-label>
+          </ion-item-divider>
+        </div>
+      </div>
+      <ion-card class="margin-x-0">
+        <div class="mat-elevation-z8 table-responsive daily-egg-report">
+          <table mat-table [dataSource]="dailyReport">
+
+            <ng-container matColumnDef="cageName">
+              <th mat-header-cell *matHeaderCellDef> Cage Name</th>
+              <td mat-cell *matCellDef="let element"> {{element.cageName}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="surveyDate">
+              <th mat-header-cell *matHeaderCellDef> Survey Date </th>
+              <td mat-cell *matCellDef="let element"> {{element.surveyDate | date:'dd-MM-yyyy'}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="flockCategory">
+              <th mat-header-cell *matHeaderCellDef> Category </th>
+              <td mat-cell *matCellDef="let element"> {{element.flockCategory}} </td>
+            </ng-container>
+
+
+            <ng-container matColumnDef="ikat">
+              <th mat-header-cell *matHeaderCellDef> Tie </th>
+              <td mat-cell *matCellDef="let element">
+                <div *ngFor="let eggCategory of element.eggCategoryStocks">
+                  <div><strong>{{eggCategory.name}}:</strong> {{eggCategory.quantity / 300 | number: '1.0-0'}}</div>
+                </div>
+              </td>
+              <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+
+            <ng-container matColumnDef="piece">
+              <th mat-header-cell *matHeaderCellDef> Piece </th>
+              <td mat-cell *matCellDef="let element">
+                <div *ngFor="let eggCategory of element.eggCategoryStocks">
+                  <div><strong>{{eggCategory.name}}:</strong> {{eggCategory.quantity % 300}}</div>
+                </div>
+              </td>
+              <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedEggColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedEggColumns;"></tr>
+          </table>
+        </div>
+      </ion-card>
+    </ion-col>
+
+    <ion-col ion-col size-xs="12" size-md="6">
+      <div class="divider-wrapper">
+        <div class="flock-section">
+          <img class="survey-divider-img" src='./assets/flaticon/feed.png'>
+        </div>
+        <div class="divider-text">
+          <ion-item-divider>
+            <ion-label>Feed</ion-label>
+          </ion-item-divider>
+        </div>
+      </div>
+      <ion-card class="margin-x-0">
+        <div class="mat-elevation-z8 table-responsive daily-feed-report">
+          <table mat-table [dataSource]="dailyReport">
+
+            <ng-container matColumnDef="cageName">
+              <th mat-header-cell *matHeaderCellDef> Cage Name</th>
+              <td mat-cell *matCellDef="let element"> {{element.cageName}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="surveyDate">
+              <th mat-header-cell *matHeaderCellDef> Survey Date </th>
+              <td mat-cell *matCellDef="let element"> {{element.surveyDate | date:'dd-MM-yyyy'}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="flockCategory">
+              <th mat-header-cell *matHeaderCellDef> Category </th>
+              <td mat-cell *matCellDef="let element"> {{element.flockCategory}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="flockFeedLineReportDtos">
+              <th mat-header-cell *matHeaderCellDef> Bags Allocated / Eaten / Left </th>
+              <td mat-cell *matCellDef="let element">
+                <div *ngFor="let feed of element.flockFeedLineReportDtos">
+                  {{feed.name}} {{feed.weight}} (KG) | <strong>Bags allocated</strong>
+                  ({{feed.createdDate | date:'dd-MM-yyyy HH:mm'}})<strong>:</strong> {{feed.bagsAllocated}} |
+                  <strong>Bags eaten: </strong> {{feed.bagsEaten}} |
+                  <strong>Bags left: {{feed.bagsLeft}}</strong>
+                </div>
+              </td>
+              <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedFeedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedFeedColumns;"></tr>
+          </table>
+        </div>
+      </ion-card>
+    </ion-col>
+  </ion-row>
+
+  <ion-row>
+    <ion-col ion-col size-xs="12" size-md="6">
+      <div class="divider-wrapper">
+        <div class="flock-section">
+          <img class="survey-divider-img" src='./assets/flaticon/health-products.png'>
+        </div>
+        <div class="divider-text">
+          <ion-item-divider>
+            <ion-label>Medicine / Vaccine</ion-label>
+          </ion-item-divider>
+        </div>
+      </div>
+      <ion-card class="margin-x-0">
+        <div class="mat-elevation-z8 table-responsive daily-health-report">
+          <table mat-table [dataSource]="dailyReport">
+
+            <ng-container matColumnDef="cageName">
+              <th mat-header-cell *matHeaderCellDef> Cage Name</th>
+              <td mat-cell *matCellDef="let element"> {{element.cageName}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="surveyDate">
+              <th mat-header-cell *matHeaderCellDef> Survey Date </th>
+              <td mat-cell *matCellDef="let element"> {{element.surveyDate | date:'dd-MM-yyyy'}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="flockCategory">
+              <th mat-header-cell *matHeaderCellDef> Category </th>
+              <td mat-cell *matCellDef="let element"> {{element.flockCategory}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="healthReportDtos">
+              <th mat-header-cell *matHeaderCellDef> Products / Quantity used </th>
+              <td mat-cell *matCellDef="let element">
+                <div *ngFor="let item of element.healthReportDtos">
+                  {{item.healthProductName}}
+                  <span *ngIf="item.unitsUsed > 0 && item.unitsUsed != null">| <strong>Units used:</strong>
+                    {{item.unitsUsed}}</span>
+                </div>
+              </td>
+              <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedHealthColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedHealthColumns;"></tr>
+          </table>
+        </div>
+      </ion-card>
+    </ion-col>
+
+    <ion-col ion-col size-xs="12" size-md="6">
+      <div class="divider-wrapper">
+        <div class="flock-section">
+          <img class="survey-divider-img" src='./assets/flaticon/manure-bag.png'>
+        </div>
+        <div class="divider-text">
+          <ion-item-divider>
+            <ion-label>Fertilizer</ion-label>
+          </ion-item-divider>
+        </div>
+      </div>
+      <ion-card class="margin-x-0">
+        <div class="mat-elevation-z8 table-responsive daily-feed-report">
+          <table mat-table [dataSource]="dailyReport">
+
+            <ng-container matColumnDef="cageName">
+              <th mat-header-cell *matHeaderCellDef> Cage Name</th>
+              <td mat-cell *matCellDef="let element"> {{element.cageName}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="surveyDate">
+              <th mat-header-cell *matHeaderCellDef> Survey Date </th>
+              <td mat-cell *matCellDef="let element"> {{element.surveyDate | date:'dd-MM-yyyy'}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="flockCategory">
+              <th mat-header-cell *matHeaderCellDef> Category </th>
+              <td mat-cell *matCellDef="let element"> {{element.flockCategory}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="manureStockDtos">
+              <th mat-header-cell *matHeaderCellDef> Bags Collected </th>
+              <td mat-cell *matCellDef="let element">
+                <div *ngFor="let manure of element.manureStockDtos">
+                  {{manure.weight}} (KG) | <strong>Bags collected by </strong> {{manure.collectedByFirstName}}
+                  {{manure.collectedByLastName}} <strong>on</strong>
+                  ({{manure.collectedDate | date:'dd-MM-yyyy HH:mm'}})
+                  <strong>:</strong> {{manure.bags}}
+                </div>
+              </td>
+              <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedManureColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedManureColumns;"></tr>
+          </table>
+        </div>
+      </ion-card>
+    </ion-col>
+  </ion-row>
 </ion-content>

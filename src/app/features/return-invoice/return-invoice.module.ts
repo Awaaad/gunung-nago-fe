@@ -20,6 +20,9 @@ import { PaymentApiService } from 'src/app/shared/apis/payment.api.service';
 import { ReturnInvoiceDetailsComponent } from './return-invoice-details/return-invoice-details.component';
 import { ReturnInvoiceListComponent } from './return-invoice-list/return-invoice-list.component';
 import { FileApiService } from 'src/app/shared/apis/file.api.service';
+import { EggCategoryApiService } from 'src/app/shared/apis/egg-category.api.service';
+import { FeedStockApiService } from 'src/app/shared/apis/feed-stock.api.service';
+import { FlockApiService } from 'src/app/shared/apis/flock.api.service';
 
 @NgModule({
   declarations: [ReturnInvoiceComponent, ReturnInvoiceListComponent, ReturnInvoiceDetailsComponent],
@@ -40,6 +43,6 @@ import { FileApiService } from 'src/app/shared/apis/file.api.service';
     MatButtonModule,
     MatAutocompleteModule,
   ],
-  providers: [SalesInvoiceApiService, TranslateService, ReturnApiService, PaymentApiService, FileApiService]
+  providers: [SalesInvoiceApiService, FlockApiService, EggCategoryApiService, FeedStockApiService, TranslateService, ReturnApiService, PaymentApiService, FileApiService]
 })
 export class ReturnInvoiceModule { }
