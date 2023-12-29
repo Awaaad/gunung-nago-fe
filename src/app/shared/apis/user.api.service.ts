@@ -12,7 +12,6 @@ export class UserApiService {
 
     constructor(private http: HttpClient) { }
 
-    // user
     public getAllUsers(): Observable<UserDto[]> {
         return this.http.get<UserDto[]>(this.baseUrl + '/all');
     }

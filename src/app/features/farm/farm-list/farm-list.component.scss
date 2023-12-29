@@ -1,0 +1,67 @@
+.input {
+    width: 100%;
+    padding-right: 10px;
+}
+
+table {
+    width: 100%;
+}
+
+th.mat-header-cell,
+td.mat-cell {
+    text-align: center;
+    border: 1px solid #CCC;
+    padding: 0 !important;
+}
+
+.table-responsive {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+}
+
+tbody {
+    overflow-x: scroll;
+}
+
+// .mat-mdc-table tbody,
+// .mat-mdc-table tfoot,
+.mat-mdc-table thead,
+.mat-mdc-cell,
+// .mat-mdc-footer-cell,
+// .mat-mdc-header-row,
+// .mat-mdc-row,
+// .mat-mdc-footer-row,
+// .mat-mdc-table 
+.mat-mdc-header-cell {
+    border: 1px solid #CCC;
+}
+
+.mat-mdc-cell:first-child {
+    border-left: 0;
+}
+
+.mat-mdc-cell:last-child {
+    border-right: 0;
+}
+
+.mdc-data-table__header-cell {
+    border-top: 0;
+}
+
+.mdc-data-table__header-cell:first-child {
+    border-left: 0;
+}
+
+.mdc-data-table__header-cell:last-child {
+    border-right: 0;
+}
+
+.mat-mdc-table .mdc-data-table__header-row {
+    background: var(--ion-color-gunung-nago-warehouse);
+    color: white;
+}
+
+.mdc-data-table__header-cell {
+    color: white;
+}

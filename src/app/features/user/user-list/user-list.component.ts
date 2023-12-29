@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
@@ -39,6 +39,7 @@ export class UserListComponent {
   public isModalOpen: boolean = false;
   public farms: FarmDto[] = [];
   public roles: RoleDto[] = [];
+  private password: any;
   public errorMessages = {
     firstName: [
       { type: 'required', message: 'First Name is required' },
@@ -119,8 +120,8 @@ export class UserListComponent {
       sortOrder: this.sortOrder.toUpperCase(),
     }
 
-    this.userSearchSubscription = this.userApiService.search(usersearchCriteriaDto).subscribe(suppliers => {
-      this.infiniteUsers = [...this.infiniteUsers, ...suppliers.content];
+    this.userSearchSubscription = this.userApiService.search(usersearchCriteriaDto).subscribe(users => {
+      this.infiniteUsers = [...this.infiniteUsers, ...users.content];
       this.users = new MatTableDataSource<UserDto>(this.infiniteUsers);
 
       if (event) {
@@ -166,7 +167,7 @@ export class UserListComponent {
       email: new FormControl({ value: userDetails.email, disabled: false }, Validators.compose([Validators.email])),
       phone: new FormControl({ value: userDetails.phone, disabled: false }, Validators.compose([Validators.required])),
       dateOfBirth: new FormControl({ value: userDetails.dateOfBirth, disabled: false }),
-      password: new FormControl({ value: userDetails.password, disabled: false }, Validators.compose([Validators.required])),
+      password: new FormControl({ value: "*****", disabled: false }, Validators.compose([Validators.required])),
       roles: new FormControl({ value: userDetails.roles.map(role => role.roleId), disabled: false }, Validators.compose([Validators.required])),
       farms: new FormControl({ value: userDetails.farms.map(farm => farm.id), disabled: false }, Validators.compose([Validators.required])),
     })
@@ -198,6 +199,11 @@ export class UserListComponent {
   }
 
   public formatEditUserDto(): void {
+    if (this.userEditForm.get("password")?.value === "*****") {
+      this.password = null;
+    } else {
+      this.password = this.userEditForm.get("password")?.value;
+    }
     this.editUserDto = {
       id: this.userEditForm.get("id")?.value,
       username: this.userEditForm.get("username")?.value,
@@ -207,7 +213,7 @@ export class UserListComponent {
       address: this.userEditForm.get("address")?.value,
       email: this.userEditForm.get("email")?.value,
       phone: this.userEditForm.get("phone")?.value,
-      password: this.userEditForm.get("password")?.value,
+      password: this.password,
       roles: this.userEditForm.get("roles")?.value.map((role: any) => {
         const roleDto: RoleDto = {
           roleId: role,

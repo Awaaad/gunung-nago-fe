@@ -44,7 +44,7 @@ export class TokenInterceptor implements HttpInterceptor {
                         this.unsuccessMsg();
                         setTimeout(() => {
                             const user = {
-                                username: 'loggedOut',
+                                username: '',
                                 role: [],
                                 farmId: 0
                             }

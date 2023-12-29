@@ -83,6 +83,10 @@ const routes: Routes = [
     loadChildren: () => import('./features/user/user.module').then(m => m.UserModule)
   },
   {
+    path: 'farm',
+    loadChildren: () => import('./features/farm/farm.module').then(m => m.FarmModule)
+  },
+  {
     path: '',
     redirectTo: 'security',
     pathMatch: 'full',

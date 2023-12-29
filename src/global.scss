@@ -274,6 +274,10 @@ strong {
     --height: 44em;
 }
 
+.farm-modal {
+    --height: 25em;
+}
+
 .btn-container-stock {
     display: flex;
     justify-content: end;
@@ -460,4 +464,34 @@ ion-toggle {
     --mat-radio-ripple-color: #000;
     --mat-radio-checked-ripple-color: var(--ion-color-positive-btn);
     --mat-radio-disabled-label-color: rgba(0, 0, 0, 0.38);
+}
+
+.nav-language {
+    margin-right: 6em;
+}
+
+
+input:-webkit-autofill,
+
+input:-webkit-autofill:hover,
+
+input:-webkit-autofill:focus input:-webkit-autofill,
+
+textarea:-webkit-autofill,
+
+textarea:-webkit-autofill:hover textarea:-webkit-autofill:focus,
+
+select:-webkit-autofill,
+
+select:-webkit-autofill:hover,
+
+select:-webkit-autofill:focus {
+
+    border: none !important;
+
+    -webkit-text-fill-color: black !important;
+
+    /* -webkit-box-shadow: 0 0 0px 1000px #FFFFFF inset; */
+
+    transition: background-color 5000s ease-in-out 0s;
 }

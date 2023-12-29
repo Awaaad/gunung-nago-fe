@@ -6,27 +6,25 @@
     <ion-title>
       <div class="router-links">
         <div class="title">
-          <img class="header-logo" src='./assets/flaticon/supplier.png'>
-          <h3 class="header-nav-products">Suppliers</h3>
+          <img class="header-logo" src='./assets/flaticon/farms.png'>
+          <h3 class="header-nav-products">Farms</h3>
         </div>
-        <div>
+        <div class="nav-language">
         </div>
       </div>
     </ion-title>
   </ion-toolbar>
 </ion-header>
-
 <ion-content [fullscreen]="false" class="ion-padding" [scrollEvents]="true" (ionScroll)="onScroll($event)">
   <div class="btn-container">
-    <ion-button color="neutral-btn" routerLink="/supplier/supplier-details"><ion-icon
-        name="add"></ion-icon></ion-button>
+    <ion-button color="neutral-btn" routerLink="/farm/farm-details"><ion-icon name="add"></ion-icon></ion-button>
   </div>
   <ion-card>
     <ion-card-content>
       <ion-row>
         <ion-col size-xs="12" size-md="6">
-          <ion-searchbar placeholder="Search by supplier name..." type="text" #supplierName
-            (ionInput)="searchBySupplierName(supplierName.value)"></ion-searchbar>
+          <ion-searchbar placeholder="Search by farm name..." type="text" #farmName
+            (ionInput)="searchByName(farmName.value)" autocomplete="off"></ion-searchbar>
         </ion-col>
         <ion-col size-xs="12" size-md="6">
           <div class="filters">
@@ -44,16 +42,11 @@
 
   <ion-card>
     <div class="mat-elevation-z8 table-responsive">
-      <table mat-table matSort (matSortChange)="sortData($event)" matSortDisableClear="true" [dataSource]="suppliers">
+      <table mat-table matSort (matSortChange)="sortData($event)" matSortDisableClear="true" [dataSource]="farms">
 
         <ng-container matColumnDef="name">
           <th mat-header-cell *matHeaderCellDef mat-sort-header="name"> Name </th>
           <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="email">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header="email"> Email </th>
-          <td mat-cell *matCellDef="let element"> {{element.email}} </td>
         </ng-container>
 
         <ng-container matColumnDef="address">
@@ -63,25 +56,8 @@
 
         <ng-container matColumnDef="telephoneNumber">
           <th mat-header-cell *matHeaderCellDef mat-sort-header="telephoneNumber"> Telephone Number </th>
-          <td mat-cell *matCellDef="let element">
-            <div class="telephone-column">
-              <strong>Number 1:</strong>{{element.telephoneNumber}}
-              <br>
-              <strong>Number 2:</strong>{{element.telephoneNumberTwo}}
-              <br>
-              <strong>Number 3:</strong>{{element.telephoneNumberThree}}
-            </div>
-          </td>
+          <td mat-cell *matCellDef="let element"> {{element.telephoneNumber}} </td>
         </ng-container>
-
-        <ng-container matColumnDef="internal">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header="internal"> Internal </th>
-          <td mat-cell *matCellDef="let element">
-            <img *ngIf="element.internal" src='./assets/flaticon/tick.png'>
-            <img *ngIf="!element.internal" src='./assets/flaticon/cross.png'>
-          </td>
-        </ng-container>
-
 
         <ng-container matColumnDef="edit">
           <th mat-header-cell *matHeaderCellDef> </th>
@@ -99,55 +75,46 @@
     </div>
   </ion-card>
   <ion-infinite-scroll threshold="100px" position="bottom" (ionInfinite)="loadData($event)">
-    <ion-infinite-scroll-content loadingSpinner="crescent" loadingText="Loading more suppliers...">
+    <ion-infinite-scroll-content loadingSpinner="crescent" loadingText="Loading more farms...">
     </ion-infinite-scroll-content>
   </ion-infinite-scroll>
 
-  <ion-modal (willDismiss)="onWillDismiss($event)" [isOpen]="isModalOpen" cssClass="supplier-modal"
-    backdropDismiss="true">
+  <ion-modal (willDismiss)="onWillDismiss($event)" [isOpen]="isModalOpen" cssClass="farm-modal" backdropDismiss="true">
     <ng-template>
       <ion-header>
         <ion-toolbar>
           <div class="title">
             <img class="header-logo ml-15" src='./assets/flaticon/edit.png'>
-            <h3 class="modal-header-text">Edit Supplier</h3>
+            <h3 class="modal-header-text">Edit Farm</h3>
           </div>
         </ion-toolbar>
       </ion-header>
       <ion-content [fullscreen]="false" class="ion-padding">
-        <form [formGroup]="supplierEditForm">
+        <form [formGroup]="farmEditForm">
           <ion-row>
-            <ion-col size-xs="12" size-md="12">
-              <ion-toggle labelPlacement="start" class="toggle" formControlName="internal"
-                color="gunung-nago-report">Internal*</ion-toggle>
-            </ion-col>
             <ion-col size-xs="12" size-md="12">
               <ion-input color="gunung-nago-primary" label="Name*" label-placement="floating" fill="outline" type="text"
                 clear-input="true" formControlName="name" required="true"></ion-input>
               <div class="error-messages">
                 <ng-container *ngFor="let error of errorMessages.name">
                   <div class="error-message"
-                    *ngIf="supplierEditForm.get('name')?.hasError(error.type) && (supplierEditForm.get('name')?.dirty || supplierEditForm.get('name')?.touched)">
+                    *ngIf="farmEditForm.get('name')?.hasError(error.type) && (farmEditForm.get('name')?.dirty || farmEditForm.get('name')?.touched)">
                     {{ error.message }}
                   </div>
                 </ng-container>
               </div>
             </ion-col>
             <ion-col size-xs="12" size-md="12">
-              <ion-input color="gunung-nago-primary" label="Email*" label-placement="floating" fill="outline"
-                type="text" clear-input="true" formControlName="email" required="true"></ion-input>
+              <ion-input color="gunung-nago-primary" label="Address*" label-placement="floating" fill="outline"
+                type="text" clear-input="true" formControlName="address" required="true"></ion-input>
               <div class="error-messages">
-                <ng-container *ngFor="let error of errorMessages.email">
+                <ng-container *ngFor="let error of errorMessages.address">
                   <div class="error-message"
-                    *ngIf="supplierEditForm.get('email')?.hasError(error.type) && (supplierEditForm.get('email')?.dirty || supplierEditForm.get('email')?.touched)">
+                    *ngIf="farmEditForm.get('address')?.hasError(error.type) && (farmEditForm.get('address')?.dirty || farmEditForm.get('address')?.touched)">
                     {{ error.message }}
                   </div>
                 </ng-container>
               </div>
-            </ion-col>
-            <ion-col size-xs="12" size-md="12">
-              <ion-input color="gunung-nago-primary" label="Address" label-placement="floating" fill="outline"
-                type="text" clear-input="true" formControlName="address"></ion-input>
             </ion-col>
             <ion-col size-xs="12" size-md="12">
               <ion-input color="gunung-nago-primary" label="Telephone Number*" label-placement="floating" fill="outline"
@@ -155,27 +122,17 @@
               <div class="error-messages">
                 <ng-container *ngFor="let error of errorMessages.telephoneNumber">
                   <div class="error-message"
-                    *ngIf="supplierEditForm.get('telephoneNumber')?.hasError(error.type) && (supplierEditForm.get('telephoneNumber')?.dirty || supplierEditForm.get('telephoneNumber')?.touched)">
+                    *ngIf="farmEditForm.get('telephoneNumber')?.hasError(error.type) && (farmEditForm.get('telephoneNumber')?.dirty || farmEditForm.get('telephoneNumber')?.touched)">
                     {{ error.message }}
                   </div>
                 </ng-container>
               </div>
             </ion-col>
           </ion-row>
-          <ion-row>
-            <ion-col size-xs="12" size-md="6">
-              <ion-input color="gunung-nago-primary" label="Telephone Number 2" label-placement="floating"
-                fill="outline" type="text" clear-input="true" formControlName="telephoneNumberTwo"></ion-input>
-            </ion-col>
-            <ion-col size-xs="12" size-md="6">
-              <ion-input color="gunung-nago-primary" label="Telephone Number 3" label-placement="floating"
-                fill="outline" type="text" clear-input="true" formControlName="telephoneNumberThree"></ion-input>
-            </ion-col>
-          </ion-row>
         </form>
         <div class="modal-btn-container ion-text-right">
           <ion-button class="cancel-btn" (click)="cancel()">Cancel</ion-button>
-          <ion-button color="positive-btn" (click)="confirm()">Save</ion-button>
+          <ion-button color="positive-btn" [disabled]="farmEditForm.invalid" (click)="confirm()">Save</ion-button>
         </div>
       </ion-content>
     </ng-template>

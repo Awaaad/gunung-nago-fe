@@ -23,7 +23,7 @@ export class LoginLogoutService {
 
     logoutUser() {
         const user = {
-            username: 'loggedOut',
+            username: '',
             role: [],
             farmId: 0
         }

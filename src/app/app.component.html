@@ -1,5 +1,84 @@
 <ng-container>
   <ion-app>
     <app-side-nav></app-side-nav>
+    <ion-fab slot="fixed" vertical="top" horizontal="end" [edge]="true">
+      <ion-fab-button color="light">
+        <ion-icon style="margin-left: 12px;" name="person"></ion-icon>
+        <strong style="width: 6em;">{{username}}</strong>
+      </ion-fab-button>
+      <ion-fab-list side="start" onclick="event.stopPropagation()">
+        <!-- <span class="med-it">Powered By Med-IT</span> -->
+        <ion-card class="float-calc">
+          <!-- <div class="calc-style">
+            <div class="subtitle">
+              <img class="cart-logo" src='./assets/flaticon/farms.png'>
+              <div class="form-section-cart">Farms</div>
+            </div>
+            <div>
+              <ion-item class="login-content__input">
+                <ion-label position="floating">Password</ion-label>
+                <ion-input [(ngModel)]="password" name="password" id="password" type="password"></ion-input>
+              </ion-item>
+            </div>
+            <div class="pt1">
+              <ion-radio-group [(ngModel)]="farmId" (ionChange)="selectFarm($event)" value="end">
+                <div *ngFor="let farm of farms" class="radio-class">
+                  <ion-radio [disabled]="!password" labelPlacement="end" color="positive-btn" [value]="farm.id">
+                    {{farm.name}}</ion-radio><br />
+                </div>
+              </ion-radio-group>
+            </div>
+          </div> -->
+
+          <ion-accordion-group>
+            <ion-accordion value="first">
+              <ion-item slot="header" color="light">
+                <ion-label>Farm</ion-label>
+              </ion-item>
+              <div class="ion-padding farm-content" slot="content">
+                <div class="calc-style">
+                  <!-- <div class="subtitle">
+                    <img class="cart-logo" src='./assets/flaticon/farms.png'>
+                    <div class="form-section-cart">Farms</div>
+                  </div> -->
+                  <div>
+                    <ion-item class="login-content__input">
+                      <ion-label position="floating">Password</ion-label>
+                      <ion-input [(ngModel)]="password" name="password" id="password" type="text" autocomplete="off"
+                        style="-webkit-text-security: disc"></ion-input>
+                    </ion-item>
+                  </div>
+                  <div class="pt1">
+                    <ion-radio-group [(ngModel)]="farmId" (ionChange)="selectFarm($event)" value="end">
+                      <div *ngFor="let farm of farms" class="radio-class">
+                        <ion-radio [disabled]="!password" labelPlacement="end" color="positive-btn" [value]="farm.id">
+                          {{farm.name}}</ion-radio><br />
+                      </div>
+                    </ion-radio-group>
+                  </div>
+                </div>
+              </div>
+            </ion-accordion>
+            <ion-accordion value="second">
+              <ion-item slot="header" color="light">
+                <ion-label>Language</ion-label>
+              </ion-item>
+              <div class="ion-padding" slot="content">
+                <div class="pt1">
+                  <ion-radio-group [(ngModel)]="language" (ionChange)="selectLanguage($event)" value="end">
+                    <div *ngFor="let language of languages" class="radio-class">
+                      <ion-radio labelPlacement="end" color="positive-btn" [value]="language.code">
+                        {{language.name}}</ion-radio><br />
+                    </div>
+                  </ion-radio-group>
+                </div>
+              </div>
+            </ion-accordion>
+          </ion-accordion-group>
+        </ion-card>
+
+
+      </ion-fab-list>
+    </ion-fab>
   </ion-app>
 </ng-container>

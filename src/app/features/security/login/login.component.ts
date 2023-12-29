@@ -61,6 +61,7 @@ export class LoginComponent implements OnInit {
   public getFarmsByUsername(): void {
     this.securityApiService.findAllFarmsByUsername(this.formLogin.get('username')?.value).subscribe(farms => {
       this.farms = farms;
+      this.emitterService.farmsEmitter.emit(this.farms);
       if (this.farms.length === 1) {
         this.loginSingleFarm(this.farms[0].id);
       }
@@ -81,9 +82,10 @@ export class LoginComponent implements OnInit {
       this.securityApiService.authenticateUser(loginParam).subscribe(data => {
         {
           localStorage.setItem('id', JSON.stringify(data.userDto.id));
+          localStorage.setItem('farmId', JSON.stringify(this.selectedFarm));
           localStorage.setItem('username', data.userDto.username);
-          localStorage.setItem('cashier', data.userDto.firstName);
           localStorage.setItem('role', JSON.stringify(data.userDto.roles.map(role => role.role)));
+          localStorage.setItem('farm', JSON.stringify(data.userDto.farms));
           localStorage.setItem('token', data.token);
           const user = {
             username: data.userDto.username,
@@ -121,9 +123,10 @@ export class LoginComponent implements OnInit {
       this.securityApiService.authenticateUser(loginParam).subscribe(data => {
         {
           localStorage.setItem('id', JSON.stringify(data.userDto.id));
+          localStorage.setItem('farmId', JSON.stringify(farmId));
           localStorage.setItem('username', data.userDto.username);
-          localStorage.setItem('cashier', data.userDto.firstName);
           localStorage.setItem('role', JSON.stringify(data.userDto.roles.map(role => role.role)));
+          localStorage.setItem('farm', JSON.stringify(data.userDto.farms));
           localStorage.setItem('token', data.token);
           const user = {
             username: data.userDto.username,
@@ -133,7 +136,6 @@ export class LoginComponent implements OnInit {
           this.loginLogoutService.loginUser(user);
 
           const roles: any = localStorage.getItem('role');
-          console.log(JSON.parse(roles).includes('ADMIN'));
           if (JSON.parse(roles).includes('ADMIN')) {
             this.router.navigateByUrl('/home');
           } else if (localStorage.getItem('role') === 'CASHIER') {

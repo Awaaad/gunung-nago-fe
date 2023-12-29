@@ -1,0 +1,81 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      <div class="router-links">
+        <div class="title">
+          <img class="header-logo" src='./assets/flaticon/add-farms.png'>
+          <h3 class="header-nav-products">Add Farms</h3>
+        </div>
+        <div class="nav-language">
+        </div>
+      </div>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content [fullscreen]="false" class="ion-padding">
+  <form [formGroup]="farmDetailsForm">
+    <div formArrayName="farmDetails" *ngFor="let farmDetails of farmDetailsFields?.controls; let i = index">
+      <div [formGroupName]="i">
+        <ion-card>
+          <ion-card-content>
+            <div class="form-array-index">
+              <h6>Farm {{i + 1}}</h6>
+              <ion-button *ngIf="farmDetailsFields != null && farmDetailsFields.length > 1"
+                (click)="removeFarmDetails(i)" class="delete-product-btn" color="gunung-nago-warehouse"><span
+                  class="material-icons">delete</span></ion-button>
+            </div>
+            <ion-row>
+              <ion-col size-xs="12" size-md="3">
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size-xs="12" size-md="3">
+                <ion-input color="gunung-nago-primary" label="Name*" label-placement="floating" fill="outline"
+                  type="text" clear-input="true" formControlName="name" required="true"></ion-input>
+                <div class="error-messages">
+                  <ng-container *ngFor="let error of errorMessages.name">
+                    <div class="error-message"
+                      *ngIf="farmDetails.get('name')?.hasError(error.type) && (farmDetails.get('name')?.dirty || farmDetails.get('name')?.touched)">
+                      {{ error.message }}
+                    </div>
+                  </ng-container>
+                </div>
+              </ion-col>
+              <ion-col size-xs="12" size-md="3">
+                <ion-input color="gunung-nago-primary" label="Address*" label-placement="floating" fill="outline"
+                  type="text" clear-input="true" formControlName="address" required="true"></ion-input>
+                <div class="error-messages">
+                  <ng-container *ngFor="let error of errorMessages.name">
+                    <div class="error-message"
+                      *ngIf="farmDetails.get('address')?.hasError(error.type) && (farmDetails.get('address')?.dirty || farmDetails.get('address')?.touched)">
+                      {{ error.message }}
+                    </div>
+                  </ng-container>
+                </div>
+              </ion-col>
+              <ion-col size-xs="12" size-md="3">
+                <ion-input color="gunung-nago-primary" label="Telephone Number*" label-placement="floating" fill="outline"
+                  type="text" clear-input="true" formControlName="telephoneNumber" required="true"></ion-input>
+                <div class="error-messages">
+                  <ng-container *ngFor="let error of errorMessages.telephoneNumber">
+                    <div class="error-message"
+                      *ngIf="farmDetails.get('telephoneNumber')?.hasError(error.type) && (farmDetails.get('telephoneNumber')?.dirty || farmDetails.get('telephoneNumber')?.touched)">
+                      {{ error.message }}
+                    </div>
+                  </ng-container>
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </div>
+    <div class="btn-container">
+      <ion-button color="neutral-btn mr-05" (click)="addFarmDetails()">Add Farm</ion-button>
+      <ion-button color="positive-btn" [disabled]="farmDetailsForm.invalid" (click)="save()">Save</ion-button>
+    </div>
+  </form>
+</ion-content>

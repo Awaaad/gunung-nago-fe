@@ -1,5 +1,5 @@
 import { Injectable, Output, EventEmitter } from '@angular/core';
-import { AuthenticatedUserDetailsDto } from 'generated-src/model';
+import { AuthenticatedUserDetailsDto, FarmDto } from 'generated-src/model';
 
 @Injectable({
     providedIn: 'root'
@@ -7,6 +7,7 @@ import { AuthenticatedUserDetailsDto } from 'generated-src/model';
 export class EmitterService {
     @Output() public sessionStateEmitter = new EventEmitter<AuthenticatedUserDetailsDto>();
     @Output() public userDetailsEmitter = new EventEmitter<AuthenticatedUserDetailsDto>();
+    @Output() public farmsEmitter = new EventEmitter<FarmDto[]>();
 
     constructor() { }
 }

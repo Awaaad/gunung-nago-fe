@@ -51,7 +51,7 @@ export class SideNavComponent implements OnInit {
 
   ngOnInit() {
     const roles: any = localStorage.getItem('role');
-    if (JSON.parse(roles).includes('ADMIN')){
+    if (roles && JSON.parse(roles).includes('ADMIN')){
       this.isAdmin = true;
       this.isloggedIn = true;
     } else {
@@ -60,7 +60,6 @@ export class SideNavComponent implements OnInit {
     }
 
     this.sessionSubscription = this.emittersService.sessionStateEmitter.subscribe((data: any) => {
-      console.log(data);
       if (data.role.includes('ADMIN')) {
         this.isAdmin = true;
         this.isloggedIn = true;

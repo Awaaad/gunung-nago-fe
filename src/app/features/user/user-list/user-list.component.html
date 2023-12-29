@@ -10,13 +10,6 @@
           <h3 class="header-nav-products">Users</h3>
         </div>
         <div>
-          <ion-item class="language-selection">
-            <ion-select aria-label="language" interface="popover" placeholder="Select language" [(ngModel)]="language"
-              (ionChange)="ionChangeLanguage($event)">
-              <ion-select-option value="en">English</ion-select-option>
-              <ion-select-option value="id">Indonesian</ion-select-option>
-            </ion-select>
-          </ion-item>
         </div>
       </div>
     </ion-title>
@@ -154,7 +147,7 @@
             </ion-col>
             <ion-col size-xs="12" size-md="6">
               <ion-input color="gunung-nago-primary" label="Password*" label-placement="floating" fill="outline"
-                type="password" clear-input="true" formControlName="password" required="true"></ion-input>
+                type="text" clear-input="true" formControlName="password" required="true"></ion-input>
               <div class="error-messages">
                 <ng-container *ngFor="let error of errorMessages.password">
                   <div class="error-message"
@@ -230,7 +223,7 @@
             </ion-col>
             <ion-col size-xs="12" size-md="6">
               <ion-input color="gunung-nago-primary" label="Address" label-placement="floating" fill="outline"
-                type="text" clear-input="true" formControlName="address" required="true"></ion-input>
+                type="text" clear-input="true" formControlName="address"></ion-input>
             </ion-col>
           </ion-row>
           <ion-row>
