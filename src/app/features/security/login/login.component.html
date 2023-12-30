@@ -81,6 +81,23 @@
               </div>
             </mat-radio-button>
           </mat-radio-group>
+          <!-- <mat-radio-group *ngIf="farms.length > 1" class="radio-group-farm" [(ngModel)]="selectedFarm">
+            <ion-row>
+              <ion-col size-xs="12" size-md="12">
+                <mat-radio-button color="primary" *ngFor="let farm of farms" [value]="farm.id" class="radio-btn-farm">
+                  <div class="farm-section">
+                    <div>
+                      <strong>{{ farm.name }}</strong>
+                    </div>
+                    <img class="farm" src='./assets/flaticon/farms.png'>
+                    <div class="egg-count">
+                      <strong>Address: {{farm.address}}</strong>
+                    </div>
+                  </div>
+                </mat-radio-button>
+              </ion-col>
+            </ion-row>
+          </mat-radio-group> -->
 
           <ion-row center *ngIf="selectedFarm && farms.length > 0">
             <ion-col class="ion-text-center ion-padding">

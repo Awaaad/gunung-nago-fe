@@ -25,7 +25,7 @@ export class PurchaseInvoiceListComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   public language = "en";
-  public displayedColumns: string[] = ['number', 'supplier', 'createdBy', 'createdDate', 'totalPrice', 'actions'];
+  public displayedColumns: string[] = ['number', 'type', 'supplier', 'createdBy', 'createdDate', 'totalPrice', 'actions'];
   public purchaseInvoices = new MatTableDataSource<PurchaseInvoiceDto>;
   private infinitePurchaseInvoices: PurchaseInvoiceDto[] = [];
   public purchaseInvoiceSearchSubscription!: Subscription;
