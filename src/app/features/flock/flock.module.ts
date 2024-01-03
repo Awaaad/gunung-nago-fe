@@ -30,10 +30,14 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { FlockCageCategoryTransferComponent } from './flock-cage-category-transfer/flock-cage-category-transfer.component';
 import { FlockStockDetailsComponent } from './flock-stock-details/flock-stock-details.component';
 import { MatRadioModule } from '@angular/material/radio';
+import { FlockStockEditDetailsComponent } from './flock-stock-edit-details/flock-stock-edit-details.component';
+import { EggCategoryApiService } from 'src/app/shared/apis/egg-category.api.service';
+import { HealthProductApiService } from 'src/app/shared/apis/health-product.api.service';
+import { ManureStockApiService } from 'src/app/shared/apis/manure-stock.api.service';
 export const MY_FORMATS = ConstantHelper.dateFormat;
 
 @NgModule({
-  declarations: [FlockListComponent, FlockDetailsComponent, FlockSaleDetailsComponent, FlockStockComponent, FlockTransferComponent, FlockCageCategoryTransferComponent, FlockStockDetailsComponent],
+  declarations: [FlockListComponent, FlockStockEditDetailsComponent, FlockDetailsComponent, FlockSaleDetailsComponent, FlockStockComponent, FlockTransferComponent, FlockCageCategoryTransferComponent, FlockStockDetailsComponent],
   imports: [
     CommonModule,
     FlockRoutingModule,
@@ -52,7 +56,7 @@ export const MY_FORMATS = ConstantHelper.dateFormat;
     DragDropModule,
     MatRadioModule
   ],
-  providers: [FlockApiService, FlockSaleApiService, SurveyApiService, CageApiService, CustomerApiService, SupplierApiService, FlockStockApiService,
+  providers: [ManureStockApiService, HealthProductApiService, EggCategoryApiService, FlockApiService, FlockSaleApiService, SurveyApiService, CageApiService, CustomerApiService, SupplierApiService, FlockStockApiService,
     {
       provide: DateAdapter,
       useClass: MomentDateAdapter,

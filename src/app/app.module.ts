@@ -14,6 +14,8 @@ import { SideNavComponent } from './shared/navigation/side-nav/side-nav.componen
 import { TokenInterceptor } from './shared/interceptor/http.interceptor';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { FormsModule } from '@angular/forms';
+import { WarmingComponent } from './shared/modals/warming/warming.component';
+import { ModalModule } from './shared/modals/modal.module';
 
 @NgModule({
   declarations: [AppComponent, SideNavComponent],
@@ -21,6 +23,7 @@ import { FormsModule } from '@angular/forms';
     BrowserAnimationsModule,
     HttpClientModule,
     FormsModule,
+    ModalModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

@@ -193,6 +193,20 @@
           <th mat-header-cell *matHeaderCellDef> Last Modified Date </th>
           <td mat-cell *matCellDef="let element"> {{element.lastModifiedDate | date:'dd-MM-yyyy HH:mm'}} </td>
         </ng-container>
+        <ng-container matColumnDef="surveyDate">
+          <th mat-header-cell *matHeaderCellDef> Survey Date </th>
+          <td mat-cell *matCellDef="let element"> {{element.surveyDate | date:'dd-MM-yyyy HH:mm'}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef> </th>
+          <td mat-cell *matCellDef="let element">
+            <div class="table-btn">
+              <ion-icon *ngIf="isTodayOrYesterday(element.createdDate)" class="table-edit-icon ml-05"
+                color="neutral-btn" name="create" (click)="routeToFlockStockEditDetails(element)"></ion-icon>
+            </div>
+          </td>
+        </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>

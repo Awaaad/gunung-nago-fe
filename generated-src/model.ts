@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2023-12-27 17:46:20.
+// Generated using typescript-generator version 3.2.1263 on 2024-01-03 14:13:34.
 
 export class AuditDto {
     createdBy!: string;
@@ -193,8 +193,11 @@ export class EggTransactionTodayDetailsDtoBuilder {
 
 export class EggTransferDto {
     eggCategoryId!: number;
-    bad!: number;
-    unsellable!: number;
+    increaseAmount!: number;
+    decreaseAmount!: number;
+    transferEggCategoryId!: number;
+    transferAmount!: number;
+    unsellableAmount!: number;
 }
 
 export class EggTransferDtoBuilder {
@@ -205,6 +208,10 @@ export class FarmDto {
     name!: string;
     telephoneNumber!: number;
     address!: string;
+}
+
+export class FarmSearchCriteriaDto {
+    name!: string;
 }
 
 export class FeedDto {
@@ -294,8 +301,12 @@ export class FeedStockSearchCriteriaDto {
 }
 
 export class FeedSurveyDto {
+    name!: string;
+    category!: FeedCategory;
+    weight!: number;
     flockFeedLineId!: number;
     bagsEaten!: number;
+    bagsAllocated!: number;
 }
 
 export class FlockFeedLineReportDto {
@@ -418,6 +429,28 @@ export class FlockStockCountDto {
     dead!: number;
 }
 
+export class FlockStockDetailsDto {
+    id!: number;
+    name!: string;
+    surveyDate!: Date;
+    age!: number;
+    flockCategory!: FlockCategory;
+    alive!: number;
+    death!: number;
+    sterile!: number;
+    good!: number;
+    totalWeight!: number;
+    bagsEaten!: number;
+    amountOfChickenWeighted!: number;
+    cageName!: string;
+    comment!: string;
+    manureBags!: number;
+    feedSurveyDtos!: FeedSurveyDto[];
+    surveyEggCountDtos!: SurveyEggCountDto[];
+    healthSurveyStockDtos!: HealthSurveyStockDto[];
+    manureStockDtos!: ManureStockDto[];
+}
+
 export class FlockStockDto extends AuditDto {
     id!: number;
     surveyDate!: Date;
@@ -428,8 +461,11 @@ export class FlockStockDto extends AuditDto {
     sterile!: number;
     good!: number;
     totalWeight!: number;
+    bagsEaten!: number;
     amountOfChickenWeighted!: number;
     cageName!: string;
+    comment!: string;
+    manureBags!: number;
     flockDto!: FlockDto;
 }
 
@@ -516,6 +552,9 @@ export class HealthSurveyDto {
 
 export class HealthSurveyStockDto {
     healthProductStockId!: number;
+    name!: string;
+    healthType!: HealthType;
+    flockStockHealthProductLineId!: number;
     boxesTotal!: number;
     unitsPerBox!: number;
     unitsTotal!: number;
@@ -732,12 +771,14 @@ export class PurchaseInvoiceDetailsDto {
     discount!: number;
     totalPrice!: number;
     comment!: string;
+    type!: PurchaseType;
     purchaseDetailsDtos!: PurchaseDetailsDto[];
 }
 
 export class PurchaseInvoiceDto {
     id!: number;
     totalPrice!: number;
+    type!: PurchaseType;
     createdBy!: string;
     createdDate!: Date;
     supplierName!: string;
@@ -748,6 +789,7 @@ export class PurchaseInvoiceDto {
 export class PurchaseInvoiceSearchCriteriaDto {
     invoiceNumber!: string;
     supplierId!: number;
+    type!: PurchaseType;
     createdBy!: string;
     dateFrom!: Date;
     dateTo!: Date;
@@ -990,8 +1032,8 @@ export class SalesInvoiceDto {
     containsReturn!: boolean;
     isToJakarta!: boolean;
     salesInvoiceId!: number;
-    refundInvoice!: boolean;
     internal!: boolean;
+    refundInvoice!: boolean;
 }
 
 export class SalesInvoiceSearchCriteriaDto {
@@ -1102,9 +1144,9 @@ export class UserDto {
     username!: string;
     firstName!: string;
     lastName!: string;
-    address!: string;
     dateOfBirth!: Date;
     email!: string;
+    address!: string;
     phone!: number;
     password!: string;
     roles!: RoleDto[];
@@ -1139,6 +1181,7 @@ export class SurveyDto {
     flockStockId!: number;
     eggStockId!: number;
     activeFlock!: boolean;
+    flockName!: string;
     cageName!: string;
     cageCategory!: CageCategory;
     flockCategory!: FlockCategory;
@@ -1159,6 +1202,8 @@ export class SurveyDto {
 }
 
 export class SurveyEggCountDto {
+    flockStockId!: number;
+    name!: string;
     eggCategoryId!: number;
     quantity!: number;
 }
@@ -1188,6 +1233,7 @@ export enum EggRecordType {
     SURVEY = 'SURVEY',
     SALE = 'SALE',
     TRANSFER = 'TRANSFER',
+    ADJUSTMENT = 'ADJUSTMENT',
     BURDEN_TRANSFER_BAD_DESTROYED = 'BURDEN_TRANSFER_BAD_DESTROYED',
     RETURN = 'RETURN',
 }

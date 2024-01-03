@@ -7,7 +7,8 @@ import { HomePage } from './home.page';
 import { HomePageRoutingModule } from './home-routing.module';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatSelectModule } from '@angular/material/select';
-
+import { NgChartsModule } from 'ng2-charts';
+import { MatTabsModule } from '@angular/material/tabs';
 @NgModule({
   imports: [
     CommonModule,
@@ -15,8 +16,10 @@ import { MatSelectModule } from '@angular/material/select';
     IonicModule,
     HomePageRoutingModule,
     TranslateModule,
+    NgChartsModule,
     FormsModule,
-    MatSelectModule
+    MatSelectModule,
+    MatTabsModule
   ],
   declarations: [HomePage]
 })

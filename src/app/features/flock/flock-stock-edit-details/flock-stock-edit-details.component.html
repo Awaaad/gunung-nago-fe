@@ -1,0 +1,755 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      <div class="router-links">
+        <div class="title">
+          <img class="header-logo" src='./assets/flaticon/flock-stock.png'>
+          <h3 class="header-nav-products">Edit {{name}} - Flock Stock / Survey For Cage: {{cageName}} - Survey Date:
+            {{surveyDate | date:'dd-MM-yyyy HH:mm'}}</h3>
+        </div>
+        <div>
+        </div>
+      </div>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="false" class="ion-padding" [scrollEvents]="true">
+  <ion-row>
+    <ion-col size-xs="12" size-md="6">
+      <div class="divider-wrapper mt-1">
+        <div class="section">
+          <img class="divider-img" src='./assets/flaticon/flock.png'>
+        </div>
+        <div class="divider-text">
+          <ion-item-divider>
+            <ion-label>Flock</ion-label>
+          </ion-item-divider>
+        </div>
+      </div>
+      <form [formGroup]="flockStockEditForm">
+        <div>
+          <div [style.color]="'grey'" class="text"><strong>Was</strong></div>
+          <ion-row>
+            <ion-col size-xs="12" size-md="3">
+              <ion-input color="gunung-nago-survey" label="{{ 'survey.survey-details.population' | translate }}"
+                label-placement="floating" fill="outline" type="number" min="0" clear-input="true" [value]="good"
+                [disabled]="true"></ion-input>
+            </ion-col>
+            <ion-col size-xs="12" size-md="3">
+              <ion-input color="gunung-nago-survey" label="{{ 'survey.survey-details.dead' | translate }}"
+                label-placement="floating" fill="outline" type="number" min="0" clear-input="true" [value]="death"
+                [disabled]="true"></ion-input>
+            </ion-col>
+            <ion-col size-xs="12" size-md="3">
+              <ion-input color="gunung-nago-survey" label="{{ 'survey.survey-details.sterile' | translate }}"
+                label-placement="floating" fill="outline" type="number" min="0" clear-input="true" [value]="sterile"
+                [disabled]="true"></ion-input>
+            </ion-col>
+            <ion-col size-xs="12" size-md="3">
+              <ion-input color="gunung-nago-survey" label="{{ 'survey.survey-details.remaining' | translate }}"
+                label-placement="floating" fill="outline" type="number" min="0" [value]="good - (death+sterile)"
+                [disabled]="true"></ion-input>
+            </ion-col>
+          </ion-row>
+          <div [style.color]="'black'" class="text"><strong>Is</strong></div>
+          <ion-row>
+            <ion-col size-xs="12" size-md="3">
+              <ion-input color="gunung-nago-survey" label="{{ 'survey.survey-details.population' | translate }}"
+                label-placement="floating" fill="outline" type="number" min="0" formControlName="good"
+                [readonly]="true"></ion-input>
+            </ion-col>
+            <ion-col size-xs="12" size-md="3">
+              <ion-input color="gunung-nago-survey" label="{{ 'survey.survey-details.dead' | translate }}"
+                label-placement="floating" fill="outline" type="number" min="0" clear-input="true"
+                formControlName="death"></ion-input>
+            </ion-col>
+            <ion-col size-xs="12" size-md="3">
+              <ion-input color="gunung-nago-survey" label="{{ 'survey.survey-details.sterile' | translate }}"
+                label-placement="floating" fill="outline" type="number" min="0" clear-input="true"
+                formControlName="sterile"></ion-input>
+            </ion-col>
+            <ion-col size-xs="12" size-md="3">
+              <!-- <ion-input color="gunung-nago-survey" label="{{ 'survey.survey-details.remaining' | translate }}"
+                label-placement="floating" fill="outline" type="number" min="0" [value]="(flockStockEditForm.get('good')?.value) - (flockStockEditForm.get('death')?.value +
+                flockStockEditForm.get('sterile')?.value)" [readonly]="true"></ion-input> -->
+            </ion-col>
+          </ion-row>
+        </div>
+
+        <div class="divider-wrapper">
+          <div class="section">
+            <img class="divider-img" src='./assets/flaticon/quantity.png'>
+          </div>
+          <div class="divider-text">
+            <ion-item-divider>
+              <ion-label>Chicken Weight</ion-label>
+            </ion-item-divider>
+          </div>
+        </div>
+
+        <ion-row>
+          <ion-col size-xs="12" size-md="4">
+            <ion-input color="gunung-nago-survey" label="Amount of chicken weighted (Kg)" label-placement="floating"
+              fill="outline" type="number" min="0" clear-input="true"
+              formControlName="amountOfChickenWeighted"></ion-input>
+          </ion-col>
+          <ion-col size-xs="12" size-md="4">
+            <ion-input color="gunung-nago-survey" label="Total weighted (Kg)" label-placement="floating" fill="outline"
+              type="number" min="0" clear-input="true" formControlName="totalWeight"></ion-input>
+          </ion-col>
+          <ion-col size-xs="12" size-md="4">
+            <ion-input color="gunung-nago-survey" label="Average weight (Kg)" label-placement="floating" fill="outline"
+              type="number" min="0" clear-input="true"
+              [value]="(flockStockEditForm.get('totalWeight')?.value / flockStockEditForm.get('amountOfChickenWeighted')?.value) | number :'1.2-2'"></ion-input>
+          </ion-col>
+        </ion-row>
+
+        <div>
+          <ion-item-divider>
+            <ion-label>Comment</ion-label>
+          </ion-item-divider>
+          <ion-row>
+            <ion-col size-xs="12" size-md="12">
+              <ion-textarea color="gunung-nago-survey" label="Comment" labelPlacement="floating" fill="outline"
+                [autoGrow]="true" formControlName="comment"></ion-textarea>
+            </ion-col>
+          </ion-row>
+        </div>
+      </form>
+
+      <div class="btn-edit-container">
+        <ion-button class="cancel-btn" (click)="getFlockStockDetails(flockStockId)">Cancel</ion-button>
+        <ion-button color="positive-btn" [disabled]="flockStockEditForm.invalid" (click)="editFlock()">Save</ion-button>
+      </div>
+    </ion-col>
+
+    <ion-col size-xs="12" size-md="6">
+      <div class="divider-wrapper mt-1">
+        <div class="section">
+          <img class="egg-divider-img" src='./assets/flaticon/eggs.png'>
+        </div>
+        <div class="divider-text">
+          <ion-item-divider>
+            <ion-label>{{ 'survey.survey-details.production' | translate }}</ion-label>
+          </ion-item-divider>
+        </div>
+        <div class="button-section">
+          <ion-button color="neutral-btn" class="add-payment-btn" (click)="addEggCategory()">Add Egg
+            Category</ion-button>
+        </div>
+      </div>
+
+      <form [formGroup]="addEggDetailsForm">
+        <div formArrayName="eggCategories" *ngFor="let eggCategory of eggCategoryFields?.controls; let i = index">
+          <span [formGroupName]="i">
+            <ion-item-divider *ngIf="i > 0" class="gray-divider">
+            </ion-item-divider>
+            <div class="form-array-index">
+              <div></div>
+              <ion-button *ngIf="eggCategoryFields != null && eggCategoryFields.length > 1"
+                (click)="removeEggCategory(i)" color="gunung-nago-warehouse"><span
+                  class="material-icons">delete</span></ion-button>
+            </div>
+            <ion-row>
+              <ion-col size-xs="12" size-md="3">
+                <ion-select color="gunung-nago-primary" label="Egg Category" label-placement="floating" fill="outline"
+                  interface="popover" placeholder="Egg Category" formControlName="eggCategoryId">
+                  <ion-select-option *ngFor="let eggCategory of eggCategories"
+                    [value]="eggCategory.id">{{eggCategory.name}} -
+                    {{eggCategory.eggType | titlecase}}</ion-select-option>
+                </ion-select>
+                <div class="error-messages">
+                  <ng-container *ngFor="let error of errorMessages.eggCategory">
+                    <div class="error-message"
+                      *ngIf="eggCategory.get('eggCategoryId')?.hasError(error.type) && (eggCategory.get('eggCategoryId')?.dirty || eggCategory.get('eggCategoryId')?.touched)">
+                      {{ error.message }}
+                    </div>
+                  </ng-container>
+                </div>
+              </ion-col>
+              <ion-col size-xs="12" size-md="3">
+                <ion-input color="gunung-nago-survey" label="{{ 'survey.survey-details.tie' | translate }}"
+                  label-placement="floating" fill="outline" type="number" min="0" clear-input="true"
+                  formControlName="tie"></ion-input>
+              </ion-col>
+              <ion-col size-xs="12" size-md="3">
+                <ion-input color="gunung-nago-survey" label="Tray" label-placement="floating" fill="outline"
+                  type="number" min="0" max="9" maxlength="1" clear-input="true" formControlName="tray"></ion-input>
+                <div class="error-messages">
+                  <ng-container *ngFor="let error of errorMessages.tray">
+                    <div class="error-message"
+                      *ngIf="eggCategory.get('tray')?.hasError(error.type) && (eggCategory.get('tray')?.dirty || eggCategory.get('tray')?.touched)">
+                      {{ error.message }}
+                    </div>
+                  </ng-container>
+                </div>
+              </ion-col>
+              <ion-col size-xs="12" size-md="3">
+                <ion-input color="gunung-nago-survey" label="{{ 'survey.survey-details.item' | translate }}"
+                  label-placement="floating" fill="outline" type="number" min="0" max="29" maxlength="2"
+                  clear-input="true" formControlName="item"></ion-input>
+                <div class="error-messages">
+                  <ng-container *ngFor="let error of errorMessages.item">
+                    <div class="error-message"
+                      *ngIf="eggCategory.get('item')?.hasError(error.type) && (eggCategory.get('item')?.dirty || eggCategory.get('item')?.touched)">
+                      {{ error.message }}
+                    </div>
+                  </ng-container>
+                </div>
+              </ion-col>
+            </ion-row>
+          </span>
+        </div>
+
+        <div class="btn-edit-container">
+          <ion-button color="positive-btn" [disabled]="addEggDetailsForm.invalid"
+            (click)="addEggRecord()">Save</ion-button>
+        </div>
+      </form>
+
+      <ion-card class="margin-x-0" *ngIf="eggReport.data.length > 0">
+        <div class="mat-elevation-z8 table-responsive daily-egg-report">
+          <table mat-table [dataSource]="eggReport">
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef> Name </th>
+              <td mat-cell *matCellDef="let element">
+                {{element.name}}
+              </td>
+              <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+
+            <ng-container matColumnDef="ikat">
+              <th mat-header-cell *matHeaderCellDef> Tie </th>
+              <td mat-cell *matCellDef="let element">
+                {{format(element.quantity / 300)}}
+              </td>
+              <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+
+
+            <ng-container matColumnDef="tray">
+              <th mat-header-cell *matHeaderCellDef> Tray </th>
+              <td mat-cell *matCellDef="let element">
+                {{format(((element.quantity % 300) / 30))}}
+              </td>
+              <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+
+            <ng-container matColumnDef="piece">
+              <th mat-header-cell *matHeaderCellDef> Piece </th>
+              <td mat-cell *matCellDef="let element">
+                {{format((element.quantity % 300) % 30)}}
+              </td>
+              <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef> </th>
+              <td mat-cell *matCellDef="let element">
+                <div class="table-btn">
+                  <ion-icon class="table-edit-icon ml-05" color="neutral-btn" name="create"
+                    (click)="openEggModal(element)"></ion-icon>
+                </div>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedEggColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedEggColumns;"></tr>
+          </table>
+        </div>
+      </ion-card>
+
+      <div class="divider-wrapper mt-1">
+        <div class="flock-section">
+          <img class="divider-img" src='./assets/flaticon/feed.png'>
+        </div>
+        <div class="divider-text">
+          <ion-item-divider>
+            <ion-label>Feed</ion-label>
+          </ion-item-divider>
+        </div>
+      </div>
+
+      <ion-card class="margin-x-0" *ngIf="feedReport.data.length > 0">
+        <div class="mat-elevation-z8 table-responsive daily-feed-report">
+          <table mat-table [dataSource]="feedReport">
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef> Name </th>
+              <td mat-cell *matCellDef="let element">
+                {{element.name}}
+              </td>
+              <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+
+            <ng-container matColumnDef="weight">
+              <th mat-header-cell *matHeaderCellDef> Weight (KG) </th>
+              <td mat-cell *matCellDef="let element">
+                {{element.weight}}
+              </td>
+              <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+
+            <ng-container matColumnDef="bagsAllocated">
+              <th mat-header-cell *matHeaderCellDef> Bags Allocated </th>
+              <td mat-cell *matCellDef="let element">
+                {{element.bagsAllocated}}
+              </td>
+              <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+
+            <ng-container matColumnDef="bagsEaten">
+              <th mat-header-cell *matHeaderCellDef> Bags Eaten </th>
+              <td mat-cell *matCellDef="let element">
+                {{element.bagsEaten}}
+              </td>
+              <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef> </th>
+              <td mat-cell *matCellDef="let element">
+                <div class="table-btn">
+                  <ion-icon class="table-edit-icon ml-05" color="neutral-btn" name="create"
+                    (click)="openFeedModal(element)"></ion-icon>
+                </div>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedFeedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedFeedColumns;"></tr>
+          </table>
+        </div>
+      </ion-card>
+
+      <div class="divider-wrapper mt-1">
+        <div class="flock-section">
+          <img class="divider-img" src='./assets/flaticon/health-products.png'>
+        </div>
+        <div class="divider-text">
+          <ion-item-divider>
+            <ion-label>Medication / Vaccination</ion-label>
+          </ion-item-divider>
+        </div>
+      </div>
+
+      <mat-form-field class="autocomplete-full-width" appearance="outline">
+        <input matInput placeholder="Search health product..." [(ngModel)]="selectedHealthProduct"
+          [matAutocomplete]="auto" [formControl]="searchHealthProductCtrl" placeholder="Seach health product">
+        <button *ngIf="selectedHealthProduct" matSuffix mat-icon-button aria-label="Clear" (click)="clearSelection()">
+          <ion-icon name="close-outline"></ion-icon>
+        </button>
+        <mat-autocomplete [panelWidth]="400" #auto="matAutocomplete" (optionSelected)="onHealthProductSelected()"
+          [displayWith]="displayWith">
+          <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+          <ng-container *ngIf="!isLoading">
+            <mat-option *ngFor="let healthProduct of filteredHealthProducts" [value]="healthProduct">
+              <span>{{healthProduct.name}}</span>
+            </mat-option>
+          </ng-container>
+        </mat-autocomplete>
+      </mat-form-field>
+
+      <div *ngIf="selectedHealthProducts.length > 0">
+        <div *ngFor="let selectedHealthProduct of selectedHealthProducts; let i=index;">
+          <ion-chip color="gunung-nago-report">
+            <ion-label>{{selectedHealthProduct.healthProductName}}</ion-label>
+            <ion-icon name="close" (click)="removeHealthProduct(selectedHealthProduct.healthProductId)"></ion-icon>
+          </ion-chip>
+
+          <div *ngFor="let healthProductStock of selectedHealthProduct.healthSurveyStockDtos; let j = index;">
+            <div class="em-title" [style.color]="j === 0 ? 'black' : 'grey'">{{j === 0 ? 'New Stock' :
+              'Old Stock'}}
+            </div>
+            <ion-row>
+              <ion-col size-xs="12" size-md="3">
+                <div class="em-body-title">Total Units: {{healthProductStock.unitsTotal}}</div>
+                <div></div>
+                <div>
+                  <ion-input color="gunung-nago-survey" label="Enter units used" label-placement="floating"
+                    fill="outline" type="number" min="0" clear-input="true" [max]="healthProductStock.unitsTotal"
+                    [(ngModel)]="healthProductStock.unitsUsed" [ngModelOptions]="{standalone: true}"
+                    (ngModelChange)="changeUnitsUsed($event, healthProductStock.unitsTotal, i, j)"
+                    name="unitsUsed"></ion-input>
+                </div>
+              </ion-col>
+            </ion-row>
+            <br>
+          </div>
+        </div>
+      </div>
+
+      <div class="btn-edit-container" *ngIf="selectedHealthProducts.length > 0">
+        <ion-button color="positive-btn" [disabled]="flockStockEditForm.invalid"
+          (click)="addHealthRecord()">Save</ion-button>
+      </div>
+
+      <ion-card class="margin-x-0" *ngIf="healthReport.data.length > 0">
+        <div class="mat-elevation-z8 table-responsive daily-health-report">
+          <table mat-table [dataSource]="healthReport">
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef> Name </th>
+              <td mat-cell *matCellDef="let element">
+                {{element.name}}
+              </td>
+              <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+
+            <ng-container matColumnDef="healthType">
+              <th mat-header-cell *matHeaderCellDef> Type </th>
+              <td mat-cell *matCellDef="let element">
+                {{element.healthType | titlecase}}
+              </td>
+              <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+
+            <ng-container matColumnDef="expiryDate">
+              <th mat-header-cell *matHeaderCellDef> Expiry Date </th>
+              <td mat-cell *matCellDef="let element">
+                {{element.expiryDate}}
+              </td>
+              <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+
+            <ng-container matColumnDef="unitsTotal">
+              <th mat-header-cell *matHeaderCellDef> Units Total </th>
+              <td mat-cell *matCellDef="let element">
+                {{element.unitsTotal}}
+              </td>
+              <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+
+            <ng-container matColumnDef="unitsUsed">
+              <th mat-header-cell *matHeaderCellDef> Units Used </th>
+              <td mat-cell *matCellDef="let element">
+                {{element.unitsUsed}}
+              </td>
+              <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef> </th>
+              <td mat-cell *matCellDef="let element">
+                <div class="table-btn">
+                  <ion-icon class="table-edit-icon ml-05" color="neutral-btn" name="create"
+                    (click)="openHealthModal(element)"></ion-icon>
+                </div>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedHealthColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedHealthColumns;"></tr>
+          </table>
+        </div>
+      </ion-card>
+
+      <div class="divider-wrapper mt-1">
+        <div class="flock-section">
+          <img class="survey-divider-img manure-bag-img" src='./assets/flaticon/manure-bag.png'>
+        </div>
+        <div class="divider-text">
+          <ion-item-divider>
+            <ion-label>Fertilizer</ion-label>
+          </ion-item-divider>
+        </div>
+        <div class="button-section">
+          <ion-button color="neutral-btn" class="add-payment-btn" (click)="addManureStock()">Add
+            Fertilizer</ion-button>
+        </div>
+      </div>
+
+
+      <form [formGroup]="addManureDetailsForm">
+        <div formArrayName="manureStocks" *ngFor="let manureStock of manureStockFields?.controls; let i = index">
+          <span [formGroupName]="i">
+            <ion-item-divider *ngIf="i > 0" class="gray-divider">
+            </ion-item-divider>
+            <div class="form-array-index">
+              <div></div>
+              <ion-button *ngIf="manureStockFields != null && manureStockFields.length > 1"
+                (click)="removeManureStock(i)" color="gunung-nago-warehouse"><span
+                  class="material-icons">delete</span></ion-button>
+            </div>
+            <ion-row>
+              <ion-col size-xs="12" size-md="3">
+                <ion-select color="gunung-nago-primary" label="Weight" label-placement="floating" fill="outline"
+                  interface="popover" formControlName="manureId">
+                  <ion-select-option *ngFor="let manure of manures" [value]="manure.id">{{manure.weight}}
+                    (KG)</ion-select-option>
+                </ion-select>
+              </ion-col>
+              <ion-col size-xs="12" size-md="3">
+                <ion-input color="gunung-nago-primary" label="Bags collected" label-placement="floating" fill="outline"
+                  type="text" clear-input="true" formControlName="bags"></ion-input>
+                <div class="error-messages">
+                  <ng-container *ngFor="let error of errorMessages.bags">
+                    <div class="error-message"
+                      *ngIf="manureStock.get('bags')?.hasError(error.type) && (manureStock.get('bags')?.dirty || manureStock.get('bags')?.touched)">
+                      {{ error.message }}
+                    </div>
+                  </ng-container>
+                </div>
+              </ion-col>
+            </ion-row>
+          </span>
+        </div>
+
+        <div class="btn-edit-container">
+          <ion-button color="positive-btn" [disabled]="addManureDetailsForm.invalid"
+            (click)="addManureRecord()">Save</ion-button>
+        </div>
+      </form>
+
+      <ion-card class="margin-x-0" *ngIf="manureReport.data.length > 0">
+        <div class="mat-elevation-z8 table-responsive daily-manure-report">
+          <table mat-table [dataSource]="manureReport">
+            <ng-container matColumnDef="weight">
+              <th mat-header-cell *matHeaderCellDef> Weight (KG) </th>
+              <td mat-cell *matCellDef="let element">
+                {{element.weight}}
+              </td>
+              <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+
+            <ng-container matColumnDef="bags">
+              <th mat-header-cell *matHeaderCellDef> Bags collected </th>
+              <td mat-cell *matCellDef="let element">
+                {{element.bags}}
+              </td>
+              <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef> </th>
+              <td mat-cell *matCellDef="let element">
+                <div class="table-btn">
+                  <ion-icon class="table-edit-icon ml-05" color="neutral-btn" name="create"
+                    (click)="openManureModal(element)"></ion-icon>
+                </div>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedManureColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedManureColumns;"></tr>
+          </table>
+        </div>
+      </ion-card>
+    </ion-col>
+  </ion-row>
+
+  <ion-modal (willDismiss)="onEggModalWillDismiss($event)" [isOpen]="isEggModalOpen" cssClass="egg-record-modal"
+    backdropDismiss="false">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <div class="title">
+            <img class="header-logo ml-15" src='./assets/flaticon/edit.png'>
+            <h3 class="modal-header-text">Edit Egg Record</h3>
+          </div>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content [fullscreen]="false" class="ion-padding">
+        <form [formGroup]="eggEditForm">
+          <ion-row>
+            <ion-col size-xs="12" size-md="12">
+              <ion-select color="gunung-nago-primary" label="Egg Category" label-placement="floating" fill="outline"
+                interface="popover" placeholder="Egg Category" formControlName="eggCategoryId">
+                <ion-select-option *ngFor="let eggCategory of eggCategories"
+                  [value]="eggCategory.id">{{eggCategory.name}}
+                  -
+                  {{eggCategory.eggType | titlecase}}</ion-select-option>
+              </ion-select>
+              <div class="error-messages">
+                <ng-container *ngFor="let error of errorMessages.eggCategory">
+                  <div class="error-message"
+                    *ngIf="eggEditForm.get('eggCategoryId')?.hasError(error.type) && (eggEditForm.get('eggCategoryId')?.dirty || eggEditForm.get('eggCategoryId')?.touched)">
+                    {{ error.message }}
+                  </div>
+                </ng-container>
+              </div>
+            </ion-col>
+            <ion-col size-xs="12" size-md="4">
+              <ion-input color="gunung-nago-survey" label="{{ 'survey.survey-details.tie' | translate }}"
+                label-placement="floating" fill="outline" type="number" min="0" clear-input="true"
+                formControlName="tie"></ion-input>
+            </ion-col>
+            <ion-col size-xs="12" size-md="4">
+              <ion-input color="gunung-nago-survey" label="Tray" label-placement="floating" fill="outline" type="number"
+                min="0" max="9" maxlength="1" clear-input="true" formControlName="tray"></ion-input>
+              <div class="error-messages">
+                <ng-container *ngFor="let error of errorMessages.tray">
+                  <div class="error-message"
+                    *ngIf="eggEditForm.get('tray')?.hasError(error.type) && (eggEditForm.get('tray')?.dirty || eggEditForm.get('tray')?.touched)">
+                    {{ error.message }}
+                  </div>
+                </ng-container>
+              </div>
+            </ion-col>
+            <ion-col size-xs="12" size-md="4">
+              <ion-input color="gunung-nago-survey" label="{{ 'survey.survey-details.item' | translate }}"
+                label-placement="floating" fill="outline" type="number" min="0" max="29" maxlength="2"
+                clear-input="true" formControlName="item"></ion-input>
+              <div class="error-messages">
+                <ng-container *ngFor="let error of errorMessages.item">
+                  <div class="error-message"
+                    *ngIf="eggEditForm.get('item')?.hasError(error.type) && (eggEditForm.get('item')?.dirty || eggEditForm.get('item')?.touched)">
+                    {{ error.message }}
+                  </div>
+                </ng-container>
+              </div>
+            </ion-col>
+          </ion-row>
+
+          <div class="modal-btn-container ion-text-right">
+            <ion-button class="cancel-btn" (click)="cancelEggEdit()">Cancel</ion-button>
+            <ion-button color="positive-btn" (click)="confirmEggEdit()"
+              [disabled]="!eggEditForm.valid">Save</ion-button>
+          </div>
+        </form>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+  <ion-modal (willDismiss)="onFeedModalWillDismiss($event)" [isOpen]="isFeedModalOpen" cssClass="feed-record-modal"
+    backdropDismiss="false">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <div class="title">
+            <img class="header-logo ml-15" src='./assets/flaticon/edit.png'>
+            <h3 class="modal-header-text">Edit Feed Record</h3>
+          </div>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content [fullscreen]="false" class="ion-padding">
+        <form [formGroup]="feedEditForm">
+          <ion-row>
+            <ion-col size-xs="12" size-md="6">
+              <ion-input color="gunung-nago-survey" label="Name" label-placement="floating" fill="outline" type="text"
+                formControlName="name"></ion-input>
+            </ion-col>
+            <ion-col size-xs="12" size-md="6">
+              <ion-input color="gunung-nago-survey" label="Weight" label-placement="floating" fill="outline"
+                type="number" min="0" clear-input="true" formControlName="weight"></ion-input>
+            </ion-col>
+            <ion-col size-xs="12" size-md="6">
+              <ion-input color="gunung-nago-survey" label="Bags Allocated" label-placement="floating" fill="outline"
+                type="number" min="0" clear-input="true" formControlName="bagsAllocated"></ion-input>
+            </ion-col>
+            <ion-col size-xs="12" size-md="6">
+              <ion-input color="gunung-nago-survey" label="Bags Eaten" label-placement="floating" fill="outline"
+                type="number" clear-input="true" formControlName="bagsEaten"></ion-input>
+              <div class="error-messages">
+                <ng-container *ngFor="let error of errorMessages.bagsEaten">
+                  <div class="error-message"
+                    *ngIf="feedEditForm.get('bagsEaten')?.hasError(error.type) && (feedEditForm.get('bagsEaten')?.dirty || feedEditForm.get('bagsEaten')?.touched)">
+                    {{ error.message }}
+                  </div>
+                </ng-container>
+              </div>
+            </ion-col>
+          </ion-row>
+
+          <div class="modal-btn-container ion-text-right">
+            <ion-button class="cancel-btn" (click)="cancelFeedEdit()">Cancel</ion-button>
+            <ion-button color="positive-btn" (click)="confirmFeedEdit()"
+              [disabled]="!feedEditForm.valid">Save</ion-button>
+          </div>
+        </form>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+  <ion-modal (willDismiss)="onHealthModalWillDismiss($event)" [isOpen]="isHealthModalOpen"
+    cssClass="health-record-modal" backdropDismiss="false">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <div class="title">
+            <img class="header-logo ml-15" src='./assets/flaticon/edit.png'>
+            <h3 class="modal-header-text">Edit Medication / Vaccination Record</h3>
+          </div>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content [fullscreen]="false" class="ion-padding">
+        <form [formGroup]="healthEditForm">
+          <ion-row>
+            <ion-col size-xs="12" size-md="6">
+              <ion-input color="gunung-nago-survey" label="Name" label-placement="floating" fill="outline" type="text"
+                formControlName="name"></ion-input>
+            </ion-col>
+            <ion-col size-xs="12" size-md="6">
+              <ion-input color="gunung-nago-survey" label="Type" label-placement="floating" fill="outline" type="text"
+                formControlName="healthType"></ion-input>
+            </ion-col>
+            <ion-col size-xs="12" size-md="6">
+              <ion-input color="gunung-nago-survey" label="Expiry Date" label-placement="floating" fill="outline"
+                type="text" min="0" clear-input="true" formControlName="expiryDate"></ion-input>
+            </ion-col>
+            <ion-col size-xs="12" size-md="6">
+            </ion-col>
+            <ion-col size-xs="12" size-md="6">
+              <ion-input color="gunung-nago-survey" label="Units Total" label-placement="floating" fill="outline"
+                type="text" min="0" clear-input="true" formControlName="unitsTotal"></ion-input>
+            </ion-col>
+            <ion-col size-xs="12" size-md="6">
+              <ion-input color="gunung-nago-survey" label="Units Used" label-placement="floating" fill="outline"
+                type="number" clear-input="true" formControlName="unitsUsed"></ion-input>
+              <div class="error-messages">
+                <ng-container *ngFor="let error of errorMessages.unitsUsed">
+                  <div class="error-message"
+                    *ngIf="healthEditForm.get('unitsUsed')?.hasError(error.type) && (healthEditForm.get('unitsUsed')?.dirty || healthEditForm.get('unitsUsed')?.touched)">
+                    {{ error.message }}
+                  </div>
+                </ng-container>
+              </div>
+            </ion-col>
+          </ion-row>
+
+          <div class="modal-btn-container ion-text-right">
+            <ion-button class="cancel-btn" (click)="cancelHealthEdit()">Cancel</ion-button>
+            <ion-button color="positive-btn" (click)="confirmHealthEdit()"
+              [disabled]="!healthEditForm.valid">Save</ion-button>
+          </div>
+        </form>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+  <ion-modal (willDismiss)="onManureModalWillDismiss($event)" [isOpen]="isManureModalOpen"
+    cssClass="manure-record-modal" backdropDismiss="false">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <div class="title">
+            <img class="header-logo ml-15" src='./assets/flaticon/manure-bag.png'>
+            <h3 class="modal-header-text">Manure Record</h3>
+          </div>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content [fullscreen]="false" class="ion-padding">
+        <form [formGroup]="manureEditForm">
+          <ion-row>
+            <ion-col size-xs="12" size-md="6">
+              <ion-input color="gunung-nago-survey" label="Weight" label-placement="floating" fill="outline" type="text"
+                formControlName="weight"></ion-input>
+            </ion-col>
+            <ion-col size-xs="12" size-md="6">
+              <ion-input color="gunung-nago-survey" label="Bags collected" label-placement="floating" fill="outline"
+                type="number" min="0" clear-input="true" formControlName="bags"></ion-input>
+            </ion-col>
+          </ion-row>
+
+          <div class="modal-btn-container ion-text-right">
+            <ion-button class="cancel-btn" (click)="cancelManureEdit()">Cancel</ion-button>
+            <ion-button color="positive-btn" (click)="confirmManureEdit()"
+              [disabled]="!manureEditForm.valid">Save</ion-button>
+          </div>
+        </form>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+</ion-content>

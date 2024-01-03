@@ -1,4 +1,4 @@
-import { AquisitionType, CageCategory, EggCategoryStockDto, EggQuantityType, EggType, FarmDto, FeedCategory, FeedSurveyDto, FlockCategory, FlockSaleDetailsDto, FlockType, HealthSurveyDto, HealthType, ManureStockDto, PurchaseDetailsDto, PurchaseInvoiceType, ReturnInvoiceType, RoleDto, SaleDetailsDto, SalesInvoiceCategory, SalesInvoiceStatus, SalesInvoiceType, SurveyEggCountDto } from "./model";
+import { AquisitionType, CageCategory, EggCategoryDto, EggCategoryStockDto, EggQuantityType, EggType, FarmDto, FeedCategory, FeedSurveyDto, FlockCategory, FlockSaleDetailsDto, FlockType, HealthSurveyDto, HealthSurveyStockDto, HealthType, ManureStockDto, PurchaseDetailsDto, PurchaseInvoiceType, ReturnInvoiceType, RoleDto, SaleDetailsDto, SalesInvoiceCategory, SalesInvoiceStatus, SalesInvoiceType, SurveyEggCountDto } from "./model";
 
 export class PageResult<T> {
     public content!: Array<T>;
@@ -385,20 +385,30 @@ export class SettleCustomerCreditPaymentFrontDto {
 
 export class EggTransferFrontDto {
     eggCategoryId: number | null | undefined | any;
-    bad: number | null | undefined | any;
-    unsellable: number | null | undefined | any;
+    transferEggCategoryId: number | null | undefined | any;
+    transferAmount: number | null | undefined | any;
+    increaseAmount: number | null | undefined | any;
+    decreaseAmount: number | null | undefined | any;
+    unsellableAmount: number | null | undefined | any;
 }
 export class EggTransferAmountFrontDto {
     eggCategoryId: number | null | undefined | any;
+    transferEggCategoryId: number | null | undefined | any;
     name: string | null | undefined | any;
     eggType: EggType | null | undefined | any;
     quantity: number | null | undefined | any;
-    pieceBad: number | null | undefined | any;
+    pieceTransfer: number | null | undefined | any;
+    tieTransfer: number | null | undefined | any;
+    trayTransfer: number | null | undefined | any;
     pieceUnsellable: number | null | undefined | any;
-    tieBad: number | null | undefined | any;
     tieUnsellable: number | null | undefined | any;
-    trayBad: number | null | undefined | any;
     trayUnsellable: number | null | undefined | any;
+    pieceIncrease: number | null | undefined | any;
+    tieIncrease: number | null | undefined | any;
+    trayIncrease: number | null | undefined | any;
+    pieceDecrease: number | null | undefined | any;
+    tieDecrease: number | null | undefined | any;
+    trayDecrease: number | null | undefined | any;
 }
 
 export class SaleDetailsForReturnFrontDto {
@@ -541,4 +551,26 @@ export class EggSaleToJakartaFrontDto {
     eggCategoryId: number | null | undefined | any;
     eggQuantityType: EggQuantityType | null | undefined | any;
     weights: number[] | [] | null | undefined;
+}
+
+export class FlockStockDetailsFrontDto {
+    id: number | null | undefined | any;
+    name: string | null | undefined | any;
+    surveyDate: Date | null | undefined | any;
+    age: number | null | undefined | any;
+    flockCategory: FlockCategory | null | undefined | any;
+    alive: number | null | undefined | any;
+    death: number | null | undefined | any;
+    sterile: number | null | undefined | any;
+    good: number | null | undefined | any;
+    totalWeight: number | null | undefined | any;
+    bagsEaten: number | null | undefined | any;
+    amountOfChickenWeighted: number | null | undefined | any;
+    cageName: string | null | undefined | any;
+    comment: string | null | undefined | any;
+    manureBags: number | null | undefined | any;
+    feedSurveyDtos: FeedSurveyDto[] | null | undefined | any;
+    surveyEggCountDtos: SurveyEggCountDto[] | null | undefined | any;
+    healthSurveyStockDtos: HealthSurveyStockDto[] | null | undefined | any;
+    manureStockDtos: ManureStockDto[] | null | undefined | any;
 }

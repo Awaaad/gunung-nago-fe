@@ -127,7 +127,6 @@ export class UserDetailsComponent implements OnInit {
   public formatUserDto(): void {
     this.userDtos = [];
     (this.userDetailsForm.get('userDetails') as FormArray).value.forEach((userDetails: any) => {
-      console.log(userDetails);
       const user = {
         id: userDetails.id,
         username: userDetails.username,

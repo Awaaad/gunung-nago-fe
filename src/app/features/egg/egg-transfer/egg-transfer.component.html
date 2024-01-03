@@ -7,7 +7,7 @@
       <div class="router-links">
         <div class="title">
           <img class="header-logo" src='./assets/flaticon/egg-transfer.png'>
-          <h3 class="header-nav-products">Egg Transfer</h3>
+          <h3 class="header-nav-products">Egg Adjustment</h3>
         </div>
         <div>
         </div>
@@ -113,13 +113,19 @@
     <ion-card-content *ngFor="let eggTransferAmountDto of eggTransferAmountDtos; let i = index">
       <div class="divider-wrapper">
         <div class="egg-section">
-          <img *ngIf="eggTransferAmountDto.eggType != 'BAD'"class="big-eggs-form" src='./assets/flaticon/good-category.png'>
-          <img *ngIf="eggTransferAmountDto.eggType == 'BAD'" class="big-eggs-form" src='./assets/flaticon/bad-category.png'>
+          <img *ngIf="eggTransferAmountDto.eggType != 'BAD'" class="big-eggs-form"
+            src='./assets/flaticon/good-category.png'>
+          <img *ngIf="eggTransferAmountDto.eggType == 'BAD'" class="big-eggs-form"
+            src='./assets/flaticon/bad-category.png'>
           <div class="egg-count">
-            <strong>{{eggTransferAmountDto.quantity - ((eggTransferAmountDto.tieBad * 300)+
-              (eggTransferAmountDto.trayBad * 30) + eggTransferAmountDto.pieceBad +
-              (eggTransferAmountDto.tieUnsellable * 300)+
-              (eggTransferAmountDto.trayUnsellable * 30) + eggTransferAmountDto.pieceUnsellable)}}</strong>
+            <strong>{{(eggTransferAmountDto.quantity + (eggTransferAmountDto.tieIncrease * 300)+
+              (eggTransferAmountDto.trayIncrease * 30) + eggTransferAmountDto.pieceIncrease)
+              - ((eggTransferAmountDto.tieDecrease * 300)+
+              (eggTransferAmountDto.trayDecrease * 30) + eggTransferAmountDto.pieceDecrease +
+              (eggTransferAmountDto.tieUnsellable * 300) +
+              (eggTransferAmountDto.trayUnsellable * 30) + eggTransferAmountDto.pieceUnsellable +
+              (eggTransferAmountDto.tieTransfer * 300) +
+              (eggTransferAmountDto.trayTransfer * 30) + eggTransferAmountDto.pieceTransfer)}}</strong>
           </div>
         </div>
         <div class="divider-text">
@@ -134,14 +140,17 @@
             <ion-item-divider>
               <ion-label>Tie</ion-label>
             </ion-item-divider>
-            <div *ngIf="eggTransferAmountDto.eggType != 'BAD'">
-              <ion-input color="gunung-nago-survey" label="Bad Tie" label-placement="floating" fill="outline"
-                type="number" min="0" clear-input="true" [(ngModel)]="eggTransferAmountDto.tieBad"></ion-input>
+            <div>
+              <ion-input color="gunung-nago-survey" label="Increase Tie" label-placement="floating" fill="outline"
+                type="number" min="0" clear-input="true" [(ngModel)]="eggTransferAmountDto.tieIncrease"></ion-input>
+            </div>
+            <div class="mt-1">
+              <ion-input color="gunung-nago-survey" label="Decrease Tie" label-placement="floating" fill="outline"
+                type="number" min="0" clear-input="true" [(ngModel)]="eggTransferAmountDto.tieDecrease"></ion-input>
             </div>
             <div class="mt-1">
               <ion-input color="gunung-nago-survey" label="Unsellable Tie" label-placement="floating" fill="outline"
-                type="number" min="0" clear-input="true"
-                [(ngModel)]="eggTransferAmountDto.tieUnsellable"></ion-input>
+                type="number" min="0" clear-input="true" [(ngModel)]="eggTransferAmountDto.tieUnsellable"></ion-input>
             </div>
           </div>
         </ion-col>
@@ -150,14 +159,17 @@
             <ion-item-divider>
               <ion-label>Tray</ion-label>
             </ion-item-divider>
-            <div *ngIf="eggTransferAmountDto.eggType != 'BAD'">
-              <ion-input color="gunung-nago-survey" label="Bad Tray" label-placement="floating" fill="outline"
-                type="number" min="0" clear-input="true" [(ngModel)]="eggTransferAmountDto.trayBad"></ion-input>
+            <div>
+              <ion-input color="gunung-nago-survey" label="Increase Tray" label-placement="floating" fill="outline"
+                type="number" min="0" clear-input="true" [(ngModel)]="eggTransferAmountDto.trayIncrease"></ion-input>
+            </div>
+            <div class="mt-1">
+              <ion-input color="gunung-nago-survey" label="Decrease Tie" label-placement="floating" fill="outline"
+                type="number" min="0" clear-input="true" [(ngModel)]="eggTransferAmountDto.trayDecrease"></ion-input>
             </div>
             <div class="mt-1">
               <ion-input color="gunung-nago-survey" label="Unsellable Tray" label-placement="floating" fill="outline"
-                type="number" min="0" clear-input="true"
-                [(ngModel)]="eggTransferAmountDto.trayUnsellable"></ion-input>
+                type="number" min="0" clear-input="true" [(ngModel)]="eggTransferAmountDto.trayUnsellable"></ion-input>
             </div>
           </div>
         </ion-col>
@@ -166,19 +178,60 @@
             <ion-item-divider>
               <ion-label>Piece</ion-label>
             </ion-item-divider>
-            <div *ngIf="eggTransferAmountDto.eggType != 'BAD'">
-              <ion-input color="gunung-nago-survey" label="Bad Piece" label-placement="floating" fill="outline"
-                type="number" min="0" clear-input="true" [(ngModel)]="eggTransferAmountDto.pieceBad"></ion-input>
+            <div>
+              <ion-input color="gunung-nago-survey" label="Increase Piece" label-placement="floating" fill="outline"
+                type="number" min="0" clear-input="true" [(ngModel)]="eggTransferAmountDto.pieceIncrease"></ion-input>
+            </div>
+            <div class="mt-1">
+              <ion-input color="gunung-nago-survey" label="Decrease Tie" label-placement="floating" fill="outline"
+                type="number" min="0" clear-input="true" [(ngModel)]="eggTransferAmountDto.pieceDecrease"></ion-input>
             </div>
             <div class="mt-1">
               <ion-input color="gunung-nago-survey" label="Unsellable Piece" label-placement="floating" fill="outline"
-                type="number" min="0" clear-input="true"
-                [(ngModel)]="eggTransferAmountDto.pieceUnsellable"></ion-input>
+                type="number" min="0" clear-input="true" [(ngModel)]="eggTransferAmountDto.pieceUnsellable"></ion-input>
             </div>
           </div>
         </ion-col>
       </ion-row>
 
+      <ion-row class="mt-1">
+        <ion-col size-xs="12" size-md="3">
+          <ion-select color="gunung-nago-primary" label="Transfer Egg Category" label-placement="floating"
+            fill="outline" interface="popover" clear-input="true"
+            [(ngModel)]="eggTransferAmountDto.transferEggCategoryId"
+            (ionChange)="ionChangeEggCategory($event, eggTransferAmountDto)">
+            <ion-select-option *ngFor="let eggCategory of eggCategories" [value]="eggCategory.id"
+              [disabled]="eggCategory.id===eggTransferAmountDto.eggCategoryId">{{ eggCategory.name
+              }}</ion-select-option>
+          </ion-select>
+        </ion-col>
+      </ion-row>
+      <ion-row *ngIf="eggTransferAmountDto.transferEggCategoryId">
+        <ion-col size-xs="12" size-md="4">
+          <div class="egg-form-section-left">
+            <div>
+              <ion-input color="gunung-nago-survey" label="Transfer Tie" label-placement="floating" fill="outline"
+                type="number" min="0" clear-input="true" [(ngModel)]="eggTransferAmountDto.tieTransfer"></ion-input>
+            </div>
+          </div>
+        </ion-col>
+        <ion-col size-xs="12" size-md="4">
+          <div class="egg-form-section-left">
+            <div>
+              <ion-input color="gunung-nago-survey" label="Transfer Tray" label-placement="floating" fill="outline"
+                type="number" min="0" clear-input="true" [(ngModel)]="eggTransferAmountDto.trayTransfer"></ion-input>
+            </div>
+          </div>
+        </ion-col>
+        <ion-col size-xs="12" size-md="4">
+          <div class="egg-form-section-left">
+            <div>
+              <ion-input color="gunung-nago-survey" label="Transfer Piece" label-placement="floating" fill="outline"
+                type="number" min="0" clear-input="true" [(ngModel)]="eggTransferAmountDto.pieceTransfer"></ion-input>
+            </div>
+          </div>
+        </ion-col>
+      </ion-row>
     </ion-card-content>
   </ion-card>
 

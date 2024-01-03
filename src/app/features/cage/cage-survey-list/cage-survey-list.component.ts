@@ -2,16 +2,17 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { CageApiService } from '../../../shared/apis/cage.api.service';
-import { AquisitionType, CageCategory, CageDto, FlockCategory } from 'generated-src/model';
+import { AquisitionType, CageCategory, CageDto, FlockCategory, SurveyDto } from 'generated-src/model';
 import { SurveyApiService } from '../../../shared/apis/survey.api.service';
 import * as moment from 'moment';
-import { IonModal } from '@ionic/angular';
+import { IonModal, ModalController } from '@ionic/angular';
 import { OverlayEventDetail } from '@ionic/core/components';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { FlockSaveFrontDto } from 'generated-src/model-front';
 import { FlockApiService } from '../../../shared/apis/flock.api.service';
 import { UtilsService } from 'src/app/shared/utils/utils.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { WarmingComponent } from 'src/app/shared/modals/warming/warming.component';
 @Component({
   selector: 'app-cage-survey-list',
   templateUrl: './cage-survey-list.component.html',
@@ -45,11 +46,11 @@ export class CageSurveyListComponent {
     private surveyApiService: SurveyApiService,
     private translateService: TranslateService,
     private router: Router,
-    private utilsService: UtilsService
+    private utilsService: UtilsService,
+    private modalController: ModalController,
   ) { }
 
   ionViewWillEnter(): void {
-    this.initialiseAlertButtons();
     this.getAllActiveCages();
   }
 
@@ -62,15 +63,13 @@ export class CageSurveyListComponent {
     this.isFlockAndCageIncompatible = false;
     this.selectedCageId = cage.id;
     this.surveyApiService.findIfSurveyHasBeenRegisteredForCage(cage.id).subscribe(data => {
-      // if (data == null) {
-      //   this.warningMessage = 'There are no active flocks for the selected cage. \n Would you like to create one?';
-      //   this.isNoActiveFlockAlertOpen = true;
-      // } else 
-      if (data === moment(new Date()).startOf('day').format(moment.HTML5_FMT.DATE)) {
+      if (data && moment(data.createdDate).startOf('day').format(moment.HTML5_FMT.DATE) === moment(new Date()).startOf('day').format(moment.HTML5_FMT.DATE)) {
         this.warningMessage = 'A survey has already been recorded today for the selected cage. \n Would you like to edit the recorded survey?';
-        this.isSurveyAlreadyRecordedAlertOpen = true;
+        // this.isSurveyAlreadyRecordedAlertOpen = true;
+        this.editModal(data);
       } else {
         this.surveyApiService.findMostRecentSurveyDtoForCage(cage.id).subscribe(data => {
+          console.log(data);
           if (data.flockCategory != (cage.cageCategory) as unknown as FlockCategory) {
             this.isFlockAndCageIncompatible = true;
             this.flockId = data.flockId;
@@ -88,12 +87,6 @@ export class CageSurveyListComponent {
     })
   }
 
-  public skip(): void {
-    this.isFlockAndCageIncompatible = false;
-    this.modal.dismiss(null, 'cancel');
-    this.router.navigate([`survey/survey-details/${this.selectedCageId}/${false}`]);
-  }
-
   public getAllActiveCages() {
     this.cageApiService.getAllActiveCages().subscribe(cages => {
       this.cagesDoc = cages.filter((cage: { cageCategory: string; }) => cage.cageCategory === CageCategory.DOC);
@@ -106,34 +99,6 @@ export class CageSurveyListComponent {
     this.cageApiService.getAllInactiveCagesByCategory(cageCategory).subscribe(cages => {
       this.transferCages = cages;
     })
-  }
-
-  public initialiseAlertButtons(): void {
-    this.alertButtons = [
-      {
-        text: 'No',
-        role: false,
-        cssClass: 'alert-negative-btn',
-        handler: () => {
-          this.isResponsePositive = false;
-        },
-      },
-      {
-        text: 'Yes',
-        role: true,
-        cssClass: 'alert-positive-btn',
-        handler: () => {
-          this.isResponsePositive = true;
-        },
-      },
-    ]
-  }
-
-  public setAlertResult(event: any): void {
-    this.isResponsePositive = event.detail.role;
-    if (this.isSurveyAlreadyRecordedAlertOpen && this.isResponsePositive === true) {
-      this.router.navigate([`survey/survey-details/${this.selectedCageId}/${true}`]);
-    }
   }
 
   private initialiseFormBuilder(flockId: number): void {
@@ -167,6 +132,12 @@ export class CageSurveyListComponent {
     this.modal.dismiss(null, 'confirm');
   }
 
+  public skip(): void {
+    this.isFlockAndCageIncompatible = false;
+    this.modal.dismiss(null, 'cancel');
+    this.router.navigate([`survey/survey-details/${this.selectedCageId}/${false}`]);
+  }
+
   public onWillDismiss(event: Event): void {
     const ev = event as CustomEvent<OverlayEventDetail<string>>;
     if (ev.detail.role === 'backdrop') {
@@ -175,5 +146,27 @@ export class CageSurveyListComponent {
     if (ev.detail.role === 'confirm') {
       this.saveTransfer();
     }
+  }
+
+  public async editModal(surveyDto: SurveyDto) {
+    const modal: HTMLIonModalElement = await this.modalController.create({
+      component: WarmingComponent,
+      cssClass: "warning-modal",
+      componentProps: {
+        message: "A survey has already been recorded today for the selected cage",
+        message2: "Would you like to edit the recorded survey?"
+      },
+      backdropDismiss: false,
+    });
+
+    modal.onDidDismiss().then((data) => {
+      if (data.data === true) {
+        this.router.navigate([`flock/flock-stock-edit-details/${surveyDto.flockStockId}`], { queryParams: { name: surveyDto.flockName, surveyDate: surveyDto.createdDate, cageName: surveyDto.cageName } });
+
+      } else {
+      }
+    });
+
+    await modal.present();
   }
 }

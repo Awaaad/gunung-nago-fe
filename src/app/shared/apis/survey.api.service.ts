@@ -27,8 +27,8 @@ export class SurveyApiService {
     return this.http.get<SurveyDto>(`${this.baseUrl}/recent/${cageId}`);
   }
 
-  public findIfSurveyHasBeenRegisteredForCage(cageId: number): Observable<string> {
-    return this.http.get<string>(`${this.baseUrl}/surveyed/${cageId}`);
+  public findIfSurveyHasBeenRegisteredForCage(cageId: number): Observable<SurveyDto> {
+    return this.http.get<SurveyDto>(`${this.baseUrl}/surveyed/${cageId}`);
   }
 
   public flockStockExistsForSelectedCageByCageId(cageId: number): Observable<boolean> {

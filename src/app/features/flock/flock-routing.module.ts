@@ -7,6 +7,7 @@ import { FlockStockComponent } from './flock-stock/flock-stock.component';
 import { FlockTransferComponent } from './flock-transfer/flock-transfer.component';
 import { FlockCageCategoryTransferComponent } from './flock-cage-category-transfer/flock-cage-category-transfer.component';
 import { FlockStockDetailsComponent } from './flock-stock-details/flock-stock-details.component';
+import { FlockStockEditDetailsComponent } from './flock-stock-edit-details/flock-stock-edit-details.component';
 
 const routes: Routes = [
   {
@@ -28,6 +29,10 @@ const routes: Routes = [
   {
     path: 'flock-stock-details/:id',
     component: FlockStockDetailsComponent
+  },
+  {
+    path: 'flock-stock-edit-details/:id',
+    component: FlockStockEditDetailsComponent
   },
   {
     path: 'flock-transfer',

@@ -1,8 +1,9 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { EggCategoryStockDto, EggTransferDto } from 'generated-src/model';
+import { EggCategoryDto, EggCategoryStockDto, EggTransferDto } from 'generated-src/model';
 import { EggStockFrontDto, EggTransferAmountFrontDto, EggTransferFrontDto } from 'generated-src/model-front';
+import { EggCategoryApiService } from 'src/app/shared/apis/egg-category.api.service';
 import { EggStockApiService } from 'src/app/shared/apis/egg-stock.api.service';
 import { UtilsService } from 'src/app/shared/utils/utils.service';
 
@@ -16,6 +17,7 @@ export class EggTransferComponent implements OnInit {
   public eggStock!: EggStockFrontDto;
   public eggTransferDtos: EggTransferFrontDto[] = [];
   public eggTransferAmountDtos: EggTransferAmountFrontDto[] = [];
+  public eggCategories: EggCategoryDto[] = [];
 
   public pieceBad: number = 0;
   public pieceUnsellable: number = 0;
@@ -27,11 +29,13 @@ export class EggTransferComponent implements OnInit {
   constructor(
     private eggStockApiService: EggStockApiService,
     private translateService: TranslateService,
-    private utilsService: UtilsService
+    private utilsService: UtilsService,
+    private eggCategoryApiService: EggCategoryApiService
   ) { }
 
   ngOnInit() {
     this.getEggStock();
+    this.getEggCategories();
   }
 
   public ionChangeLanguage(event: any): void {
@@ -64,15 +68,22 @@ export class EggTransferComponent implements OnInit {
     } else {
       const eggTransferAmountDto = {
         eggCategoryId: eggCategory.eggCategoryId,
+        transferEggCategoryId: null,
         name: eggCategory.name,
         eggType: eggCategory.eggType,
         quantity: eggCategory.quantity,
-        pieceBad: null,
+        pieceTransfer: null,
+        tieTransfer: null,
+        trayTransfer: null,
         pieceUnsellable: null,
-        tieBad: null,
         tieUnsellable: null,
-        trayBad: null,
         trayUnsellable: null,
+        pieceIncrease: null,
+        tieIncrease: null,
+        trayIncrease: null,
+        pieceDecrease: null,
+        tieDecrease: null,
+        trayDecrease: null
       }
       this.eggTransferAmountDtos.push(eggTransferAmountDto);
     }
@@ -82,10 +93,28 @@ export class EggTransferComponent implements OnInit {
     this.eggTransferDtos = this.eggTransferAmountDtos.map(eggTransferAmountDto => {
       return {
         eggCategoryId: eggTransferAmountDto.eggCategoryId,
-        bad: (eggTransferAmountDto.tieBad * 300) + (eggTransferAmountDto.trayBad * 30) + eggTransferAmountDto.pieceBad,
-        unsellable: (eggTransferAmountDto.tieUnsellable * 300) + (eggTransferAmountDto.trayUnsellable * 30) + eggTransferAmountDto.pieceUnsellable
+        transferEggCategoryId: eggTransferAmountDto.transferEggCategoryId,
+        transferAmount: (eggTransferAmountDto.tieTransfer * 300) + (eggTransferAmountDto.trayTransfer * 30) + eggTransferAmountDto.pieceTransfer,
+        increaseAmount: (eggTransferAmountDto.tieIncrease * 300) + (eggTransferAmountDto.trayIncrease * 30) + eggTransferAmountDto.pieceIncrease,
+        decreaseAmount: (eggTransferAmountDto.tieDecrease * 300) + (eggTransferAmountDto.trayDecrease * 30) + eggTransferAmountDto.pieceDecrease,
+        unsellableAmount: (eggTransferAmountDto.tieUnsellable * 300) + (eggTransferAmountDto.trayUnsellable * 30) + eggTransferAmountDto.pieceUnsellable
       }
     })
+  }
+
+  private getEggCategories(): void {
+    this.eggCategoryApiService.findAll().subscribe(eggCategories => {
+      this.eggCategories = eggCategories;
+    })
+  }
+
+  public ionChangeEggCategory(event: any, eggTransferAmountDto: EggTransferAmountFrontDto) {
+    console.log(event.detail.value);
+    console.log(eggTransferAmountDto.eggCategoryId);
+    if (event.detail.value === eggTransferAmountDto.eggCategoryId) {
+      eggTransferAmountDto.transferEggCategoryId = null;
+      event.stopPropagation;
+    }
   }
 
   public save(): void {

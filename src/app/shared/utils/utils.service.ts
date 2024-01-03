@@ -105,4 +105,8 @@ export class UtilsService {
     }
     return undefined;
   }
+
+  public formatEggQuantity(value: number): number {
+    return Math.floor(value);
+  }
 }

@@ -1,0 +1,160 @@
+.divider-img {
+    width: 3em;
+}
+
+.text {
+    margin: 7px;
+}
+
+.input {
+    width: 100%;
+    padding-right: 10px;
+}
+
+table {
+    width: 100%;
+}
+
+th.mat-header-cell,
+td.mat-cell {
+    text-align: center;
+    border: 1px solid #CCC;
+    padding: 0 !important;
+}
+
+.table-responsive {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+}
+
+tbody {
+    overflow-x: scroll;
+}
+
+// .mat-mdc-table tbody,
+// .mat-mdc-table tfoot,
+.mat-mdc-table thead,
+.mat-mdc-cell,
+// .mat-mdc-footer-cell,
+// .mat-mdc-header-row,
+// .mat-mdc-row,
+// .mat-mdc-footer-row,
+// .mat-mdc-table 
+.mat-mdc-header-cell {
+    border: 1px solid #CCC;
+}
+
+.mat-mdc-cell:first-child {
+    border-left: 0;
+}
+
+.mat-mdc-cell:last-child {
+    border-right: 0;
+}
+
+.mdc-data-table__header-cell {
+    border-top: 0;
+}
+
+.mdc-data-table__header-cell:first-child {
+    border-left: 0;
+}
+
+.mdc-data-table__header-cell:last-child {
+    border-right: 0;
+}
+
+.mdc-data-table__header-cell {
+    color: white;
+}
+
+// .mdc-data-table__row:last-child .mat-mdc-cell {
+//     border: 1px solid #CCC;
+// }
+
+// .mdc-data-table__row:last-child .mat-mdc-cell {
+//     border-left: none;
+// }
+
+.margin-x-0 {
+    margin-right: 3px;
+    margin-left: 3px;
+}
+
+.daily-report {
+    .mat-mdc-table .mdc-data-table__header-row {
+        background: var(--ion-color-gunung-nago-report);
+        color: white;
+    }
+}
+
+.daily-egg-report {
+    .mat-mdc-table .mdc-data-table__header-row {
+        background: var(--ion-color-gunung-nago-report);
+        color: white;
+    }
+}
+
+.daily-feed-report {
+    .mat-mdc-table .mdc-data-table__header-row {
+        background: var(--ion-color-gunung-nago-report);
+        color: white;
+    }
+}
+
+.daily-flock-report {
+    .mat-mdc-table .mdc-data-table__header-row {
+        background: var(--ion-color-gunung-nago-report);
+        color: white;
+    }
+}
+
+.daily-health-report {
+    .mat-mdc-table .mdc-data-table__header-row {
+        background: var(--ion-color-gunung-nago-report);
+        color: white;
+    }
+}
+
+.daily-manure-report {
+    .mat-mdc-table .mdc-data-table__header-row {
+        background: var(--ion-color-gunung-nago-report);
+        color: white;
+    }
+}
+
+.survey-divider-img {
+    width: 3em;
+}
+
+.em-title {
+    font-size: 15px;
+    font-weight: 500;
+    margin-left: 6px;
+}
+
+ion-chip {
+    border-radius: 4px;
+    background-color: var(--ion-color-gunung-nago-report);
+    color: white;
+    font-size: 15px;
+}
+
+.btn-edit-container {
+    display: flex;
+    justify-content: end;
+    margin: 1em 0;
+}
+
+.button-section {
+    margin: 0.4em 0 0 1em;
+}
+
+.egg-divider-img {
+    width: 4em;
+}
+
+.manure-bag-img {
+    width: 4em;
+}

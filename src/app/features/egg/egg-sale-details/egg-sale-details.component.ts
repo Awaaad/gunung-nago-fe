@@ -184,7 +184,25 @@ export class EggSaleDetailsComponent implements OnInit {
 
   public changeIsToJakarta(event: any): void {
     this.isToJakarta = event.detail.checked;
-    this.reset();
+    this.eggCategoryStockBtn = [];
+    this.totalPrice = 0;
+    this.totalRemainingEggs = 0;
+    this.totalRemainingGoodEggs = 0;
+    this.totalRemainingBadEggs = 0;
+    this.showFormArray = false;
+    this.initialiseEggSaleSaveDto();
+    this.resetFormValues();
+
+    this.eggSaleForm?.get("isToJakarta")?.setValue(this.isToJakarta);
+    this.eggSaleForm?.get("pricePerKg")?.setValue(null);
+    (this.eggSaleForm.get('eggCategorySaleDtos') as FormArray).clear();
+
+
+    if (this.paymentForm) {
+      this.paymentForm.reset();
+      (this.paymentForm.get('payments') as FormArray).clear();
+    }
+    this.getEggStock();
   }
 
   private setCustomerNewValue(isNewCustomer: boolean): void {

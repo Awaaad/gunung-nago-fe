@@ -22,7 +22,7 @@
       <ion-label color="norm">NORMAL</ion-label>
     </ion-item-divider>
     <ion-row>
-      <ion-col size-xs="6" size-md="3" class="mt-1e" *ngFor="let cage of cages">
+      <ion-col size-xs="6" size-md="2" class="mt-1e" *ngFor="let cage of cages">
         <ion-ripple-effect class="custom-ripple"></ion-ripple-effect>
         <ion-card color="norm" (click)="routeToSurveyDetails(cage)">
           <ion-card-content class="home-card-content">
@@ -36,7 +36,7 @@
       <ion-label color="dara">DARA</ion-label>
     </ion-item-divider>
     <ion-row>
-      <ion-col size-xs="6" size-md="3" class="mt-1e" *ngFor="let cage of cagesDara">
+      <ion-col size-xs="6" size-md="2" class="mt-1e" *ngFor="let cage of cagesDara">
         <ion-card color="dara" (click)="routeToSurveyDetails(cage)">
           <ion-card-content class="home-card-content">
             {{cage.name}}
@@ -49,7 +49,7 @@
       <ion-label color="doc">DOC</ion-label>
     </ion-item-divider>
     <ion-row>
-      <ion-col size-xs="6" size-md="3" class="mt-1e" *ngFor="let cage of cagesDoc">
+      <ion-col size-xs="6" size-md="2" class="mt-1e" *ngFor="let cage of cagesDoc">
         <ion-card color="doc" (click)="routeToSurveyDetails(cage)">
           <ion-card-content class="home-card-content">
             {{cage.name}}
@@ -93,16 +93,11 @@
         <div class="modal-btn-container ion-text-right">
           <ion-button color="neutral-btn mr-05" (click)="skip()">Skip</ion-button>
           <ion-button class="cancel-btn" (click)="cancel()">Cancel</ion-button>
-          <ion-button color="positive-btn" (click)="confirm()" [disabled]="!transferForm.value.cageId">Save and proceed to survey</ion-button>
+          <ion-button color="positive-btn" (click)="confirm()" [disabled]="!transferForm.value.cageId">Save and proceed
+            to survey</ion-button>
         </div>
       </ion-content>
     </ng-template>
   </ion-modal>
-
-  <!-- <ion-alert [isOpen]="isNoActiveFlockAlertOpen" header="Warning!" subHeader={{warningMessage}} [buttons]="alertButtons"
-    (didDismiss)="setAlertResult($event)"></ion-alert> -->
-
-  <ion-alert [isOpen]="isSurveyAlreadyRecordedAlertOpen" header="Warning!" subHeader={{warningMessage}}
-    [buttons]="alertButtons" (didDismiss)="setAlertResult($event)"></ion-alert>
 
 </ion-content>

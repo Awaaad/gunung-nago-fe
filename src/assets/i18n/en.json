@@ -9,7 +9,7 @@
 	"activity.home": "Home",
 	"activity.survey": "Survey",
 	"activity.trays": "Trays",
-	"activity.vaccine-medication": "Vaccine / Medication",
+	"activity.vaccine-medication": "Medication / Vaccination",
 	"activity.warehouse": "Warehouse",
 	"cage.cage-list.cage-list": "Cage List",
 	"cage.cage-details.cage-details": "Cage Details",
@@ -49,5 +49,5 @@
 	"survey.survey-details.total-item": "Total Item",
 	"survey.survey-details.up-down": "+ / -",
 	"survey.survey-details.usage": "Usage",
-	"survey.survey-details.vaccine-medication": "Vaccine / Medication"
+	"survey.survey-details.vaccine-medication": "Medication / Vaccination"
 }

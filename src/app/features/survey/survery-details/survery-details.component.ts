@@ -444,6 +444,8 @@ export class SurveryDetailsComponent implements OnInit {
     this.surveyEggCountDtos = [];
     this.surveyEggCountDtos = (this.surveyForm.get('eggCategories') as FormArray).value.map((form: any) => {
       const surveyEggCountDto: SurveyEggCountDto = {
+        flockStockId: 0,
+        name: "",
         eggCategoryId: form.eggCategoryId,
         quantity: (form.tie * 300) + (form.tray * 30) + form.item
       }

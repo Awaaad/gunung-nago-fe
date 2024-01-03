@@ -1,0 +1,16 @@
+<ion-header>
+  <ion-toolbar>
+    <div class="title">
+      <img class="header-logo ml-15" src='./assets/flaticon/warning.png'>
+      <h3 class="modal-header-text">Warning</h3>
+    </div>
+  </ion-toolbar>
+</ion-header>
+<ion-content [fullscreen]="false" class="ion-padding">
+  <div class="warning-text">{{message}}</div>
+  <div class="warning-text mt-1">{{message2}}</div>
+  <div class="modal-btn-container ion-text-right">
+    <ion-button class="cancel-btn" (click)="closeModal()">No</ion-button>
+    <ion-button color="positive-btn" (click)="onSubmit()">Yes</ion-button>
+  </div>
+</ion-content>

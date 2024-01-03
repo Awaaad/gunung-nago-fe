@@ -1,162 +1,80 @@
-.card-corner {
-  height: 100%;
-  width: 7em;
-  z-index: 1;
-  position: absolute;
-  left: -75px;
+::ng-deep .doughnutChart {
+  margin: auto;
+  height: 400px !important;
+  width: 400px !important;
 }
 
-.card-rounded-corner {
-  height: 135px;
-  width: 135px;
-  background-color: #068C38;
-  z-index: 1;
-  position: absolute;
-  top: -75px;
-  right: -75px;
-  border-radius: 50%;
-  -webkit-transition: all .5s ease;
-  -o-transition: all .5s ease;
-  transition: all .5s ease;
-}
+// .mb-2 {
+//   margin-bottom: 2em;
+// }
 
-.survey {
-  background-color: #0F1A87;
-}
-
-.report {
-  background-color: #068C38;
-}
-
-.flock-sale {
-  background-color: #A14813;
-}
-
-.cage {
-  background-color: #3d4142;
-}
-
-.flock {
-  background-color: #5F3E2A;
-}
-
-.warehouse {
+.danger {
   background-color: #d13710;
 }
 
-.dashboard {
-  background-color: #FF9933;
+.success {
+  background-color: rgb(6, 140, 56);
 }
 
-.vaccine {
-  background-color: #831882;
+.neutral {
+  background-color: #0F1A87;
 }
 
-.chicken-food {
-  background-color: #f5b803;
+.warning {
+  background-color: #F79F1F;
 }
 
-.home-card-title {
-  padding-left: 1em;
-}
-
-.home-card-content {
+.card-info {
   text-align: center;
 }
 
-::ng-deeep .item-radio-checked.sc-ion-select-popover-md {
-  --background: rgba(var(--ion-color-primary-rgb, 56, 128, 255), 0.08);
-  --background-focused: none;
-  --background-focused-opacity: 0.2;
-  --background-hover: none;
-  --background-hover-opacity: 0.12;
+.card-info-title {
+  font-size: 15px;
+  color: white;
 }
 
-::ng-deep .mat-focused .mat-form-field-label {
-  /*change color of label*/
-  color: black !important;
+.card-info-text {
+  font-size: 2em;
+  color: white;
 }
 
-::ng-deep.mat-form-field-underline {
-  /*change color of underline*/
-  background-color: gray !important;
+.card-info-message {
+  font-size: 15px;
+  color: white;
 }
 
-::ng-deep.mat-form-field-ripple {
-  /*change color of underline when focused*/
-  background-color: gray !important;
-}
-
-::ng-deep .mat-form-field-placeholder {
-  color: red;
-}
-
-::ng-deep .mat-focused .mat-form-field-placeholder {
-  color: red;
-}
-
-::ng-deep .mat-form-field {
-  /*change color of label*/
-  width: auto;
-  color: black;
-  padding-left: 20px;
-}
-
-::ng-deep .mat-select-value {
+.first-level-title {
   color: black;
 }
 
-::ng-deep .select-label {
+.first-level-amount {
   color: black;
+  font-size: 1.8em;
+  font-weight: 500;
 }
 
-::ng-deep .mat-primary .mat-option.mat-selected:not(.mat-option-disabled) {
-  color: black;
+.first-level-img {
+  width: 4.8em;
+  text-align: center;
+  margin: auto;
+  display: flex;
 }
 
-::ng-deep .mat-form-field-infix {
-  padding: 0.5em 0;
-  border-bottom: 0.15em solid gray;
+.flocks-img {
+  width: 6em;
 }
 
-::ng-deep .mat-select-arrow {
-  color: gray;
+.divider-img {
+  width: 3em;
 }
 
-::ng-deep .mat-select-panel .mat-option.mat-selected:not(.mat-option-multiple) {
-  background-color: #e2e2e2 !important;
+.divider-wrapper {
+  margin: 1em;
 }
 
-::ng-deep .mat-option.mat-active {
-  background: #e2e2e2 !important;
-  color: black;
-}
-
-// ion-card {
-//   --background: #19422d;
-//   --color: #fff;
-
-//   --border-color: #fff;
-//   --border-style: dashed;
-//   --border-width: 2px;
-
-//   --border-radius: 20px;
-
-//   --ripple-color: purple;
-
-//   --detail-icon-color: white;
-//   --detail-icon-opacity: 1;
-//   --detail-icon-font-size: 20px;
-// }
-
-.custom-ripple {
-  color: #501ace;
-}
-
-// .card-center {
-//   justify-content: center;
-// }
-
-.warehouse {
-  background-color: #91260c;
+ion-item-divider {
+  margin-bottom: 1em;
+  border-color: rgb(34, 34, 34);
+  color: rgb(34, 34, 34);
+  font-weight: 500;
 }

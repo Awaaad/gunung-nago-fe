@@ -278,6 +278,27 @@ strong {
     --height: 28em;
 }
 
+.egg-record-modal {
+    --height: 24em;
+}
+
+.feed-record-modal {
+    --height: 24em;
+}
+
+.manure-record-modal {
+    --height: 24em;
+}
+
+.health-record-modal {
+    --height: 28em;
+}
+
+.warning-modal {
+    --height: 17em;
+    --width: 26em;
+}
+
 .btn-container-stock {
     display: flex;
     justify-content: end;

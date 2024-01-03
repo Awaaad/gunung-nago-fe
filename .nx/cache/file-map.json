@@ -1,0 +1,2106 @@
+{
+  "version": "6.0",
+  "nxVersion": "17.1.3",
+  "deps": {
+    "@angular/animations": "^17.0.8",
+    "@angular/cdk": "^16.1.7",
+    "@angular/common": "^17.0.8",
+    "@angular/compiler": "^17.0.8",
+    "@angular/core": "^17.0.8",
+    "@angular/forms": "^17.0.8",
+    "@angular/material": "^16.1.7",
+    "@angular/material-moment-adapter": "^16.2.0",
+    "@angular/platform-browser": "^17.0.8",
+    "@angular/platform-browser-dynamic": "^17.0.8",
+    "@angular/router": "^17.0.8",
+    "@angular/service-worker": "^17.0.8",
+    "@capacitor/app": "5.0.6",
+    "@capacitor/core": "5.2.2",
+    "@capacitor/haptics": "5.0.6",
+    "@capacitor/keyboard": "5.0.6",
+    "@capacitor/status-bar": "5.0.6",
+    "@ionic/angular": "^7.0.0",
+    "@maskito/angular": "^1.7.0",
+    "@maskito/core": "^1.7.0",
+    "@ngx-translate/core": "^15.0.0",
+    "@ngx-translate/http-loader": "^8.0.0",
+    "ionicons": "^7.0.0",
+    "lodash": "^4.17.21",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.3.0",
+    "zone.js": "~0.14.2",
+    "@angular-devkit/build-angular": "^17.0.8",
+    "@angular-eslint/builder": "^17.0.1",
+    "@angular-eslint/eslint-plugin": "^17.0.1",
+    "@angular-eslint/eslint-plugin-template": "^17.0.1",
+    "@angular-eslint/schematics": "^17.0.1",
+    "@angular-eslint/template-parser": "^17.0.1",
+    "@angular/cli": "^17.0.8",
+    "@angular/compiler-cli": "^17.0.8",
+    "@angular/language-service": "^17.0.8",
+    "@capacitor/cli": "5.2.2",
+    "@ionic/angular-toolkit": "^9.0.0",
+    "@types/jasmine": "~4.3.0",
+    "@types/lodash": "^4.14.200",
+    "@types/node": "^12.11.1",
+    "@typescript-eslint/eslint-plugin": "5.3.0",
+    "@typescript-eslint/parser": "5.3.0",
+    "eslint": "^7.26.0",
+    "eslint-plugin-import": "2.22.1",
+    "eslint-plugin-jsdoc": "30.7.6",
+    "eslint-plugin-prefer-arrow": "1.2.2",
+    "jasmine-core": "~4.6.0",
+    "jasmine-spec-reporter": "~5.0.0",
+    "karma": "~6.4.0",
+    "karma-chrome-launcher": "~3.2.0",
+    "karma-coverage": "~2.2.0",
+    "karma-coverage-istanbul-reporter": "~3.0.2",
+    "karma-jasmine": "~5.1.0",
+    "karma-jasmine-html-reporter": "~2.0.0",
+    "ts-node": "^8.3.0",
+    "typescript": "~5.2.2"
+  },
+  "pathMappings": {},
+  "nxJsonPlugins": [],
+  "fileMap": {
+    "projectFileMap": {},
+    "nonProjectFiles": [
+      {
+        "file": ".browserslistrc",
+        "hash": "7979060078399394427"
+      },
+      {
+        "file": ".editorconfig",
+        "hash": "6686520031028425313"
+      },
+      {
+        "file": ".gitignore",
+        "hash": "91109559695469517"
+      },
+      {
+        "file": ".vscode/extensions.json",
+        "hash": "592272277800690021"
+      },
+      {
+        "file": "angular.json",
+        "hash": "18187483614385100982"
+      },
+      {
+        "file": "capacitor.config.json",
+        "hash": "15753941481085060538"
+      },
+      {
+        "file": "capacitor.config.ts",
+        "hash": "9539236794580833119"
+      },
+      {
+        "file": "generated-src/model-front.ts",
+        "hash": "17623651835003539215"
+      },
+      {
+        "file": "generated-src/model.ts",
+        "hash": "9386699041144408858"
+      },
+      {
+        "file": "ionic.config.json",
+        "hash": "10809424741263315237"
+      },
+      {
+        "file": "karma.conf.js",
+        "hash": "13719387092471133633"
+      },
+      {
+        "file": "ngsw-config.json",
+        "hash": "12579492061924086660"
+      },
+      {
+        "file": "package-lock.json",
+        "hash": "12618259159123046200"
+      },
+      {
+        "file": "package.json",
+        "hash": "12532230446619749479"
+      },
+      {
+        "file": "src/app/app-routing.module.ts",
+        "hash": "8732479579623964341"
+      },
+      {
+        "file": "src/app/app.component.html",
+        "hash": "13822748730225504209"
+      },
+      {
+        "file": "src/app/app.component.scss",
+        "hash": "4742463724211602950"
+      },
+      {
+        "file": "src/app/app.component.ts",
+        "hash": "1908531289065489635"
+      },
+      {
+        "file": "src/app/app.module.ts",
+        "hash": "7099099129939518665"
+      },
+      {
+        "file": "src/app/features/bank-account/bank-account-details/bank-account-details.component.html",
+        "hash": "16510052995502243846"
+      },
+      {
+        "file": "src/app/features/bank-account/bank-account-details/bank-account-details.component.scss",
+        "hash": "3244421341483603138"
+      },
+      {
+        "file": "src/app/features/bank-account/bank-account-details/bank-account-details.component.ts",
+        "hash": "8866495166478473535"
+      },
+      {
+        "file": "src/app/features/bank-account/bank-account-list/bank-account-list.component.html",
+        "hash": "14190818870820315242"
+      },
+      {
+        "file": "src/app/features/bank-account/bank-account-list/bank-account-list.component.scss",
+        "hash": "10110249913551798957"
+      },
+      {
+        "file": "src/app/features/bank-account/bank-account-list/bank-account-list.component.ts",
+        "hash": "9161526002208660791"
+      },
+      {
+        "file": "src/app/features/bank-account/bank-account-routing.module.ts",
+        "hash": "5136412539031435350"
+      },
+      {
+        "file": "src/app/features/bank-account/bank-account.module.ts",
+        "hash": "16050418939236849488"
+      },
+      {
+        "file": "src/app/features/cage/cage-details/cage-details.component.html",
+        "hash": "17053953776744361440"
+      },
+      {
+        "file": "src/app/features/cage/cage-details/cage-details.component.scss",
+        "hash": "16511792405191964422"
+      },
+      {
+        "file": "src/app/features/cage/cage-details/cage-details.component.ts",
+        "hash": "17157436058017512929"
+      },
+      {
+        "file": "src/app/features/cage/cage-list/cage-list.component.html",
+        "hash": "1894803173247661967"
+      },
+      {
+        "file": "src/app/features/cage/cage-list/cage-list.component.scss",
+        "hash": "5689174389654429490"
+      },
+      {
+        "file": "src/app/features/cage/cage-list/cage-list.component.ts",
+        "hash": "10747202093561493408"
+      },
+      {
+        "file": "src/app/features/cage/cage-routing.module.ts",
+        "hash": "1485617210516659366"
+      },
+      {
+        "file": "src/app/features/cage/cage-survey-list/cage-survey-list.component.html",
+        "hash": "3181460450656569907"
+      },
+      {
+        "file": "src/app/features/cage/cage-survey-list/cage-survey-list.component.scss",
+        "hash": "15949926043113403843"
+      },
+      {
+        "file": "src/app/features/cage/cage-survey-list/cage-survey-list.component.ts",
+        "hash": "11528317102798030335"
+      },
+      {
+        "file": "src/app/features/cage/cage.module.ts",
+        "hash": "16803382858320805360"
+      },
+      {
+        "file": "src/app/features/customer/customer-details/customer-details.component.html",
+        "hash": "9652133059165827800"
+      },
+      {
+        "file": "src/app/features/customer/customer-details/customer-details.component.scss",
+        "hash": "3244421341483603138"
+      },
+      {
+        "file": "src/app/features/customer/customer-details/customer-details.component.ts",
+        "hash": "7234546998514921603"
+      },
+      {
+        "file": "src/app/features/customer/customer-list/customer-list.component.html",
+        "hash": "8837435525037379123"
+      },
+      {
+        "file": "src/app/features/customer/customer-list/customer-list.component.scss",
+        "hash": "9389962116209042082"
+      },
+      {
+        "file": "src/app/features/customer/customer-list/customer-list.component.ts",
+        "hash": "11733907637709176030"
+      },
+      {
+        "file": "src/app/features/customer/customer-routing.module.ts",
+        "hash": "15537499697421497629"
+      },
+      {
+        "file": "src/app/features/customer/customer-statement-of-account/customer-statement-of-account.component.html",
+        "hash": "15866331941394611569"
+      },
+      {
+        "file": "src/app/features/customer/customer-statement-of-account/customer-statement-of-account.component.scss",
+        "hash": "4017533345058150442"
+      },
+      {
+        "file": "src/app/features/customer/customer-statement-of-account/customer-statement-of-account.component.ts",
+        "hash": "10265106336510259134"
+      },
+      {
+        "file": "src/app/features/customer/customer.module.ts",
+        "hash": "5784120072629833385"
+      },
+      {
+        "file": "src/app/features/egg/egg-category-details/egg-category-details.component.html",
+        "hash": "9268977839317438434"
+      },
+      {
+        "file": "src/app/features/egg/egg-category-details/egg-category-details.component.scss",
+        "hash": "3244421341483603138"
+      },
+      {
+        "file": "src/app/features/egg/egg-category-details/egg-category-details.component.ts",
+        "hash": "15410127352474655542"
+      },
+      {
+        "file": "src/app/features/egg/egg-category-list/egg-category-list.component.html",
+        "hash": "13625606499498549950"
+      },
+      {
+        "file": "src/app/features/egg/egg-category-list/egg-category-list.component.scss",
+        "hash": "2394023696249631868"
+      },
+      {
+        "file": "src/app/features/egg/egg-category-list/egg-category-list.component.ts",
+        "hash": "11516606456010717315"
+      },
+      {
+        "file": "src/app/features/egg/egg-report/egg-report.component.html",
+        "hash": "1491045568497376483"
+      },
+      {
+        "file": "src/app/features/egg/egg-report/egg-report.component.scss",
+        "hash": "6110180975326654824"
+      },
+      {
+        "file": "src/app/features/egg/egg-report/egg-report.component.ts",
+        "hash": "9143301241746019282"
+      },
+      {
+        "file": "src/app/features/egg/egg-routing.module.ts",
+        "hash": "4139706780497833559"
+      },
+      {
+        "file": "src/app/features/egg/egg-sale-details/egg-sale-details.component.html",
+        "hash": "912812762949292416"
+      },
+      {
+        "file": "src/app/features/egg/egg-sale-details/egg-sale-details.component.scss",
+        "hash": "17753780337292009491"
+      },
+      {
+        "file": "src/app/features/egg/egg-sale-details/egg-sale-details.component.ts",
+        "hash": "9278670691059574476"
+      },
+      {
+        "file": "src/app/features/egg/egg-stock/egg-stock.component.html",
+        "hash": "7420876495514040622"
+      },
+      {
+        "file": "src/app/features/egg/egg-stock/egg-stock.component.scss",
+        "hash": "5938131042640834521"
+      },
+      {
+        "file": "src/app/features/egg/egg-stock/egg-stock.component.ts",
+        "hash": "15180863152562738443"
+      },
+      {
+        "file": "src/app/features/egg/egg-stock-details/egg-stock-details.component.html",
+        "hash": "688022696771710166"
+      },
+      {
+        "file": "src/app/features/egg/egg-stock-details/egg-stock-details.component.scss",
+        "hash": "1556748182291894183"
+      },
+      {
+        "file": "src/app/features/egg/egg-stock-details/egg-stock-details.component.ts",
+        "hash": "9702222693395145765"
+      },
+      {
+        "file": "src/app/features/egg/egg-transfer/egg-transfer.component.html",
+        "hash": "8555933765546210102"
+      },
+      {
+        "file": "src/app/features/egg/egg-transfer/egg-transfer.component.scss",
+        "hash": "10524340131570094234"
+      },
+      {
+        "file": "src/app/features/egg/egg-transfer/egg-transfer.component.ts",
+        "hash": "14988559366310436225"
+      },
+      {
+        "file": "src/app/features/egg/egg.module.ts",
+        "hash": "13331443907478879926"
+      },
+      {
+        "file": "src/app/features/farm/farm-details/farm-details.component.html",
+        "hash": "344540637421469717"
+      },
+      {
+        "file": "src/app/features/farm/farm-details/farm-details.component.scss",
+        "hash": "3244421341483603138"
+      },
+      {
+        "file": "src/app/features/farm/farm-details/farm-details.component.ts",
+        "hash": "11428953647258164789"
+      },
+      {
+        "file": "src/app/features/farm/farm-list/farm-list.component.html",
+        "hash": "3456588457369095782"
+      },
+      {
+        "file": "src/app/features/farm/farm-list/farm-list.component.scss",
+        "hash": "6126118412731857199"
+      },
+      {
+        "file": "src/app/features/farm/farm-list/farm-list.component.ts",
+        "hash": "6774545195508263487"
+      },
+      {
+        "file": "src/app/features/farm/farm-routing.module.ts",
+        "hash": "14826310462912351183"
+      },
+      {
+        "file": "src/app/features/farm/farm.module.ts",
+        "hash": "5834788874633796278"
+      },
+      {
+        "file": "src/app/features/feed/feed-allocation/feed-allocation.component.html",
+        "hash": "1743331002334873291"
+      },
+      {
+        "file": "src/app/features/feed/feed-allocation/feed-allocation.component.scss",
+        "hash": "12969081802369648071"
+      },
+      {
+        "file": "src/app/features/feed/feed-allocation/feed-allocation.component.ts",
+        "hash": "1661812857568641362"
+      },
+      {
+        "file": "src/app/features/feed/feed-details/feed-details.component.html",
+        "hash": "4511412976502947682"
+      },
+      {
+        "file": "src/app/features/feed/feed-details/feed-details.component.scss",
+        "hash": "3244421341483603138"
+      },
+      {
+        "file": "src/app/features/feed/feed-details/feed-details.component.ts",
+        "hash": "13571212850571206159"
+      },
+      {
+        "file": "src/app/features/feed/feed-list/feed-list.component.html",
+        "hash": "5179447329409658249"
+      },
+      {
+        "file": "src/app/features/feed/feed-list/feed-list.component.scss",
+        "hash": "3920500309792616042"
+      },
+      {
+        "file": "src/app/features/feed/feed-list/feed-list.component.ts",
+        "hash": "15708530759301191696"
+      },
+      {
+        "file": "src/app/features/feed/feed-routing.module.ts",
+        "hash": "6086753929466106181"
+      },
+      {
+        "file": "src/app/features/feed/feed-sale-details/feed-sale-details.component.html",
+        "hash": "16864827798899845068"
+      },
+      {
+        "file": "src/app/features/feed/feed-sale-details/feed-sale-details.component.scss",
+        "hash": "6396762016911433908"
+      },
+      {
+        "file": "src/app/features/feed/feed-sale-details/feed-sale-details.component.ts",
+        "hash": "1891400892364521497"
+      },
+      {
+        "file": "src/app/features/feed/feed-stock/feed-stock.component.html",
+        "hash": "6464489656079696276"
+      },
+      {
+        "file": "src/app/features/feed/feed-stock/feed-stock.component.scss",
+        "hash": "14132254592382222019"
+      },
+      {
+        "file": "src/app/features/feed/feed-stock/feed-stock.component.ts",
+        "hash": "16012414664956932977"
+      },
+      {
+        "file": "src/app/features/feed/feed-stock-details/feed-stock-details.component.html",
+        "hash": "711156859026692041"
+      },
+      {
+        "file": "src/app/features/feed/feed-stock-details/feed-stock-details.component.scss",
+        "hash": "5381888812972685130"
+      },
+      {
+        "file": "src/app/features/feed/feed-stock-details/feed-stock-details.component.ts",
+        "hash": "16976376575742993585"
+      },
+      {
+        "file": "src/app/features/feed/feed.module.ts",
+        "hash": "4412693478619546334"
+      },
+      {
+        "file": "src/app/features/flock/flock-cage-category-transfer/flock-cage-category-transfer.component.html",
+        "hash": "2504319577306117471"
+      },
+      {
+        "file": "src/app/features/flock/flock-cage-category-transfer/flock-cage-category-transfer.component.scss",
+        "hash": "14609205628906076745"
+      },
+      {
+        "file": "src/app/features/flock/flock-cage-category-transfer/flock-cage-category-transfer.component.ts",
+        "hash": "297131768065247925"
+      },
+      {
+        "file": "src/app/features/flock/flock-details/flock-details.component.html",
+        "hash": "14096308370541093259"
+      },
+      {
+        "file": "src/app/features/flock/flock-details/flock-details.component.scss",
+        "hash": "3244421341483603138"
+      },
+      {
+        "file": "src/app/features/flock/flock-details/flock-details.component.ts",
+        "hash": "15687349356165991015"
+      },
+      {
+        "file": "src/app/features/flock/flock-list/flock-list.component.html",
+        "hash": "14479450174499803545"
+      },
+      {
+        "file": "src/app/features/flock/flock-list/flock-list.component.scss",
+        "hash": "2359494512595900186"
+      },
+      {
+        "file": "src/app/features/flock/flock-list/flock-list.component.ts",
+        "hash": "5655655792905038524"
+      },
+      {
+        "file": "src/app/features/flock/flock-routing.module.ts",
+        "hash": "12340231299757288380"
+      },
+      {
+        "file": "src/app/features/flock/flock-sale-details/flock-sale-details.component.html",
+        "hash": "12944439581642533326"
+      },
+      {
+        "file": "src/app/features/flock/flock-sale-details/flock-sale-details.component.scss",
+        "hash": "8955796502852546666"
+      },
+      {
+        "file": "src/app/features/flock/flock-sale-details/flock-sale-details.component.ts",
+        "hash": "16585357838516082665"
+      },
+      {
+        "file": "src/app/features/flock/flock-stock/flock-stock.component.html",
+        "hash": "13824995615769955513"
+      },
+      {
+        "file": "src/app/features/flock/flock-stock/flock-stock.component.scss",
+        "hash": "889175519172358504"
+      },
+      {
+        "file": "src/app/features/flock/flock-stock/flock-stock.component.ts",
+        "hash": "15208459912272974415"
+      },
+      {
+        "file": "src/app/features/flock/flock-stock-details/flock-stock-details.component.html",
+        "hash": "13872896127299350315"
+      },
+      {
+        "file": "src/app/features/flock/flock-stock-details/flock-stock-details.component.scss",
+        "hash": "10159624921391552520"
+      },
+      {
+        "file": "src/app/features/flock/flock-stock-details/flock-stock-details.component.ts",
+        "hash": "4009776793416383760"
+      },
+      {
+        "file": "src/app/features/flock/flock-transfer/flock-transfer.component.html",
+        "hash": "7227030392977691534"
+      },
+      {
+        "file": "src/app/features/flock/flock-transfer/flock-transfer.component.scss",
+        "hash": "16805913833671017859"
+      },
+      {
+        "file": "src/app/features/flock/flock-transfer/flock-transfer.component.ts",
+        "hash": "2766276570877949836"
+      },
+      {
+        "file": "src/app/features/flock/flock.module.ts",
+        "hash": "9615100773422947296"
+      },
+      {
+        "file": "src/app/features/health/health-details/health-details.component.html",
+        "hash": "6072739786889415742"
+      },
+      {
+        "file": "src/app/features/health/health-details/health-details.component.scss",
+        "hash": "3244421341483603138"
+      },
+      {
+        "file": "src/app/features/health/health-details/health-details.component.ts",
+        "hash": "3579778473210917145"
+      },
+      {
+        "file": "src/app/features/health/health-list/health-list.component.html",
+        "hash": "2651724719495877180"
+      },
+      {
+        "file": "src/app/features/health/health-list/health-list.component.scss",
+        "hash": "7165672907788998857"
+      },
+      {
+        "file": "src/app/features/health/health-list/health-list.component.ts",
+        "hash": "16291431106106365442"
+      },
+      {
+        "file": "src/app/features/health/health-routing.module.ts",
+        "hash": "13226124181885225081"
+      },
+      {
+        "file": "src/app/features/health/health-stock/health-stock.component.html",
+        "hash": "6919711240567791049"
+      },
+      {
+        "file": "src/app/features/health/health-stock/health-stock.component.scss",
+        "hash": "5176693484805286802"
+      },
+      {
+        "file": "src/app/features/health/health-stock/health-stock.component.ts",
+        "hash": "8858157440934788415"
+      },
+      {
+        "file": "src/app/features/health/health-stock-details/health-stock-details.component.html",
+        "hash": "62140975957691342"
+      },
+      {
+        "file": "src/app/features/health/health-stock-details/health-stock-details.component.scss",
+        "hash": "7520037345087583521"
+      },
+      {
+        "file": "src/app/features/health/health-stock-details/health-stock-details.component.ts",
+        "hash": "13449974674404708323"
+      },
+      {
+        "file": "src/app/features/health/health.module.ts",
+        "hash": "3757558137303282795"
+      },
+      {
+        "file": "src/app/features/home/home-routing.module.ts",
+        "hash": "15640276891962985461"
+      },
+      {
+        "file": "src/app/features/home/home.module.ts",
+        "hash": "17592337110567827734"
+      },
+      {
+        "file": "src/app/features/home/home.page.html",
+        "hash": "9581896345442484618"
+      },
+      {
+        "file": "src/app/features/home/home.page.scss",
+        "hash": "5151264706669252675"
+      },
+      {
+        "file": "src/app/features/home/home.page.ts",
+        "hash": "9042087130501648676"
+      },
+      {
+        "file": "src/app/features/manure/manure-details/manure-details.component.html",
+        "hash": "12116391867078798101"
+      },
+      {
+        "file": "src/app/features/manure/manure-details/manure-details.component.scss",
+        "hash": "3244421341483603138"
+      },
+      {
+        "file": "src/app/features/manure/manure-details/manure-details.component.ts",
+        "hash": "9530593831564752137"
+      },
+      {
+        "file": "src/app/features/manure/manure-list/manure-list.component.html",
+        "hash": "15882941198485145471"
+      },
+      {
+        "file": "src/app/features/manure/manure-list/manure-list.component.scss",
+        "hash": "17723228942782604725"
+      },
+      {
+        "file": "src/app/features/manure/manure-list/manure-list.component.ts",
+        "hash": "14301347838919754648"
+      },
+      {
+        "file": "src/app/features/manure/manure-routing.module.ts",
+        "hash": "12750852519803906710"
+      },
+      {
+        "file": "src/app/features/manure/manure-sale-details/manure-sale-details.component.html",
+        "hash": "11754865792798512429"
+      },
+      {
+        "file": "src/app/features/manure/manure-sale-details/manure-sale-details.component.scss",
+        "hash": "7838466513941756261"
+      },
+      {
+        "file": "src/app/features/manure/manure-sale-details/manure-sale-details.component.ts",
+        "hash": "9924731188895013990"
+      },
+      {
+        "file": "src/app/features/manure/manure-stock/manure-stock.component.html",
+        "hash": "16474038568772481788"
+      },
+      {
+        "file": "src/app/features/manure/manure-stock/manure-stock.component.scss",
+        "hash": "3244421341483603138"
+      },
+      {
+        "file": "src/app/features/manure/manure-stock/manure-stock.component.ts",
+        "hash": "10120689484600704665"
+      },
+      {
+        "file": "src/app/features/manure/manure-stock-details/manure-stock-details.component.html",
+        "hash": "2541292081961733125"
+      },
+      {
+        "file": "src/app/features/manure/manure-stock-details/manure-stock-details.component.scss",
+        "hash": "12556084357930793847"
+      },
+      {
+        "file": "src/app/features/manure/manure-stock-details/manure-stock-details.component.ts",
+        "hash": "10162883621505319951"
+      },
+      {
+        "file": "src/app/features/manure/manure.module.ts",
+        "hash": "5105406555676408136"
+      },
+      {
+        "file": "src/app/features/payment/payment-details/payment-details.component.html",
+        "hash": "5164121489413532405"
+      },
+      {
+        "file": "src/app/features/payment/payment-details/payment-details.component.scss",
+        "hash": "3244421341483603138"
+      },
+      {
+        "file": "src/app/features/payment/payment-details/payment-details.component.ts",
+        "hash": "15483909644932084447"
+      },
+      {
+        "file": "src/app/features/payment/payment-list/payment-list.component.html",
+        "hash": "2578025005112958861"
+      },
+      {
+        "file": "src/app/features/payment/payment-list/payment-list.component.scss",
+        "hash": "13369595132840366179"
+      },
+      {
+        "file": "src/app/features/payment/payment-list/payment-list.component.ts",
+        "hash": "3977837232259898792"
+      },
+      {
+        "file": "src/app/features/payment/payment-routing.module.ts",
+        "hash": "14063095329526919978"
+      },
+      {
+        "file": "src/app/features/payment/payment.module.ts",
+        "hash": "4830352223838247351"
+      },
+      {
+        "file": "src/app/features/point-of-sale/point-of-sale-routing.module.ts",
+        "hash": "13581567206810705241"
+      },
+      {
+        "file": "src/app/features/point-of-sale/point-of-sale.component.html",
+        "hash": "1229276770912629148"
+      },
+      {
+        "file": "src/app/features/point-of-sale/point-of-sale.component.scss",
+        "hash": "9001419766003285522"
+      },
+      {
+        "file": "src/app/features/point-of-sale/point-of-sale.component.ts",
+        "hash": "7531781713582509883"
+      },
+      {
+        "file": "src/app/features/point-of-sale/point-of-sale.module.ts",
+        "hash": "10889706845724597931"
+      },
+      {
+        "file": "src/app/features/purchase-invoice/purchase-invoice-details/purchase-invoice-details.component.html",
+        "hash": "17367225450091694243"
+      },
+      {
+        "file": "src/app/features/purchase-invoice/purchase-invoice-details/purchase-invoice-details.component.scss",
+        "hash": "15879407743565480587"
+      },
+      {
+        "file": "src/app/features/purchase-invoice/purchase-invoice-details/purchase-invoice-details.component.ts",
+        "hash": "2539617660415610871"
+      },
+      {
+        "file": "src/app/features/purchase-invoice/purchase-invoice-list/purchase-invoice-list.component.html",
+        "hash": "16410056089826312756"
+      },
+      {
+        "file": "src/app/features/purchase-invoice/purchase-invoice-list/purchase-invoice-list.component.scss",
+        "hash": "5064036668144116218"
+      },
+      {
+        "file": "src/app/features/purchase-invoice/purchase-invoice-list/purchase-invoice-list.component.ts",
+        "hash": "16099510939701258893"
+      },
+      {
+        "file": "src/app/features/purchase-invoice/purchase-invoice-routing.module.ts",
+        "hash": "11787887092397284573"
+      },
+      {
+        "file": "src/app/features/purchase-invoice/purchase-invoice.module.ts",
+        "hash": "3568851956399622180"
+      },
+      {
+        "file": "src/app/features/report/daily-report/daily-report.component.html",
+        "hash": "4092721879013255774"
+      },
+      {
+        "file": "src/app/features/report/daily-report/daily-report.component.scss",
+        "hash": "12441671196896003538"
+      },
+      {
+        "file": "src/app/features/report/daily-report/daily-report.component.ts",
+        "hash": "15789212376673564574"
+      },
+      {
+        "file": "src/app/features/report/report-routing.module.ts",
+        "hash": "16580939735830320089"
+      },
+      {
+        "file": "src/app/features/report/report.module.ts",
+        "hash": "4053937817782305474"
+      },
+      {
+        "file": "src/app/features/return-invoice/return-invoice-details/return-invoice-details.component.html",
+        "hash": "12745763131845796348"
+      },
+      {
+        "file": "src/app/features/return-invoice/return-invoice-details/return-invoice-details.component.scss",
+        "hash": "15990993305489696029"
+      },
+      {
+        "file": "src/app/features/return-invoice/return-invoice-details/return-invoice-details.component.ts",
+        "hash": "2888917053527094051"
+      },
+      {
+        "file": "src/app/features/return-invoice/return-invoice-list/return-invoice-list.component.html",
+        "hash": "17379574185217436739"
+      },
+      {
+        "file": "src/app/features/return-invoice/return-invoice-list/return-invoice-list.component.scss",
+        "hash": "10517537175497770747"
+      },
+      {
+        "file": "src/app/features/return-invoice/return-invoice-list/return-invoice-list.component.ts",
+        "hash": "5002001139232922911"
+      },
+      {
+        "file": "src/app/features/return-invoice/return-invoice-routing.module.ts",
+        "hash": "3647478078125985529"
+      },
+      {
+        "file": "src/app/features/return-invoice/return-invoice.component.html",
+        "hash": "11733257673782040208"
+      },
+      {
+        "file": "src/app/features/return-invoice/return-invoice.component.scss",
+        "hash": "6949039645775546279"
+      },
+      {
+        "file": "src/app/features/return-invoice/return-invoice.component.ts",
+        "hash": "3814728432811949837"
+      },
+      {
+        "file": "src/app/features/return-invoice/return-invoice.module.ts",
+        "hash": "959561454383008364"
+      },
+      {
+        "file": "src/app/features/sales-invoice/sales-invoice-by-type-list/sales-invoice-by-type-list.component.html",
+        "hash": "8990346364171716800"
+      },
+      {
+        "file": "src/app/features/sales-invoice/sales-invoice-by-type-list/sales-invoice-by-type-list.component.scss",
+        "hash": "11540227147464614044"
+      },
+      {
+        "file": "src/app/features/sales-invoice/sales-invoice-by-type-list/sales-invoice-by-type-list.component.ts",
+        "hash": "12095132867544852644"
+      },
+      {
+        "file": "src/app/features/sales-invoice/sales-invoice-customer-credit-list/sales-invoice-customer-credit-list.component.html",
+        "hash": "3858756238311025087"
+      },
+      {
+        "file": "src/app/features/sales-invoice/sales-invoice-customer-credit-list/sales-invoice-customer-credit-list.component.scss",
+        "hash": "16094544876646142621"
+      },
+      {
+        "file": "src/app/features/sales-invoice/sales-invoice-customer-credit-list/sales-invoice-customer-credit-list.component.ts",
+        "hash": "16938292586360845355"
+      },
+      {
+        "file": "src/app/features/sales-invoice/sales-invoice-details/sales-invoice-details.component.html",
+        "hash": "12813976627846301072"
+      },
+      {
+        "file": "src/app/features/sales-invoice/sales-invoice-details/sales-invoice-details.component.scss",
+        "hash": "15990993305489696029"
+      },
+      {
+        "file": "src/app/features/sales-invoice/sales-invoice-details/sales-invoice-details.component.ts",
+        "hash": "15250171920981805839"
+      },
+      {
+        "file": "src/app/features/sales-invoice/sales-invoice-edit/sales-invoice-edit.component.html",
+        "hash": "11850720298071164667"
+      },
+      {
+        "file": "src/app/features/sales-invoice/sales-invoice-edit/sales-invoice-edit.component.scss",
+        "hash": "3244421341483603138"
+      },
+      {
+        "file": "src/app/features/sales-invoice/sales-invoice-edit/sales-invoice-edit.component.spec.ts",
+        "hash": "13984602029372088118"
+      },
+      {
+        "file": "src/app/features/sales-invoice/sales-invoice-edit/sales-invoice-edit.component.ts",
+        "hash": "8743705713515840866"
+      },
+      {
+        "file": "src/app/features/sales-invoice/sales-invoice-list/sales-invoice-list.component.html",
+        "hash": "2997553171157335573"
+      },
+      {
+        "file": "src/app/features/sales-invoice/sales-invoice-list/sales-invoice-list.component.scss",
+        "hash": "3065531655858722805"
+      },
+      {
+        "file": "src/app/features/sales-invoice/sales-invoice-list/sales-invoice-list.component.ts",
+        "hash": "6976388722098989149"
+      },
+      {
+        "file": "src/app/features/sales-invoice/sales-invoice-routing.module.ts",
+        "hash": "2509991395207237235"
+      },
+      {
+        "file": "src/app/features/sales-invoice/sales-invoice.module.ts",
+        "hash": "16505871784828968844"
+      },
+      {
+        "file": "src/app/features/security/login/login.component.html",
+        "hash": "11409659865218700304"
+      },
+      {
+        "file": "src/app/features/security/login/login.component.scss",
+        "hash": "17835881762540729113"
+      },
+      {
+        "file": "src/app/features/security/login/login.component.ts",
+        "hash": "15697808071735208602"
+      },
+      {
+        "file": "src/app/features/security/security-routing.module.ts",
+        "hash": "13530375131177981513"
+      },
+      {
+        "file": "src/app/features/security/security.module.ts",
+        "hash": "3691471048262429979"
+      },
+      {
+        "file": "src/app/features/stock-update/stock-update-routing.module.ts",
+        "hash": "14349789414061642033"
+      },
+      {
+        "file": "src/app/features/stock-update/stock-update.component.html",
+        "hash": "8351136803370670921"
+      },
+      {
+        "file": "src/app/features/stock-update/stock-update.component.scss",
+        "hash": "1649320887537621880"
+      },
+      {
+        "file": "src/app/features/stock-update/stock-update.component.ts",
+        "hash": "10302603776453739382"
+      },
+      {
+        "file": "src/app/features/stock-update/stock-update.module.ts",
+        "hash": "15094940953331721177"
+      },
+      {
+        "file": "src/app/features/supplier/supplier-details/supplier-details.component.html",
+        "hash": "13216789678722117071"
+      },
+      {
+        "file": "src/app/features/supplier/supplier-details/supplier-details.component.scss",
+        "hash": "3244421341483603138"
+      },
+      {
+        "file": "src/app/features/supplier/supplier-details/supplier-details.component.ts",
+        "hash": "11739727083939389421"
+      },
+      {
+        "file": "src/app/features/supplier/supplier-list/supplier-list.component.html",
+        "hash": "10417972004620781740"
+      },
+      {
+        "file": "src/app/features/supplier/supplier-list/supplier-list.component.scss",
+        "hash": "17964620534846647566"
+      },
+      {
+        "file": "src/app/features/supplier/supplier-list/supplier-list.component.ts",
+        "hash": "4379944174079893869"
+      },
+      {
+        "file": "src/app/features/supplier/supplier-routing.module.ts",
+        "hash": "583288839418247665"
+      },
+      {
+        "file": "src/app/features/supplier/supplier.module.ts",
+        "hash": "14225190411846420574"
+      },
+      {
+        "file": "src/app/features/survey/survery-details/survery-details.component.html",
+        "hash": "17264588595852444374"
+      },
+      {
+        "file": "src/app/features/survey/survery-details/survery-details.component.scss",
+        "hash": "6725900080069231925"
+      },
+      {
+        "file": "src/app/features/survey/survery-details/survery-details.component.ts",
+        "hash": "16644089471035567901"
+      },
+      {
+        "file": "src/app/features/survey/survey-list/survey-list.component.html",
+        "hash": "9217242110593579138"
+      },
+      {
+        "file": "src/app/features/survey/survey-list/survey-list.component.scss",
+        "hash": "6443059183306533397"
+      },
+      {
+        "file": "src/app/features/survey/survey-list/survey-list.component.ts",
+        "hash": "1623623738022398411"
+      },
+      {
+        "file": "src/app/features/survey/survey-routing.module.ts",
+        "hash": "15190733614727605105"
+      },
+      {
+        "file": "src/app/features/survey/survey.module.ts",
+        "hash": "2760167320535906024"
+      },
+      {
+        "file": "src/app/features/user/user-details/user-details.component.html",
+        "hash": "169863453991260457"
+      },
+      {
+        "file": "src/app/features/user/user-details/user-details.component.scss",
+        "hash": "3244421341483603138"
+      },
+      {
+        "file": "src/app/features/user/user-details/user-details.component.ts",
+        "hash": "6994077045451772601"
+      },
+      {
+        "file": "src/app/features/user/user-list/user-list.component.html",
+        "hash": "1180265089815170816"
+      },
+      {
+        "file": "src/app/features/user/user-list/user-list.component.scss",
+        "hash": "6244233533043029241"
+      },
+      {
+        "file": "src/app/features/user/user-list/user-list.component.ts",
+        "hash": "11283679203260083938"
+      },
+      {
+        "file": "src/app/features/user/user-routing.module.ts",
+        "hash": "4839707833728609089"
+      },
+      {
+        "file": "src/app/features/user/user.module.ts",
+        "hash": "12157959208321114809"
+      },
+      {
+        "file": "src/app/shared/apis/bank-account.api.service.ts",
+        "hash": "16058195323423367889"
+      },
+      {
+        "file": "src/app/shared/apis/cage.api.service.ts",
+        "hash": "9300708050181574212"
+      },
+      {
+        "file": "src/app/shared/apis/customer.api.service.ts",
+        "hash": "7166798747764025332"
+      },
+      {
+        "file": "src/app/shared/apis/egg-category.api.service.ts",
+        "hash": "2644475340604395979"
+      },
+      {
+        "file": "src/app/shared/apis/egg-sale.api.service.ts",
+        "hash": "10632743341093212426"
+      },
+      {
+        "file": "src/app/shared/apis/egg-stock.api.service.ts",
+        "hash": "6218624581676068531"
+      },
+      {
+        "file": "src/app/shared/apis/farm.api.service.ts",
+        "hash": "10928142497176537299"
+      },
+      {
+        "file": "src/app/shared/apis/feed-sale.api.service.ts",
+        "hash": "14561907577039658890"
+      },
+      {
+        "file": "src/app/shared/apis/feed-stock.api.service.ts",
+        "hash": "11652415877255208956"
+      },
+      {
+        "file": "src/app/shared/apis/feed.api.service.ts",
+        "hash": "13737532796656691702"
+      },
+      {
+        "file": "src/app/shared/apis/file.api.service.ts",
+        "hash": "17509807034698222113"
+      },
+      {
+        "file": "src/app/shared/apis/flock-feed-line.api.service.ts",
+        "hash": "17201820760032033151"
+      },
+      {
+        "file": "src/app/shared/apis/flock-sale.api.service.ts",
+        "hash": "10658267875373361050"
+      },
+      {
+        "file": "src/app/shared/apis/flock-stock.api.service.ts",
+        "hash": "4943744839135220322"
+      },
+      {
+        "file": "src/app/shared/apis/flock.api.service.ts",
+        "hash": "17646155974785946698"
+      },
+      {
+        "file": "src/app/shared/apis/health-product-stock.api.service.ts",
+        "hash": "7208289959433562030"
+      },
+      {
+        "file": "src/app/shared/apis/health-product.api.service.ts",
+        "hash": "2628538994159594588"
+      },
+      {
+        "file": "src/app/shared/apis/manure-sale.api.service.ts",
+        "hash": "4327396099084057129"
+      },
+      {
+        "file": "src/app/shared/apis/manure-stock.api.service.ts",
+        "hash": "18271483545035816994"
+      },
+      {
+        "file": "src/app/shared/apis/payment-mode.api.service.ts",
+        "hash": "1547176674409718644"
+      },
+      {
+        "file": "src/app/shared/apis/payment.api.service.ts",
+        "hash": "10720743402755111235"
+      },
+      {
+        "file": "src/app/shared/apis/point-of-sale.api.service.ts",
+        "hash": "7382368520277518879"
+      },
+      {
+        "file": "src/app/shared/apis/purchase-invoice.api.service.ts",
+        "hash": "17006033123577928359"
+      },
+      {
+        "file": "src/app/shared/apis/purchase.api.service.ts",
+        "hash": "16562289031994974310"
+      },
+      {
+        "file": "src/app/shared/apis/receipt.api.service.ts",
+        "hash": "713201429448777843"
+      },
+      {
+        "file": "src/app/shared/apis/report.api.service.ts",
+        "hash": "2095874377841900100"
+      },
+      {
+        "file": "src/app/shared/apis/return.api.service.ts",
+        "hash": "12080980800211508440"
+      },
+      {
+        "file": "src/app/shared/apis/role.api.service.ts",
+        "hash": "4902914829158791668"
+      },
+      {
+        "file": "src/app/shared/apis/sales-invoice.api.service.ts",
+        "hash": "14467595327041452738"
+      },
+      {
+        "file": "src/app/shared/apis/security.api.service.ts",
+        "hash": "5144495860753396511"
+      },
+      {
+        "file": "src/app/shared/apis/supplier.api.service.ts",
+        "hash": "3408986121553725513"
+      },
+      {
+        "file": "src/app/shared/apis/survey.api.service.ts",
+        "hash": "10117488366883582314"
+      },
+      {
+        "file": "src/app/shared/apis/user.api.service.ts",
+        "hash": "579925791146234869"
+      },
+      {
+        "file": "src/app/shared/auths/auth.guard.ts",
+        "hash": "7780851207363516463"
+      },
+      {
+        "file": "src/app/shared/auths/login.guard.ts",
+        "hash": "4933919553638277070"
+      },
+      {
+        "file": "src/app/shared/auths/login.logout.service.ts",
+        "hash": "13747893457561218196"
+      },
+      {
+        "file": "src/app/shared/emitters/emitter.service.ts",
+        "hash": "6901638882550290531"
+      },
+      {
+        "file": "src/app/shared/helpers/constant.helper.ts",
+        "hash": "9481422729734760930"
+      },
+      {
+        "file": "src/app/shared/interceptor/http.interceptor.ts",
+        "hash": "17428825840283515735"
+      },
+      {
+        "file": "src/app/shared/modals/modal.module.ts",
+        "hash": "17732174403703108413"
+      },
+      {
+        "file": "src/app/shared/modals/survey-proceed/survey-proceed.component.html",
+        "hash": "4033674104221029673"
+      },
+      {
+        "file": "src/app/shared/modals/survey-proceed/survey-proceed.component.scss",
+        "hash": "1476717738704672234"
+      },
+      {
+        "file": "src/app/shared/modals/survey-proceed/survey-proceed.component.spec.ts",
+        "hash": "2408469061650517740"
+      },
+      {
+        "file": "src/app/shared/modals/survey-proceed/survey-proceed.component.ts",
+        "hash": "16735364552985933573"
+      },
+      {
+        "file": "src/app/shared/navigation/side-nav/side-nav.component.html",
+        "hash": "600983818450004521"
+      },
+      {
+        "file": "src/app/shared/navigation/side-nav/side-nav.component.scss",
+        "hash": "5655242810517760352"
+      },
+      {
+        "file": "src/app/shared/navigation/side-nav/side-nav.component.ts",
+        "hash": "17706064738929206332"
+      },
+      {
+        "file": "src/app/shared/utils/utils.service.ts",
+        "hash": "9149193202723724812"
+      },
+      {
+        "file": "src/assets/flaticon/abacus.png",
+        "hash": "2848075186626912148"
+      },
+      {
+        "file": "src/assets/flaticon/add-bank-account.png",
+        "hash": "11157906672488598930"
+      },
+      {
+        "file": "src/assets/flaticon/add-cage.png",
+        "hash": "7135192052880879151"
+      },
+      {
+        "file": "src/assets/flaticon/add-customers.png",
+        "hash": "5780399426539147010"
+      },
+      {
+        "file": "src/assets/flaticon/add-egg-category.png",
+        "hash": "15399242413274034589"
+      },
+      {
+        "file": "src/assets/flaticon/add-farms.png",
+        "hash": "5871790255787443982"
+      },
+      {
+        "file": "src/assets/flaticon/add-feed.png",
+        "hash": "12858103184918500907"
+      },
+      {
+        "file": "src/assets/flaticon/add-flock.png",
+        "hash": "3500174554856283719"
+      },
+      {
+        "file": "src/assets/flaticon/add-health-product.png",
+        "hash": "17726330342089889654"
+      },
+      {
+        "file": "src/assets/flaticon/add-icon.svg",
+        "hash": "9076592170616247365"
+      },
+      {
+        "file": "src/assets/flaticon/add-payment-mode.png",
+        "hash": "13837042105273264270"
+      },
+      {
+        "file": "src/assets/flaticon/add-role.png",
+        "hash": "11549392332716346811"
+      },
+      {
+        "file": "src/assets/flaticon/add-supplier.png",
+        "hash": "14791675307881060588"
+      },
+      {
+        "file": "src/assets/flaticon/add-user.png",
+        "hash": "16768603734555098612"
+      },
+      {
+        "file": "src/assets/flaticon/add-users.png",
+        "hash": "4120781807448021093"
+      },
+      {
+        "file": "src/assets/flaticon/add.png",
+        "hash": "7421381442404287731"
+      },
+      {
+        "file": "src/assets/flaticon/age.png",
+        "hash": "4252572426662041610"
+      },
+      {
+        "file": "src/assets/flaticon/bad-category.png",
+        "hash": "511480613142701920"
+      },
+      {
+        "file": "src/assets/flaticon/bad-eggs.png",
+        "hash": "3735917960324076293"
+      },
+      {
+        "file": "src/assets/flaticon/bank-account-icon.svg",
+        "hash": "1708459103619042773"
+      },
+      {
+        "file": "src/assets/flaticon/bank-account.png",
+        "hash": "3801467090493944226"
+      },
+      {
+        "file": "src/assets/flaticon/bank-account.svg",
+        "hash": "1584284087020821465"
+      },
+      {
+        "file": "src/assets/flaticon/big-eggs.png",
+        "hash": "6429479770547751512"
+      },
+      {
+        "file": "src/assets/flaticon/bill.png",
+        "hash": "14577167118187066460"
+      },
+      {
+        "file": "src/assets/flaticon/cage-icon.svg",
+        "hash": "7445976136477140330"
+      },
+      {
+        "file": "src/assets/flaticon/cage-survey.png",
+        "hash": "1175756668783260265"
+      },
+      {
+        "file": "src/assets/flaticon/cage.png",
+        "hash": "18262128548850845437"
+      },
+      {
+        "file": "src/assets/flaticon/cart.png",
+        "hash": "13375523322694626097"
+      },
+      {
+        "file": "src/assets/flaticon/cash-register.png",
+        "hash": "7687528491620754345"
+      },
+      {
+        "file": "src/assets/flaticon/category-big.png",
+        "hash": "12416559214550094795"
+      },
+      {
+        "file": "src/assets/flaticon/category-medium.png",
+        "hash": "9499218285726110115"
+      },
+      {
+        "file": "src/assets/flaticon/category-small.png",
+        "hash": "7456442207998788997"
+      },
+      {
+        "file": "src/assets/flaticon/category.png",
+        "hash": "4984647902579155368"
+      },
+      {
+        "file": "src/assets/flaticon/chicken-icon.svg",
+        "hash": "1198129367569042751"
+      },
+      {
+        "file": "src/assets/flaticon/clock.png",
+        "hash": "13381028742678367328"
+      },
+      {
+        "file": "src/assets/flaticon/collection-icon.svg",
+        "hash": "6964845830405973902"
+      },
+      {
+        "file": "src/assets/flaticon/collection.png",
+        "hash": "1903452094192507868"
+      },
+      {
+        "file": "src/assets/flaticon/configuration.png",
+        "hash": "10935217400810502234"
+      },
+      {
+        "file": "src/assets/flaticon/confirm-stock.png",
+        "hash": "3707386160972891687"
+      },
+      {
+        "file": "src/assets/flaticon/confirmation.png",
+        "hash": "5282929894035878572"
+      },
+      {
+        "file": "src/assets/flaticon/credit-card.png",
+        "hash": "95483607050286276"
+      },
+      {
+        "file": "src/assets/flaticon/credit-report.png",
+        "hash": "11135809709698386323"
+      },
+      {
+        "file": "src/assets/flaticon/cross.png",
+        "hash": "16951117374228641987"
+      },
+      {
+        "file": "src/assets/flaticon/customer-icon.svg",
+        "hash": "15286700665968260010"
+      },
+      {
+        "file": "src/assets/flaticon/customer.png",
+        "hash": "1674695750928380496"
+      },
+      {
+        "file": "src/assets/flaticon/daily-report-icon.svg",
+        "hash": "15328905717930581953"
+      },
+      {
+        "file": "src/assets/flaticon/daily-report.png",
+        "hash": "3286385709806147131"
+      },
+      {
+        "file": "src/assets/flaticon/dashboard-icon.svg",
+        "hash": "3619067869425567608"
+      },
+      {
+        "file": "src/assets/flaticon/dashboard.png",
+        "hash": "7623120836752195017"
+      },
+      {
+        "file": "src/assets/flaticon/delivery.png",
+        "hash": "615936415900172199"
+      },
+      {
+        "file": "src/assets/flaticon/distribution.png",
+        "hash": "13024942738387136372"
+      },
+      {
+        "file": "src/assets/flaticon/edit-1.png",
+        "hash": "1071479421424671931"
+      },
+      {
+        "file": "src/assets/flaticon/edit.png",
+        "hash": "11765344077690660068"
+      },
+      {
+        "file": "src/assets/flaticon/egg-form.png",
+        "hash": "16292143538929542448"
+      },
+      {
+        "file": "src/assets/flaticon/egg-icon.svg",
+        "hash": "1006476222349586787"
+      },
+      {
+        "file": "src/assets/flaticon/egg-report-icon.svg",
+        "hash": "1305027862890474244"
+      },
+      {
+        "file": "src/assets/flaticon/egg-report.png",
+        "hash": "4545710119364236850"
+      },
+      {
+        "file": "src/assets/flaticon/egg-sale.png",
+        "hash": "2366321545806867084"
+      },
+      {
+        "file": "src/assets/flaticon/egg-stock.png",
+        "hash": "5971045622621797132"
+      },
+      {
+        "file": "src/assets/flaticon/egg-transfer-icon.svg",
+        "hash": "14445576069928132824"
+      },
+      {
+        "file": "src/assets/flaticon/egg-transfer.png",
+        "hash": "3448531204853336998"
+      },
+      {
+        "file": "src/assets/flaticon/eggs.png",
+        "hash": "7720029593616585624"
+      },
+      {
+        "file": "src/assets/flaticon/enter.png",
+        "hash": "8518582127132426964"
+      },
+      {
+        "file": "src/assets/flaticon/farm-big.png",
+        "hash": "16872658634692622460"
+      },
+      {
+        "file": "src/assets/flaticon/farm-chicken.png",
+        "hash": "1838160715373391780"
+      },
+      {
+        "file": "src/assets/flaticon/farm-icon.svg",
+        "hash": "8313328554393047602"
+      },
+      {
+        "file": "src/assets/flaticon/farm.png",
+        "hash": "255863085349532564"
+      },
+      {
+        "file": "src/assets/flaticon/farms.png",
+        "hash": "11776252144144270985"
+      },
+      {
+        "file": "src/assets/flaticon/feed-allocation-icon.svg",
+        "hash": "2183894865613862233"
+      },
+      {
+        "file": "src/assets/flaticon/feed-allocation.png",
+        "hash": "11921279326717305818"
+      },
+      {
+        "file": "src/assets/flaticon/feed-icon.svg",
+        "hash": "5334600229458628720"
+      },
+      {
+        "file": "src/assets/flaticon/feed-sale.png",
+        "hash": "13085018698597828117"
+      },
+      {
+        "file": "src/assets/flaticon/feed-stock.png",
+        "hash": "16058194712760521749"
+      },
+      {
+        "file": "src/assets/flaticon/feed.png",
+        "hash": "4372195908922735629"
+      },
+      {
+        "file": "src/assets/flaticon/file.png",
+        "hash": "17799023163091463534"
+      },
+      {
+        "file": "src/assets/flaticon/flock-in-cage.png",
+        "hash": "4229293952644241198"
+      },
+      {
+        "file": "src/assets/flaticon/flock-in-cage.svg",
+        "hash": "17868664807595571950"
+      },
+      {
+        "file": "src/assets/flaticon/flock-sale.png",
+        "hash": "12219013830617397064"
+      },
+      {
+        "file": "src/assets/flaticon/flock-stock.png",
+        "hash": "10098881491149893735"
+      },
+      {
+        "file": "src/assets/flaticon/flock.png",
+        "hash": "8672125585884760794"
+      },
+      {
+        "file": "src/assets/flaticon/flocks-in-cage.png",
+        "hash": "2516223629357659936"
+      },
+      {
+        "file": "src/assets/flaticon/flocks.png",
+        "hash": "11713410196488375245"
+      },
+      {
+        "file": "src/assets/flaticon/good-category.png",
+        "hash": "6408902416023518418"
+      },
+      {
+        "file": "src/assets/flaticon/good-chicken.png",
+        "hash": "3250997191164130675"
+      },
+      {
+        "file": "src/assets/flaticon/good-eggs.png",
+        "hash": "10351352689134907785"
+      },
+      {
+        "file": "src/assets/flaticon/health-products-icon.svg",
+        "hash": "9372890677392606761"
+      },
+      {
+        "file": "src/assets/flaticon/health-products-stock.png",
+        "hash": "6942298108018815750"
+      },
+      {
+        "file": "src/assets/flaticon/health-products.png",
+        "hash": "460991089623125667"
+      },
+      {
+        "file": "src/assets/flaticon/image1.png",
+        "hash": "17665279452137855251"
+      },
+      {
+        "file": "src/assets/flaticon/in-store.png",
+        "hash": "15577328263023023895"
+      },
+      {
+        "file": "src/assets/flaticon/increase.png",
+        "hash": "15615607739608160593"
+      },
+      {
+        "file": "src/assets/flaticon/invoice-icon.svg",
+        "hash": "12153363201011983732"
+      },
+      {
+        "file": "src/assets/flaticon/invoice.png",
+        "hash": "10047246642916778513"
+      },
+      {
+        "file": "src/assets/flaticon/jakarta.png",
+        "hash": "10187637766263925287"
+      },
+      {
+        "file": "src/assets/flaticon/list-icon.svg",
+        "hash": "4065456216482529530"
+      },
+      {
+        "file": "src/assets/flaticon/list.png",
+        "hash": "11604987718224802747"
+      },
+      {
+        "file": "src/assets/flaticon/login-farm.png",
+        "hash": "10773140039523597871"
+      },
+      {
+        "file": "src/assets/flaticon/login.png",
+        "hash": "17823820040324700180"
+      },
+      {
+        "file": "src/assets/flaticon/manure-bag.png",
+        "hash": "1083952238170281752"
+      },
+      {
+        "file": "src/assets/flaticon/manure-icon.svg",
+        "hash": "13111292832662775832"
+      },
+      {
+        "file": "src/assets/flaticon/manure-purchase.png",
+        "hash": "11487879506540731104"
+      },
+      {
+        "file": "src/assets/flaticon/manure-purchase.svg",
+        "hash": "2972542940123918407"
+      },
+      {
+        "file": "src/assets/flaticon/manure-sale.png",
+        "hash": "1055336611122319837"
+      },
+      {
+        "file": "src/assets/flaticon/manure-stock.png",
+        "hash": "15165856881540325012"
+      },
+      {
+        "file": "src/assets/flaticon/manure.png",
+        "hash": "4645978781938595738"
+      },
+      {
+        "file": "src/assets/flaticon/medical-records.png",
+        "hash": "11095726215235242622"
+      },
+      {
+        "file": "src/assets/flaticon/medium-eggs.png",
+        "hash": "5773853126333535533"
+      },
+      {
+        "file": "src/assets/flaticon/money-icon.svg",
+        "hash": "16845493891329223284"
+      },
+      {
+        "file": "src/assets/flaticon/official-documents.png",
+        "hash": "839263413938733406"
+      },
+      {
+        "file": "src/assets/flaticon/open-padlock.png",
+        "hash": "13361713832224317777"
+      },
+      {
+        "file": "src/assets/flaticon/order-history.png",
+        "hash": "4747475709994388248"
+      },
+      {
+        "file": "src/assets/flaticon/packages.png",
+        "hash": "11334211862360568962"
+      },
+      {
+        "file": "src/assets/flaticon/padlock.png",
+        "hash": "9044057536731582933"
+      },
+      {
+        "file": "src/assets/flaticon/payment-method.png",
+        "hash": "12768347264161672309"
+      },
+      {
+        "file": "src/assets/flaticon/payment-mode-icon.svg",
+        "hash": "13060404872134496379"
+      },
+      {
+        "file": "src/assets/flaticon/payment-mode.png",
+        "hash": "16227146917438646743"
+      },
+      {
+        "file": "src/assets/flaticon/point-of-sale-icon.svg",
+        "hash": "126306140594178661"
+      },
+      {
+        "file": "src/assets/flaticon/point-of-sale.png",
+        "hash": "976615825697054087"
+      },
+      {
+        "file": "src/assets/flaticon/psychotropic-record.png",
+        "hash": "7322295534636972526"
+      },
+      {
+        "file": "src/assets/flaticon/purchase-icon.svg",
+        "hash": "2351877411348826831"
+      },
+      {
+        "file": "src/assets/flaticon/purchase-invoice-icon.svg",
+        "hash": "3914824449115255737"
+      },
+      {
+        "file": "src/assets/flaticon/purchase-invoice.png",
+        "hash": "1812853844860279278"
+      },
+      {
+        "file": "src/assets/flaticon/purchase.png",
+        "hash": "17011867239577729594"
+      },
+      {
+        "file": "src/assets/flaticon/quantity.png",
+        "hash": "10007245966005389474"
+      },
+      {
+        "file": "src/assets/flaticon/receipt.png",
+        "hash": "7713849003289701514"
+      },
+      {
+        "file": "src/assets/flaticon/record-icon.svg",
+        "hash": "7908311320328481014"
+      },
+      {
+        "file": "src/assets/flaticon/record.png",
+        "hash": "856955780633900658"
+      },
+      {
+        "file": "src/assets/flaticon/refund.png",
+        "hash": "3281628341923373831"
+      },
+      {
+        "file": "src/assets/flaticon/return-box.png",
+        "hash": "6102643822847891708"
+      },
+      {
+        "file": "src/assets/flaticon/return-goods.png",
+        "hash": "15266705337597137577"
+      },
+      {
+        "file": "src/assets/flaticon/return-invoice-icon-list.svg",
+        "hash": "16795563969609143397"
+      },
+      {
+        "file": "src/assets/flaticon/return-invoice-icon.svg",
+        "hash": "15604101274838756606"
+      },
+      {
+        "file": "src/assets/flaticon/return-invoice.png",
+        "hash": "659782193099800982"
+      },
+      {
+        "file": "src/assets/flaticon/role.png",
+        "hash": "7187349568504980069"
+      },
+      {
+        "file": "src/assets/flaticon/sales-icon.svg",
+        "hash": "14704981052845319040"
+      },
+      {
+        "file": "src/assets/flaticon/sales-invoice-icon.svg",
+        "hash": "14174749718509260958"
+      },
+      {
+        "file": "src/assets/flaticon/sales-invoice.png",
+        "hash": "18269578897980529273"
+      },
+      {
+        "file": "src/assets/flaticon/settings.png",
+        "hash": "5193138034245873459"
+      },
+      {
+        "file": "src/assets/flaticon/small-eggs.png",
+        "hash": "10168485738702824260"
+      },
+      {
+        "file": "src/assets/flaticon/sterile-chicken.png",
+        "hash": "159749313124760151"
+      },
+      {
+        "file": "src/assets/flaticon/stock-icon.svg",
+        "hash": "13675157061064084093"
+      },
+      {
+        "file": "src/assets/flaticon/stock-table-icon.svg",
+        "hash": "2792344532675440698"
+      },
+      {
+        "file": "src/assets/flaticon/stock.png",
+        "hash": "7133168916385366175"
+      },
+      {
+        "file": "src/assets/flaticon/supplier-icon.svg",
+        "hash": "14104249331819025898"
+      },
+      {
+        "file": "src/assets/flaticon/supplier.png",
+        "hash": "11059438463473626657"
+      },
+      {
+        "file": "src/assets/flaticon/survey-icon.svg",
+        "hash": "12270836222426965230"
+      },
+      {
+        "file": "src/assets/flaticon/survey.png",
+        "hash": "7552897072401895480"
+      },
+      {
+        "file": "src/assets/flaticon/syringe.png",
+        "hash": "16393225228262036191"
+      },
+      {
+        "file": "src/assets/flaticon/system-update.png",
+        "hash": "17532051772539426838"
+      },
+      {
+        "file": "src/assets/flaticon/tick.png",
+        "hash": "8604586851175610031"
+      },
+      {
+        "file": "src/assets/flaticon/transfer-goods.png",
+        "hash": "4602121661226200948"
+      },
+      {
+        "file": "src/assets/flaticon/transfer-goods.svg",
+        "hash": "11745574621859100515"
+      },
+      {
+        "file": "src/assets/flaticon/transfer-icon.svg",
+        "hash": "3057578641518373233"
+      },
+      {
+        "file": "src/assets/flaticon/transfer.png",
+        "hash": "7544713264743028247"
+      },
+      {
+        "file": "src/assets/flaticon/user.png",
+        "hash": "5330833801759763020"
+      },
+      {
+        "file": "src/assets/flaticon/users-icon.svg",
+        "hash": "6648282233865908718"
+      },
+      {
+        "file": "src/assets/flaticon/users.png",
+        "hash": "18442582997230300743"
+      },
+      {
+        "file": "src/assets/flaticon/warning.png",
+        "hash": "3475372561715921527"
+      },
+      {
+        "file": "src/assets/flaticon/workflow.png",
+        "hash": "6941744412251338395"
+      },
+      {
+        "file": "src/assets/header-icon/cage.png",
+        "hash": "8578105350975044537"
+      },
+      {
+        "file": "src/assets/header-icon/chicken.png",
+        "hash": "10033562955352602455"
+      },
+      {
+        "file": "src/assets/header-icon/poultry.png",
+        "hash": "11329495037201815819"
+      },
+      {
+        "file": "src/assets/header-icon/process.png",
+        "hash": "3812473734902486986"
+      },
+      {
+        "file": "src/assets/header-icon/survey.png",
+        "hash": "608442911633015702"
+      },
+      {
+        "file": "src/assets/home-icon/barn.png",
+        "hash": "4506939702344423676"
+      },
+      {
+        "file": "src/assets/home-icon/cage.png",
+        "hash": "8245835198625055560"
+      },
+      {
+        "file": "src/assets/home-icon/chicken-rice.png",
+        "hash": "4168890781040642087"
+      },
+      {
+        "file": "src/assets/home-icon/dashboard.png",
+        "hash": "1090659127362489377"
+      },
+      {
+        "file": "src/assets/home-icon/garage.png",
+        "hash": "10204848409818510256"
+      },
+      {
+        "file": "src/assets/home-icon/marker.png",
+        "hash": "1732645420579501656"
+      },
+      {
+        "file": "src/assets/home-icon/poultry.png",
+        "hash": "7509236818206376475"
+      },
+      {
+        "file": "src/assets/home-icon/survey.png",
+        "hash": "1966828887739260926"
+      },
+      {
+        "file": "src/assets/home-icon/vaccine.png",
+        "hash": "4766132812919995316"
+      },
+      {
+        "file": "src/assets/home-icon/warehouse.png",
+        "hash": "5216153809723432125"
+      },
+      {
+        "file": "src/assets/i18n/en.json",
+        "hash": "15001794916277837504"
+      },
+      {
+        "file": "src/assets/i18n/fr.json",
+        "hash": "16995305315107203638"
+      },
+      {
+        "file": "src/assets/i18n/id.json",
+        "hash": "1536842651669544175"
+      },
+      {
+        "file": "src/assets/icon/chicken/Android/icons8-chicken-12(-ldpi).png",
+        "hash": "1287149572769635013"
+      },
+      {
+        "file": "src/assets/icon/chicken/Android/icons8-chicken-16(-mdpi).png",
+        "hash": "374963268854362591"
+      },
+      {
+        "file": "src/assets/icon/chicken/Android/icons8-chicken-24(-hdpi).png",
+        "hash": "17227885100984404273"
+      },
+      {
+        "file": "src/assets/icon/chicken/Android/icons8-chicken-32(-xhdpi).png",
+        "hash": "9193463455962115837"
+      },
+      {
+        "file": "src/assets/icon/chicken/Android/icons8-chicken-48(-xxhdpi).png",
+        "hash": "6529493743554456064"
+      },
+      {
+        "file": "src/assets/icon/chicken/Android/icons8-chicken-64(-xxxhdpi).png",
+        "hash": "11302355309612790027"
+      },
+      {
+        "file": "src/assets/icon/chicken/iOS/icons8-chicken-16(@1x).png",
+        "hash": "374963268854362591"
+      },
+      {
+        "file": "src/assets/icon/chicken/iOS/icons8-chicken-32(@2x).png",
+        "hash": "9193463455962115837"
+      },
+      {
+        "file": "src/assets/icon/chicken/iOS/icons8-chicken-48(@3x).png",
+        "hash": "6529493743554456064"
+      },
+      {
+        "file": "src/assets/icon/chicken/icons8-chicken-16.png",
+        "hash": "374963268854362591"
+      },
+      {
+        "file": "src/assets/icon/chicken/icons8-chicken-32.png",
+        "hash": "9193463455962115837"
+      },
+      {
+        "file": "src/assets/icon/chicken/icons8-chicken-48.png",
+        "hash": "6529493743554456064"
+      },
+      {
+        "file": "src/assets/icon/chicken/icons8-chicken-64.png",
+        "hash": "11302355309612790027"
+      },
+      {
+        "file": "src/assets/icon/favicon.png",
+        "hash": "17482944836898362639"
+      },
+      {
+        "file": "src/assets/icons/icon-128x128.png",
+        "hash": "6958142672098158475"
+      },
+      {
+        "file": "src/assets/icons/icon-144x144.png",
+        "hash": "12483613795545651842"
+      },
+      {
+        "file": "src/assets/icons/icon-152x152.png",
+        "hash": "2024915375681497405"
+      },
+      {
+        "file": "src/assets/icons/icon-192x192.png",
+        "hash": "8190590621518636537"
+      },
+      {
+        "file": "src/assets/icons/icon-384x384.png",
+        "hash": "1606610030968857797"
+      },
+      {
+        "file": "src/assets/icons/icon-512x512.png",
+        "hash": "14979126792470453700"
+      },
+      {
+        "file": "src/assets/icons/icon-72x72.png",
+        "hash": "8761616234735723067"
+      },
+      {
+        "file": "src/assets/icons/icon-96x96.png",
+        "hash": "8228883476684552347"
+      },
+      {
+        "file": "src/assets/shapes.svg",
+        "hash": "4708889011185296100"
+      },
+      {
+        "file": "src/environments/environment.prod.ts",
+        "hash": "11450995697249539276"
+      },
+      {
+        "file": "src/environments/environment.ts",
+        "hash": "2174010818151832455"
+      },
+      {
+        "file": "src/global.scss",
+        "hash": "14016854446591143358"
+      },
+      {
+        "file": "src/index.html",
+        "hash": "2657577049569972554"
+      },
+      {
+        "file": "src/main.ts",
+        "hash": "3447864527603543144"
+      },
+      {
+        "file": "src/manifest.webmanifest",
+        "hash": "10078094709780095471"
+      },
+      {
+        "file": "src/polyfills.ts",
+        "hash": "16163444994210036896"
+      },
+      {
+        "file": "src/test.ts",
+        "hash": "12412031923219697029"
+      },
+      {
+        "file": "src/theme/variables.scss",
+        "hash": "5522494362910326672"
+      },
+      {
+        "file": "src/zone-flags.ts",
+        "hash": "3323586086306676158"
+      },
+      {
+        "file": "tsconfig.app.json",
+        "hash": "9041030522571917449"
+      },
+      {
+        "file": "tsconfig.json",
+        "hash": "8068411453516471358"
+      },
+      {
+        "file": "tsconfig.spec.json",
+        "hash": "17198424518534092990"
+      }
+    ]
+  }
+}
